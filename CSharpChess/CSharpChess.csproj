@@ -41,14 +41,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OneCharBoard.cs" />
+    <Compile Include="TheBoard\BoardLocation.cs" />
     <Compile Include="TheBoard\BoardPiece.cs" />
     <Compile Include="TheBoard\BoardLine.cs" />
     <Compile Include="Chess.cs" />
     <Compile Include="TheBoard\ChessBoard.cs" />
+    <Compile Include="TheBoard\ChessMove.cs" />
     <Compile Include="TheBoard\ChessPiece.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValidMoves\PawnValidMoveGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

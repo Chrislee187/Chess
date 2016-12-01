@@ -1,6 +1,6 @@
 ﻿using CSharpChess.TheBoard;
 
-namespace CSharpChess.UnitTests
+namespace CSharpChess.UnitTests.Helpers
 {
     public class BoardBuilder
     {

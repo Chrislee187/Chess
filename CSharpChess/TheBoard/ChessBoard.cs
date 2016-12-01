@@ -145,11 +145,12 @@ namespace CSharpChess.TheBoard
 
         public BoardPiece this[Chess.ChessFile file, int rank] => getPiece(file, rank);
         public BoardPiece this[int file, int rank] => getPiece((Chess.ChessFile) file, rank);
+        public BoardPiece this[BoardLocation location] => getPiece(location.File, location.Rank);
         private BoardPiece getPiece(Chess.ChessFile file, int rank)
         {
             Chess.Validations.ThrowInvalidRank(rank);
             Chess.Validations.ThrowInvalidFile(file);
-            return this[(int)file, rank];
+            return _boardPieces[(int)file, rank];
         }
     }
 }

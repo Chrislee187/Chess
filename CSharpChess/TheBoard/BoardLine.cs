@@ -47,7 +47,7 @@ namespace CSharpChess.TheBoard
 
         public override string ToString()
         {
-            var s = new string(Pieces.Select(OneCharBoard.ToOneChar).ToArray());
+            var s = new string(Pieces.Select(OneCharBoard.ToChar).ToArray());
             return $"{s}";
         }
     }

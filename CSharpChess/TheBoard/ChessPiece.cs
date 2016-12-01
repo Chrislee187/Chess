@@ -18,5 +18,26 @@
         }
 
         public override string ToString() => $"{Colour} {Name}";
+
+        protected bool Equals(ChessPiece other)
+        {
+            return Colour == other.Colour && Name == other.Name;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ChessPiece) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((int) Colour*397) ^ (int) Name;
+            }
+        }
     }
 }

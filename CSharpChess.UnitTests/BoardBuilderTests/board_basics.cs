@@ -2,6 +2,7 @@
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
+using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.BoardBuilderTests
@@ -14,7 +15,7 @@ namespace CSharpChess.UnitTests.BoardBuilderTests
         [SetUp]
         public void SetUp()
         {
-            _board = BoardBuilder.EmptyBoard;
+            _board = BoardBuilder.NewGame;
         }
         [Test]
         public void can_supply_ranks()
