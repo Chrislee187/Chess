@@ -11,19 +11,23 @@ namespace CSharpChess
 
         public static Chess.Colours PieceColour(char p)
         {
+            if(p =='.' || p ==' ') return Chess.Colours.None;
+
             return char.IsLower(p)
                 ? Chess.Colours.Black
-                : char.IsUpper(p) ? Chess.Colours.White : Chess.Colours.None;
+                : Chess.Colours.White;
         }
 
         public static Chess.PieceNames PieceName(char p)
         {
+            if(p =='.' || p ==' ') return Chess.PieceNames.Blank;
+
             var valid = OneCharPieceNames.Where(c => char.ToUpper(p) == c.Value).ToList();
             if (!valid.Any())
                 throw new ArgumentException($"Invalid One Char representations of a chess piece found '{p}'", nameof(p));
 
             var pieceNames = OneCharPieceNames.First(c => char.ToUpper(p) == c.Value).Key;
-            Console.WriteLine($"{pieceNames} == {p}");
+//            Console.WriteLine($"{pieceNames} == {p}");
             return pieceNames;
         }
 

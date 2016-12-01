@@ -15,5 +15,9 @@ namespace CSharpChess.TheBoard
             Rank = rank;
             Piece = chessPiece;
         }
+
+        public BoardPiece(Chess.ChessFile file, int rank, ChessPiece chessPiece) : this((int) file, rank, chessPiece)
+        {
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpChess.TheBoard
 {
@@ -8,6 +10,13 @@ namespace CSharpChess.TheBoard
         {
             File = file;
             Rank = rank;
+        }
+
+        public BoardLocation(string v)
+        {
+            var x = (BoardLocation) v;
+            File = x.File;
+            Rank = x.Rank;
         }
 
         public int Rank { get; }
@@ -23,6 +32,15 @@ namespace CSharpChess.TheBoard
             if(!int.TryParse(s[1].ToString(), out rank)) throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
 
             return new BoardLocation(file, rank);
+        }
+
+        public static BoardLocation At(Chess.ChessFile file, int rank)
+        {
+            return new BoardLocation(file, rank);
+        }
+        public static BoardLocation At(int file, int rank)
+        {
+            return new BoardLocation((Chess.ChessFile)file, rank);
         }
 
         public static BoardLocation At(string at)
@@ -44,5 +62,17 @@ namespace CSharpChess.TheBoard
         }
 
         public override int GetHashCode() => ToString().GetHashCode();
+
+        public static IEnumerable<BoardLocation> Generate(params string[] locs)
+        {
+            var list = new List<BoardLocation>();
+
+            foreach (var loc in locs)
+            {
+                list.Add(loc);
+            }
+
+            return list;
+        }
     }
 }

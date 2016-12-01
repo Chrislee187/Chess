@@ -82,10 +82,10 @@ namespace CSharpChess.TheBoard
                 foreach (var file in Chess.Files)
                 {
                     if (file != 0 && rank != 0)
-                        _boardPieces[file, rank] = new BoardPiece(file, rank, Chess.Pieces.Blank);
+                        this[file, rank] = new BoardPiece(file, rank, Chess.Pieces.Blank);
                     else
                     {
-                        _boardPieces[file, rank] = null;
+                        this[file, rank] = null;
                     }
                 }
             }
@@ -98,7 +98,7 @@ namespace CSharpChess.TheBoard
                 {
                     foreach (var rank in Chess.Ranks)
                     {
-                        yield return _boardPieces[file, rank];
+                        yield return this[file, rank];
                     }
                 }
             }
@@ -120,7 +120,7 @@ namespace CSharpChess.TheBoard
             Chess.Validations.ThrowInvalidRank(rank);
             foreach (var file in Chess.Files)
             {
-                yield return _boardPieces[file, rank];
+                yield return this[file, rank];
             }
         }
 
@@ -134,23 +134,37 @@ namespace CSharpChess.TheBoard
                 }
             }
         }
-        internal IEnumerable<BoardPiece> File(int file)
+        internal IEnumerable<BoardPiece> File(Chess.ChessFile file)
         {
             Chess.Validations.ThrowInvalidFile(file);
             foreach (var rank in Chess.Ranks)
             {
-                yield return _boardPieces[file, rank];
+                yield return this[file, rank];
             }
         }
 
-        public BoardPiece this[Chess.ChessFile file, int rank] => getPiece(file, rank);
-        public BoardPiece this[int file, int rank] => getPiece((Chess.ChessFile) file, rank);
+        public BoardPiece this[Chess.ChessFile file, int rank]
+        {
+            get { return getPiece(file, rank); }
+            private set { _boardPieces[(int) file, rank] = value; }
+        }
+
+        public BoardPiece this[int file, int rank]
+        {
+            get { return getPiece((Chess.ChessFile) file, rank); }
+            private set { _boardPieces[(int)file, rank] = value; }
+        }
         public BoardPiece this[BoardLocation location] => getPiece(location.File, location.Rank);
         private BoardPiece getPiece(Chess.ChessFile file, int rank)
         {
             Chess.Validations.ThrowInvalidRank(rank);
             Chess.Validations.ThrowInvalidFile(file);
             return _boardPieces[(int)file, rank];
+        }
+
+        public bool IsEmptyAt(BoardLocation boardLocation)
+        {
+            return this[boardLocation].Piece.Equals(ChessPiece.NullPiece);
         }
     }
 }

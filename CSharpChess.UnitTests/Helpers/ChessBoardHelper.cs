@@ -18,7 +18,7 @@ namespace CSharpChess.UnitTests.Helpers
             {
                 foreach (var file in Chess.Files)
                 {
-                    var oneCharPiece = validChars[RankAndFileToOneCharIndex(rank, file)];
+                    var oneCharPiece = validChars[RankAndFileToOneCharIndex(file, rank)];
                     var colour = OneCharBoard.PieceColour(oneCharPiece);
                     var name = OneCharBoard.PieceName(oneCharPiece);
 
@@ -46,9 +46,9 @@ namespace CSharpChess.UnitTests.Helpers
             return trimmed;
         }
 
-        private static int RankAndFileToOneCharIndex(int rank, int file)
+        private static int RankAndFileToOneCharIndex(Chess.ChessFile file, int rank)
         {
-            var idx = (8 - rank)*8 + (file - 1);
+            var idx = (8 - rank)*8 + ((int) file - 1);
             return idx;
         }
     }

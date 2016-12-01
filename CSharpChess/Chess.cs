@@ -19,7 +19,7 @@ namespace CSharpChess
             }
         }
 
-        public static IEnumerable<int> Files => Enumerable.Cast<int>(EnumExtensions.All<ChessFile>());
+        public static IEnumerable<ChessFile> Files => EnumExtensions.All<ChessFile>();
 
         public enum ChessFile { A=1, B, C, D, E, F, G, H};
 
@@ -62,8 +62,8 @@ namespace CSharpChess
         {
             public static bool InvalidRank(int rank) => !Ranks.Contains(rank);
 
-            public static bool InvalidFile(ChessFile file) => !Files.Contains((int) file);
-            public static bool InvalidFile(int file) => !Files.Contains(file);
+            public static bool InvalidFile(ChessFile file) => InvalidFile((int)file);
+            public static bool InvalidFile(int file) => Files.All(f => (int) f != file);
 
             public static void ThrowInvalidRank(int rank)
             {

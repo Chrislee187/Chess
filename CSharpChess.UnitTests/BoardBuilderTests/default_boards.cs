@@ -38,10 +38,10 @@ namespace CSharpChess.UnitTests.BoardBuilderTests
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var customboard = ChessBoardHelper.OneCharBoardToBoardPieces(asOneChar);
-            var board = new ChessBoard(customboard);
+            var board = BoardBuilder.CustomBoard(asOneChar);
 
             AssertNewGameBoard(board);
         }
+
     }
 }

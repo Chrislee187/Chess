@@ -2,7 +2,7 @@
 {
     public class ChessPiece
     {
-        public static ChessPiece NullPiece = new ChessPiece(Chess.Colours.White, Chess.PieceNames.Blank);
+        public static ChessPiece NullPiece = new ChessPiece(Chess.Colours.None, Chess.PieceNames.Blank);
 
         public Chess.Colours Colour { get; }
         public Chess.PieceNames Name { get; }
@@ -11,10 +11,6 @@
         {
             Name = name;
             Colour = colour;
-        }
-
-        private ChessPiece()
-        {
         }
 
         public override string ToString() => $"{Colour} {Name}";
@@ -27,7 +23,7 @@
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
+//            if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
             return Equals((ChessPiece) obj);
         }
