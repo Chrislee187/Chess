@@ -6,7 +6,6 @@ namespace CSharpChess.ValidMoves
 {
     public class PawnValidMoveGenerator
     {
-        
         public IEnumerable<ChessMove> For(ChessBoard board, BoardLocation at)
         {
             var possibleMoves = new List<ChessMove>();
@@ -15,6 +14,8 @@ namespace CSharpChess.ValidMoves
 
             possibleMoves.AddRange(Takes(board, at));
 
+            // TODO: Promotions
+            
             return possibleMoves;
         }
 

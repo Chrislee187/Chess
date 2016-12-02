@@ -32,7 +32,8 @@
     public enum MoveType
     {
         Move, Take, TakeEnPassant, Castle, Check, Checkmate,
-        Unknown
+        Promotion,
+        Unknown,
     }
 
 }

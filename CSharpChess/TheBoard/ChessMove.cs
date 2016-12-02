@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Linq;
 
 namespace CSharpChess.TheBoard
 {
     public class ChessMove
     {
-        public ChessMove(BoardLocation from, BoardLocation to, MoveType moveType)
+
+        public ChessMove(BoardLocation @from, BoardLocation to, MoveType moveType, Chess.PieceNames promotedTo = Chess.PieceNames.Blank)
         {
             From = from;
             To = to;
             MoveType = moveType;
+            PromotedTo = promotedTo;
         }
 
         public BoardLocation From { get; }
         public BoardLocation To { get; }
         public MoveType MoveType { get; }
+        public Chess.PieceNames PromotedTo { get; }
 
         public override string ToString() => $"{From}-{To}";
 
@@ -21,26 +25,60 @@ namespace CSharpChess.TheBoard
         #region object overrides
         public static implicit operator ChessMove(string move)
         {
-            var from = "";
-            var to = "";
+            var moveType = MoveType.Unknown;
+            Chess.PieceNames promotedTo = Chess.PieceNames.Blank;
+            const string validMoveChars = "ABCDEFGH12345678";
 
-            if (move.Length == 5)
+            var moveU = move.ToUpper();
+
+            var from = moveU.Substring(0, 2);
+
+            var idx = 2;
+            if (validMoveChars.All(c => c != moveU[idx]))
             {
-                from = move.Substring(0, 2);
-                to = move.Substring(3, 2);
-            }
-            else if (move.Length == 4)
-            {
-                from = move.Substring(0, 2);
-                to = move.Substring(2, 2);
-            }
-            else
-            {
-                throw new ArgumentException($"'{move}' is not a valid move.");
+                idx++;
             }
 
-            return new ChessMove(from, to,MoveType.Unknown);
+            var to = moveU.Substring(idx, 2);
+            idx = idx + 2;
+            var left = moveU.Substring(idx);
+
+            if (left == string.Empty)
+            {
+                return new ChessMove(from, to, moveType);
+            }
+
+            if (left.First() == '=')
+            {
+                left = left.Substring(1);
+
+                if (left == string.Empty)
+                {
+                    throw new ArgumentException($"'{move}' is missing promotion character", nameof(move));
+                }
+            }
+
+            promotedTo = GetPromotionPiece(left);
+            if(promotedTo != Chess.PieceNames.Blank)
+                moveType = MoveType.Promotion;
+
+            return new ChessMove(from, to, moveType, promotedTo);
         }
+
+        private static Chess.PieceNames GetPromotionPiece(string piece)
+        {
+            switch (piece.ToUpper())
+            {
+                case "R": return Chess.PieceNames.Rook;
+                case "B": return Chess.PieceNames.Bishop;
+                case "N": return Chess.PieceNames.Knight;
+                case "Q": return Chess.PieceNames.Queen;
+            }
+
+            throw new ArgumentException($"'{piece}' is not a valid promotion", nameof(piece));
+
+        }
+
         // ReSharper disable once MemberCanBePrivate.Global
         protected bool Equals(ChessMove other)
         {
