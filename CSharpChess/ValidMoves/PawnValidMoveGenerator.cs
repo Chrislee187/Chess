@@ -20,47 +20,47 @@ namespace CSharpChess.ValidMoves
 
         private IEnumerable<ChessMove> TakeMoves(ChessBoard board, BoardLocation at)
         {
-            // Get piece NW & NE (SW/SW for black) of location
-            // if it's an enemy piece add to list
-            var direction = GetDirectionModifer(board[at]);
             var moveTos = new List<BoardLocation>();
             var pieceColour = board[at].Piece.Colour;
 
-            const int left = -1;
-            const int right = 1;
+            var verticalDirectioModifier = pieceColour == Chess.Colours.White ? +1 : -1;
+            const int leftDirectionModifier = -1;
+            const int rightDirectionModifier = 1;
 
-            Action<BoardLocation> AddToList = (takeLocation) =>
+            Action<BoardLocation> addToList = (takeLocation) =>
             {
                 if (CanTakeAt(board, takeLocation, pieceColour))
                     moveTos.Add(takeLocation);
             };
+            CheckForNormalTake(at, rightDirectionModifier, verticalDirectioModifier, addToList);
+            CheckForNormalTake(at, leftDirectionModifier, verticalDirectioModifier, addToList);
 
-            if (at.File > Chess.ChessFile.A)
-            {
-                var takeLocation = BoardLocation.At((int) at.File + left,at.Rank + (1 * direction));
-                AddToList(takeLocation);
-            }
-
-            if (at.File < Chess.ChessFile.H)
-            {
-                var takeLocation = BoardLocation.At((int)at.File + right, at.Rank + (1 * direction));
-                AddToList(takeLocation);
-            }
-
-            // TODO: en passant
+            // TODO: en passant, BoardPieces need a move history so we can check the previous move was a two-step
             return moveTos.Select(m => new ChessMove(at, m));
         }
-
-        private static bool CanTakeAt(ChessBoard board, BoardLocation takeLocation, Chess.Colours colour)
+        private static void CheckForNormalTake(BoardLocation from, int horizontalDirectionModifier, int verticalDirectionModifier, Action<BoardLocation> addToList)
         {
-            return !board.IsEmptyAt(takeLocation) && board[takeLocation].Piece.Colour != colour;
+            var notOnHorizontalEdge = horizontalDirectionModifier > 0 
+                ? from.File < Chess.ChessFile.H 
+                : from.File > Chess.ChessFile.A;
+
+            if (notOnHorizontalEdge)
+            {
+                var newFile = (int)from.File + horizontalDirectionModifier;
+                var newRank = from.Rank + verticalDirectionModifier;
+                addToList(BoardLocation.At(newFile, newRank));
+            }
         }
+
+        private static bool CanTakeAt(ChessBoard board, BoardLocation takeLocation, Chess.Colours colourOfTakingPiece) 
+            => !board.IsEmptyAt(takeLocation) && board[takeLocation].Piece.Colour != colourOfTakingPiece;
 
         private static IEnumerable<ChessMove> ForwardMoves(ChessBoard board, BoardLocation at)
         {
-            if(board[at].Piece.Colour == Chess.Colours.None) return new List<ChessMove>();
+            var chessPiece = board[at].Piece;
+            if(chessPiece.Colour == Chess.Colours.None) return new List<ChessMove>();
 
-            var direction = GetDirectionModifer(board[at]);
+            var direction = board[at].Piece.Colour == Chess.Colours.White ? +1 : -1;
 
             // TODO: Create a function that takes an order line of locations
             // and returns the index of the first blocker?
@@ -76,16 +76,6 @@ namespace CSharpChess.ValidMoves
             }
 
             return validMoves;
-        }
-
-        private static int GetDirectionModifer(BoardPiece boardPiece)
-        {
-            return boardPiece.Piece.Colour == Chess.Colours.White ? +1 : -1;
-        }
-
-        private static IEnumerable<ChessMove> EnPassantMoves(ChessBoard board, BoardLocation from)
-        {
-            return new List<ChessMove>();
         }
 
         private static bool Blocked(ChessBoard board, ChessMove chessMove)

@@ -49,6 +49,8 @@
     <Compile Include="BoardBuilderTests\board_basics.cs" />
     <Compile Include="BoardBuilderTests\default_boards.cs" />
     <Compile Include="Helpers\ChessBoardHelper.cs" />
+    <Compile Include="Movement\basic_moves.cs" />
+    <Compile Include="Movement\ChessMoveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidMoveGeneration\Pawns\from_starting_position.cs" />
   </ItemGroup>

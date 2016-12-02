@@ -38,7 +38,7 @@ namespace CSharpChess.UnitTests.BoardBuilderTests
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var board = BoardBuilder.CustomBoard(asOneChar);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
             AssertNewGameBoard(board);
         }

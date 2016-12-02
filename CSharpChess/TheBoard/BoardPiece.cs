@@ -4,20 +4,37 @@ namespace CSharpChess.TheBoard
 {
     public class BoardPiece
     {
-        public int File { get; }
-        public int Rank { get; }
+        public static BoardPiece Empty(BoardLocation fromLocation) => new BoardPiece(fromLocation, ChessPiece.NullPiece);
+
+        private readonly List<ChessMove> _moveHistory = new List<ChessMove>();
+
+        public IEnumerable<ChessMove> MoveHistory { get { return _moveHistory; } }
+
+        public BoardLocation Location { get; set; }
+
         public ChessPiece Piece { get; }
-        public IEnumerable<ChessMove> ValidMoves { get; }
 
         public BoardPiece(int file, int rank, ChessPiece chessPiece)
         {
-            File = file;
-            Rank = rank;
+            Location = new BoardLocation((Chess.ChessFile) file, rank);
             Piece = chessPiece;
         }
-
-        public BoardPiece(Chess.ChessFile file, int rank, ChessPiece chessPiece) : this((int) file, rank, chessPiece)
+        public BoardPiece(Chess.ChessFile file, int rank, ChessPiece chessPiece)
+            : this(new BoardLocation(file, rank), chessPiece)
         {
         }
+
+        public BoardPiece(BoardLocation location, ChessPiece piece)
+        {
+            Location = location;
+            Piece = piece;
+        }
+
+        public void MoveTo(BoardLocation moveTo)
+        {
+            _moveHistory.Add(new ChessMove(Location, moveTo));
+            Location = moveTo;
+        }
+
     }
 }
