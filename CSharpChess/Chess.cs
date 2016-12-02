@@ -109,5 +109,15 @@ namespace CSharpChess
                 ThrowInvalidFile((int) file);
             }
         }
+
+        public static int StartingPawnRankFor(Colours chessPieceColour)
+        {
+            if (chessPieceColour == Colours.White)
+                return 2;
+            else if (chessPieceColour == Colours.Black)
+                return 7;
+
+            return 0;
+        }
     }
 }

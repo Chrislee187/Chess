@@ -27,6 +27,11 @@
         {
             return new MoveResult(true, MoveType.TakeEnPassant, move);
         }
+
+        public static MoveResult Promotion(ChessMove move)
+        {
+            return new MoveResult(true, MoveType.Promotion, move);
+        }
     }
 
     public enum MoveType

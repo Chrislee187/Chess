@@ -93,7 +93,14 @@ namespace CSharpChess.TheBoard
 
             if (validMovesForPiece.Any(vm => vm.Equals(move)))
             {
-                var moveType = validMovesForPiece.First(vm => vm.Equals(move)).MoveType;
+                var validMove = validMovesForPiece.First(vm => vm.Equals(move));
+                MoveType moveType = move.MoveType;
+
+                if (moveType == MoveType.Unknown)
+                {
+                    moveType = validMove.MoveType;
+                }
+
                 if (IsEmptyAt(move.To))
                 {
                     this[move.From] = BoardPiece.Empty(from.Location);
@@ -108,6 +115,11 @@ namespace CSharpChess.TheBoard
                         return UpdateTurn(MoveResult.Enpassant(move));
                     }
 
+                    if (moveType == MoveType.Promotion)
+                    {
+                        this[move.To] = new BoardPiece(move.To, new ChessPiece(from.Piece.Colour, move.PromotedTo));
+                        return UpdateTurn(MoveResult.Promotion(move));
+                    }
 
                     return UpdateTurn(MoveResult.Success(move));
                 }

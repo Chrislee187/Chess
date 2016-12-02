@@ -121,10 +121,12 @@ namespace CSharpChess.ValidMoves
             if (!Blocked(board, newMove))
             {
                 validMoves.Add(newMove);
-
-                newMove = new ChessMove(at, new BoardLocation(at.File, at.Rank + (direction * 2)), MoveType.Move);
-                if (!Blocked(board, newMove))
-                    validMoves.Add(newMove);
+                if (board[at].Location.Rank == Chess.StartingPawnRankFor(chessPiece.Colour) )
+                {
+                    newMove = new ChessMove(at, new BoardLocation(at.File, at.Rank + (direction * 2)), MoveType.Move);
+                    if (!Blocked(board, newMove))
+                        validMoves.Add(newMove);
+                }
             }
 
             return validMoves;
