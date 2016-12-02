@@ -1,4 +1,5 @@
-﻿namespace CSharpChess.TheBoard
+﻿// ReSharper disable MemberCanBePrivate.Global
+namespace CSharpChess.TheBoard
 {
     public class ChessPiece
     {
@@ -13,6 +14,13 @@
             Colour = colour;
         }
 
+        public bool Is(Chess.Colours colour, Chess.PieceNames name) => Is(colour) && Is(name);
+        public bool Is(Chess.Colours colour) => Colour == colour;
+        public bool Is(Chess.PieceNames name) => name == Name;
+        public bool IsNot(Chess.Colours colour, Chess.PieceNames name) => IsNot(colour) && IsNot(name);
+        public bool IsNot(Chess.Colours colour) => Colour != colour;
+        public bool IsNot(Chess.PieceNames name) => name != Name;
+
         public override string ToString() => $"{Colour} {Name}";
 
         protected bool Equals(ChessPiece other)
@@ -23,8 +31,9 @@
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-//            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            // ReSharper disable once ConvertIfStatementToReturnStatement
+            if (obj.GetType() != GetType()) return false;
             return Equals((ChessPiece) obj);
         }
 

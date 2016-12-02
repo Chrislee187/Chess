@@ -7,6 +7,7 @@ using NUnit.Framework;
 namespace CSharpChess.UnitTests.Movement
 {
     [TestFixture]
+    // ReSharper disable once InconsistentNaming
     public class basic_moves : BoardAssertions
     {
         [Test]
@@ -36,6 +37,7 @@ namespace CSharpChess.UnitTests.Movement
 
             var result = board.Move("D2-D4");
 
+            Assert.True(result.Succeeded);
             Assert.True(board.IsEmptyAt("d2"));
             Assert.True(board.IsNotEmptyAt("d4"));
 

@@ -30,9 +30,9 @@ namespace CSharpChess.TheBoard
             Piece = piece;
         }
 
-        public void MoveTo(BoardLocation moveTo)
+        public void MoveTo(BoardLocation moveTo, MoveType type)
         {
-            _moveHistory.Add(new ChessMove(Location, moveTo));
+            _moveHistory.Add(new ChessMove(Location, moveTo, type));
             Location = moveTo;
         }
 

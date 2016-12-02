@@ -31,20 +31,18 @@ namespace CSharpChess.UnitTests.BoardBuilderTests
 
         protected static void AssertExpectedMoves(IEnumerable<BoardLocation> expected, IEnumerable<ChessMove> actual)
         {
-            if (!expected.Any() && !actual.Any()) return;
+            var expectedLocations = expected as IList<BoardLocation> ?? expected.ToList();
+            var acutalMoves = actual as IList<ChessMove> ?? actual.ToList();
 
-            var actualMoves = actual as IList<ChessMove> ?? actual.ToList();
+            if (!expectedLocations.Any() && !acutalMoves.Any()) return;
+
+            var actualMoves = actual as IList<ChessMove> ?? acutalMoves.ToList();
             var startLoc = actualMoves.First().From;
-            var expectedMoves = expected.Select(e => new ChessMove(startLoc, e));
+            var expectedMoves = expectedLocations.Select(e => new ChessMove(startLoc, e, MoveType.Unknown));
 
             CollectionAssert.AreEquivalent(expectedMoves, actualMoves);
-//            foreach (var move in expected)
-//            {
-//                var exp = new ChessMove(startLoc, move);
-//                var moves = string.Join(", ",actualMoves.Select(a => a.ToString()));
-//                Assert.False(actualMoves.All(m => m.Equals(exp)), $"Expected move '{startLoc}-{move}', not found in expected move list '{moves}'");
-//            }
-            Assert.That(actualMoves.Count(), Is.EqualTo(expected.Count()));
+
+            Assert.That(actualMoves.Count(), Is.EqualTo(expectedLocations.Count()));
         }
     }
 }

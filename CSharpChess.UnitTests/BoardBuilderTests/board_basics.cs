@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
@@ -8,6 +9,7 @@ using NUnit.Framework;
 namespace CSharpChess.UnitTests.BoardBuilderTests
 {
     [TestFixture]
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class board_basics
     {
         private ChessBoard _board;
@@ -46,7 +48,8 @@ namespace CSharpChess.UnitTests.BoardBuilderTests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                var x = _board[file, rank];
+                // ReSharper disable once UnusedVariable
+                var x = _board[(Chess.ChessFile) file, rank];
             });
         }
     }

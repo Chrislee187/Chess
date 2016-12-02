@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using CSharpChess.ValidMoves;
 
@@ -9,8 +8,58 @@ namespace CSharpChess.TheBoard
     public class ChessBoard
     {
         private readonly BoardPiece[,] _boardPieces = new BoardPiece[9,9];
+        private Chess.Colours ToPlay { get; set; } = Chess.Colours.None;
 
-        public Chess.Colours ToPlay { get; private set; } = Chess.Colours.None;
+        public IEnumerable<BoardPiece> Pieces
+        {
+            get
+            {
+                foreach (var file in Chess.Files)
+                {
+                    foreach (var rank in Chess.Ranks)
+                    {
+                        yield return this[file, rank];
+                    }
+                }
+            }
+        }
+        public IEnumerable<BoardRank> Ranks
+        {
+            get
+            {
+                foreach (var rank in Chess.Ranks)
+                {
+                    yield return new BoardRank(rank, Rank(rank).ToArray());
+                }
+            }
+        }
+        public IEnumerable<BoardFile> Files
+        {
+            get
+            {
+                foreach (var file in Chess.Files)
+                {
+                    yield return new BoardFile(file, File(file).ToArray());
+                }
+            }
+        }
+
+        public BoardPiece this[Chess.ChessFile file, int rank]
+        {
+            get { return this[(int)file, rank]; }
+            private set { this[(int)file, rank] = value; }
+        }
+        public BoardPiece this[BoardLocation location]
+        {
+            get { return this[location.File, location.Rank]; }
+            private set { this[location.File, location.Rank] = value; }
+        }
+        private BoardPiece this[int file, int rank]
+        {
+            get { return GetPiece((Chess.ChessFile)file, rank); }
+            set { _boardPieces[file, rank] = value; }
+        }
+
 
         public ChessBoard(bool newGame)
         {
@@ -32,6 +81,47 @@ namespace CSharpChess.TheBoard
             }
             ToPlay = toPlay;
         }
+
+        public MoveResult Move(ChessMove move)
+        {
+            BoardPiece from = this[move.From];
+
+            if (from.Piece.Colour != ToPlay && ToPlay != Chess.Colours.None) // This is also caters from empty from square
+                return UpdateTurn(MoveResult.IncorrectPlayer(move));
+
+            var validMovesForPiece = GetValidMoves(this, move.From).ToList();
+
+            if (validMovesForPiece.Any(vm => vm.Equals(move)))
+            {
+                var moveType = validMovesForPiece.First(vm => vm.Equals(move)).MoveType;
+                if (IsEmptyAt(move.To))
+                {
+                    this[move.From] = BoardPiece.Empty(from.Location);
+
+                    from.MoveTo(move.To, moveType);
+                    this[move.To] = from;
+
+                    if (moveType == MoveType.TakeEnPassant)
+                    {
+                        var takenLocation = new BoardLocation(move.To.File, move.From.Rank);
+                        this[takenLocation] = BoardPiece.Empty(takenLocation);
+                        return UpdateTurn(MoveResult.Enpassant(move));
+                    }
+
+
+                    return UpdateTurn(MoveResult.Success(move));
+                }
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid move {move}", nameof(move));
+            }
+            throw new InvalidOperationException("Move() still a WIP");
+        }
+
+        public bool IsEmptyAt(BoardLocation location) => this[location].Piece.Equals(ChessPiece.NullPiece);
+
+        public bool IsNotEmptyAt(BoardLocation location) => !IsEmptyAt(location);
 
         private void NewBoard()
         {
@@ -100,31 +190,7 @@ namespace CSharpChess.TheBoard
             }
         }
 
-        public IEnumerable<BoardPiece> Pieces {
-            get
-            {
-                foreach (var file in Chess.Files)
-                {
-                    foreach (var rank in Chess.Ranks)
-                    {
-                        yield return this[file, rank];
-                    }
-                }
-            }
-        }
-
-        public IEnumerable<BoardRank> Ranks
-        {
-            get
-            {
-                foreach (var rank in Chess.Ranks)
-                {
-                    yield return new BoardRank(rank, Rank((int)rank).ToArray());
-                }
-            }
-        }
-
-        public IEnumerable<BoardPiece> Rank(int rank)
+        private IEnumerable<BoardPiece> Rank(int rank)
         {
             Chess.Validations.ThrowInvalidRank(rank);
             foreach (var file in Chess.Files)
@@ -133,18 +199,7 @@ namespace CSharpChess.TheBoard
             }
         }
 
-        public IEnumerable<BoardFile> Files
-        {
-            get
-            {
-                foreach (var file in Chess.Files)
-                {
-                    yield return new BoardFile(file, File(file).ToArray());
-                }
-            }
-        }
-
-        public IEnumerable<BoardPiece> File(Chess.ChessFile file)
+        private IEnumerable<BoardPiece> File(Chess.ChessFile file)
         {
             Chess.Validations.ThrowInvalidFile(file);
             foreach (var rank in Chess.Ranks)
@@ -153,51 +208,12 @@ namespace CSharpChess.TheBoard
             }
         }
 
-        public BoardPiece this[Chess.ChessFile file, int rank]
+        private MoveResult UpdateTurn(MoveResult result)
         {
-            get { return GetPiece(file, rank); }
-            private set { this[(int) file, rank] = value; }
-        }
+            if (ToPlay == Chess.Colours.White) ToPlay = Chess.Colours.Black;
+            else if(ToPlay == Chess.Colours.Black) ToPlay = Chess.Colours.White;
 
-        public BoardPiece this[int file, int rank]
-        {
-            get { return GetPiece((Chess.ChessFile) file, rank); }
-            private set { _boardPieces[file, rank] = value; }
-        }
-
-        public BoardPiece this[BoardLocation location]
-        {
-            get { return GetPiece(location); }
-            private set { this[location.File, location.Rank] = value; }
-        }
-
-        public bool IsEmptyAt(BoardLocation location) => this[location].Piece.Equals(ChessPiece.NullPiece);
-
-        public bool IsNotEmptyAt(BoardLocation location) => !IsEmptyAt(location);
-
-        public MoveResult Move(ChessMove move)
-        {
-            BoardPiece from = this[move.From];
-            var to = this[move.To];
-
-            if (from.Piece.Colour != ToPlay) // This is also caters from empty from square
-                return MoveResult.IncorrectPlayer(move);
-
-            var validMovesForPiece = GetValidMoves(this, move.From);
-
-            if (validMovesForPiece.Any(vm => vm.Equals(move)))
-            {
-                if (IsEmptyAt(move.To))
-                {
-                    from.MoveTo(move.To);
-                    this[move.To] = from;
-                    _boardPieces[(int) move.From.File, move.From.Rank] = BoardPiece.Empty(from.Location);
-                    return MoveResult.Success(move);
-                }
-
-            }
-
-            throw new InvalidOperationException("Move() still a WIP");
+            return result;
         }
 
         private IEnumerable<ChessMove> GetValidMoves(ChessBoard board, BoardLocation at)
@@ -213,36 +229,6 @@ namespace CSharpChess.TheBoard
             Chess.Validations.ThrowInvalidFile(file);
             return _boardPieces[(int)file, rank];
         }
-
-        private BoardPiece GetPiece(BoardLocation location) => GetPiece(location.File, location.Rank);
     }
 
-    public class MoveResult
-    {
-        public bool Succeeded { get; }
-        public MoveType MoveType { get; }
-        public ChessMove Move { get; set; }
-
-        public MoveResult(bool success, MoveType moveType, ChessMove move)
-        {
-            Succeeded = success;
-            MoveType = moveType;
-            Move = move;
-        }
-
-        public static MoveResult IncorrectPlayer(ChessMove move)
-        {
-            return new MoveResult(false, TheBoard.MoveType.Move, move);
-        }
-
-        public static MoveResult Success(ChessMove move)
-        {
-            return new MoveResult(true, TheBoard.MoveType.Move, move);
-        }
-    }
-
-    public enum MoveType
-    {
-        Move, Take, TakeEnPassant, Castle, Check, Checkmate
-    }
 }

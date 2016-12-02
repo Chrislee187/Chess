@@ -21,7 +21,14 @@ namespace CSharpChess
 
         public static IEnumerable<ChessFile> Files => EnumExtensions.All<ChessFile>();
 
-        public enum ChessFile { A=1, B, C, D, E, F, G, H};
+        public static class Board
+        {
+
+            public const int LeftDirectionModifier = -1;
+            public const int RightDirectionModifier = 1;
+        }
+
+        public enum ChessFile { A = 1, B, C, D, E, F, G, H };
 
         public static class Pieces
         {
@@ -44,6 +51,27 @@ namespace CSharpChess
                 public static readonly ChessPiece Rook = new ChessPiece(Colours.Black, PieceNames.Rook);
                 public static readonly ChessPiece King = new ChessPiece(Colours.Black, PieceNames.King);
                 public static readonly ChessPiece Queen = new ChessPiece(Colours.Black, PieceNames.Queen);
+            }
+
+            public static int Direction(ChessPiece piece)
+            {
+                return piece.Colour == Colours.White
+                    ? +1
+                    : piece.Colour == Colours.Black
+                        ? -1 : 0;
+
+            }
+
+            public static int EnpassantFromRankFor(Colours colour)
+            {
+                const int whitePawnsEnPassantFromRank = 5;
+                const int blackPawnsEnPassantFromRank = 4;
+
+                return colour == Colours.White
+                    ? whitePawnsEnPassantFromRank
+                    : colour == Colours.Black
+                        ? blackPawnsEnPassantFromRank : 0;
+
             }
         }
 

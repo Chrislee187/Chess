@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CSharpChess.TheBoard;
+﻿using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.BoardBuilderTests;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
@@ -8,6 +7,7 @@ using NUnit.Framework;
 namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 {
     [TestFixture]
+    // ReSharper disable once InconsistentNaming
     public class from_starting_position : BoardAssertions
     {
         const int WhitePawnRank = 2;
@@ -96,7 +96,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             AssertExpectedMoves(expected, moves);
         }
 
-        [Test, Ignore("TODO")]
+        [Test]
         public void pawn_can_take_enpassant()
         {
             var asOneChar =
@@ -109,13 +109,21 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var expected = BoardLocation.ListOf("D6", "C6");
+            var expected = BoardLocation.ListOf("D3", "C3");
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            
+            var result = board.Move("c2c4");
+            Assert.That(result.Succeeded);
 
-            var moves = new PawnValidMoveGenerator().For(board, "D5");
+            var moves = new PawnValidMoveGenerator().For(board, "D4");
 
             AssertExpectedMoves(expected, moves);
+
+            result = board.Move("d4c3");
+            Assert.That(result.Succeeded, "Enpassant move failed");
+            Assert.That(result.MoveType, Is.EqualTo(MoveType.TakeEnPassant));
+            Assert.That(board.IsEmptyAt("c4"), "Taken piece not removed");
         }
     }
 }

@@ -1,23 +1,24 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace CSharpChess.TheBoard
 {
     public class ChessMove
     {
-        public ChessMove(BoardLocation from, BoardLocation to)
+        public ChessMove(BoardLocation from, BoardLocation to, MoveType moveType)
         {
             From = from;
             To = to;
+            MoveType = moveType;
         }
 
         public BoardLocation From { get; }
         public BoardLocation To { get; }
+        public MoveType MoveType { get; }
 
         public override string ToString() => $"{From}-{To}";
 
 
-        #region Special stuff
+        #region object overrides
         public static implicit operator ChessMove(string move)
         {
             var from = "";
@@ -38,8 +39,9 @@ namespace CSharpChess.TheBoard
                 throw new ArgumentException($"'{move}' is not a valid move.");
             }
 
-            return new ChessMove(from, to);
+            return new ChessMove(from, to,MoveType.Unknown);
         }
+        // ReSharper disable once MemberCanBePrivate.Global
         protected bool Equals(ChessMove other)
         {
             return Equals(From, other.From) && Equals(To, other.To);
