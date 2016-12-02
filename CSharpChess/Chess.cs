@@ -119,5 +119,14 @@ namespace CSharpChess
 
             return 0;
         }
+
+        public static int PromotionRankFor(Colours chessPieceColour)
+        {
+            return chessPieceColour == Chess.Colours.Black
+                ? 1
+                : chessPieceColour == Chess.Colours.White
+                    ? 8
+                    : 0;
+        }
     }
 }

@@ -62,4 +62,12 @@ namespace CSharpChess.TheBoard
         public override int GetHashCode() => ToString().GetHashCode();
         #endregion
     }
+
+    public static class BoardLocationExtensions
+    {
+        public static BoardLocation ToBoardLocation(this string value)
+        {
+            return value;
+        }
+    }
 }

@@ -6,7 +6,7 @@ namespace CSharpChess.TheBoard
     public class ChessMove
     {
 
-        public ChessMove(BoardLocation @from, BoardLocation to, MoveType moveType, Chess.PieceNames promotedTo = Chess.PieceNames.Blank)
+        public ChessMove(BoardLocation from, BoardLocation to, MoveType moveType, Chess.PieceNames promotedTo = Chess.PieceNames.Blank)
         {
             From = from;
             To = to;
@@ -18,7 +18,6 @@ namespace CSharpChess.TheBoard
         public BoardLocation To { get; }
         public MoveType MoveType { get; }
         public Chess.PieceNames PromotedTo { get; }
-
         public override string ToString() => $"{From}-{To}";
 
 

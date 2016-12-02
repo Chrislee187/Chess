@@ -55,6 +55,7 @@
     <Compile Include="Movement\ChessMoveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidMoveGeneration\Pawns\from_starting_position.cs" />
+    <Compile Include="ValidMoveGeneration\Pawns\pawn_moves.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

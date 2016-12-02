@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using CSharpChess.TheBoard;
 
 namespace CSharpChess.ValidMoves
@@ -22,20 +24,54 @@ namespace CSharpChess.ValidMoves
         private IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
         {
             var moves = new List<ChessMove>();
-
+            var pieceColour = board[at].Piece.Colour;
+            
             moves.AddRange(NormalTakeMoves(board, at, Chess.Board.LeftDirectionModifier)
-                .Select(l => new ChessMove(at, l, MoveType.Take)));
+                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.Take))));
+
             moves.AddRange(NormalTakeMoves(board, at, Chess.Board.RightDirectionModifier)
-                .Select(l => new ChessMove(at, l, MoveType.Take)));
+                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.Take))));
 
             moves.AddRange(EnPassantTakeMoves(board, at, Chess.Board.LeftDirectionModifier)
-                .Select(l => new ChessMove(at, l, MoveType.TakeEnPassant)));
+                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.TakeEnPassant))));
+
             moves.AddRange(EnPassantTakeMoves(board, at, Chess.Board.RightDirectionModifier)
-                .Select(l => new ChessMove(at, l, MoveType.TakeEnPassant)));
+                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.TakeEnPassant))));
 
             return moves;
         }
 
+        private IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
+        {
+            var chessPiece = board[at].Piece;
+            if(chessPiece.Colour == Chess.Colours.None) return new List<ChessMove>();
+
+            var direction = Chess.Pieces.Direction(chessPiece);
+            var boardLocation = new BoardLocation(at.File, at.Rank + direction);
+
+            var newMove = new ChessMove(at, boardLocation, Promotable(boardLocation, chessPiece.Colour, MoveType.Move));
+
+            var validMoves = new List<ChessMove>();
+            if (!Blocked(board, newMove))
+            {
+                validMoves.Add(newMove);
+                if (board[at].Location.Rank == Chess.StartingPawnRankFor(chessPiece.Colour) )
+                {
+                    var location = new BoardLocation(at.File, at.Rank + (direction * 2));
+                    newMove = new ChessMove(at, location, Promotable(location, chessPiece.Colour, MoveType.Move));
+                    if (!Blocked(board, newMove))
+                        validMoves.Add(newMove);
+                }
+            }
+
+            return validMoves;
+        }
+
+        private MoveType Promotable(BoardLocation bl, Chess.Colours colour, MoveType dflt)
+        {
+            var promotionRank = Chess.PromotionRankFor(colour);
+            return bl.Rank == promotionRank ? MoveType.Promotion : dflt;
+        }
         private IEnumerable<BoardLocation> NormalTakeMoves(ChessBoard board, BoardLocation at, int horizontal)
         {
             var vertical = Chess.Pieces.Direction(board[at].Piece);
@@ -108,29 +144,6 @@ namespace CSharpChess.ValidMoves
         private static bool CanTakeAt(ChessBoard board, BoardLocation takeLocation, Chess.Colours colourOfTakingPiece) 
             => !board.IsEmptyAt(takeLocation) && board[takeLocation].Piece.Colour != colourOfTakingPiece;
 
-        private static IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
-        {
-            var chessPiece = board[at].Piece;
-            if(chessPiece.Colour == Chess.Colours.None) return new List<ChessMove>();
-
-            var direction = Chess.Pieces.Direction(chessPiece);
-
-            var newMove = new ChessMove(at, new BoardLocation(at.File, at.Rank + direction), MoveType.Move);
-
-            var validMoves = new List<ChessMove>();
-            if (!Blocked(board, newMove))
-            {
-                validMoves.Add(newMove);
-                if (board[at].Location.Rank == Chess.StartingPawnRankFor(chessPiece.Colour) )
-                {
-                    newMove = new ChessMove(at, new BoardLocation(at.File, at.Rank + (direction * 2)), MoveType.Move);
-                    if (!Blocked(board, newMove))
-                        validMoves.Add(newMove);
-                }
-            }
-
-            return validMoves;
-        }
 
         private static bool Blocked(ChessBoard board, ChessMove chessMove)
         {
