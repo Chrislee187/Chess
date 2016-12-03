@@ -8,7 +8,15 @@ namespace CSharpChess.UnitTests.Helpers
     public static class ChessBoardHelper
     {
         private static string _validOneChars = ". prnbqkPRNBQK";
-
+        public static string NewBoardInOneCharNotation =
+                "rnbqkbnr" +
+                "pppppppp" +
+                "........" +
+                "........" +
+                "........" +
+                "........" +
+                "PPPPPPPP" +
+                "RNBQKBNR";
         public static IEnumerable<BoardPiece> OneCharBoardToBoardPieces(string asOneChar)
         {
             var validChars = AssertValidRepresentation(asOneChar);

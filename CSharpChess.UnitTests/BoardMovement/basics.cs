@@ -19,6 +19,16 @@ namespace CSharpChess.UnitTests.BoardMovement
         }
 
         [Test]
+        public void white_cannot_move_when_blacks_turn()
+        {
+            var board = BoardBuilder.CustomBoard(ChessBoardHelper.NewBoardInOneCharNotation, Chess.Colours.Black);
+
+            var result = board.Move("D2-D4");
+
+            Assert.That(result.Succeeded, Is.False);
+        }
+
+        [Test]
         public void cannot_move_an_empty_square()
         {
             var board = BoardBuilder.NewGame;
