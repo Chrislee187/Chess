@@ -54,18 +54,19 @@ namespace CSharpChess.TheBoard
             get { return this[location.File, location.Rank]; }
             private set { this[location.File, location.Rank] = value; }
         }
-        private BoardPiece this[int file, int rank]
+        public BoardPiece this[int file, int rank]
         {
             get { return GetPiece((Chess.ChessFile)file, rank); }
-            set { _boardPieces[file, rank] = value; }
+            private set { _boardPieces[file, rank] = value; }
         }
-
         public BoardPiece this[string location]
         {
             get { return GetPiece((BoardLocation) location); }
-            set { this[(BoardLocation) location] = value; }
+            private set { this[(BoardLocation) location] = value; }
         }
 
+        public bool CanEnPassant(BoardLocation at, BoardLocation moveLocation)
+            => Chess.Rules.Pawns.CanEnPassant(this, at, moveLocation);
 
         public ChessBoard(bool newGame)
         {
@@ -115,17 +116,14 @@ namespace CSharpChess.TheBoard
 
                     this[move.To] = from;
 
-                    if (moveType == MoveType.TakeEnPassant)
+                    switch (moveType)
                     {
-                        ClearSquare(new BoardLocation(move.To.File, move.From.Rank));
-                        return UpdateTurn(MoveResult.Enpassant(move));
-                    }
-
-                    //TODO: Is this tested???
-                    if (moveType == MoveType.Promotion)
-                    {
-                        this[move.To] = new BoardPiece(move.To, new ChessPiece(from.Piece.Colour, move.PromotedTo));
-                        return UpdateTurn(MoveResult.Promotion(move));
+                        case MoveType.TakeEnPassant:
+                            ClearSquare(new BoardLocation(move.To.File, move.From.Rank));
+                            return UpdateTurn(MoveResult.Enpassant(move));
+                        case MoveType.Promotion:
+                            this[move.To] = new BoardPiece(move.To, new ChessPiece(from.Piece.Colour, move.PromotedTo));
+                            return UpdateTurn(MoveResult.Promotion(move));
                     }
 
                     return UpdateTurn(MoveResult.Success(move));
@@ -137,6 +135,7 @@ namespace CSharpChess.TheBoard
             }
             throw new InvalidOperationException("Move() still a WIP");
         }
+        public MoveResult Move(string move) => Move((ChessMove) move);
 
         private void ClearSquare(BoardLocation takenLocation) 
             => this[takenLocation] = BoardPiece.Empty(takenLocation);
@@ -266,8 +265,6 @@ namespace CSharpChess.TheBoard
             return this[location];
         }
 
-        public bool CanEnPassant(BoardLocation at, BoardLocation moveLocation) 
-            => Chess.Rules.Pawns.CanEnPassant(this, at, moveLocation);
     }
 
 }

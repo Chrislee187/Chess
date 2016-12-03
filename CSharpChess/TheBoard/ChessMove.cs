@@ -27,7 +27,7 @@ namespace CSharpChess.TheBoard
 
         #region object overrides
         // TODO: Change to explicit
-        public static implicit operator ChessMove(string move)
+        public static explicit operator ChessMove(string move)
         {
             var moveType = MoveType.Unknown;
             Chess.PieceNames promotedTo = Chess.PieceNames.Blank;
