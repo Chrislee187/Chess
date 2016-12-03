@@ -302,10 +302,12 @@ namespace CSharpChess.TheBoard
                     return new PawnValidMoveGenerator().For(board, at);
                 case Chess.PieceNames.Knight:
                     return new KnightValidMoveGenerator().For(board, at);
-//                case Chess.PieceNames.Rook:
-//                    break;
-//                case Chess.PieceNames.Bishop:
-//                    break;
+                case Chess.PieceNames.Rook:
+                    return new RookValidMoveGenerator().For(board, at);
+                    break;
+                case Chess.PieceNames.Bishop:
+                    return new BishopValidMoveGenerator().For(board, at);
+                    break;
 //                case Chess.PieceNames.King:
 //                    break;
 //                case Chess.PieceNames.Queen:

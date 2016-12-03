@@ -39,7 +39,7 @@ namespace CSharpChess.UnitTests.TheBoard
             Assert.That(result.MoveType, Is.EqualTo(moveType));
             Assert.True(board.IsEmptyAt(m.From), $"Move start square '{m.From}' not empty, contains '{board[m.From].Piece}'.");
             Assert.True(board.IsNotEmptyAt(m.To), "Move destination square empty.");
-            Assert.True(board[m.To].Piece.Is(chessPiece.Colour, chessPiece.Name), $"'{board[m.From].Piece}' found at destination, expected' {chessPiece}'");
+            Assert.True(board[m.To].Piece.Is(chessPiece.Colour, chessPiece.Name), $"'{board[m.To].Piece}' found at destination, expected' {chessPiece}'");
         }
 
         protected static void AssertMovesContainsExpectedWithType(IEnumerable<ChessMove> actual,

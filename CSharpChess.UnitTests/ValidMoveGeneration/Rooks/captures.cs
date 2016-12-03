@@ -19,19 +19,20 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Rooks
             _generator = new RookValidMoveGenerator();
         }
         [Test]
-        public void can_take_in_four_diagonal_directions()
+        public void can_take_in_four_directions()
         {
-            const string asOneChar = "........" +
-                                     ".p.p.p.." +
-                                     "........" +
-                                     ".p.R.p.." +
-                                     "........" +
-                                     ".p.p.p.." +
-                                     "........" +
-                                     "........";
+            //                        ABCDEFGH
+            const string asOneChar = "........" + // 8
+                                     "...p...." + // 7
+                                     "........" + // 6
+                                     ".p.R.p.." + // 5
+                                     "........" + // 4
+                                     "...p...." + // 3
+                                     "........" + // 2
+                                     "........";  // 1
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
-            var expectedTakes = BoardLocation.List("F7", "F3", "B3", "B7");
+            var expectedTakes = BoardLocation.List("D7", "F5", "D3", "B5");
 
             var chessMoves = _generator.For(board, "D5").ToList();
 

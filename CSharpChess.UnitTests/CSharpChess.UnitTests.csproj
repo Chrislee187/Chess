@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoardMovement\rooks.cs" />
     <Compile Include="BoardMovement\knights.cs" />
+    <Compile Include="BoardMovement\bishops.cs" />
     <Compile Include="TheBoard\BoardAssertions.cs" />
     <Compile Include="Helpers\BoardBuilder.cs" />
     <Compile Include="BoardBuilderTests\board_basics.cs" />

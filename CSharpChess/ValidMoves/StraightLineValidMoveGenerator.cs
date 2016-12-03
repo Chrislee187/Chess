@@ -33,7 +33,7 @@ namespace CSharpChess.ValidMoves
         protected override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
         {
             var result = new List<ChessMove>();
-            var directions = Chess.Rules.Bishops.DirectionTransformations;
+            var directions = _directions;
 
             foreach (var direction in directions)
             {
