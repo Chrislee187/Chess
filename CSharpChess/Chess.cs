@@ -91,6 +91,9 @@ namespace CSharpChess
                     : colour;
         }
 
+        public static bool CanTakeAt(ChessBoard board, BoardLocation takeLocation, Colours attackerColour)
+            => board.IsNotEmptyAt(takeLocation)
+            && board[takeLocation].Piece.Colour == EnemyColour(attackerColour);
         public enum Colours
         {
             White, Black,

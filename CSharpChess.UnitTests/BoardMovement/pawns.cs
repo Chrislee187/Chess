@@ -11,7 +11,7 @@ namespace CSharpChess.UnitTests.BoardMovement
     public class pawns : BoardAssertions
     {
         [Test]
-        public void can_move_two_forward()
+        public void can_move_two_forward_at_start()
         {
             var board = BoardBuilder.NewGame;
 

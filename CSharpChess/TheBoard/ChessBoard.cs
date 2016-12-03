@@ -248,8 +248,25 @@ namespace CSharpChess.TheBoard
         private IEnumerable<ChessMove> GetValidMoves(ChessBoard board, BoardLocation at)
         {
             var pieceName = board[at].Piece.Name;
-            if(pieceName != Chess.PieceNames.Pawn) throw new NotImplementedException($"ValidMoveGenerator for {pieceName} not yet implemented.");
-            return new PawnValidMoveGenerator().For(board, at);
+            switch (pieceName)
+            {
+                case Chess.PieceNames.Pawn:
+                    return new PawnValidMoveGenerator().For(board, at);
+                case Chess.PieceNames.Knight:
+                    return new KnightValidMoveGenerator().For(board, at);
+//                case Chess.PieceNames.Rook:
+//                    break;
+//                case Chess.PieceNames.Bishop:
+//                    break;
+//                case Chess.PieceNames.King:
+//                    break;
+//                case Chess.PieceNames.Queen:
+//                    break;
+//                case Chess.PieceNames.Blank:
+//                    break;
+                default:
+                    throw new NotImplementedException($"ValidMoveGenerator for {pieceName} not yet implemented.");
+            }
         }
 
         private BoardPiece GetPiece(Chess.ChessFile file, int rank)

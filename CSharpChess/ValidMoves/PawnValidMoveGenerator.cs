@@ -1,32 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using CSharpChess.TheBoard;
 
 namespace CSharpChess.ValidMoves
 {
-    public class PawnValidMoveGenerator
+    public class PawnValidMoveGenerator : ValidMoveGeneratorBase
     {
-        public IEnumerable<ChessMove> For(ChessBoard board, string location)
-        {
-            return For(board, (BoardLocation) location);
-        }
+        public PawnValidMoveGenerator() : base(Chess.PieceNames.Pawn)
+        {}
 
-            public IEnumerable<ChessMove> For(ChessBoard board, BoardLocation at)
-        {
-            var possibleMoves = new List<ChessMove>();
-
-            possibleMoves.AddRange(Moves(board, at));
-
-            possibleMoves.AddRange(Takes(board, at));
-
-            // TODO: Promotions
-            
-            return possibleMoves;
-        }
-
-        private IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
+        protected override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
         {
             var moves = new List<ChessMove>();
             var pieceColour = board[at].Piece.Colour;
@@ -50,10 +33,10 @@ namespace CSharpChess.ValidMoves
             return moves;
         }
 
-        private IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
+        protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
         {
             var chessPiece = board[at].Piece;
-            if(chessPiece.Colour == Chess.Colours.None) return new List<ChessMove>();
+            if (chessPiece.Colour == Chess.Colours.None) return new List<ChessMove>();
 
             var direction = Chess.Pieces.Direction(chessPiece);
             var boardLocation = new BoardLocation(at.File, at.Rank + direction);
@@ -98,7 +81,7 @@ namespace CSharpChess.ValidMoves
             var newRank = at.Rank + vertical;
             var takeLocation = BoardLocation.At(newFile, newRank);
 
-            if (CanTakeAt(board, takeLocation, pieceColour))
+            if (Chess.CanTakeAt(board, takeLocation, pieceColour))
             {
                 moveTos.Add(takeLocation);
             }
@@ -134,10 +117,6 @@ namespace CSharpChess.ValidMoves
             
             return moveTos;
         }
-
-        private static bool CanTakeAt(ChessBoard board, BoardLocation takeLocation, Chess.Colours colourOfTakingPiece) 
-            => !board.IsEmptyAt(takeLocation) && board[takeLocation].Piece.Colour != colourOfTakingPiece;
-
 
         private static bool Blocked(ChessBoard board, ChessMove chessMove)
         {
