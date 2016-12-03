@@ -23,7 +23,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var expected = BoardLocation.List("D3", "C3");
+            var expected = BoardLocation.List("C3");
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
@@ -32,7 +32,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var moves = new PawnValidMoveGenerator().For(board, "D4");
 
-            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.TakeEnPassant);
         }
         [Test]
         public void cannot_take_piece_one_square_in_front_of_it()
@@ -89,13 +89,13 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var expected = BoardLocation.List("C3", "C4", "B3", "D3");
+            var expected = BoardLocation.List("B3", "D3");
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
             var moves = new PawnValidMoveGenerator().For(board, "C2");
 
-            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Take);
         }
     }
 }

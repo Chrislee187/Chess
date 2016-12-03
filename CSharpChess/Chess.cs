@@ -156,6 +156,7 @@ namespace CSharpChess
                 internal static Func<int, int> Right => (i) => +1 * i;
                 internal static Func<int, int> Down => (i) => -1 * i;
                 internal static Func<int, int> Up => (i) => +1 * i;
+                internal static Func<int> None => () => 0;
             }
 
             public static class Pawns
@@ -216,6 +217,16 @@ namespace CSharpChess
                     Tuple.Create(Movement.Right(1), Movement.Down(1)),
                     Tuple.Create(Movement.Left(1), Movement.Up(1)),
                     Tuple.Create(Movement.Left(1), Movement.Down(1))
+                };
+            }
+            public static class Rooks
+            {
+                public static IEnumerable<Tuple<int, int>> DirectionTransformations => new List<Tuple<int, int>>
+                {
+                    Tuple.Create(Movement.None(), Movement.Up(1)),
+                    Tuple.Create(Movement.Right(1), Movement.None()),
+                    Tuple.Create(Movement.None(), Movement.Down(1)),
+                    Tuple.Create(Movement.Left(1), Movement.None())
                 };
             }
         }

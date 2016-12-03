@@ -8,7 +8,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
 {
     [TestFixture]
     // ReSharper disable once InconsistentNaming
-    public class from_starting_position : BoardAssertions
+    public partial class from_starting_position : BoardAssertions
     {
         [TestCase("C1")]
         [TestCase("F1")]
