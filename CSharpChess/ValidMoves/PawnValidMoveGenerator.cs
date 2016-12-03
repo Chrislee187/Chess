@@ -8,7 +8,12 @@ namespace CSharpChess.ValidMoves
 {
     public class PawnValidMoveGenerator
     {
-        public IEnumerable<ChessMove> For(ChessBoard board, BoardLocation at)
+        public IEnumerable<ChessMove> For(ChessBoard board, string location)
+        {
+            return For(board, (BoardLocation) location);
+        }
+
+            public IEnumerable<ChessMove> For(ChessBoard board, BoardLocation at)
         {
             var possibleMoves = new List<ChessMove>();
 

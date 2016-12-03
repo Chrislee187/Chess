@@ -60,6 +60,12 @@ namespace CSharpChess.TheBoard
             set { _boardPieces[file, rank] = value; }
         }
 
+        public BoardPiece this[string location]
+        {
+            get { return GetPiece((BoardLocation) location); }
+            set { this[(BoardLocation) location] = value; }
+        }
+
 
         public ChessBoard(bool newGame)
         {
@@ -140,6 +146,12 @@ namespace CSharpChess.TheBoard
 
         public bool IsNotEmptyAt(BoardLocation location) 
             => !IsEmptyAt(location);
+
+        public bool IsEmptyAt(string location)
+            => this[(BoardLocation) location].Piece.Equals(ChessPiece.NullPiece);
+
+        public bool IsNotEmptyAt(string location)
+            => !IsEmptyAt((BoardLocation) location);
 
         private void NewBoard()
         {
@@ -246,6 +258,12 @@ namespace CSharpChess.TheBoard
             Chess.Validations.ThrowInvalidRank(rank);
             Chess.Validations.ThrowInvalidFile(file);
             return _boardPieces[(int)file, rank];
+        }
+        private BoardPiece GetPiece(BoardLocation location)
+        {
+            Chess.Validations.ThrowInvalidRank(location.Rank);
+            Chess.Validations.ThrowInvalidFile(location.File);
+            return this[location];
         }
 
         public bool CanEnPassant(BoardLocation at, BoardLocation moveLocation) 

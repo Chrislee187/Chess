@@ -19,7 +19,7 @@ namespace CSharpChess.TheBoard
 
         public static BoardLocation At(int file, int rank) => new BoardLocation((Chess.ChessFile)file, rank);
 
-        public static BoardLocation At(string at) => at;
+        public static BoardLocation At(string at) => (BoardLocation) at;
 
         public static IEnumerable<BoardLocation> ListOf(params string[] locs)
         {
@@ -27,7 +27,7 @@ namespace CSharpChess.TheBoard
 
             foreach (var loc in locs)
             {
-                list.Add(loc);
+                list.Add((BoardLocation) loc);
             }
 
             return list;
@@ -37,7 +37,7 @@ namespace CSharpChess.TheBoard
         #region Object overrides
         public override string ToString() => File.ToString().Substring(0, 1) + Rank;
 
-        public static implicit operator BoardLocation(string s)
+        public static explicit operator BoardLocation(string s)
         {
             if (s.Length != 2) throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
 
@@ -67,7 +67,7 @@ namespace CSharpChess.TheBoard
     {
         public static BoardLocation ToBoardLocation(this string value)
         {
-            return value;
+            return (BoardLocation) value;
         }
     }
 }

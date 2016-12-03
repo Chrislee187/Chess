@@ -5,6 +5,10 @@ namespace CSharpChess.TheBoard
 {
     public class ChessMove
     {
+        public ChessMove(string from, string to, MoveType moveType,
+            Chess.PieceNames promotedTo = Chess.PieceNames.Blank) : this((BoardLocation) from, (BoardLocation) to, moveType, promotedTo)
+        {
+        }
 
         public ChessMove(BoardLocation from, BoardLocation to, MoveType moveType, Chess.PieceNames promotedTo = Chess.PieceNames.Blank)
         {
@@ -22,6 +26,7 @@ namespace CSharpChess.TheBoard
 
 
         #region object overrides
+        // TODO: Change to explicit
         public static implicit operator ChessMove(string move)
         {
             var moveType = MoveType.Unknown;
