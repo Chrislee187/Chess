@@ -30,10 +30,14 @@ namespace CSharpChess.ValidMoves
             if(chessPiece.Colour == Chess.Colours.None) return new List<ChessMove>();
 
             var possibleMoves = Chess.Rules.Knights.MovesFrom(at);
+
+            Func<BoardLocation, bool> locationIsValidToMoveTo = board.IsEmptyAt;
+
             return possibleMoves
-                .Where(board.IsEmptyAt)
+                .Where(locationIsValidToMoveTo)
                 .Select(m => new ChessMove(at, m, MoveType.Move));
         }
+
         private IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
         {
             var chessPiece = board[at].Piece;
@@ -43,10 +47,13 @@ namespace CSharpChess.ValidMoves
 
             Chess.Colours enemyColour = Chess.EnemyColour(chessPiece.Colour);
 
+            Func<BoardLocation, bool> locationIsValidToTake = m => board.IsNotEmptyAt(m) && board[m].Piece.Colour == enemyColour;
+
             return possibleMoves
-                .Where(m => board.IsNotEmptyAt(m) && board[m].Piece.Colour == enemyColour)
+                .Where(locationIsValidToTake)
                 .Select(m => new ChessMove(at, m, MoveType.Take));
         }
+
         private MoveType Promotable(BoardLocation location, Chess.Colours colour, MoveType dflt)
         {
             var promotionRank = Chess.PromotionRankFor(colour);

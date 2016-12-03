@@ -29,7 +29,7 @@ namespace CSharpChess.UnitTests.TheBoard
             return ranks;
         }
 
-        protected static void AssertExpectedMoves(IEnumerable<BoardLocation> expected, IEnumerable<ChessMove> actual)
+        protected static void AssertMovesAreAsExpected(IEnumerable<ChessMove> actual, IEnumerable<BoardLocation> expected)
         {
             var expectedLocations = expected as IList<BoardLocation> ?? expected.ToList();
             var acutalMoves = actual as IList<ChessMove> ?? actual.ToList();
@@ -43,6 +43,20 @@ namespace CSharpChess.UnitTests.TheBoard
             CollectionAssert.AreEquivalent(expectedMoves, actualMoves);
 
             Assert.That(actualMoves.Count(), Is.EqualTo(expectedLocations.Count()));
+        }
+
+        protected void AssertMovesContains(IEnumerable<ChessMove> moves, string location, MoveType moveType)
+        {
+            var found = moves.FirstOrDefault( m => 
+                m.To.Equals(BoardLocation.At("A3"))
+                && m.MoveType == MoveType.Move);
+
+            Assert.IsNotNull(found, $"MoveType of '{moveType}' to ${location} not found!.");
+        }
+
+        protected static void AssertAllMovesAreOfType(IEnumerable<ChessMove> moves, MoveType moveType)
+        {
+            Assert.That(moves.All(m => m.MoveType == moveType), "Unexpected MoveType found");
         }
     }
 }

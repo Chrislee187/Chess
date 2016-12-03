@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.UnitTests.TheBoard;
@@ -9,9 +8,16 @@ using NUnit.Framework;
 namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
 {
     [TestFixture]
-    // ReSharper disable once InconsistentNaming
     public class captures : BoardAssertions
     {
+        private KnightValidMoveGenerator _knightValidMoveGenerator;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _knightValidMoveGenerator = new KnightValidMoveGenerator();
+        }
+
         [Test]
         public void can_capture()
         {
@@ -29,10 +35,35 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
-            var moves = new KnightValidMoveGenerator().For(board, "B1");
+            var moves = _knightValidMoveGenerator.For(board, "B1").ToList();
 
-            Assert.That(moves.First(m => m.To.Equals(BoardLocation.At("C3"))).MoveType
-                , Is.EqualTo(MoveType.Take));
+            AssertMovesAreAsExpected(moves, expected);
+
+            AssertMovesContains(moves, "A3", MoveType.Move);
+            AssertMovesContains(moves, "C3", MoveType.Take);
         }
-   }
+
+        [Test]
+        public void all_moves_generated()
+        {
+            var asOneChar =
+                    "........" +
+                    "........" +
+                    "........" +
+                    "........" +
+                    "...N...." +
+                    "........" +
+                    "........" +
+                    "........"
+                ;
+            var expected = BoardLocation.List("E6", "F5", "F3", "E2", "C2", "B3", "B5", "C6");
+
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+
+            var moves = _knightValidMoveGenerator.For(board, "D4").ToList();
+
+            AssertMovesAreAsExpected(moves, expected);
+            AssertAllMovesAreOfType(moves, MoveType.Move);
+        }
+    }
 }
