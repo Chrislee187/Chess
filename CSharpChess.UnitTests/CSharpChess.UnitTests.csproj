@@ -47,7 +47,7 @@
     <Compile Include="BoardMovement\rooks.cs" />
     <Compile Include="BoardMovement\knights.cs" />
     <Compile Include="BoardMovement\bishops.cs" />
-    <Compile Include="TheBoard\BoardAssertions.cs" />
+    <Compile Include="Helpers\BoardAssertions.cs" />
     <Compile Include="Helpers\BoardBuilder.cs" />
     <Compile Include="BoardBuilderTests\board_basics.cs" />
     <Compile Include="BoardBuilderTests\default_boards.cs" />
@@ -64,6 +64,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidMoveGeneration\Pawns\from_starting_position.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\moves.cs" />
+    <Compile Include="ValidMoveGeneration\Queen\captures.cs" />
+    <Compile Include="ValidMoveGeneration\Queen\from_starting_position.cs" />
+    <Compile Include="ValidMoveGeneration\Queen\moves.cs" />
     <Compile Include="ValidMoveGeneration\Rooks\captures.cs" />
     <Compile Include="ValidMoveGeneration\Rooks\from_starting_position.cs" />
     <Compile Include="ValidMoveGeneration\Rooks\moves.cs" />

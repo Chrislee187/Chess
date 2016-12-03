@@ -55,6 +55,7 @@
     <Compile Include="ValidMoves\BishopValidMoveGenerator.cs" />
     <Compile Include="ValidMoves\KnightValidMoveGenerator.cs" />
     <Compile Include="ValidMoves\PawnValidMoveGenerator.cs" />
+    <Compile Include="ValidMoves\QueenValidMoveGenerator.cs" />
     <Compile Include="ValidMoves\RookValidMoveGenerator.cs" />
     <Compile Include="ValidMoves\StraightLineValidMoveGenerator.cs" />
     <Compile Include="ValidMoves\ValidMoveGeneratorBase.cs" />
