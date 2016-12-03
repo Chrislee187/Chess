@@ -1,7 +1,7 @@
 ﻿using CSharpChess.TheBoard;
 using NUnit.Framework;
 
-namespace CSharpChess.UnitTests.Movement
+namespace CSharpChess.UnitTests.TheBoard
 {
     [TestFixture]
     public class ChessMoveTests

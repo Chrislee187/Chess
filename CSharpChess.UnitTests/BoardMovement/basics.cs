@@ -1,15 +1,13 @@
-﻿using System.Linq;
-using CSharpChess.TheBoard;
-using CSharpChess.UnitTests.BoardBuilderTests;
+﻿using CSharpChess.UnitTests.BoardBuilderTests;
 using CSharpChess.UnitTests.Helpers;
-using CSharpChess.ValidMoves;
+using CSharpChess.UnitTests.TheBoard;
 using NUnit.Framework;
 
-namespace CSharpChess.UnitTests.Movement
+namespace CSharpChess.UnitTests.BoardMovement
 {
     [TestFixture]
     // ReSharper disable once InconsistentNaming
-    public class basic_moves : BoardAssertions
+    public class basics : BoardAssertions
     {
         [Test]
         public void black_cannot_move_when_whites_turn()

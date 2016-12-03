@@ -4,7 +4,7 @@ using System.Linq;
 using CSharpChess.TheBoard;
 using NUnit.Framework;
 
-namespace CSharpChess.UnitTests.BoardBuilderTests
+namespace CSharpChess.UnitTests.TheBoard
 {
     public class BoardAssertions
     {

@@ -2,17 +2,17 @@
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.BoardBuilderTests;
 using CSharpChess.UnitTests.Helpers;
-using CSharpChess.ValidMoves;
+using CSharpChess.UnitTests.TheBoard;
 using NUnit.Framework;
 
-namespace CSharpChess.UnitTests.Movement
+namespace CSharpChess.UnitTests.BoardMovement
 {
     [TestFixture]
     // ReSharper disable once InconsistentNaming
-    public class pawn_moves : BoardAssertions
+    public class pawns : BoardAssertions
     {
         [Test]
-        public void opening_pawn_move()
+        public void can_move_two_forward()
         {
             var board = BoardBuilder.NewGame;
 
@@ -31,7 +31,7 @@ namespace CSharpChess.UnitTests.Movement
         }
 
         [Test]
-        public void pawn_can_take_enpassant()
+        public void can_take_enpassant()
         {
             var asOneChar =
                 "rnbqkbnr" +
@@ -63,7 +63,7 @@ namespace CSharpChess.UnitTests.Movement
         [TestCase("N", Chess.PieceNames.Knight)]
         [TestCase("r", Chess.PieceNames.Rook)]
         [TestCase("R", Chess.PieceNames.Rook)]
-        public void pawn_is_promoted(string promotionCharacter, Chess.PieceNames name)
+        public void can_promote(string promotionCharacter, Chess.PieceNames name)
         {
             var asOneChar =
                 "........" +

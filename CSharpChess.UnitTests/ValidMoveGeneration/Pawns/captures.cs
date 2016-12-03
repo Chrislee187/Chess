@@ -1,6 +1,7 @@
 ﻿using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.BoardBuilderTests;
 using CSharpChess.UnitTests.Helpers;
+using CSharpChess.UnitTests.TheBoard;
 using CSharpChess.ValidMoves;
 using NUnit.Framework;
 
@@ -8,10 +9,10 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 {
     [TestFixture]
     // ReSharper disable once InconsistentNaming
-    public class capture_moves_are_generated : BoardAssertions
+    public class captures : BoardAssertions
     {
         [Test]
-        public void pawn_can_take_enpassant()
+        public void can_enpassant()
         {
             var asOneChar =
                 "rnbqkbnr" +
@@ -35,7 +36,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             AssertExpectedMoves(expected, moves);
         }
         [Test]
-        public void pawn_cannot_take_piece_one_square_in_front_of_it()
+        public void cannot_take_piece_one_square_in_front_of_it()
         {
             var asOneChar =
                 "rnbqkbnr" +
@@ -56,7 +57,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             AssertExpectedMoves(expected, moves);
         }
         [Test]
-        public void pawn_cannot_take_piece_two_squares_in_front_of_it()
+        public void cannot_take_piece_two_squares_in_front_of_it()
         {
             var asOneChar =
                 "rnbqkbnr" +
@@ -79,7 +80,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
         }
         [Test]
-        public void pawn_can_take_pieces_diagonally_opposite()
+        public void can_take_pieces_diagonally_opposite()
         {
             var asOneChar =
                 "rnbqkbnr" +

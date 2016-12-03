@@ -3,16 +3,17 @@ using System.Linq;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.BoardBuilderTests;
 using CSharpChess.UnitTests.Helpers;
+using CSharpChess.UnitTests.TheBoard;
 using CSharpChess.ValidMoves;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 {
     [TestFixture]
-    public class pawn_moves : BoardAssertions
+    public class moves : BoardAssertions
     {
         [Test]
-        public void pawn_is_promotable()
+        public void promotion()
         {
             var asOneChar =
                 "........" +
