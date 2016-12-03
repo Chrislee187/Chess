@@ -55,7 +55,7 @@ namespace CSharpChess.ValidMoves
             return result;
         }
 
-        private BoardLocation ApplyDirection(BoardLocation from, Tuple<int, int> direction)
+        public static BoardLocation ApplyDirection(BoardLocation from, Tuple<int, int> direction)
         {
             var file = (int)from.File + direction.Item1;
             var rank = from.Rank + direction.Item2;

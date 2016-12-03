@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoardMovement\kings.cs" />
     <Compile Include="BoardMovement\queens.cs" />
     <Compile Include="BoardMovement\rooks.cs" />
     <Compile Include="BoardMovement\knights.cs" />
@@ -56,6 +57,9 @@
     <Compile Include="BoardMovement\pawns.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\from_starting_position.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\captures.cs" />
+    <Compile Include="ValidMoveGeneration\Kings\captures.cs" />
+    <Compile Include="ValidMoveGeneration\Kings\from_starting_position.cs" />
+    <Compile Include="ValidMoveGeneration\Kings\moves.cs" />
     <Compile Include="ValidMoveGeneration\Knights\moves.cs" />
     <Compile Include="ValidMoveGeneration\Knights\captures.cs" />
     <Compile Include="ValidMoveGeneration\Knights\from_starting_position.cs" />
