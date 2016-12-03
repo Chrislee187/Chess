@@ -60,7 +60,7 @@ namespace CSharpChess
                 public static readonly ChessPiece Queen = new ChessPiece(Colours.Black, PieceNames.Queen);
             }
 
-            public static int Direction(ChessPiece piece)
+            public static int VerticalDirectionModifierFor(ChessPiece piece)
             {
                 return piece.Colour == Colours.White
                     ? +1

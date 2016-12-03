@@ -15,19 +15,19 @@ namespace CSharpChess.ValidMoves
             var pieceColour = board[at].Piece.Colour;
             
             moves.AddRange(NormalTakes(board, at, Chess.Board.LeftDirectionModifier)
-                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.Take)))
+                .Select(l => new ChessMove(at, l, PromotedTo(l, pieceColour, MoveType.Take)))
                 );
 
             moves.AddRange(NormalTakes(board, at, Chess.Board.RightDirectionModifier)
-                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.Take)))
+                .Select(l => new ChessMove(at, l, PromotedTo(l, pieceColour, MoveType.Take)))
                 );
 
             moves.AddRange(EnPassantTakes(board, at, Chess.Board.LeftDirectionModifier)
-                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.TakeEnPassant)))
+                .Select(l => new ChessMove(at, l, PromotedTo(l, pieceColour, MoveType.TakeEnPassant)))
                 );
 
             moves.AddRange(EnPassantTakes(board, at, Chess.Board.RightDirectionModifier)
-                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.TakeEnPassant)))
+                .Select(l => new ChessMove(at, l, PromotedTo(l, pieceColour, MoveType.TakeEnPassant)))
                 );
 
             return moves;
@@ -36,22 +36,20 @@ namespace CSharpChess.ValidMoves
         protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
         {
             var chessPiece = board[at].Piece;
-            if (chessPiece.Colour == Chess.Colours.None) return new List<ChessMove>();
-
-            var direction = Chess.Pieces.Direction(chessPiece);
+            var direction = Chess.Pieces.VerticalDirectionModifierFor(chessPiece);
             var boardLocation = new BoardLocation(at.File, at.Rank + direction);
-
-            var newMove = new ChessMove(at, boardLocation, Promotable(boardLocation, chessPiece.Colour, MoveType.Move));
+            var newMove = new ChessMove(at, boardLocation, PromotedTo(boardLocation, chessPiece.Colour, MoveType.Move));
 
             var validMoves = new List<ChessMove>();
-            if (!Blocked(board, newMove))
+            if (board.IsEmptyAt(newMove.To))
             {
                 validMoves.Add(newMove);
                 if (board[at].Location.Rank == Chess.StartingPawnRankFor(chessPiece.Colour) )
                 {
                     var location = new BoardLocation(at.File, at.Rank + (direction * 2));
-                    newMove = new ChessMove(at, location, Promotable(location, chessPiece.Colour, MoveType.Move));
-                    if (!Blocked(board, newMove))
+                    newMove = new ChessMove(at, location, PromotedTo(location, chessPiece.Colour, MoveType.Move));
+
+                    if (board.IsEmptyAt(newMove.To))
                         validMoves.Add(newMove);
                 }
             }
@@ -59,31 +57,32 @@ namespace CSharpChess.ValidMoves
             return validMoves;
         }
 
-        private MoveType Promotable(BoardLocation location, Chess.Colours colour, MoveType dflt)
+        private MoveType PromotedTo(BoardLocation location, Chess.Colours colour, MoveType dflt)
         {
-            var promotionRank = Chess.PromotionRankFor(colour);
-            return location.Rank == promotionRank ? MoveType.Promotion : dflt;
+            return location.Rank == Chess.PromotionRankFor(colour) 
+                ? MoveType.Promotion 
+                : dflt;
         }
         private IEnumerable<BoardLocation> NormalTakes(ChessBoard board, BoardLocation at, int horizontal)
         {
-            var vertical = Chess.Pieces.Direction(board[at].Piece);
+            var vertical = Chess.Pieces.VerticalDirectionModifierFor(board[at].Piece);
 
             var pieceColour = board[at].Piece.Colour;
-            var notOnHorizontalEdge = horizontal > 0 
-                ? at.File < Chess.ChessFile.H 
-                : at.File > Chess.ChessFile.A;
 
             var moveTos = new List<BoardLocation>();
 
-            if (!notOnHorizontalEdge) return moveTos;
-
-            var newFile = (int)at.File + horizontal;
-            var newRank = at.Rank + vertical;
-            var takeLocation = BoardLocation.At(newFile, newRank);
-
-            if (Chess.CanTakeAt(board, takeLocation, pieceColour))
+            if (CanTakeThisSide(at, horizontal))
             {
-                moveTos.Add(takeLocation);
+                var newFile = (int) at.File + horizontal;
+                var newRank = at.Rank + vertical;
+                var takeLocation = BoardLocation.At(newFile, newRank);
+
+                if (Chess.CanTakeAt(board, takeLocation, pieceColour))
+                {
+                    moveTos.Add(takeLocation);
+                }
+
+                return moveTos;
             }
 
             return moveTos;
@@ -91,7 +90,7 @@ namespace CSharpChess.ValidMoves
 
         private IEnumerable<BoardLocation> EnPassantTakes(ChessBoard board, BoardLocation at, int horizontal)
         {
-            var vertical = Chess.Pieces.Direction(board[at].Piece);
+            var vertical = Chess.Pieces.VerticalDirectionModifierFor(board[at].Piece);
 
             var moveTos = new List<BoardLocation>();
 
@@ -99,11 +98,7 @@ namespace CSharpChess.ValidMoves
 
             if (at.Rank == enpassantFromRank)
             {
-                var notOnHorizontalEdge = horizontal > 0
-                    ? at.File < Chess.ChessFile.H
-                    : at.File > Chess.ChessFile.A;
-
-                if (notOnHorizontalEdge)
+                if (CanTakeThisSide(at, horizontal))
                 {
                     var newFile = (int)at.File + horizontal;
                     var enPassantLocation = new BoardLocation((Chess.ChessFile)newFile, at.Rank + vertical);
@@ -118,9 +113,12 @@ namespace CSharpChess.ValidMoves
             return moveTos;
         }
 
-        private static bool Blocked(ChessBoard board, ChessMove chessMove)
+        private static bool CanTakeThisSide(BoardLocation at, int horizontal)
         {
-            return !board[chessMove.To].Piece.Equals(ChessPiece.NullPiece);
+            var notOnHorizontalEdge = horizontal > 0
+                ? at.File < Chess.ChessFile.H
+                : at.File > Chess.ChessFile.A;
+            return notOnHorizontalEdge;
         }
     }
 }

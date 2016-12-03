@@ -65,12 +65,8 @@ namespace CSharpChess.ValidMoves
 
             while (to != null && board.IsEmptyAt(to))
             {
-                to = ApplyDirection(to, direction);
-            }
-
-            if (board[to].Piece.Colour == Chess.ColourOfEnemy(board[at].Piece.Colour))
-            {
                 result.Add(to);
+                to = ApplyDirection(to, direction);
             }
             return result;
         }

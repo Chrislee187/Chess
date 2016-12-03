@@ -23,8 +23,9 @@ namespace CSharpChess.ValidMoves
             var possibleMoves = new List<ChessMove>();
             var chessPiece = board[at].Piece;
 
-            if (chessPiece.Colour == Chess.Colours.None) return possibleMoves;
-            if (chessPiece.Name != ForPiece) return possibleMoves;
+            if (chessPiece.Colour == Chess.Colours.None
+                || chessPiece.Name != ForPiece)
+                    return possibleMoves;
 
             AddMoves(board, at, possibleMoves);
 

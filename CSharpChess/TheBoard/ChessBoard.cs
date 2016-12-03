@@ -54,6 +54,7 @@ namespace CSharpChess.TheBoard
             get { return this[location.File, location.Rank]; }
             private set { this[location.File, location.Rank] = value; }
         }
+        // ReSharper disable once MemberCanBePrivate.Global
         public BoardPiece this[int file, int rank]
         {
             get { return GetPiece((Chess.ChessFile)file, rank); }
@@ -62,6 +63,7 @@ namespace CSharpChess.TheBoard
         public BoardPiece this[string location]
         {
             get { return GetPiece((BoardLocation) location); }
+            // ReSharper disable once UnusedMember.Local
             private set { this[(BoardLocation) location] = value; }
         }
 

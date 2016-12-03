@@ -26,15 +26,15 @@ namespace CSharpChess.UnitTests.BoardMovement
         [Test]
         public void can_take()
         {
-            var asOneChar =
-                "........" +
-                "........" +
-                "....p..." +
-                "........" +
-                "...N...." +
-                "........" +
-                "........" +
-                "........";
+            string asOneChar;
+            asOneChar = "........" +
+                        "........" +
+                        "....p..." +
+                        "........" +
+                        "...N...." +
+                        "........" +
+                        "........" +
+                        "........";
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 

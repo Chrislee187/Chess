@@ -40,7 +40,6 @@ namespace CSharpChess.TheBoard
         public static explicit operator ChessMove(string move)
         {
             var moveType = MoveType.Unknown;
-            Chess.PieceNames promotedTo = Chess.PieceNames.Blank;
             const string validMoveChars = "ABCDEFGH12345678";
 
             var moveU = move.ToUpper();
@@ -72,7 +71,7 @@ namespace CSharpChess.TheBoard
                 }
             }
 
-            promotedTo = GetPromotionPiece(left);
+            var promotedTo = GetPromotionPiece(left);
             if(promotedTo != Chess.PieceNames.Blank)
                 moveType = MoveType.Promotion;
 
@@ -103,7 +102,7 @@ namespace CSharpChess.TheBoard
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((ChessMove) obj);
         }
 

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.UnitTests.TheBoard;
 using CSharpChess.ValidMoves;
@@ -15,7 +14,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
         [TestCase("F1")]
         [TestCase("C8")]
         [TestCase("F8")]
-        public void have_no_moves_at_start(string knightLocation, IEnumerable<string> expectedLocations)
+        public void have_no_moves_at_start(string knightLocation)
         {
             var board = BoardBuilder.NewGame;
 

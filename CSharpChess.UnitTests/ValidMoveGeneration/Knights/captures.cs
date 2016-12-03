@@ -21,26 +21,20 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
         [Test]
         public void can_capture()
         {
-            var asOneChar =
-                "rnbqkbnr" +
-                "pppppppp" +
-                "........" +
-                "........" +
-                "........" +
-                "..p....." +
-                "PPPPPPPP" +
-                "RNBQKBNR";
-
-            var expected = BoardLocation.List("A3", "C3");
-
+            const string asOneChar = "rnbqkbnr" +
+                                     "pppppppp" +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "..p....." +
+                                     "PPPPPPPP" +
+                                     "RNBQKBNR";
+            var expected = BoardLocation.List("C3");
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
             var moves = _knightValidMoveGenerator.For(board, "B1").ToList();
 
-            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
-
-            AssertMovesContains(moves, "A3", MoveType.Move);
-            AssertMovesContains(moves, "C3", MoveType.Take);
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Take);
         }
 
         [Test]
@@ -54,10 +48,8 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
                     "...N...." +
                     "........" +
                     "........" +
-                    "........"
-                ;
+                    "........";
             var expected = BoardLocation.List("E6", "F5", "F3", "E2", "C2", "B3", "B5", "C6");
-
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
             var moves = _knightValidMoveGenerator.For(board, "D4").ToList();
