@@ -82,7 +82,7 @@ namespace CSharpChess
             }
         }
 
-        public static Colours EnemyColour(Colours colour)
+        public static Colours ColourOfEnemy(Colours colour)
         {
             return colour == Colours.Black
                 ? Colours.White
@@ -93,7 +93,7 @@ namespace CSharpChess
 
         public static bool CanTakeAt(ChessBoard board, BoardLocation takeLocation, Colours attackerColour)
             => board.IsNotEmptyAt(takeLocation)
-            && board[takeLocation].Piece.Colour == EnemyColour(attackerColour);
+            && board[takeLocation].Piece.Colour == ColourOfEnemy(attackerColour);
         public enum Colours
         {
             White, Black,
@@ -150,6 +150,14 @@ namespace CSharpChess
 
         public static class Rules
         {
+            private static class Movement
+            {
+                internal static Func<int, int> Left => (i) => -1 * i;
+                internal static Func<int, int> Right => (i) => +1 * i;
+                internal static Func<int, int> Down => (i) => -1 * i;
+                internal static Func<int, int> Up => (i) => +1 * i;
+            }
+
             public static class Pawns
             {
                 // TODO: Unit Test this
@@ -171,20 +179,16 @@ namespace CSharpChess
 
             public static class Knights
             {
-                private static Func<int, int> left => (i) => -1 * i;
-                private static Func<int, int> right => (i) => +1 * i;
-                private static Func<int, int> down => (i) => -1 * i;
-                private static Func<int, int> up => (i) => +1 * i;
-                public static IEnumerable<Tuple<int,int>> MoveMatrix = new List<Tuple<int, int>>
+                private static readonly IEnumerable<Tuple<int,int>> MoveMatrix = new List<Tuple<int, int>>
                 {
-                    Tuple.Create(right(1), up(2)),
-                    Tuple.Create(right(2), up(1)),
-                    Tuple.Create(right(2), down(1)),
-                    Tuple.Create(right(1), down(2)),
-                    Tuple.Create(left(1), down(2)),
-                    Tuple.Create(left(2), down(1)),
-                    Tuple.Create(left(2), up (1)),
-                    Tuple.Create(left(1), up(2))
+                    Tuple.Create(Movement.Right(1), Movement.Up(2)),
+                    Tuple.Create(Movement.Right(2), Movement.Up(1)),
+                    Tuple.Create(Movement.Right(2), Movement.Down(1)),
+                    Tuple.Create(Movement.Right(1), Movement.Down(2)),
+                    Tuple.Create(Movement.Left(1), Movement.Down(2)),
+                    Tuple.Create(Movement.Left(2), Movement.Down(1)),
+                    Tuple.Create(Movement.Left(2), Movement.Up (1)),
+                    Tuple.Create(Movement.Left(1), Movement.Up(2))
                 };
 
                 public static IEnumerable<BoardLocation> MovesFrom(BoardLocation from)
@@ -202,6 +206,17 @@ namespace CSharpChess
                         return BoardLocation.At(file, rank);
                     });
                 }
+            }
+
+            public static class Bishops
+            {
+                public static IEnumerable<Tuple<int, int>> DirectionTransformations => new List<Tuple<int, int>>
+                {
+                    Tuple.Create(Movement.Right(1), Movement.Up(1)),
+                    Tuple.Create(Movement.Right(1), Movement.Down(1)),
+                    Tuple.Create(Movement.Left(1), Movement.Up(1)),
+                    Tuple.Create(Movement.Left(1), Movement.Down(1))
+                };
             }
         }
     }

@@ -37,7 +37,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
 
             var moves = _knightValidMoveGenerator.For(board, "B1").ToList();
 
-            AssertMovesAreAsExpected(moves, expected);
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
 
             AssertMovesContains(moves, "A3", MoveType.Move);
             AssertMovesContains(moves, "C3", MoveType.Take);
@@ -62,7 +62,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
 
             var moves = _knightValidMoveGenerator.For(board, "D4").ToList();
 
-            AssertMovesAreAsExpected(moves, expected);
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
             AssertAllMovesAreOfType(moves, MoveType.Move);
         }
     }

@@ -1,5 +1,4 @@
-﻿using CSharpChess.UnitTests.BoardBuilderTests;
-using CSharpChess.UnitTests.Helpers;
+﻿using CSharpChess.UnitTests.Helpers;
 using CSharpChess.UnitTests.TheBoard;
 using NUnit.Framework;
 

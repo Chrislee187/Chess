@@ -68,7 +68,7 @@ namespace CSharpChess.TheBoard
         public bool CanEnPassant(BoardLocation at, BoardLocation moveLocation)
             => Chess.Rules.Pawns.CanEnPassant(this, at, moveLocation);
 
-        public ChessBoard(bool newGame)
+        public ChessBoard(bool newGame = true)
         {
             if (newGame)
             {

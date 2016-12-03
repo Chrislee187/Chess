@@ -52,6 +52,7 @@
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TheBoard\MoveResult.cs" />
+    <Compile Include="ValidMoves\BishopValidMoveGenerator.cs" />
     <Compile Include="ValidMoves\KnightValidMoveGenerator.cs" />
     <Compile Include="ValidMoves\PawnValidMoveGenerator.cs" />
     <Compile Include="ValidMoves\ValidMoveGeneratorBase.cs" />

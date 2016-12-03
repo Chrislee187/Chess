@@ -32,7 +32,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var moves = new PawnValidMoveGenerator().For(board, "D4");
 
-            AssertMovesAreAsExpected(moves, expected);
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
         }
         [Test]
         public void cannot_take_piece_one_square_in_front_of_it()
@@ -53,7 +53,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var moves = new PawnValidMoveGenerator().For(board, "A2");
 
-            AssertMovesAreAsExpected(moves, expected);
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
         }
         [Test]
         public void cannot_take_piece_two_squares_in_front_of_it()
@@ -74,9 +74,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var moves = new PawnValidMoveGenerator().For(board, "A2");
 
-            AssertMovesAreAsExpected(moves, expected);
-
-
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
         }
         [Test]
         public void can_take_pieces_diagonally_opposite()
@@ -97,7 +95,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var moves = new PawnValidMoveGenerator().For(board, "C2");
 
-            AssertMovesAreAsExpected(moves, expected);
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
         }
     }
 }

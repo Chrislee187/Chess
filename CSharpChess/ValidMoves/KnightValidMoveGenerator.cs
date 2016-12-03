@@ -34,6 +34,5 @@ namespace CSharpChess.ValidMoves
                 .Where(locationIsValidToTake)
                 .Select(m => new ChessMove(at, m, MoveType.Take));
         }
-
     }
 }

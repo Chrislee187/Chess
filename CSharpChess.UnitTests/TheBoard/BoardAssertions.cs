@@ -42,20 +42,23 @@ namespace CSharpChess.UnitTests.TheBoard
             Assert.True(board[m.To].Piece.Is(chessPiece.Colour, chessPiece.Name), $"'{board[m.From].Piece}' found at destination, expected' {chessPiece}'");
         }
 
-        protected static void AssertMovesAreAsExpected(IEnumerable<ChessMove> actual, IEnumerable<BoardLocation> expected)
+        protected static void AssertMovesContainsExpectedWithType(IEnumerable<ChessMove> actual,
+            IEnumerable<BoardLocation> expected, MoveType moveType)
         {
             var expectedLocations = expected as IList<BoardLocation> ?? expected.ToList();
-            var acutalMoves = actual as IList<ChessMove> ?? actual.ToList();
+            var actualMoves = actual as IList<ChessMove> ?? actual.ToList();
 
-            if (!expectedLocations.Any() && !acutalMoves.Any()) return;
+            if (!expectedLocations.Any() && !actualMoves.Any()) return;
 
-            var actualMoves = actual as IList<ChessMove> ?? acutalMoves.ToList();
             var startLoc = actualMoves.First().From;
-            var expectedMoves = expectedLocations.Select(e => new ChessMove(startLoc, e, MoveType.Unknown));
+            var expectedMoves = expectedLocations.Select(e =>
+                new ChessMove(startLoc, e, moveType)
+                );
 
-            CollectionAssert.AreEquivalent(expectedMoves, actualMoves);
+            var movesOfType = actualMoves.Where(m => m.MoveType == moveType).ToList();
+            CollectionAssert.AreEquivalent(expectedMoves, movesOfType);
 
-            Assert.That(actualMoves.Count(), Is.EqualTo(expectedLocations.Count()));
+            Assert.That(movesOfType.Count(), Is.EqualTo(expectedLocations.Count()));
         }
 
         protected static void AssertMovesContains(IEnumerable<ChessMove> moves, string location, MoveType moveType)
