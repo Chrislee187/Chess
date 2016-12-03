@@ -97,41 +97,56 @@ namespace CSharpChess.TheBoard
             if (boardPiece.Piece.Colour != ToPlay && ToPlay != Chess.Colours.None)
                 return MoveResult.IncorrectPlayer(move);
 
+            MoveResult result;
             var validMove = CheckMoveIsValid(move);
             if (validMove != null)
             {
                 var moveType = IfUnknownMoveType(move.MoveType, validMove.MoveType);
 
-                switch (moveType)
-                {
-                    case MoveType.Take:
-                        TakeSquare(move.To);
-                        break;
-                    case MoveType.Promotion:
-                        if (IsNotEmptyAt(move.To))
-                        {
-                            TakeSquare(move.To);
-                        }
-                        break;
-                }
+                PreMoveActions(move, moveType);
 
                 MovePiece(move, boardPiece, moveType);
 
-                switch (moveType)
-                {
-                    case MoveType.TakeEnPassant:
-                        var takenLocation = new BoardLocation(move.To.File, move.From.Rank);
-                        TakeSquare(takenLocation);
-                        return UpdateTurn(MoveResult.Enpassant(move));
-                    case MoveType.Promotion:
-                        Promote(move.To, boardPiece.Piece.Colour, move.PromotedTo);
-                        return UpdateTurn(MoveResult.Promotion(move));
-                }
+                result = PostMoveTidyUp(move, moveType, boardPiece);
 
-                return UpdateTurn(MoveResult.Success(move, moveType));
+                return result;
             }
 
             throw new ArgumentException($"Invalid move {move}", nameof(move));
+        }
+
+        private MoveResult PostMoveTidyUp(ChessMove move, MoveType moveType, BoardPiece boardPiece)
+        {
+            MoveResult result;
+            switch (moveType)
+            {
+                case MoveType.TakeEnPassant:
+                    var takenLocation = new BoardLocation(move.To.File, move.From.Rank);
+                    TakeSquare(takenLocation);
+                    result = UpdateTurn(MoveResult.Enpassant(move));
+                    break;
+                case MoveType.Promotion:
+                    Promote(move.To, boardPiece.Piece.Colour, move.PromotedTo);
+                    result = UpdateTurn(MoveResult.Promotion(move));
+                    break;
+                default:
+                    result = UpdateTurn(MoveResult.Success(move, moveType));
+                    break;
+            }
+            return result;
+        }
+
+        private void PreMoveActions(ChessMove move, MoveType moveType)
+        {
+            switch (moveType)
+            {
+                case MoveType.Take:
+                    TakeSquare(move.To);
+                    break;
+                case MoveType.Promotion:
+                    if (IsNotEmptyAt(move.To)) TakeSquare(move.To);
+                    break;
+            }
         }
 
         private void TakeSquare(BoardLocation takenLocation)
