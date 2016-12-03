@@ -54,6 +54,7 @@ namespace CSharpChess.TheBoard
             get { return this[location.File, location.Rank]; }
             private set { this[location.File, location.Rank] = value; }
         }
+
         // ReSharper disable once MemberCanBePrivate.Global
         public BoardPiece this[int file, int rank]
         {
@@ -62,13 +63,10 @@ namespace CSharpChess.TheBoard
         }
         public BoardPiece this[string location]
         {
-            get { return GetPiece((BoardLocation) location); }
+            get { return this[(BoardLocation) location]; }
             // ReSharper disable once UnusedMember.Local
             private set { this[(BoardLocation) location] = value; }
         }
-
-        public bool CanEnPassant(BoardLocation at, BoardLocation moveLocation)
-            => Chess.Rules.Pawns.CanEnPassant(this, at, moveLocation);
 
         public ChessBoard(bool newGame = true)
         {
@@ -86,12 +84,11 @@ namespace CSharpChess.TheBoard
             EmptyBoard();
             foreach (var boardPiece in pieces)
             {
-                _boardPieces[(int) boardPiece.Location.File, boardPiece.Location.Rank] = boardPiece;
+                this[boardPiece.Location] = boardPiece;
             }
             ToPlay = toPlay;
         }
 
-        //TODO: Code do with some love
         public MoveResult Move(ChessMove move)
         {
             var boardPiece = this[move.From];
@@ -99,7 +96,6 @@ namespace CSharpChess.TheBoard
             if (boardPiece.Piece.Colour != ToPlay && ToPlay != Chess.Colours.None)
                 return MoveResult.IncorrectPlayer(move);
 
-            MoveResult result;
             var validMove = CheckMoveIsValid(move);
             if (validMove != null)
             {
@@ -109,9 +105,7 @@ namespace CSharpChess.TheBoard
 
                 MovePiece(move, boardPiece, moveType);
 
-                result = PostMoveTidyUp(move, moveType, boardPiece);
-
-                return result;
+                return PostMoveTidyUp(move, moveType, boardPiece);
             }
 
             throw new ArgumentException($"Invalid move {move}", nameof(move));
@@ -323,8 +317,6 @@ namespace CSharpChess.TheBoard
             Chess.Validations.ThrowInvalidFile(file);
             return _boardPieces[(int)file, rank];
         }
-        private BoardPiece GetPiece(BoardLocation location) 
-            => GetPiece(location.File, location.Rank);
     }
 
 }

@@ -103,7 +103,7 @@ namespace CSharpChess.ValidMoves
                     var newFile = (int)at.File + horizontal;
                     var enPassantLocation = new BoardLocation((Chess.ChessFile)newFile, at.Rank + vertical);
 
-                    if (board.CanEnPassant(at, enPassantLocation))
+                    if (Chess.Rules.Pawns.CanEnPassant(board, at, enPassantLocation))
                     {
                         moveTos.Add(enPassantLocation);
                     }
