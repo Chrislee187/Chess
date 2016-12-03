@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CSharpChess.TheBoard;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.TheBoard
 {
+    [SuppressMessage("ReSharper", "UnusedParameter.Global")]
     public class BoardAssertions
     {
         protected static void AssertNewGameBoard(ChessBoard board)
@@ -21,12 +23,23 @@ namespace CSharpChess.UnitTests.TheBoard
             Assert.That(ranks[0], Is.EqualTo("RNBQKBNR"));
         }
 
-        private static List<string> DumpBoardToConsole(ChessBoard board)
+        protected static void AssertMoveSucceeded(MoveResult result, ChessBoard board, string move, ChessPiece chessPiece, MoveType moveType = MoveType.Move)
         {
-            var view = new OneCharBoard(board);
-            var ranks = view.Ranks.ToList();
-            ranks.ForEach(Console.WriteLine);
-            return ranks;
+            var m = (ChessMove)move;
+            Assert.True(result.Succeeded);
+            Assert.That(result.MoveType, Is.EqualTo(moveType));
+            Assert.True(board.IsEmptyAt(m.From), $"Move start square '{m.From}' not empty, contains '{board[m.From].Piece}'.");
+            Assert.True(board.IsNotEmptyAt(m.To), "Move destination square empty.");
+            Assert.True(board[m.To].Piece.Is(chessPiece.Colour, chessPiece.Name), $"'{board[m.From].Piece}' found at destination, expected' {chessPiece}'");
+        }
+        protected static void AssertTakeSucceeded(MoveResult result, ChessBoard board, string move, ChessPiece chessPiece, MoveType moveType = MoveType.Take)
+        {
+            var m = (ChessMove)move;
+            Assert.True(result.Succeeded);
+            Assert.That(result.MoveType, Is.EqualTo(moveType));
+            Assert.True(board.IsEmptyAt(m.From), $"Move start square '{m.From}' not empty, contains '{board[m.From].Piece}'.");
+            Assert.True(board.IsNotEmptyAt(m.To), "Move destination square empty.");
+            Assert.True(board[m.To].Piece.Is(chessPiece.Colour, chessPiece.Name), $"'{board[m.From].Piece}' found at destination, expected' {chessPiece}'");
         }
 
         protected static void AssertMovesAreAsExpected(IEnumerable<ChessMove> actual, IEnumerable<BoardLocation> expected)
@@ -45,7 +58,7 @@ namespace CSharpChess.UnitTests.TheBoard
             Assert.That(actualMoves.Count(), Is.EqualTo(expectedLocations.Count()));
         }
 
-        protected void AssertMovesContains(IEnumerable<ChessMove> moves, string location, MoveType moveType)
+        protected static void AssertMovesContains(IEnumerable<ChessMove> moves, string location, MoveType moveType)
         {
             var found = moves.FirstOrDefault( m => 
                 m.To.Equals(BoardLocation.At("A3"))
@@ -57,6 +70,15 @@ namespace CSharpChess.UnitTests.TheBoard
         protected static void AssertAllMovesAreOfType(IEnumerable<ChessMove> moves, MoveType moveType)
         {
             Assert.That(moves.All(m => m.MoveType == moveType), "Unexpected MoveType found");
+        }
+
+
+        protected static List<string> DumpBoardToConsole(ChessBoard board)
+        {
+            var view = new OneCharBoard(board);
+            var ranks = view.Ranks.ToList();
+            ranks.ForEach(Console.WriteLine);
+            return ranks;
         }
     }
 }

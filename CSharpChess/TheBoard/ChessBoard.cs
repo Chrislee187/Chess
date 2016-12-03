@@ -92,53 +92,84 @@ namespace CSharpChess.TheBoard
         //TODO: Code do with some love
         public MoveResult Move(ChessMove move)
         {
-            BoardPiece from = this[move.From];
+            var boardPiece = this[move.From];
 
-            if (from.Piece.Colour != ToPlay && ToPlay != Chess.Colours.None)
+            if (boardPiece.Piece.Colour != ToPlay && ToPlay != Chess.Colours.None)
                 return MoveResult.IncorrectPlayer(move);
 
-            var validMovesForPiece = GetValidMoves(this, move.From).ToList();
-
-            var validMove = validMovesForPiece.FirstOrDefault(vm => vm.Equals(move));
+            var validMove = CheckMoveIsValid(move);
             if (validMove != null)
             {
-                MoveType moveType = move.MoveType;
+                var moveType = IfUnknownMoveType(move.MoveType, validMove.MoveType);
 
-                if (moveType == MoveType.Unknown)
+                switch (moveType)
                 {
-                    moveType = validMove.MoveType;
+                    case MoveType.Take:
+                        TakeSquare(move.To);
+                        break;
+                    case MoveType.Promotion:
+                        if (IsNotEmptyAt(move.To))
+                        {
+                            TakeSquare(move.To);
+                        }
+                        break;
                 }
 
-                if (IsEmptyAt(move.To))
+                MovePiece(move, boardPiece, moveType);
+
+                switch (moveType)
                 {
-                    ClearSquare(move.From);
-                    from.MoveTo(move.To, moveType);
-
-                    this[move.To] = from;
-
-                    switch (moveType)
-                    {
-                        case MoveType.TakeEnPassant:
-                            ClearSquare(new BoardLocation(move.To.File, move.From.Rank));
-                            return UpdateTurn(MoveResult.Enpassant(move));
-                        case MoveType.Promotion:
-                            this[move.To] = new BoardPiece(move.To, new ChessPiece(from.Piece.Colour, move.PromotedTo));
-                            return UpdateTurn(MoveResult.Promotion(move));
-                    }
-
-                    return UpdateTurn(MoveResult.Success(move));
+                    case MoveType.TakeEnPassant:
+                        var takenLocation = new BoardLocation(move.To.File, move.From.Rank);
+                        TakeSquare(takenLocation);
+                        return UpdateTurn(MoveResult.Enpassant(move));
+                    case MoveType.Promotion:
+                        Promote(move.To, boardPiece.Piece.Colour, move.PromotedTo);
+                        return UpdateTurn(MoveResult.Promotion(move));
                 }
+
+                return UpdateTurn(MoveResult.Success(move, moveType));
             }
-            else
-            {
-                throw new ArgumentException($"Invalid move {move}", nameof(move));
-            }
-            throw new InvalidOperationException("Move() still a WIP");
+
+            throw new ArgumentException($"Invalid move {move}", nameof(move));
         }
+
+        private void TakeSquare(BoardLocation takenLocation)
+        {
+            this[takenLocation].Taken(takenLocation);
+            ClearSquare(takenLocation);
+        }
+
+        private void Promote(BoardLocation at, Chess.Colours colour, Chess.PieceNames pieceName)
+        {
+            this[at] = new BoardPiece(at, new ChessPiece(colour, pieceName));
+        }
+
+        private void MovePiece(ChessMove move, BoardPiece boardPiece, MoveType moveType)
+        {
+            ClearSquare(move.From);
+            boardPiece.MoveTo(move.To, moveType);
+            this[move.To] = boardPiece;
+        }
+
+        private static MoveType IfUnknownMoveType(MoveType moveType, MoveType @default) 
+            => moveType == MoveType.Unknown 
+                ? @default 
+                : moveType;
+
+        private ChessMove CheckMoveIsValid(ChessMove move)
+        {
+            var validMove = GetValidMoves(this, move.From)
+                                .FirstOrDefault(vm => vm.Equals(move));
+            return validMove;
+        }
+
         public MoveResult Move(string move) => Move((ChessMove) move);
 
-        private void ClearSquare(BoardLocation takenLocation) 
-            => this[takenLocation] = BoardPiece.Empty(takenLocation);
+        private void ClearSquare(BoardLocation takenLocation)
+        {
+            this[takenLocation] = BoardPiece.Empty(takenLocation);
+        }
 
         public bool IsEmptyAt(BoardLocation location) 
             => this[location].Piece.Equals(ChessPiece.NullPiece);

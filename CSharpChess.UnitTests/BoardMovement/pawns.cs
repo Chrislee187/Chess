@@ -17,12 +17,7 @@ namespace CSharpChess.UnitTests.BoardMovement
 
             var result = board.Move("D2-D4");
 
-            Assert.True(result.Succeeded);
-            Assert.True(board.IsEmptyAt("d2"));
-            Assert.True(board.IsNotEmptyAt("d4"));
-
-            Assert.That(result.Succeeded, Is.True);
-            Assert.That(result.MoveType, Is.EqualTo(MoveType.Move));
+            AssertMoveSucceeded(result, board, "D2-D4", Chess.Pieces.White.Pawn);
 
             var piece = board[result.Move.To];
             Assert.That(piece.MoveHistory.Count(), Is.EqualTo(1));
@@ -46,9 +41,12 @@ namespace CSharpChess.UnitTests.BoardMovement
 
             board.Move("c2c4");
             var result = board.Move("d4c3");
+
             Assert.That(result.Succeeded, "Enpassant move failed");
             Assert.That(result.MoveType, Is.EqualTo(MoveType.TakeEnPassant));
+            Assert.That(board.IsEmptyAt("d4"), "Moved piece not removed from starting sqaure");
             Assert.That(board.IsEmptyAt("c4"), "Taken piece not removed");
+            Assert.That(board["c3"].Piece.Is(Chess.Colours.Black, Chess.PieceNames.Pawn), "Moved piece not found on destination sqaure.");
         }
 
 
@@ -74,14 +72,11 @@ namespace CSharpChess.UnitTests.BoardMovement
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
-            var moveResult = board.Move("a7-a8"+promotionCharacter);
+            var result = board.Move("a7-a8"+promotionCharacter);
 
-            Assert.That(moveResult.Succeeded);
-            Assert.That(moveResult.MoveType, Is.EqualTo(MoveType.Promotion));
-            Assert.That(moveResult.Move.PromotedTo, Is.EqualTo(name));
+            AssertMoveSucceeded(result, board, "a7-a8", new ChessPiece(Chess.Colours.White, name), MoveType.Promotion);
 
-            Assert.That(board["a8"].Piece.Is(Chess.Colours.White));
-            Assert.That(board["a8"].Piece.Is(name));
+            Assert.That(result.Move.PromotedTo, Is.EqualTo(name));
         }
 
 

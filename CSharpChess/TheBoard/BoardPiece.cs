@@ -36,5 +36,9 @@ namespace CSharpChess.TheBoard
             Location = moveTo;
         }
 
+        public void Taken(BoardLocation takenLocation)
+        {
+            _moveHistory.Add(ChessMove.Taken(takenLocation));
+        }
     }
 }

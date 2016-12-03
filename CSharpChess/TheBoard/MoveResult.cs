@@ -18,9 +18,9 @@
             return new MoveResult(false, MoveType.Move, move);
         }
 
-        public static MoveResult Success(ChessMove move)
+        public static MoveResult Success(ChessMove move, MoveType moveType = MoveType.Move)
         {
-            return new MoveResult(true, MoveType.Move, move);
+            return new MoveResult(true, moveType, move);
         }
 
         public static MoveResult Enpassant(ChessMove move)
@@ -28,7 +28,7 @@
             return new MoveResult(true, MoveType.TakeEnPassant, move);
         }
 
-        public static MoveResult Promotion(ChessMove move)
+        public static MoveResult Promotion(ChessMove move, MoveType moveType = MoveType.Promotion)
         {
             return new MoveResult(true, MoveType.Promotion, move);
         }
@@ -39,6 +39,7 @@
         Move, Take, TakeEnPassant, Castle, Check, Checkmate,
         Promotion,
         Unknown,
+        Taken
     }
 
 }

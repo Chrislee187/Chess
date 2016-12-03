@@ -17,16 +17,30 @@ namespace CSharpChess.UnitTests.BoardMovement
 
             var result = board.Move("B1-C3");
 
-            Assert.True(result.Succeeded);
-            Assert.True(board.IsEmptyAt("b1"), "Knight start square not empty.");
-            Assert.True(board.IsNotEmptyAt("c3"), "Knight destination square empty.");
-            Assert.True(board["c3"].Piece.Is(Chess.Colours.White, Chess.PieceNames.Knight), "Knight not found at destination");
-
-            Assert.That(result.Succeeded, Is.True);
-            Assert.That(result.MoveType, Is.EqualTo(MoveType.Move));
+            AssertMoveSucceeded(result, board, "B1-C3", Chess.Pieces.White.Knight, MoveType.Move);
 
             var piece = board[result.Move.To];
             Assert.That(piece.MoveHistory.Count(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void can_take()
+        {
+            var asOneChar =
+                "........" +
+                "........" +
+                "....p..." +
+                "........" +
+                "...N...." +
+                "........" +
+                "........" +
+                "........";
+
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+
+            var result = board.Move("d4e6");
+
+            AssertTakeSucceeded(result, board, "d4e6", new ChessPiece(Chess.Colours.White, Chess.PieceNames.Knight));
         }
     }
 }

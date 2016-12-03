@@ -22,8 +22,18 @@ namespace CSharpChess.TheBoard
         public BoardLocation To { get; }
         public MoveType MoveType { get; }
         public Chess.PieceNames PromotedTo { get; }
-        public override string ToString() => $"{From}-{To}";
+        public static ChessMove Taken(BoardLocation location) => new ChessMove(location, MoveType.Taken);
 
+        private ChessMove(BoardLocation location, MoveType taken)
+        {
+            From = location;
+            MoveType = taken;
+        }
+
+        public override string ToString()
+        {
+            return $"{From}-{To}";
+        }
 
         #region object overrides
         // TODO: Change to explicit
