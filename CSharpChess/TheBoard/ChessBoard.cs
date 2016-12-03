@@ -82,18 +82,19 @@ namespace CSharpChess.TheBoard
             ToPlay = toPlay;
         }
 
+        //TODO: Code do with some love
         public MoveResult Move(ChessMove move)
         {
             BoardPiece from = this[move.From];
 
-            if (from.Piece.Colour != ToPlay && ToPlay != Chess.Colours.None) // This is also caters from empty from square
-                return UpdateTurn(MoveResult.IncorrectPlayer(move));
+            if (from.Piece.Colour != ToPlay && ToPlay != Chess.Colours.None)
+                return MoveResult.IncorrectPlayer(move);
 
             var validMovesForPiece = GetValidMoves(this, move.From).ToList();
 
-            if (validMovesForPiece.Any(vm => vm.Equals(move)))
+            var validMove = validMovesForPiece.FirstOrDefault(vm => vm.Equals(move));
+            if (validMove != null)
             {
-                var validMove = validMovesForPiece.First(vm => vm.Equals(move));
                 MoveType moveType = move.MoveType;
 
                 if (moveType == MoveType.Unknown)
@@ -103,18 +104,18 @@ namespace CSharpChess.TheBoard
 
                 if (IsEmptyAt(move.To))
                 {
-                    this[move.From] = BoardPiece.Empty(from.Location);
-
+                    ClearSquare(move.From);
                     from.MoveTo(move.To, moveType);
+
                     this[move.To] = from;
 
                     if (moveType == MoveType.TakeEnPassant)
                     {
-                        var takenLocation = new BoardLocation(move.To.File, move.From.Rank);
-                        this[takenLocation] = BoardPiece.Empty(takenLocation);
+                        ClearSquare(new BoardLocation(move.To.File, move.From.Rank));
                         return UpdateTurn(MoveResult.Enpassant(move));
                     }
 
+                    //TODO: Is this tested???
                     if (moveType == MoveType.Promotion)
                     {
                         this[move.To] = new BoardPiece(move.To, new ChessPiece(from.Piece.Colour, move.PromotedTo));
@@ -131,9 +132,14 @@ namespace CSharpChess.TheBoard
             throw new InvalidOperationException("Move() still a WIP");
         }
 
-        public bool IsEmptyAt(BoardLocation location) => this[location].Piece.Equals(ChessPiece.NullPiece);
+        private void ClearSquare(BoardLocation takenLocation) 
+            => this[takenLocation] = BoardPiece.Empty(takenLocation);
 
-        public bool IsNotEmptyAt(BoardLocation location) => !IsEmptyAt(location);
+        public bool IsEmptyAt(BoardLocation location) 
+            => this[location].Piece.Equals(ChessPiece.NullPiece);
+
+        public bool IsNotEmptyAt(BoardLocation location) 
+            => !IsEmptyAt(location);
 
         private void NewBoard()
         {
@@ -241,6 +247,9 @@ namespace CSharpChess.TheBoard
             Chess.Validations.ThrowInvalidFile(file);
             return _boardPieces[(int)file, rank];
         }
+
+        public bool CanEnPassant(BoardLocation at, BoardLocation moveLocation) 
+            => Chess.Rules.Pawns.CanEnPassant(this, at, moveLocation);
     }
 
 }

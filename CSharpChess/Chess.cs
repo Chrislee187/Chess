@@ -128,5 +128,27 @@ namespace CSharpChess
                     ? 8
                     : 0;
         }
+
+        public static class Rules
+        {
+            public static class Pawns
+            {
+                // TODO: Unit Test this
+                public static bool CanEnPassant(ChessBoard board, BoardLocation at, BoardLocation moveLocation)
+                {
+                    var newFile = moveLocation.File;
+                    var takeLocation = new BoardLocation(newFile, at.Rank);
+                    var piece = board[takeLocation].Piece;
+                    var canTakeAPiece = board.IsNotEmptyAt(takeLocation)
+                                        && piece.Is(Chess.PieceNames.Pawn)
+                                        && piece.IsNot(board[at].Piece.Colour)
+                                        && board[takeLocation].MoveHistory.Count() == 1
+                        ;
+                    var moveToSpotIsVacant = board.IsEmptyAt(moveLocation);
+
+                    return (canTakeAPiece && moveToSpotIsVacant);
+                }
+            }
+        }
     }
 }

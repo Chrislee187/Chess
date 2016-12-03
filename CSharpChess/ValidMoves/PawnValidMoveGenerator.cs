@@ -26,17 +26,21 @@ namespace CSharpChess.ValidMoves
             var moves = new List<ChessMove>();
             var pieceColour = board[at].Piece.Colour;
             
-            moves.AddRange(NormalTakeMoves(board, at, Chess.Board.LeftDirectionModifier)
-                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.Take))));
+            moves.AddRange(NormalTakes(board, at, Chess.Board.LeftDirectionModifier)
+                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.Take)))
+                );
 
-            moves.AddRange(NormalTakeMoves(board, at, Chess.Board.RightDirectionModifier)
-                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.Take))));
+            moves.AddRange(NormalTakes(board, at, Chess.Board.RightDirectionModifier)
+                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.Take)))
+                );
 
-            moves.AddRange(EnPassantTakeMoves(board, at, Chess.Board.LeftDirectionModifier)
-                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.TakeEnPassant))));
+            moves.AddRange(EnPassantTakes(board, at, Chess.Board.LeftDirectionModifier)
+                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.TakeEnPassant)))
+                );
 
-            moves.AddRange(EnPassantTakeMoves(board, at, Chess.Board.RightDirectionModifier)
-                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.TakeEnPassant))));
+            moves.AddRange(EnPassantTakes(board, at, Chess.Board.RightDirectionModifier)
+                .Select(l => new ChessMove(at, l, Promotable(l, pieceColour, MoveType.TakeEnPassant)))
+                );
 
             return moves;
         }
@@ -67,12 +71,12 @@ namespace CSharpChess.ValidMoves
             return validMoves;
         }
 
-        private MoveType Promotable(BoardLocation bl, Chess.Colours colour, MoveType dflt)
+        private MoveType Promotable(BoardLocation location, Chess.Colours colour, MoveType dflt)
         {
             var promotionRank = Chess.PromotionRankFor(colour);
-            return bl.Rank == promotionRank ? MoveType.Promotion : dflt;
+            return location.Rank == promotionRank ? MoveType.Promotion : dflt;
         }
-        private IEnumerable<BoardLocation> NormalTakeMoves(ChessBoard board, BoardLocation at, int horizontal)
+        private IEnumerable<BoardLocation> NormalTakes(ChessBoard board, BoardLocation at, int horizontal)
         {
             var vertical = Chess.Pieces.Direction(board[at].Piece);
 
@@ -97,7 +101,7 @@ namespace CSharpChess.ValidMoves
             return moveTos;
         }
 
-        private IEnumerable<BoardLocation> EnPassantTakeMoves(ChessBoard board, BoardLocation at, int horizontal)
+        private IEnumerable<BoardLocation> EnPassantTakes(ChessBoard board, BoardLocation at, int horizontal)
         {
             var vertical = Chess.Pieces.Direction(board[at].Piece);
 
@@ -114,31 +118,16 @@ namespace CSharpChess.ValidMoves
                 if (notOnHorizontalEdge)
                 {
                     var newFile = (int)at.File + horizontal;
-                    var moveLocation = new BoardLocation((Chess.ChessFile)newFile, at.Rank + vertical);
+                    var enPassantLocation = new BoardLocation((Chess.ChessFile)newFile, at.Rank + vertical);
 
-                    if (EnPassantAvailable(board, at, moveLocation))
+                    if (board.CanEnPassant(at, enPassantLocation))
                     {
-                        moveTos.Add(moveLocation);
+                        moveTos.Add(enPassantLocation);
                     }
                 }
             }
             
             return moveTos;
-        }
-
-        private static bool EnPassantAvailable(ChessBoard board, BoardLocation at, BoardLocation moveLocation)
-        {
-            var newFile = moveLocation.File;
-            var takeLocation = new BoardLocation(newFile, at.Rank);
-            var piece = board[takeLocation].Piece;
-            var canTakeAPiece = board.IsNotEmptyAt(takeLocation)
-                                && piece.Is(Chess.PieceNames.Pawn)
-                                && piece.IsNot(board[at].Piece.Colour)
-                                && board[takeLocation].MoveHistory.Count() == 1
-                ;
-            var moveToSpotIsVacant = board.IsEmptyAt(moveLocation);
-
-            return (canTakeAPiece && moveToSpotIsVacant);
         }
 
         private static bool CanTakeAt(ChessBoard board, BoardLocation takeLocation, Chess.Colours colourOfTakingPiece) 
