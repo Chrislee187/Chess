@@ -26,6 +26,13 @@ namespace CSharpChess
 
             public const int LeftDirectionModifier = -1;
             public const int RightDirectionModifier = 1;
+
+
+            public static bool IsValidLocation(int file, int rank)
+            {
+                return !Validations.InvalidFile(file)
+                    && !Validations.InvalidRank(rank);
+            }
         }
 
         public enum ChessFile { A = 1, B, C, D, E, F, G, H };
@@ -75,6 +82,15 @@ namespace CSharpChess
             }
         }
 
+        public static Colours EnemyColour(Colours colour)
+        {
+            return colour == Colours.Black
+                ? Colours.White
+                : colour == Colours.White
+                    ? Colours.Black
+                    : colour;
+        }
+
         public enum Colours
         {
             White, Black,
@@ -122,9 +138,9 @@ namespace CSharpChess
 
         public static int PromotionRankFor(Colours chessPieceColour)
         {
-            return chessPieceColour == Chess.Colours.Black
+            return chessPieceColour == Colours.Black
                 ? 1
-                : chessPieceColour == Chess.Colours.White
+                : chessPieceColour == Colours.White
                     ? 8
                     : 0;
         }
@@ -140,13 +156,48 @@ namespace CSharpChess
                     var takeLocation = new BoardLocation(newFile, at.Rank);
                     var piece = board[takeLocation].Piece;
                     var canTakeAPiece = board.IsNotEmptyAt(takeLocation)
-                                        && piece.Is(Chess.PieceNames.Pawn)
+                                        && piece.Is(PieceNames.Pawn)
                                         && piece.IsNot(board[at].Piece.Colour)
                                         && board[takeLocation].MoveHistory.Count() == 1
                         ;
                     var moveToSpotIsVacant = board.IsEmptyAt(moveLocation);
 
                     return (canTakeAPiece && moveToSpotIsVacant);
+                }
+            }
+
+            public static class Knights
+            {
+                private static Func<int, int> left => (i) => -1 * i;
+                private static Func<int, int> right => (i) => +1 * i;
+                private static Func<int, int> down => (i) => -1 * i;
+                private static Func<int, int> up => (i) => +1 * i;
+                public static IEnumerable<Tuple<int,int>> MoveMatrix = new List<Tuple<int, int>>
+                {
+                    Tuple.Create(right(1), up(2)),
+                    Tuple.Create(right(2), up(1)),
+                    Tuple.Create(right(2), down(1)),
+                    Tuple.Create(right(1), down(2)),
+                    Tuple.Create(left(1), down(2)),
+                    Tuple.Create(left(2), down(1)),
+                    Tuple.Create(left(2), up (1)),
+                    Tuple.Create(left(1), up(2))
+                };
+
+                public static IEnumerable<BoardLocation> MovesFrom(BoardLocation from)
+                {
+                    return MoveMatrix.Where(t =>
+                    {
+                        var file = (int) from.File + t.Item1;
+                        var rank = from.Rank + t.Item2;
+
+                        return Board.IsValidLocation(file, rank);
+                    }).Select(t =>
+                    {
+                        var file = (int) from.File + t.Item1;
+                        var rank = from.Rank + t.Item2;
+                        return BoardLocation.At(file, rank);
+                    });
                 }
             }
         }

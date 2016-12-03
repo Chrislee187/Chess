@@ -44,12 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoardMovement\knights.cs" />
     <Compile Include="TheBoard\BoardAssertions.cs" />
     <Compile Include="Helpers\BoardBuilder.cs" />
     <Compile Include="BoardBuilderTests\board_basics.cs" />
     <Compile Include="BoardBuilderTests\default_boards.cs" />
     <Compile Include="Helpers\ChessBoardHelper.cs" />
     <Compile Include="BoardMovement\pawns.cs" />
+    <Compile Include="ValidMoveGeneration\Knights\captures.cs" />
+    <Compile Include="ValidMoveGeneration\Knights\from_starting_position.cs" />
     <Compile Include="ValidMoveGeneration\Pawns\captures.cs" />
     <Compile Include="BoardMovement\basics.cs" />
     <Compile Include="TheBoard\ChessMoveTests.cs" />
