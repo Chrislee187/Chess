@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CSharpChess.TheBoard
 {
@@ -15,13 +14,16 @@ namespace CSharpChess.TheBoard
             Rank = rank;
         }
 
-        public static BoardLocation At(Chess.ChessFile file, int rank) => new BoardLocation(file, rank);
+        public static BoardLocation At(Chess.ChessFile file, int rank) 
+            => new BoardLocation(file, rank);
 
-        public static BoardLocation At(int file, int rank) => new BoardLocation((Chess.ChessFile)file, rank);
+        public static BoardLocation At(int file, int rank) 
+            => new BoardLocation((Chess.ChessFile)file, rank);
 
-        public static BoardLocation At(string at) => (BoardLocation) at;
+        public static BoardLocation At(string at) 
+            => (BoardLocation) at;
 
-        public static IEnumerable<BoardLocation> ListOf(params string[] locs)
+        public static IEnumerable<BoardLocation> List(params string[] locs)
         {
             var list = new List<BoardLocation>();
 
@@ -32,7 +34,6 @@ namespace CSharpChess.TheBoard
 
             return list;
         }
-
 
         #region Object overrides
         public override string ToString() => File.ToString().Substring(0, 1) + Rank;

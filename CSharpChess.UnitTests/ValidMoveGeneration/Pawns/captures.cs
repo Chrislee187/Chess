@@ -24,7 +24,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var expected = BoardLocation.ListOf("D3", "C3");
+            var expected = BoardLocation.List("D3", "C3");
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
@@ -48,7 +48,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var expected = BoardLocation.ListOf();
+            var expected = BoardLocation.List();
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
@@ -69,7 +69,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var expected = BoardLocation.ListOf("A3");
+            var expected = BoardLocation.List("A3");
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
@@ -92,7 +92,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var expected = BoardLocation.ListOf("C3", "C4", "B3", "D3");
+            var expected = BoardLocation.List("C3", "C4", "B3", "D3");
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 

@@ -22,8 +22,8 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             {
                 var whitePawn = BoardLocation.At(file, WhitePawnRank);
                 var blackPawn = BoardLocation.At(file, BlackPawnRank);
-                var whiteExpected = BoardLocation.ListOf($"{whitePawn.File}{whitePawn.Rank + 1}", $"{whitePawn.File}{whitePawn.Rank + 2}");
-                var blackExpected = BoardLocation.ListOf($"{blackPawn.File}{blackPawn.Rank - 1}", $"{blackPawn.File}{blackPawn.Rank - 2}");
+                var whiteExpected = BoardLocation.List($"{whitePawn.File}{whitePawn.Rank + 1}", $"{whitePawn.File}{whitePawn.Rank + 2}");
+                var blackExpected = BoardLocation.List($"{blackPawn.File}{blackPawn.Rank - 1}", $"{blackPawn.File}{blackPawn.Rank - 2}");
 
                 AssertExpectedMoves(whiteExpected, new PawnValidMoveGenerator().For(board, whitePawn));
                 AssertExpectedMoves(blackExpected, new PawnValidMoveGenerator().For(board, blackPawn));

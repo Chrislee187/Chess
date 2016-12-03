@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using CSharpChess.TheBoard;
-using CSharpChess.UnitTests.BoardBuilderTests;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.UnitTests.TheBoard;
 using NUnit.Framework;
@@ -43,12 +42,10 @@ namespace CSharpChess.UnitTests.BoardMovement
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var expected = BoardLocation.ListOf("D3", "C3");
-
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
-            var result = board.Move("c2c4");
-            result = board.Move("d4c3");
+            board.Move("c2c4");
+            var result = board.Move("d4c3");
             Assert.That(result.Succeeded, "Enpassant move failed");
             Assert.That(result.MoveType, Is.EqualTo(MoveType.TakeEnPassant));
             Assert.That(board.IsEmptyAt("c4"), "Taken piece not removed");

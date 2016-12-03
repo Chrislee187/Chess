@@ -258,13 +258,8 @@ namespace CSharpChess.TheBoard
             Chess.Validations.ThrowInvalidFile(file);
             return _boardPieces[(int)file, rank];
         }
-        private BoardPiece GetPiece(BoardLocation location)
-        {
-            Chess.Validations.ThrowInvalidRank(location.Rank);
-            Chess.Validations.ThrowInvalidFile(location.File);
-            return this[location];
-        }
-
+        private BoardPiece GetPiece(BoardLocation location) 
+            => GetPiece(location.File, location.Rank);
     }
 
 }
