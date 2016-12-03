@@ -8,7 +8,7 @@ namespace CSharpChess.UnitTests.TheBoard
     {
         [TestCase("A2A4", Chess.ChessFile.A, 2, Chess.ChessFile.A, 4)]
         [TestCase("b7-b6", Chess.ChessFile.B, 7, Chess.ChessFile.B, 6)]
-        public void can_implicitly_parse_move_strings(string move, Chess.ChessFile fromFile, int fromRank, Chess.ChessFile toFile, int toRank)
+        public void can_explicitly_parse_move_strings(string move, Chess.ChessFile fromFile, int fromRank, Chess.ChessFile toFile, int toRank)
         {
             var chessMove = (ChessMove) move;
 
@@ -22,7 +22,7 @@ namespace CSharpChess.UnitTests.TheBoard
         [TestCase("A7-A8N", Chess.PieceNames.Knight)]
         [TestCase("A7A8=R", Chess.PieceNames.Rook)]
         [TestCase("A7-A8=b", Chess.PieceNames.Bishop)]
-        public void can_implicitly_parse_move_strings_with_promotions(string move, Chess.PieceNames pieceName)
+        public void can_explicitly_parse_move_strings_with_promotions(string move, Chess.PieceNames pieceName)
         {
             var chessMove = (ChessMove)move;
 
