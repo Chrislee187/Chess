@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using CSharpChess.TheBoard;
 
 namespace CSharpChess.ValidMoves
@@ -9,7 +10,13 @@ namespace CSharpChess.ValidMoves
 
         protected abstract IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at);
         protected abstract IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at);
-        protected abstract IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at);
+        protected virtual IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
+        {
+            var threats = new List<BoardLocation>();
+            threats.AddRange(Moves(board, at).Select(m => m.To));
+            threats.AddRange(Takes(board, at).Select(m => m.To));
+            return threats;
+        }
 
         protected ValidMoveGeneratorBase(Chess.PieceNames forPiece)
         {
@@ -32,6 +39,9 @@ namespace CSharpChess.ValidMoves
 
             return possibleMoves;
         }
+
+        public IEnumerable<BoardLocation> ValidThreats(ChessBoard board, BoardLocation at) 
+            => Threats(board, at);
 
         private void AddMoves(ChessBoard board, BoardLocation at, List<ChessMove> possibleMoves)
         {

@@ -25,5 +25,14 @@ namespace CSharpChess.TheBoard
 
             throw new NotImplementedException($"ValidMoveGenerator for {pieceName} not yet implemented.");
         }
+        public IEnumerable<BoardLocation> GetThreateningMoves(ChessBoard board, BoardLocation at)
+        {
+            var pieceName = board[at].Piece.Name;
+
+            if (_generators.ContainsKey(pieceName))
+                return _generators[pieceName].ValidThreats(board, at);
+
+            throw new NotImplementedException($"ValidMoveGenerator for {pieceName} not yet implemented.");
+        }
     }
 }

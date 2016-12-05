@@ -33,6 +33,16 @@ namespace CSharpChess
                 return !Validations.InvalidFile(file)
                     && !Validations.InvalidRank(rank);
             }
+
+            public const string NewBoardAsOneChar =
+                               "rnbqkbnr" +
+                               "pppppppp" +
+                               "........" +
+                               "........" +
+                               "........" +
+                               "........" +
+                               "PPPPPPPP" +
+                               "RNBQKBNR";
         }
 
         public enum ChessFile { A = 1, B, C, D, E, F, G, H };

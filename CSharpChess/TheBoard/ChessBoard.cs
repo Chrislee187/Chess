@@ -16,9 +16,9 @@ namespace CSharpChess.TheBoard
         {
             get
             {
-                foreach (var file in Chess.Files)
+                foreach (var rank in Chess.Ranks)
                 {
-                    foreach (var rank in Chess.Ranks)
+                    foreach (var file in Chess.Files)
                     {
                         yield return this[file, rank];
                     }
@@ -44,17 +44,6 @@ namespace CSharpChess.TheBoard
                     yield return new BoardFile(file, File(file).ToArray());
                 }
             }
-        }
-
-        public IEnumerable<BoardLocation> DefendingFrom(string loc, Chess.Colours pieceColour) => DefendingFrom(BoardLocation.At(loc), pieceColour);
-        public IEnumerable<BoardLocation> DefendingFrom(BoardLocation loc, Chess.Colours pieceColour)
-        {
-            return new List<BoardLocation>();
-        }
-        public IEnumerable<BoardLocation> AttackingFrom(string loc) => AttackingFrom(BoardLocation.At(loc));
-        public IEnumerable<BoardLocation> AttackingFrom(BoardLocation loc)
-        {
-            return new List<BoardLocation>();
         }
 
         public BoardPiece this[Chess.ChessFile file, int rank]

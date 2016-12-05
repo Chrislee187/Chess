@@ -9,7 +9,8 @@ namespace CSharpChess.ValidMoves
     {
         private readonly IEnumerable<Tuple<int, int>> _directions;
 
-        public StraightLineValidMoveGenerator(IEnumerable<Tuple<int, int>> directions, Chess.PieceNames name) : base(name)
+        // TODO: Sort out the Tuple
+        protected StraightLineValidMoveGenerator(IEnumerable<Tuple<int, int>> directions, Chess.PieceNames name) : base(name)
         {
             _directions = directions;
         }
@@ -53,11 +54,6 @@ namespace CSharpChess.ValidMoves
                 }
             }
             return result;
-        }
-
-        protected override IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
-        {
-            throw new NotImplementedException();
         }
 
         public static BoardLocation ApplyDirection(BoardLocation from, Tuple<int, int> direction)

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using CSharpChess.TheBoard;
 
 namespace CSharpChess.ValidMoves
@@ -14,18 +12,15 @@ namespace CSharpChess.ValidMoves
         {
             var result = new List<ChessMove>();
             var directions = Chess.Rules.Queens.DirectionTransformations;
-            var piece = board[at].Piece;
+
             foreach (var direction in directions)
             {
                 var to = StraightLineValidMoveGenerator.ApplyDirection(at, direction);
 
-                if (to != null)
+                if (to != null 
+                    && board.IsEmptyAt(to))
                 {
-                    if (!board.DefendingFrom(to, piece.Colour).Any())
-                    {
-                        if (board.IsEmptyAt(to))
-                            result.Add(new ChessMove(at, to, MoveType.Move));
-                    }
+                    result.Add(new ChessMove(at, to, MoveType.Move));
                 }
             }
 
@@ -46,11 +41,6 @@ namespace CSharpChess.ValidMoves
             }
 
             return result;
-        }
-
-        protected override IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
-        {
-            throw new NotImplementedException();
         }
     }
 }

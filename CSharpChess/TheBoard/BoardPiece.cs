@@ -40,5 +40,10 @@ namespace CSharpChess.TheBoard
         {
             _moveHistory.Add(ChessMove.Taken(takenLocation));
         }
+
+        public override string ToString()
+        {
+            return $"{Piece} @ {Location}";
+        }
     }
 }
