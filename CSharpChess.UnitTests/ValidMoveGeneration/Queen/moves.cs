@@ -25,7 +25,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Queen
             var expected = BoardLocation.List("E6", "E4", "C6", "C4", "D6", "E5", "D4", "C5");
 
             var generator = new QueenValidMoveGenerator();
-            var chessMoves = generator.For(board, "D5");
+            var chessMoves = generator.ValidMoves(board, "D5");
 
             AssertMovesContainsExpectedWithType(chessMoves, expected, MoveType.Move);
         }

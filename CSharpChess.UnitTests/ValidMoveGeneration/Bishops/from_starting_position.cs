@@ -18,7 +18,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
         {
             var board = BoardBuilder.NewGame;
 
-            var validMoves = new KnightValidMoveGenerator().For(board, knightLocation);
+            var validMoves = new KnightValidMoveGenerator().ValidMoves(board, knightLocation);
 
             Assert.That(validMoves.Count(), Is.EqualTo(0));
         }

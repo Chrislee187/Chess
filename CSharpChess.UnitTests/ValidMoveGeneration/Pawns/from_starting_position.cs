@@ -25,8 +25,8 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 var whiteExpected = BoardLocation.List($"{whitePawn.File}{whitePawn.Rank + 1}", $"{whitePawn.File}{whitePawn.Rank + 2}");
                 var blackExpected = BoardLocation.List($"{blackPawn.File}{blackPawn.Rank - 1}", $"{blackPawn.File}{blackPawn.Rank - 2}");
 
-                AssertMovesContainsExpectedWithType(new PawnValidMoveGenerator().For(board, whitePawn), whiteExpected, MoveType.Move);
-                AssertMovesContainsExpectedWithType(new PawnValidMoveGenerator().For(board, blackPawn), blackExpected, MoveType.Move);
+                AssertMovesContainsExpectedWithType(new PawnValidMoveGenerator().ValidMoves(board, whitePawn), whiteExpected, MoveType.Move);
+                AssertMovesContainsExpectedWithType(new PawnValidMoveGenerator().ValidMoves(board, blackPawn), blackExpected, MoveType.Move);
             }
         }
     }

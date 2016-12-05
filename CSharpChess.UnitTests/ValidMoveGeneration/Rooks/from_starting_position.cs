@@ -25,7 +25,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Rooks
         {
             var board = BoardBuilder.NewGame;
 
-            var validMoves = _generator.For(board, location);
+            var validMoves = _generator.ValidMoves(board, location);
 
             Assert.That(validMoves.Count(), Is.EqualTo(0));
         }

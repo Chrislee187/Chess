@@ -23,7 +23,7 @@ namespace CSharpChess
 
         public static class Board
         {
-
+            // These need to be an enum
             public const int LeftDirectionModifier = -1;
             public const int RightDirectionModifier = 1;
 

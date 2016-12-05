@@ -9,16 +9,17 @@ namespace CSharpChess.ValidMoves
 
         protected abstract IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at);
         protected abstract IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at);
+        protected abstract IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at);
 
         protected ValidMoveGeneratorBase(Chess.PieceNames forPiece)
         {
             ForPiece = forPiece;
         }
 
-        public IEnumerable<ChessMove> For(ChessBoard board, string location) =>
-            For(board, (BoardLocation)location);
+        public IEnumerable<ChessMove> ValidMoves(ChessBoard board, string location) =>
+            ValidMoves(board, (BoardLocation)location);
 
-        public IEnumerable<ChessMove> For(ChessBoard board, BoardLocation at)
+        public IEnumerable<ChessMove> ValidMoves(ChessBoard board, BoardLocation at)
         {
             var possibleMoves = new List<ChessMove>();
             var chessPiece = board[at].Piece;

@@ -20,7 +20,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
         {
             var board = BoardBuilder.NewGame;
 
-            var validMoves = new KnightValidMoveGenerator().For(board, knightLocation);
+            var validMoves = new KnightValidMoveGenerator().ValidMoves(board, knightLocation);
 
             AssertMovesContainsExpectedWithType(validMoves, expectedLocations.Select(l => BoardLocation.At(l)), MoveType.Move);
         }

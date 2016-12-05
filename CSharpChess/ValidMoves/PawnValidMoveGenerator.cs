@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.TheBoard;
@@ -14,25 +15,16 @@ namespace CSharpChess.ValidMoves
             var moves = new List<ChessMove>();
             var pieceColour = board[at].Piece.Colour;
             
-            moves.AddRange(NormalTakes(board, at, Chess.Board.LeftDirectionModifier)
+            moves.AddRange(ValidCaptures(board, at)
                 .Select(l => new ChessMove(at, l, PromotedTo(l, pieceColour, MoveType.Take)))
                 );
 
-            moves.AddRange(NormalTakes(board, at, Chess.Board.RightDirectionModifier)
-                .Select(l => new ChessMove(at, l, PromotedTo(l, pieceColour, MoveType.Take)))
-                );
-
-            moves.AddRange(EnPassantTakes(board, at, Chess.Board.LeftDirectionModifier)
-                .Select(l => new ChessMove(at, l, PromotedTo(l, pieceColour, MoveType.TakeEnPassant)))
-                );
-
-            moves.AddRange(EnPassantTakes(board, at, Chess.Board.RightDirectionModifier)
+            moves.AddRange(ValidEnPassants(board, at)
                 .Select(l => new ChessMove(at, l, PromotedTo(l, pieceColour, MoveType.TakeEnPassant)))
                 );
 
             return moves;
         }
-
         protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
         {
             var chessPiece = board[at].Piece;
@@ -56,64 +48,76 @@ namespace CSharpChess.ValidMoves
 
             return validMoves;
         }
-
-        private MoveType PromotedTo(BoardLocation location, Chess.Colours colour, MoveType dflt)
+        protected override IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
         {
-            return location.Rank == Chess.PromotionRankFor(colour) 
-                ? MoveType.Promotion 
+            var threats = new List<BoardLocation>();
+            threats.AddRange(EnPassantLocations(board, at));
+            threats.AddRange(CaptureLocations(board, at));
+            return threats;
+        }
+
+        private static IEnumerable<BoardLocation> ValidCaptures(ChessBoard board, BoardLocation at) 
+            => CaptureLocations(board, at).Where(p => Chess.CanTakeAt(board, p, board[at].Piece.Colour));
+
+        private static IEnumerable<BoardLocation> CaptureLocations(ChessBoard board, BoardLocation at)
+            => CalcCaptureLocations(board, at, CalcNormalTakePosition);
+
+        private static IEnumerable<BoardLocation> ValidEnPassants(ChessBoard board, BoardLocation at) 
+            => EnPassantLocations(board, at).Where(p => Chess.Rules.Pawns.CanEnPassant(board, at, p));
+
+        private static IEnumerable<BoardLocation> EnPassantLocations(ChessBoard board, BoardLocation at) 
+            => CalcCaptureLocations(board, at, CalcEnPassantPosition);
+
+        private static IEnumerable<BoardLocation> CalcCaptureLocations(ChessBoard board, BoardLocation at, Func<ChessBoard, BoardLocation, int, BoardLocation> positionCalculator)
+        {
+            var directions = new[] { Chess.Board.LeftDirectionModifier, Chess.Board.RightDirectionModifier };
+
+            var positions = new List<BoardLocation>();
+            foreach (var direction in directions)
+            {
+                BoardLocation loc;
+                if ((loc = positionCalculator(board, at, direction)) != null)
+                {
+                    positions.Add(loc);
+                }
+            }
+            return positions;
+        }
+
+        private static BoardLocation CalcNormalTakePosition(ChessBoard board, BoardLocation at, int horizontal)
+        {
+            var vertical = Chess.Pieces.VerticalDirectionModifierFor(board[at].Piece);
+
+            if (NotOnEdge(at, horizontal))
+            {
+                return BoardLocation.At((int)at.File + horizontal, at.Rank + vertical);
+            }
+
+            return null;
+        }
+
+        private static BoardLocation CalcEnPassantPosition(ChessBoard board, BoardLocation at, int horizontal)
+        {
+            var vertical = Chess.Pieces.VerticalDirectionModifierFor(board[at].Piece);
+
+            var enpassantRank = Chess.Pieces.EnpassantFromRankFor(board[at].Piece.Colour);
+
+            if (at.Rank == enpassantRank && NotOnEdge(at, horizontal))
+            {
+                return BoardLocation.At((int) at.File + horizontal, at.Rank + vertical);
+            }
+
+            return null;
+        }
+
+        private static MoveType PromotedTo(BoardLocation location, Chess.Colours colour, MoveType dflt)
+        {
+            return location.Rank == Chess.PromotionRankFor(colour)
+                ? MoveType.Promotion
                 : dflt;
         }
-        private IEnumerable<BoardLocation> NormalTakes(ChessBoard board, BoardLocation at, int horizontal)
-        {
-            var vertical = Chess.Pieces.VerticalDirectionModifierFor(board[at].Piece);
 
-            var pieceColour = board[at].Piece.Colour;
-
-            var moveTos = new List<BoardLocation>();
-
-            if (CanTakeThisSide(at, horizontal))
-            {
-                var newFile = (int) at.File + horizontal;
-                var newRank = at.Rank + vertical;
-                var takeLocation = BoardLocation.At(newFile, newRank);
-
-                if (Chess.CanTakeAt(board, takeLocation, pieceColour))
-                {
-                    moveTos.Add(takeLocation);
-                }
-
-                return moveTos;
-            }
-
-            return moveTos;
-        }
-
-        private IEnumerable<BoardLocation> EnPassantTakes(ChessBoard board, BoardLocation at, int horizontal)
-        {
-            var vertical = Chess.Pieces.VerticalDirectionModifierFor(board[at].Piece);
-
-            var moveTos = new List<BoardLocation>();
-
-            var enpassantFromRank = Chess.Pieces.EnpassantFromRankFor(board[at].Piece.Colour);
-
-            if (at.Rank == enpassantFromRank)
-            {
-                if (CanTakeThisSide(at, horizontal))
-                {
-                    var newFile = (int)at.File + horizontal;
-                    var enPassantLocation = new BoardLocation((Chess.ChessFile)newFile, at.Rank + vertical);
-
-                    if (Chess.Rules.Pawns.CanEnPassant(board, at, enPassantLocation))
-                    {
-                        moveTos.Add(enPassantLocation);
-                    }
-                }
-            }
-            
-            return moveTos;
-        }
-
-        private static bool CanTakeThisSide(BoardLocation at, int horizontal)
+        private static bool NotOnEdge(BoardLocation at, int horizontal)
         {
             var notOnHorizontalEdge = horizontal > 0
                 ? at.File < Chess.ChessFile.H

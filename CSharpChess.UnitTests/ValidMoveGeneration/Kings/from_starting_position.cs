@@ -15,7 +15,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
         {
             var board = BoardBuilder.NewGame;
 
-            var validMoves = new KingValidMoveGenerator().For(board, location);
+            var validMoves = new KingValidMoveGenerator().ValidMoves(board, location);
 
             Assert.That(validMoves.Count(), Is.EqualTo(0));
         }

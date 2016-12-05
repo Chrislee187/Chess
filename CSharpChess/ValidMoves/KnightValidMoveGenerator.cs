@@ -34,5 +34,10 @@ namespace CSharpChess.ValidMoves
                 .Where(locationIsValidToTake)
                 .Select(m => new ChessMove(at, m, MoveType.Take));
         }
+
+        protected override IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

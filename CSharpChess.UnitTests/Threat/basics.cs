@@ -52,7 +52,7 @@ namespace CSharpChess.UnitTests.Threat
             Assert.That(board.DefendingFrom("B3", Chess.Colours.Black).Contains(BoardLocation.At("A2")), "No ThreatAgainst found");
 //            Assert.That(board.AttackingFrom("A2").Contains(BoardLocation.At("B3")), "No ThreatFrom found");
 
-            var moves = new PawnValidMoveGenerator().For(board, "D4");
+            var moves = new PawnValidMoveGenerator().ValidMoves(board, "D4");
 
         }
     }

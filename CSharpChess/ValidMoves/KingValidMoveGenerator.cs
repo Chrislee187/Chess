@@ -47,5 +47,10 @@ namespace CSharpChess.ValidMoves
 
             return result;
         }
+
+        protected override IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

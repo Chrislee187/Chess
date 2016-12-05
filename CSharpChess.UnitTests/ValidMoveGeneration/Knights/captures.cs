@@ -33,7 +33,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
             var expected = BoardLocation.List("C3");
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
-            var moves = _knightValidMoveGenerator.For(board, "B1").ToList();
+            var moves = _knightValidMoveGenerator.ValidMoves(board, "B1").ToList();
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.Take);
         }

@@ -55,6 +55,11 @@ namespace CSharpChess.ValidMoves
             return result;
         }
 
+        protected override IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
+        {
+            throw new NotImplementedException();
+        }
+
         public static BoardLocation ApplyDirection(BoardLocation from, Tuple<int, int> direction)
         {
             var file = (int)from.File + direction.Item1;
