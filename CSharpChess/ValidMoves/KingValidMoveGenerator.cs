@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CSharpChess.TheBoard;
 
@@ -8,39 +9,30 @@ namespace CSharpChess.ValidMoves
         public KingValidMoveGenerator() : base(Chess.PieceNames.King)
         { }
 
-        protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
+        private IEnumerable<ChessMove> AddMoveIf(ChessBoard board, BoardLocation at,
+            Func<ChessBoard, BoardLocation, BoardLocation, bool> predicate, MoveType moveType)
         {
             var result = new List<ChessMove>();
-            var directions = Chess.Rules.Queens.DirectionTransformations;
+            var directions = Chess.Rules.KingAndQueen.DirectionTransformations;
 
             foreach (var direction in directions)
             {
                 var to = StraightLineValidMoveGenerator.ApplyDirection(at, direction);
 
-                if (to != null 
-                    && board.IsEmptyAt(to))
+                if (to != null
+                    && predicate(board, at, to))
                 {
-                    result.Add(new ChessMove(at, to, MoveType.Move));
+                    result.Add(new ChessMove(at, to, moveType));
                 }
             }
 
             return result;
         }
-        protected override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
-        {
-            var result = new List<ChessMove>();
-            var directions = Chess.Rules.Queens.DirectionTransformations;
 
-            foreach (var direction in directions)
-            {
-                var to = StraightLineValidMoveGenerator.ApplyDirection(at, direction);
+        protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at) => 
+            AddMoveIf(board, at, (b, f, t) => b.IsEmptyAt(t), MoveType.Move);
 
-                var attackerColour = board[at].Piece.Colour;
-                if (to != null && Chess.CanTakeAt(board, to, attackerColour))
-                    result.Add(new ChessMove(at, to, MoveType.Take));
-            }
-
-            return result;
-        }
+        protected override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at) => 
+            AddMoveIf(board, at, (b, f, t) => Chess.CanTakeAt(b, t, b[f].Piece.Colour), MoveType.Take);
     }
 }

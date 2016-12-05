@@ -10,29 +10,20 @@ namespace CSharpChess.ValidMoves
         public KnightValidMoveGenerator() : base(Chess.PieceNames.Knight)
         {}
 
-        protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
+        private IEnumerable<ChessMove> AddMoveIf(ChessBoard board, BoardLocation at,
+            Func<ChessBoard, BoardLocation, BoardLocation, bool> predicate, MoveType moveType)
         {
             var possibleMoves = Chess.Rules.Knights.MovesFrom(at);
 
-            Func<BoardLocation, bool> locationIsValidToMoveTo = 
-                board.IsEmptyAt;
-
             return possibleMoves
-                .Where(locationIsValidToMoveTo)
-                .Select(m => new ChessMove(at, m, MoveType.Move));
+                .Where(to => predicate(board, at, to))
+                .Select(m => new ChessMove(at, m, moveType));
         }
 
-        protected override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
-        {
-            var possibleMoves = Chess.Rules.Knights.MovesFrom(at);
-            var chessPiece = board[at].Piece;
+        protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at) 
+            => AddMoveIf(board, at, (b, f, t) => b.IsEmptyAt(t), MoveType.Move);
 
-            Func<BoardLocation, bool> locationIsValidToTake = l =>
-                    Chess.CanTakeAt(board, l, chessPiece.Colour);
-
-            return possibleMoves
-                .Where(locationIsValidToTake)
-                .Select(m => new ChessMove(at, m, MoveType.Take));
-        }
+        protected override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at) 
+            => AddMoveIf(board, at, (b, f, t) => Chess.CanTakeAt(b, t, b[f].Piece.Colour), MoveType.Take);
     }
 }

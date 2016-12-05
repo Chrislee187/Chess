@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
-using CSharpChess.ValidMoves;
 using NUnit.Framework;
 
 // ReSharper disable InconsistentNaming
@@ -20,7 +19,7 @@ namespace CSharpChess.UnitTests.Threat
         [SetUp]
         public void SetUp()
         {
-            _newBoard = BoardBuilder.CustomBoard(Chess.Board.NewBoardAsOneChar, Chess.Colours.White);
+            _newBoard = BoardBuilder.NewGame;
             _newBoardThreats = new ThreatAnalyser(_newBoard);
             _newBoardThreats.BuildTable();
         }
@@ -43,14 +42,15 @@ namespace CSharpChess.UnitTests.Threat
         {
             foreach (Chess.ChessFile file in Enum.GetValues(typeof(Chess.ChessFile)))
             {
-                foreach (var rank in new [] { 3,4,5,6})
+                foreach (var threatRank in new [] { 3,4,5,6})
                 {
-                    var colour = rank < 5 ? Chess.Colours.Black : Chess.Colours.White;
-                    var pawnFile = rank < 5 ? 2 : 7;
-                    var loc = BoardLocation.At(file, rank);
+                    var loc = BoardLocation.At(file, threatRank);
+
+                    var defender = threatRank < 5 ? Chess.Colours.Black : Chess.Colours.White;
+                    var pawnFile = defender == Chess.Colours.White ? 7 : 2;
                     var pawnLocation = BoardLocation.At(file, pawnFile);
 
-                    CollectionAssert.DoesNotContain(_newBoardThreats.Attacking(loc, Chess.Colours.Black), pawnLocation);
+                    CollectionAssert.DoesNotContain(_newBoardThreats.Attacking(loc, defender), pawnLocation);
                 }
             }
         }

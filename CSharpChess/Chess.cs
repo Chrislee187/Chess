@@ -239,7 +239,7 @@ namespace CSharpChess
                     Tuple.Create(Movement.Left(1), Movement.None())
                 };
             }
-            public static class Queens
+            public static class KingAndQueen
             {
                 public static IEnumerable<Tuple<int, int>> DirectionTransformations
                     => Bishops.DirectionTransformations.Concat(Rooks.DirectionTransformations);

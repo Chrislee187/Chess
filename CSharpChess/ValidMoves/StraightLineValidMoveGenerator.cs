@@ -38,19 +38,16 @@ namespace CSharpChess.ValidMoves
 
             foreach (var direction in directions)
             {
-                var lastEmpty = GetUntilNotEmpty(board, at, direction)?.LastOrDefault();
+                var lastEmpty = GetUntilNotEmpty(board, at, direction)?
+                                    .LastOrDefault();
 
                 if (lastEmpty != null)
                 {
                     var to = ApplyDirection(lastEmpty, direction);
 
-                    if (to != null)
-                    {
-                        if (board[to].Piece.Colour == Chess.ColourOfEnemy(board[at].Piece.Colour))
-                        {
+                    if (to != null 
+                        && board[to].Piece.Colour == Chess.ColourOfEnemy(board[at].Piece.Colour))
                             result.Add(new ChessMove(at, to, MoveType.Take));
-                        }
-                    }
                 }
             }
             return result;
