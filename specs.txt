@@ -1,3 +1,11 @@
+How to detect check, 
+	detect player putting enemy in check
+	detect king moving in to check 
+	detect playing moving a piece which would result in leaving his own king in check
+	
+
+
+
 Ranks are the horizontal Numbers
 Files are the vertical Letters
  ABCDEFGH
@@ -49,6 +57,8 @@ Enum Files
 BoardBuilder
 	EmptyBoard
 	NewBoard
+	CustomBoard(OneCharString (Len = 64))
+	CustomBoard(OneCharPieces[64))
 	CustomBoard(BoardRanks[8] ranks)
 	SetRank(int rank, ChessPiece[] pieces)
 	SetRank(int rank, string pieces) // . - empty square, ' ' - leave contents intact

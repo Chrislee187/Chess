@@ -1,4 +1,5 @@
-﻿using CSharpChess.TheBoard;
+﻿using System.Linq;
+using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.UnitTests.TheBoard;
 using CSharpChess.ValidMoves;
@@ -14,7 +15,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
         const int BlackPawnRank = 7;
 
         [Test]
-        public void can_move_or_two_squares()
+        public void can_move_one_or_two_squares()
         {
             var board = BoardBuilder.NewGame;
             foreach (var file in Chess.Files)
@@ -28,6 +29,5 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 AssertMovesContainsExpectedWithType(new PawnValidMoveGenerator().For(board, blackPawn), blackExpected, MoveType.Move);
             }
         }
-
     }
 }

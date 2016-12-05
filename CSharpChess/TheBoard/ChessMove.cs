@@ -18,9 +18,9 @@ namespace CSharpChess.TheBoard
             PromotedTo = promotedTo;
         }
 
-        public BoardLocation From { get; }
-        public BoardLocation To { get; }
-        public MoveType MoveType { get; }
+        public BoardLocation From { get; protected set; }
+        public BoardLocation To { get; protected set; }
+        public MoveType MoveType { get; protected set; }
         public Chess.PieceNames PromotedTo { get; }
         public static ChessMove Taken(BoardLocation location) => new ChessMove(location, MoveType.Taken);
 

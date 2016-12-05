@@ -14,13 +14,19 @@ namespace CSharpChess.ValidMoves
         {
             var result = new List<ChessMove>();
             var directions = Chess.Rules.Queens.DirectionTransformations;
-
+            var piece = board[at].Piece;
             foreach (var direction in directions)
             {
                 var to = StraightLineValidMoveGenerator.ApplyDirection(at, direction);
 
-                if(to != null && board.IsEmptyAt(to))
-                    result.Add(new ChessMove(at, to, MoveType.Move));
+                if (to != null)
+                {
+                    if (!board.DefendingFrom(to, piece.Colour).Any())
+                    {
+                        if (board.IsEmptyAt(to))
+                            result.Add(new ChessMove(at, to, MoveType.Move));
+                    }
+                }
             }
 
             return result;

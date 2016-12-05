@@ -7,7 +7,9 @@ namespace CSharpChess.TheBoard
 {
     public class ChessBoard
     {
+        
         private readonly BoardPiece[,] _boardPieces = new BoardPiece[9,9];
+        private readonly ValidMoveFactory _validMoveFactory = new ValidMoveFactory();
         private Chess.Colours ToPlay { get; set; } = Chess.Colours.None;
 
         public IEnumerable<BoardPiece> Pieces
@@ -44,6 +46,17 @@ namespace CSharpChess.TheBoard
             }
         }
 
+        public IEnumerable<BoardLocation> DefendingFrom(string loc, Chess.Colours pieceColour) => DefendingFrom(BoardLocation.At(loc), pieceColour);
+        public IEnumerable<BoardLocation> DefendingFrom(BoardLocation loc, Chess.Colours pieceColour)
+        {
+            return new List<BoardLocation>();
+        }
+        public IEnumerable<BoardLocation> AttackingFrom(string loc) => AttackingFrom(BoardLocation.At(loc));
+        public IEnumerable<BoardLocation> AttackingFrom(BoardLocation loc)
+        {
+            return new List<BoardLocation>();
+        }
+
         public BoardPiece this[Chess.ChessFile file, int rank]
         {
             get { return this[(int)file, rank]; }
@@ -77,6 +90,8 @@ namespace CSharpChess.TheBoard
             }
             else
                 EmptyBoard();
+
+            // TODO: Build Initial threat lists            
         }
 
         public ChessBoard(IEnumerable<BoardPiece> pieces, Chess.Colours toPlay)
@@ -99,6 +114,7 @@ namespace CSharpChess.TheBoard
             var validMove = CheckMoveIsValid(move);
             if (validMove != null)
             {
+                // TODO: Update threat lists            
                 var moveType = IfUnknownMoveType(move.MoveType, validMove.MoveType);
 
                 PreMoveActions(move, moveType);
@@ -170,7 +186,7 @@ namespace CSharpChess.TheBoard
 
         private ChessMove CheckMoveIsValid(ChessMove move)
         {
-            var validMove = GetValidMoves(this, move.From)
+            var validMove = _validMoveFactory.GetValidMoves(this, move.From)
                                 .FirstOrDefault(vm => vm.Equals(move));
             return validMove;
         }
@@ -285,30 +301,6 @@ namespace CSharpChess.TheBoard
             else if(ToPlay == Chess.Colours.Black) ToPlay = Chess.Colours.White;
 
             return result;
-        }
-
-        private IEnumerable<ChessMove> GetValidMoves(ChessBoard board, BoardLocation at)
-        {
-            var pieceName = board[at].Piece.Name;
-            switch (pieceName)
-            {
-                case Chess.PieceNames.Pawn:
-                    return new PawnValidMoveGenerator().For(board, at);
-                case Chess.PieceNames.Knight:
-                    return new KnightValidMoveGenerator().For(board, at);
-                case Chess.PieceNames.Rook:
-                    return new RookValidMoveGenerator().For(board, at);
-                case Chess.PieceNames.Bishop:
-                    return new BishopValidMoveGenerator().For(board, at);
-                case Chess.PieceNames.King:
-                    return new KingValidMoveGenerator().For(board, at);
-                case Chess.PieceNames.Queen:
-                    return new QueenValidMoveGenerator().For(board, at);
-//                case Chess.PieceNames.Blank:
-//                    break;
-                default:
-                    throw new NotImplementedException($"ValidMoveGenerator for {pieceName} not yet implemented.");
-            }
         }
 
         private BoardPiece GetPiece(Chess.ChessFile file, int rank)
