@@ -116,6 +116,9 @@ namespace CSharpChess.TheBoard
             throw new ArgumentException($"Invalid move {move}", nameof(move));
         }
 
+        public Chess.Colours ColourOfPiece(BoardLocation at) => this[at].Piece.Colour;
+        public Chess.PieceNames NameOfPiece(BoardLocation at) => this[at].Piece.Name;
+
         private MoveResult PostMoveTidyUp(ChessMove move, MoveType moveType, BoardPiece boardPiece)
         {
             MoveResult result;

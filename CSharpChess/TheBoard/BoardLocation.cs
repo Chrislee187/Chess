@@ -50,17 +50,27 @@ namespace CSharpChess.TheBoard
             return new BoardLocation(file, rank);
         }
 
-        public override bool Equals(object location)
+        protected bool Equals(BoardLocation other)
         {
-            if (location == null || GetType() != location.GetType())
-            {
-                return false;
-            }
-
-            return location.ToString() == ToString();
+            return Rank == other.Rank && File == other.File;
         }
 
-        public override int GetHashCode() => ToString().GetHashCode();
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((BoardLocation) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Rank*397) ^ (int) File;
+            }
+        }
+
         #endregion
     }
 

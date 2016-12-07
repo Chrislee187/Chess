@@ -54,6 +54,7 @@
     <Compile Include="TheBoard\MoveResult.cs" />
     <Compile Include="TheBoard\PgnChessMove.cs" />
     <Compile Include="TheBoard\ValidMoveFactory.cs" />
+    <Compile Include="Threat\ThreatAnalyser.cs" />
     <Compile Include="ValidMoves\BishopValidMoveGenerator.cs" />
     <Compile Include="ValidMoves\KnightValidMoveGenerator.cs" />
     <Compile Include="ValidMoves\PawnValidMoveGenerator.cs" />

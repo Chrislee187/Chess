@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.TheBoard;
+using CSharpChess.Threat;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
@@ -23,18 +22,21 @@ namespace CSharpChess.UnitTests.Threat
             _newBoardThreats = new ThreatAnalyser(_newBoard);
             _newBoardThreats.BuildTable();
         }
+
         [Test]
         public void pawn_at_B2_generates_threat_against_A3_and_C3()
         {
-            Assert.That(_newBoardThreats.AttackingFrom(BoardLocation.At("B2")), Contains.Item((BoardLocation)"A3"));
-            Assert.That(_newBoardThreats.AttackingFrom(BoardLocation.At("B2")), Contains.Item((BoardLocation)"C3"));
+            Assert.That(_newBoardThreats.AttacksFrom(BoardLocation.At("B2")), Contains.Item((BoardLocation) "A3"));
+            Assert.That(_newBoardThreats.AttacksFrom(BoardLocation.At("B2")), Contains.Item((BoardLocation) "C3"));
         }
 
         [Test]
         public void A3_and_C3_have_threat_from_B2()
         {
-            Assert.That(_newBoardThreats.Attacking(BoardLocation.At("A3"), Chess.Colours.Black), Contains.Item(BoardLocation.At("B2")));
-            Assert.That(_newBoardThreats.Attacking(BoardLocation.At("C3"), Chess.Colours.Black), Contains.Item(BoardLocation.At("B2")));
+            Assert.That(_newBoardThreats.DefendingAt(BoardLocation.At("A3"), Chess.Colours.Black),
+                Contains.Item(BoardLocation.At("B2")));
+            Assert.That(_newBoardThreats.DefendingAt(BoardLocation.At("C3"), Chess.Colours.Black),
+                Contains.Item(BoardLocation.At("B2")));
         }
 
         [Test]
@@ -42,7 +44,7 @@ namespace CSharpChess.UnitTests.Threat
         {
             foreach (Chess.ChessFile file in Enum.GetValues(typeof(Chess.ChessFile)))
             {
-                foreach (var threatRank in new [] { 3,4,5,6})
+                foreach (var threatRank in new[] {3, 4, 5, 6})
                 {
                     var loc = BoardLocation.At(file, threatRank);
 
@@ -50,82 +52,53 @@ namespace CSharpChess.UnitTests.Threat
                     var pawnFile = defender == Chess.Colours.White ? 7 : 2;
                     var pawnLocation = BoardLocation.At(file, pawnFile);
 
-                    CollectionAssert.DoesNotContain(_newBoardThreats.Attacking(loc, defender), pawnLocation);
+                    CollectionAssert.DoesNotContain(_newBoardThreats.DefendingAt(loc, defender), pawnLocation);
                 }
             }
         }
 
         [TestCase(Chess.PieceNames.Pawn)]
         [TestCase(Chess.PieceNames.Knight)]
-        public void pwns_and_knights_generate_threat(Chess.PieceNames piece)
+        public void pawns_and_knights_generate_threat(Chess.PieceNames piece)
         {
             Assert.That(_newBoard.Pieces
-                .Where(p => p.Piece.Is(piece))
-                .Where(p => !_newBoardThreats.AttackingFrom(p.Location).Any())
+                    .Where(p => p.Piece.Is(piece))
+                    .Where(p => !_newBoardThreats.AttacksFrom(p.Location).Any())
                 , Is.Empty);
+        }
+
+        [Test]
+        public void rooks_generate_threat()
+        {
+            // TODO: Refactor this in to a seperate class with checks against on all the rooks on the board below
+            // also gives us a place for custom tests as and when required.
+            const string NoPawnBoard =
+                "rnbqkbnr" +
+                "........" +
+                "........" +
+                "........" +
+                "........" +
+                "........" +
+                "........" +
+                "RNBQKBNR";
+
+            var customBoard = BoardBuilder.CustomBoard(NoPawnBoard, Chess.Colours.White);
+
+            var analyser = new ThreatAnalyser(customBoard);
+            analyser.BuildTable();
+
+            var attacking = analyser.AttacksFrom(BoardLocation.At("A1")).ToList();
+            var expected = BoardLocation.List("A2", "A3", "A4", "A5", "A6", "A7", "A8");
+            CollectionAssert.AreEquivalent(expected, attacking);
+
+            var defending = analyser.DefendingAt(BoardLocation.At("A2"), Chess.Colours.Black).ToList();
+            Assert.That(defending.Any(d => d.Equals(BoardLocation.At("A1"))));
         }
 
         [Test]
         public void other_pieces_generate_threat()
         {
-            Assert.Fail("TODO");
-        }
-    }
-
-    public class ThreatAnalyser
-    {
-        private readonly ChessBoard _board;
-        private readonly ValidMoveFactory _validMoveFactory = new ValidMoveFactory();
-
-        private readonly IDictionary<Chess.Colours, ThreatDictionary> _attackingFrom;
-
-        public ThreatAnalyser(ChessBoard board)
-        {
-            _board = board;
-            _attackingFrom = new ConcurrentDictionary<Chess.Colours, ThreatDictionary>();
-        }
-
-        public void BuildTable()
-        {
-            _attackingFrom.Clear();
-            _attackingFrom.Add(Chess.Colours.White, new ThreatDictionary());
-            _attackingFrom.Add(Chess.Colours.Black, new ThreatDictionary());
-
-            foreach (var attackerColour in _attackingFrom.Keys)
-            {
-                var threatDict = _attackingFrom[attackerColour];
-                foreach (var boardPiece in _board.Pieces.Where(bp => bp.Piece.Is(attackerColour)))
-                {
-                    var validMoves = _validMoveFactory.GetThreateningMoves(_board, boardPiece.Location).ToList();
-
-                    var threateningMoves = new List<BoardLocation>();
-
-                    if (validMoves.Any())
-                    {
-                        threateningMoves.AddRange(_validMoveFactory.GetThreateningMoves(_board, boardPiece.Location));
-                    }
-                    threatDict.Add(boardPiece.Location, threateningMoves.ToList());
-                }
-            }
-        }
-
-        private class ThreatDictionary : Dictionary<BoardLocation, IEnumerable<BoardLocation>>
-        {
-
-        }
-
-        public IEnumerable<BoardLocation> AttackingFrom(BoardLocation boardLocation)
-        {
-            var attacksFrom = _attackingFrom[_board[boardLocation].Piece.Colour];
-
-            return attacksFrom[boardLocation];
-        }
-
-        public IEnumerable<BoardLocation> Attacking(BoardLocation boardLocation, Chess.Colours defendingColour)
-        {
-            return _attackingFrom[Chess.ColourOfEnemy(defendingColour)]
-                    .Where(v => v.Value.Contains(boardLocation))
-                    .Select(v => v.Key);
+            Assert.Fail();
         }
     }
 }

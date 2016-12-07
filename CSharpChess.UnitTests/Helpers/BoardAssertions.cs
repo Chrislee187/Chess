@@ -83,5 +83,11 @@ namespace CSharpChess.UnitTests.Helpers
             ranks.ForEach(Console.WriteLine);
             return ranks;
         }
+
+        protected static void DumpBoardLocations(List<BoardLocation> attacking)
+        {
+            Console.Write($"{string.Join(",", attacking)}");
+            Console.WriteLine($" - {attacking.Count()}");
+        }
     }
 }

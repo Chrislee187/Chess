@@ -6,7 +6,7 @@ namespace CSharpChess.TheBoard
 {
     public class ValidMoveFactory
     {
-        private IDictionary<Chess.PieceNames, ValidMoveGeneratorBase> _generators = new Dictionary<Chess.PieceNames, ValidMoveGeneratorBase>
+        private readonly IDictionary<Chess.PieceNames, ValidMoveGeneratorBase> _generators = new Dictionary<Chess.PieceNames, ValidMoveGeneratorBase>
         {
             {Chess.PieceNames.Pawn, new PawnValidMoveGenerator() },
             {Chess.PieceNames.Knight, new KnightValidMoveGenerator() },
