@@ -56,7 +56,9 @@
     <Compile Include="Helpers\ChessBoardHelper.cs" />
     <Compile Include="BoardMovement\pawns.cs" />
     <Compile Include="TheBoard\PsgChessMoveTests.cs" />
+    <Compile Include="Threat\queens.cs" />
     <Compile Include="Threat\rooks.cs" />
+    <Compile Include="Threat\pawns.cs" />
     <Compile Include="Threat\ThreatAnalysis.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\from_starting_position.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\captures.cs" />

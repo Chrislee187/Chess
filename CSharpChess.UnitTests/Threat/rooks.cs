@@ -12,7 +12,7 @@ namespace CSharpChess.UnitTests.Threat
     public class rooks : BoardAssertions
     {
         [Test]
-        public void rooks_generate_threat()
+        public void rooks_generate_vertical_threat()
         {
             var customBoard = BoardBuilder.CustomBoard(NoPawnBoard, Chess.Colours.White);
 

@@ -24,45 +24,10 @@ namespace CSharpChess.UnitTests.Threat
         }
 
         [Test]
-        public void pawn_at_B2_generates_threat_against_A3_and_C3()
-        {
-            Assert.That(_newBoardThreats.AttacksFrom(BoardLocation.At("B2")), Contains.Item((BoardLocation) "A3"));
-            Assert.That(_newBoardThreats.AttacksFrom(BoardLocation.At("B2")), Contains.Item((BoardLocation) "C3"));
-        }
-
-        [Test]
-        public void A3_and_C3_have_threat_from_B2()
-        {
-            Assert.That(_newBoardThreats.DefendingAt(BoardLocation.At("A3"), Chess.Colours.Black),
-                Contains.Item(BoardLocation.At("B2")));
-            Assert.That(_newBoardThreats.DefendingAt(BoardLocation.At("C3"), Chess.Colours.Black),
-                Contains.Item(BoardLocation.At("B2")));
-        }
-
-        [Test]
-        public void normal_pawn_movement_does_not_generate_threat()
-        {
-            foreach (Chess.ChessFile file in Enum.GetValues(typeof(Chess.ChessFile)))
-            {
-                foreach (var threatRank in new[] {3, 4, 5, 6})
-                {
-                    var loc = BoardLocation.At(file, threatRank);
-
-                    var defender = threatRank < 5 ? Chess.Colours.Black : Chess.Colours.White;
-                    var pawnFile = defender == Chess.Colours.White ? 7 : 2;
-                    var pawnLocation = BoardLocation.At(file, pawnFile);
-
-                    CollectionAssert.DoesNotContain(_newBoardThreats.DefendingAt(loc, defender), pawnLocation);
-                }
-            }
-        }
-
-        [TestCase(Chess.PieceNames.Pawn)]
-        [TestCase(Chess.PieceNames.Knight)]
-        public void pawns_and_knights_generate_threat(Chess.PieceNames piece)
+        public void knights_generate_threat()
         {
             Assert.That(_newBoard.Pieces
-                    .Where(p => p.Piece.Is(piece))
+                    .Where(p => p.Piece.Is(Chess.PieceNames.Knight))
                     .Where(p => !_newBoardThreats.AttacksFrom(p.Location).Any())
                 , Is.Empty);
         }
