@@ -10,7 +10,7 @@ namespace CSharpChess.ValidMoves
         public PawnValidMoveGenerator() : base(Chess.PieceNames.Pawn)
         {}
 
-        protected override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
+        public override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
         {
             var moves = new List<ChessMove>();
             var pieceColour = board[at].Piece.Colour;
@@ -25,7 +25,8 @@ namespace CSharpChess.ValidMoves
 
             return moves;
         }
-        protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
+
+        public override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
         {
             var chessPiece = board[at].Piece;
             var direction = Chess.Pieces.VerticalDirectionModifierFor(chessPiece);
@@ -48,7 +49,8 @@ namespace CSharpChess.ValidMoves
 
             return validMoves;
         }
-        protected override IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at)
+
+        public override IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at)
         {
             var chessPiece = board[at].Piece;
             var direction = Chess.Pieces.VerticalDirectionModifierFor(chessPiece);

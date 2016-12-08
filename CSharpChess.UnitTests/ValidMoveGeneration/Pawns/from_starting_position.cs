@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using CSharpChess.TheBoard;
+﻿using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
-using CSharpChess.UnitTests.TheBoard;
 using CSharpChess.ValidMoves;
 using NUnit.Framework;
 

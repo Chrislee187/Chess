@@ -2,7 +2,6 @@
 using System.Linq;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
-using CSharpChess.UnitTests.TheBoard;
 using CSharpChess.ValidMoves;
 using NUnit.Framework;
 
@@ -25,5 +24,15 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
             AssertMovesContainsExpectedWithType(validMoves, expectedLocations.Select(l => BoardLocation.At(l)), MoveType.Move);
         }
 
+        [Test]
+        public void covers_pawns_to_its_front_sides()
+        {
+            var board = BoardBuilder.NewGame;
+            var boardLocation = BoardLocation.At("B1");
+
+            var covers = new KnightValidMoveGenerator().Covers(board, boardLocation).Select(m => m.To).ToList();
+
+            Assert.That(covers, Contains.Item(BoardLocation.At("D2")));
+        }
     }
 }

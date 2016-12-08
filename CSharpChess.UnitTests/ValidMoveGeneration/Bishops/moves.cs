@@ -1,6 +1,5 @@
 ﻿using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
-using CSharpChess.UnitTests.TheBoard;
 using CSharpChess.ValidMoves;
 using NUnit.Framework;
 // ReSharper disable InconsistentNaming

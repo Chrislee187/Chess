@@ -58,7 +58,7 @@ namespace CSharpChess.UnitTests.Helpers
             var expectedLocations = expected as IList<BoardLocation> ?? expected.ToList();
             var actualMoves = actual as IList<ChessMove> ?? actual.ToList();
 
-            if (!expectedLocations.Any() && !actualMoves.Any()) return;
+            if (!expectedLocations.Any() || !actualMoves.Any()) Assert.Fail("No moves found!");
 
             var startLoc = actualMoves.First().From;
             var expectedMoves = expectedLocations.Select(e =>
@@ -95,7 +95,7 @@ namespace CSharpChess.UnitTests.Helpers
 //            return ranks;
         }
 
-        protected static void DumpBoardLocations(List<BoardLocation> attacking)
+        protected static void DumpBoardLocations(IEnumerable<BoardLocation> attacking)
         {
             Console.Write($"{string.Join(",", attacking)}");
             Console.WriteLine($" - {attacking.Count()}");

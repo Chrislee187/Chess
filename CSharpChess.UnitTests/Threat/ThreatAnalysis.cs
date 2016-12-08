@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CSharpChess.TheBoard;
 using CSharpChess.Threat;
 using CSharpChess.UnitTests.Helpers;
@@ -30,12 +29,6 @@ namespace CSharpChess.UnitTests.Threat
                     .Where(p => p.Piece.Is(Chess.PieceNames.Knight))
                     .Where(p => !_newBoardThreats.AttacksFrom(p.Location).Any())
                 , Is.Empty);
-        }
-
-        [Test]
-        public void other_pieces_generate_threat()
-        {
-            Assert.Fail();
         }
     }
 }

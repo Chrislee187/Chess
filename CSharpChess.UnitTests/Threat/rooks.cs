@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CSharpChess.TheBoard;
-using CSharpChess.Threat;
-using CSharpChess.UnitTests.Helpers;
+﻿using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.Threat

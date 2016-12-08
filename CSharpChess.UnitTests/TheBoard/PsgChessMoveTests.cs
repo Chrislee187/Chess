@@ -1,7 +1,6 @@
 ﻿using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace CSharpChess.UnitTests.TheBoard
 {

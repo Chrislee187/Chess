@@ -8,9 +8,9 @@ namespace CSharpChess.ValidMoves
     {
         private Chess.PieceNames ForPiece { get; }
 
-        protected abstract IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at);
-        protected abstract IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at);
-        protected abstract IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at);
+        public abstract IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at);
+        public abstract IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at);
+        public abstract IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at);
         protected virtual IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
         {
             var threats = new List<BoardLocation>();

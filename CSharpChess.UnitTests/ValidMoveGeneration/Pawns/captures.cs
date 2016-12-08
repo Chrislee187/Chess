@@ -1,6 +1,6 @@
-﻿using CSharpChess.TheBoard;
+﻿using System.Linq;
+using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
-using CSharpChess.UnitTests.TheBoard;
 using CSharpChess.ValidMoves;
 using NUnit.Framework;
 
@@ -51,9 +51,10 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
-            var moves = new PawnValidMoveGenerator().ValidMoves(board, "A2");
+            var moves = new PawnValidMoveGenerator().ValidMoves(board, "A2").ToList();
 
-            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
+            Assert.That(moves, Is.Empty);
+
         }
         [Test]
         public void cannot_take_piece_two_squares_in_front_of_it()

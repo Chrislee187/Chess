@@ -20,13 +20,13 @@ namespace CSharpChess.ValidMoves
                 .Select(m => new ChessMove(at, m, moveType));
         }
 
-        protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at) 
+        public override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at) 
             => AddMoveIf(board, at, (b, f, t) => b.IsEmptyAt(t), MoveType.Move);
 
-        protected override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at) 
+        public override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at) 
             => AddMoveIf(board, at, (b, f, t) => Chess.CanTakeAt(b, t, b[f].Piece.Colour), MoveType.Take);
 
-        protected override IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at)
+        public override IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at)
             => AddMoveIf(board, at, (b, f, t) => b[f].Piece.Colour == b[t].Piece.Colour, MoveType.Cover);
 
     }
