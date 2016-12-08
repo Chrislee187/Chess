@@ -68,34 +68,6 @@ namespace CSharpChess.UnitTests.Threat
         }
 
         [Test]
-        public void rooks_generate_threat()
-        {
-            // TODO: Refactor this in to a seperate class with checks against on all the rooks on the board below
-            // also gives us a place for custom tests as and when required.
-            const string NoPawnBoard =
-                "rnbqkbnr" +
-                "........" +
-                "........" +
-                "........" +
-                "........" +
-                "........" +
-                "........" +
-                "RNBQKBNR";
-
-            var customBoard = BoardBuilder.CustomBoard(NoPawnBoard, Chess.Colours.White);
-
-            var analyser = new ThreatAnalyser(customBoard);
-            analyser.BuildTable();
-
-            var attacking = analyser.AttacksFrom(BoardLocation.At("A1")).ToList();
-            var expected = BoardLocation.List("A2", "A3", "A4", "A5", "A6", "A7", "A8");
-            CollectionAssert.AreEquivalent(expected, attacking);
-
-            var defending = analyser.DefendingAt(BoardLocation.At("A2"), Chess.Colours.Black).ToList();
-            Assert.That(defending.Any(d => d.Equals(BoardLocation.At("A1"))));
-        }
-
-        [Test]
         public void other_pieces_generate_threat()
         {
             Assert.Fail();

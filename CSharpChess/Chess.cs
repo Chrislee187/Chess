@@ -33,6 +33,10 @@ namespace CSharpChess
                 return !Validations.InvalidFile(file)
                     && !Validations.InvalidRank(rank);
             }
+            public static bool IsValidLocation(BoardLocation boardLocation)
+            {
+                return IsValidLocation((int) boardLocation.File, boardLocation.Rank);
+            }
 
             public const string NewBoardAsOneChar =
                                "rnbqkbnr" +
@@ -43,6 +47,7 @@ namespace CSharpChess
                                "........" +
                                "PPPPPPPP" +
                                "RNBQKBNR";
+
         }
 
         public enum ChessFile { A = 1, B, C, D, E, F, G, H };

@@ -30,9 +30,20 @@ namespace CSharpChess.Threat
             }
         }
 
+        /// <summary>
+        /// Return the BoardLocation instances that the supplied BoardLocation is Threatening
+        /// </summary>
+        /// <param name="boardLocation"></param>
+        /// <returns></returns>
         public IEnumerable<BoardLocation> AttacksFrom(BoardLocation boardLocation) 
             => _attacksForPlayer[_board.ColourOfPiece(boardLocation)][boardLocation];
 
+        /// <summary>
+        /// Returns the BoardLocation instances that are placing the supplied BoardLocation under Threat
+        /// </summary>
+        /// <param name="boardLocation"></param>
+        /// <param name="asPlayer"></param>
+        /// <returns></returns>
         public IEnumerable<BoardLocation> DefendingAt(BoardLocation boardLocation, Chess.Colours asPlayer) 
             => _attacksForPlayer[Chess.ColourOfEnemy(asPlayer)]
                 .Where(v => v.Value.Any(l => l.Equals(boardLocation)))

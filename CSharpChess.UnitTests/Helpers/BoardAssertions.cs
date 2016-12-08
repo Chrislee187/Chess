@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CSharpChess.TheBoard;
+using CSharpChess.Threat;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.Helpers
@@ -10,6 +11,15 @@ namespace CSharpChess.UnitTests.Helpers
     [SuppressMessage("ReSharper", "UnusedParameter.Global")]
     public class BoardAssertions
     {
+        protected const string NoPawnBoard = "rnbqkbnr" +
+                                           "........" +
+                                           "........" +
+                                           "........" +
+                                           "........" +
+                                           "........" +
+                                           "........" +
+                                           "RNBQKBNR";
+
         protected static void AssertNewGameBoard(ChessBoard board)
         {
             var ranks = DumpBoardToConsole(board);
@@ -88,6 +98,44 @@ namespace CSharpChess.UnitTests.Helpers
         {
             Console.Write($"{string.Join(",", attacking)}");
             Console.WriteLine($" - {attacking.Count()}");
+        }
+
+        protected static void AssertPiecesGeneratesVerticalThreat(ChessBoard customBoard, Chess.PieceNames pieceName, Func<BoardLocation, int, IEnumerable<BoardLocation>> expectedThreatsBuilder)
+        {
+            var analyser = new ThreatAnalyser(customBoard);
+            analyser.BuildTable();
+
+            foreach (var rook in customBoard.Pieces.Where(p => p.Piece.Is(pieceName)))
+            {
+                foreach (var vertDirection in new[] {1, -1})
+                {
+                    var expected = expectedThreatsBuilder(rook.Location, vertDirection).ToList();
+
+                    CollectionAssert.IsSubsetOf(expected, analyser.AttacksFrom(rook.Location));
+
+                    foreach (var boardLocation in expected)
+                    {
+                        var defending = analyser.DefendingAt(boardLocation, Chess.ColourOfEnemy(rook.Piece.Colour)).ToList();
+                        Assert.That(defending.Any(d => d.Equals(rook.Location)));
+                    }
+                }
+            }
+
+        }
+
+        protected IEnumerable<BoardLocation> BuildVerticalThreats(BoardLocation fromPieceAtLocation, int vertDirectionModifier)
+        {
+            var expected = new List<BoardLocation>();
+            for (int i = 1; i <= 7; i++)
+            {
+                var rank = fromPieceAtLocation.Rank + (i * vertDirectionModifier);
+                if (Chess.Board.IsValidLocation((int) fromPieceAtLocation.File, rank))
+                {
+                    expected.Add(BoardLocation.At(fromPieceAtLocation.File, rank));
+                }
+            }
+
+            return expected;
         }
     }
 }
