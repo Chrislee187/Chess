@@ -28,6 +28,7 @@ namespace CSharpChess.UnitTests.Threat
         {
             Assert.That(_newBoardThreats.AttacksFrom(BoardLocation.At("B2")), Contains.Item((BoardLocation) "A3"));
             Assert.That(_newBoardThreats.AttacksFrom(BoardLocation.At("B2")), Contains.Item((BoardLocation) "C3"));
+            DumpBoardToConsole(_newBoard);
         }
 
         [Test]

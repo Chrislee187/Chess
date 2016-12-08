@@ -14,7 +14,7 @@ namespace CSharpChess.ValidMoves
         {
             var result = new List<ChessMove>();
             var directions = Chess.Rules.KingAndQueen.DirectionTransformations;
-
+            
             foreach (var direction in directions)
             {
                 var to = StraightLineValidMoveGenerator.ApplyDirection(at, direction);
@@ -29,8 +29,11 @@ namespace CSharpChess.ValidMoves
             return result;
         }
 
-        protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at) => 
+        protected override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at) =>
             AddMoveIf(board, at, (b, f, t) => b.IsEmptyAt(t), MoveType.Move);
+
+        protected override IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at) =>
+            AddMoveIf(board, at, (b, f, t) => board.IsEmptyAt(t) || !board.IsEmptyAt(t) && board[f].Piece.Colour == board[t].Piece.Colour, MoveType.Cover);
 
         protected override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at) => 
             AddMoveIf(board, at, (b, f, t) => Chess.CanTakeAt(b, t, b[f].Piece.Colour), MoveType.Take);

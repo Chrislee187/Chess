@@ -52,6 +52,28 @@ namespace CSharpChess.ValidMoves
             }
             return result;
         }
+        protected override IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at)
+        {
+            var result = new List<ChessMove>();
+            var directions = _directions;
+
+            foreach (var direction in directions)
+            {
+                var lastEmpty = GetUntilNotEmpty(board, at, direction)?
+                                    .LastOrDefault();
+
+                if (lastEmpty != null)
+                {
+                    var to = ApplyDirection(lastEmpty, direction);
+
+                    if (to != null
+                        && board[to].Piece.Colour == Chess.ColourOfEnemy(board[at].Piece.Colour))
+                        result.Add(new ChessMove(at, to, MoveType.Cover));
+                }
+            }
+            return result;
+        }
+
 
         public static BoardLocation ApplyDirection(BoardLocation from, Tuple<int, int> direction)
         {

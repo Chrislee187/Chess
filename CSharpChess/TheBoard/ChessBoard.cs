@@ -301,6 +301,30 @@ namespace CSharpChess.TheBoard
             Chess.Validations.ThrowInvalidFile(file);
             return _boardPieces[(int)file, rank];
         }
+
+        private sealed class BoardPiecesEqualityComparer : IEqualityComparer<ChessBoard>
+        {
+            public bool Equals(ChessBoard x, ChessBoard y)
+            {
+                if (ReferenceEquals(x, y)) return true;
+                if (ReferenceEquals(x, null)) return false;
+                if (ReferenceEquals(y, null)) return false;
+                if (x.GetType() != y.GetType()) return false;
+                return Equals(x._boardPieces, y._boardPieces);
+            }
+
+            public int GetHashCode(ChessBoard obj)
+            {
+                return (obj._boardPieces != null ? obj._boardPieces.GetHashCode() : 0);
+            }
+        }
+
+        private static readonly IEqualityComparer<ChessBoard> BoardPiecesComparerInstance = new BoardPiecesEqualityComparer();
+
+        public static IEqualityComparer<ChessBoard> BoardPiecesComparer
+        {
+            get { return BoardPiecesComparerInstance; }
+        }
     }
 
 }

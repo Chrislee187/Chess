@@ -48,6 +48,29 @@ namespace CSharpChess.ValidMoves
 
             return validMoves;
         }
+        protected override IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at)
+        {
+            var chessPiece = board[at].Piece;
+            var direction = Chess.Pieces.VerticalDirectionModifierFor(chessPiece);
+            var boardLocation = new BoardLocation(at.File, at.Rank + direction);
+            var newMove = new ChessMove(at, boardLocation, PromotedTo(boardLocation, chessPiece.Colour, MoveType.Move));
+
+            var validMoves = new List<ChessMove>();
+            if (!board.IsEmptyAt(newMove.To) && board[newMove.To].Piece.Colour == chessPiece.Colour)
+            {
+                validMoves.Add(newMove);
+                if (board[at].Location.Rank == Chess.StartingPawnRankFor(chessPiece.Colour))
+                {
+                    var location = new BoardLocation(at.File, at.Rank + (direction * 2));
+                    newMove = new ChessMove(at, location, PromotedTo(location, chessPiece.Colour, MoveType.Move));
+
+                    if (!board.IsEmptyAt(newMove.To) && board[newMove.To].Piece.Colour == chessPiece.Colour)
+                        validMoves.Add(newMove);
+                }
+            }
+
+            return validMoves;
+        }
         protected override IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
         {
             var threats = new List<BoardLocation>();

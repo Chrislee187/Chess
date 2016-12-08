@@ -10,11 +10,13 @@ namespace CSharpChess.ValidMoves
 
         protected abstract IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at);
         protected abstract IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at);
+        protected abstract IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at);
         protected virtual IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
         {
             var threats = new List<BoardLocation>();
             threats.AddRange(Moves(board, at).Select(m => m.To));
             threats.AddRange(Takes(board, at).Select(m => m.To));
+            threats.AddRange(Covers(board, at).Select(m => m.To));
             return threats;
         }
 

@@ -39,7 +39,8 @@
         Move, Take, TakeEnPassant, Castle, Check, Checkmate,
         Promotion,
         Unknown,
-        Taken
+        Taken,
+        Cover
     }
 
 }

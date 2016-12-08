@@ -11,14 +11,14 @@ namespace CSharpChess.Threat
         private readonly ValidMoveFactory _validMoveFactory = new ValidMoveFactory();
 
         private readonly IDictionary<Chess.Colours, ThreatDictionary> _attacksForPlayer;
-
+        private static IEnumerable<BoardLocation> EmptyLocations = new List<BoardLocation>();
         public ThreatAnalyser(ChessBoard board)
         {
             _board = board;
             _attacksForPlayer = new ConcurrentDictionary<Chess.Colours, ThreatDictionary>();
         }
 
-        public void BuildTable()
+        public ThreatAnalyser BuildTable()
         {
             _attacksForPlayer.Clear();
             _attacksForPlayer.Add(Chess.Colours.White, new ThreatDictionary());
@@ -28,6 +28,8 @@ namespace CSharpChess.Threat
             {
                 AddThreatsForPlayer(_attacksForPlayer[attackerColour], attackerColour);
             }
+
+            return this;
         }
 
         /// <summary>
@@ -44,10 +46,12 @@ namespace CSharpChess.Threat
         /// <param name="boardLocation"></param>
         /// <param name="asPlayer"></param>
         /// <returns></returns>
-        public IEnumerable<BoardLocation> DefendingAt(BoardLocation boardLocation, Chess.Colours asPlayer) 
-            => _attacksForPlayer[Chess.ColourOfEnemy(asPlayer)]
-                .Where(v => v.Value.Any(l => l.Equals(boardLocation)))
-                .Select(v => v.Key);
+        public IEnumerable<BoardLocation> DefendingAt(BoardLocation boardLocation, Chess.Colours asPlayer)
+        {
+            return _attacksForPlayer
+                    .SelectMany(kvp => kvp.Value)
+                    .Where(v => v.Value.Contains(boardLocation)).Select( v=> v.Key);
+        }
 
         private void AddThreatsForPlayer(ThreatDictionary threatDict, Chess.Colours attackerColour)
         {

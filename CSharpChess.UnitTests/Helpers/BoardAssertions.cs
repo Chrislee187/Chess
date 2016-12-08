@@ -22,7 +22,7 @@ namespace CSharpChess.UnitTests.Helpers
 
         protected static void AssertNewGameBoard(ChessBoard board)
         {
-            var ranks = DumpBoardToConsole(board);
+            var ranks = new OneCharBoard(board).Ranks.ToList();
             Assert.That(ranks[7], Is.EqualTo("rnbqkbnr"));
             Assert.That(ranks[6], Is.EqualTo("pppppppp"));
             Assert.That(ranks[5], Is.EqualTo("........"));
@@ -86,12 +86,13 @@ namespace CSharpChess.UnitTests.Helpers
         }
 
 
-        protected static List<string> DumpBoardToConsole(ChessBoard board)
+        protected static void DumpBoardToConsole(ChessBoard board)
         {
-            var view = new OneCharBoard(board);
-            var ranks = view.Ranks.ToList();
-            ranks.ForEach(Console.WriteLine);
-            return ranks;
+            BoardConsoleWriter.Write(board);
+//            var view = new OneCharBoard(board);
+//            var ranks = view.Ranks.ToList();
+//            ranks.ForEach(Console.WriteLine);
+//            return ranks;
         }
 
         protected static void DumpBoardLocations(List<BoardLocation> attacking)
@@ -136,6 +137,59 @@ namespace CSharpChess.UnitTests.Helpers
             }
 
             return expected;
+        }
+    }
+
+    public class BoardConsoleWriter
+    {
+        private const bool UseColours = false;
+        public static void Write(ChessBoard board, ThreatAnalyser threats = null)
+        {
+            var consoleBoard = CreateConsoleBoard(board, threats);
+
+            foreach (var rank in Chess.Ranks.Reverse())
+            {
+                foreach (var file in Chess.Files)
+                {
+                    consoleBoard[BoardLocation.At((int) file, rank)]();
+                }
+                Console.Write("\n");
+            }
+
+        }
+
+        private static Dictionary<BoardLocation, Action> CreateConsoleBoard(ChessBoard board, ThreatAnalyser threats)
+        {
+            var t = threats ?? new ThreatAnalyser(board).BuildTable();
+
+            var consoleBoard = new Dictionary<BoardLocation, Action>();
+
+
+            foreach (var boardPiece in board.Pieces)
+            {
+                var underThreat = t.DefendingAt(boardPiece.Location, boardPiece.Piece.Colour).Any();
+
+                Action write = () =>
+                {
+                    if (underThreat && UseColours)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                    }
+                    if (underThreat && !UseColours)
+                    {
+                        Console.Write("X");
+                    }
+                    else
+                        Console.Write(OneCharBoard.ToChar(boardPiece));
+                    if (underThreat && UseColours)
+                    {
+                        Console.ResetColor();
+                    }
+                };
+
+                consoleBoard.Add(boardPiece.Location, write);
+            }
+            return consoleBoard;
         }
     }
 }
