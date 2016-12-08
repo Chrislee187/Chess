@@ -33,23 +33,21 @@ namespace CSharpChess.UnitTests.Helpers
             Assert.That(ranks[0], Is.EqualTo("RNBQKBNR"));
         }
 
-        protected static void AssertMoveSucceeded(MoveResult result, ChessBoard board, string move, ChessPiece chessPiece, MoveType moveType = MoveType.Move)
+        protected static void AssertMoveSucceeded(MoveResult result, ChessBoard board, string move, ChessPiece chessPiece, MoveType moveType = MoveType.Move) 
+            => AssertMoveTypeSucceeded(result, board, move, chessPiece, moveType);
+
+        protected static void AssertTakeSucceeded(MoveResult result, ChessBoard board, string move, ChessPiece chessPiece, MoveType moveType = MoveType.Take) 
+            => AssertMoveTypeSucceeded(result, board, move, chessPiece, moveType);
+
+        private static void AssertMoveTypeSucceeded(MoveResult result, ChessBoard board, string move, ChessPiece chessPiece, MoveType moveType)
         {
             var m = (ChessMove)move;
             Assert.True(result.Succeeded);
             Assert.That(result.MoveType, Is.EqualTo(moveType));
             Assert.True(board.IsEmptyAt(m.From), $"Move start square '{m.From}' not empty, contains '{board[m.From].Piece}'.");
             Assert.True(board.IsNotEmptyAt(m.To), "Move destination square empty.");
-            Assert.True(board[m.To].Piece.Is(chessPiece.Colour, chessPiece.Name), $"'{board[m.From].Piece}' found at destination, expected' {chessPiece}'");
-        }
-        protected static void AssertTakeSucceeded(MoveResult result, ChessBoard board, string move, ChessPiece chessPiece, MoveType moveType = MoveType.Take)
-        {
-            var m = (ChessMove)move;
-            Assert.True(result.Succeeded);
-            Assert.That(result.MoveType, Is.EqualTo(moveType));
-            Assert.True(board.IsEmptyAt(m.From), $"Move start square '{m.From}' not empty, contains '{board[m.From].Piece}'.");
-            Assert.True(board.IsNotEmptyAt(m.To), "Move destination square empty.");
-            Assert.True(board[m.To].Piece.Is(chessPiece.Colour, chessPiece.Name), $"'{board[m.To].Piece}' found at destination, expected' {chessPiece}'");
+            Assert.True(board[m.To].Piece.Is(chessPiece.Colour, chessPiece.Name),
+                $"'{board[m.From].Piece}' found at destination, expected' {chessPiece}'");
         }
 
         protected static void AssertMovesContainsExpectedWithType(IEnumerable<ChessMove> actual,
@@ -80,44 +78,26 @@ namespace CSharpChess.UnitTests.Helpers
             Assert.IsNotNull(found, $"MoveType of '{moveType}' to ${location} not found!.");
         }
 
-        protected static void AssertAllMovesAreOfType(IEnumerable<ChessMove> moves, MoveType moveType)
-        {
-            Assert.That(moves.All(m => m.MoveType == moveType), "Unexpected MoveType found");
-        }
-
-
-        protected static void DumpBoardToConsole(ChessBoard board)
-        {
-            BoardConsoleWriter.Write(board);
-//            var view = new OneCharBoard(board);
-//            var ranks = view.Ranks.ToList();
-//            ranks.ForEach(Console.WriteLine);
-//            return ranks;
-        }
-
-        protected static void DumpBoardLocations(IEnumerable<BoardLocation> attacking)
-        {
-            Console.Write($"{string.Join(",", attacking)}");
-            Console.WriteLine($" - {attacking.Count()}");
-        }
+        protected static void AssertAllMovesAreOfType(IEnumerable<ChessMove> moves, MoveType moveType) 
+            => Assert.That(moves.All(m => m.MoveType == moveType), "Unexpected MoveType found");
 
         protected static void AssertPiecesGeneratesVerticalThreat(ChessBoard customBoard, Chess.PieceNames pieceName, Func<BoardLocation, int, IEnumerable<BoardLocation>> expectedThreatsBuilder)
         {
             var analyser = new ThreatAnalyser(customBoard);
-            analyser.BuildTable();
 
-            foreach (var rook in customBoard.Pieces.Where(p => p.Piece.Is(pieceName)))
+            foreach (var piece in customBoard.Pieces.Where(p => p.Piece.Is(pieceName)))
             {
-                foreach (var vertDirection in new[] {1, -1})
+                foreach (var vertDirection in new[] { 1, -1 })
                 {
-                    var expected = expectedThreatsBuilder(rook.Location, vertDirection).ToList();
+                    var expected = expectedThreatsBuilder(piece.Location, vertDirection).ToList();
 
-                    CollectionAssert.IsSubsetOf(expected, analyser.AttacksFrom(rook.Location));
+                    var threatDictionary = analyser.For(piece.Piece.Colour,piece.Location);
+                    CollectionAssert.IsSubsetOf(expected, threatDictionary.Threats.Select(t => t.To));
 
                     foreach (var boardLocation in expected)
                     {
-                        var defending = analyser.DefendingAt(boardLocation, Chess.ColourOfEnemy(rook.Piece.Colour)).ToList();
-                        Assert.That(defending.Any(d => d.Equals(rook.Location)));
+                        var defending = threatDictionary.Covers;
+                        Assert.That(defending.Any(d => d.From.Equals(piece.Location)), $"{piece.Location} not found in {string.Join(",",defending)}");
                     }
                 }
             }
@@ -130,7 +110,7 @@ namespace CSharpChess.UnitTests.Helpers
             for (int i = 1; i <= 7; i++)
             {
                 var rank = fromPieceAtLocation.Rank + (i * vertDirectionModifier);
-                if (Chess.Board.IsValidLocation((int) fromPieceAtLocation.File, rank))
+                if (Chess.Board.IsValidLocation((int)fromPieceAtLocation.File, rank))
                 {
                     expected.Add(BoardLocation.At(fromPieceAtLocation.File, rank));
                 }
@@ -138,11 +118,22 @@ namespace CSharpChess.UnitTests.Helpers
 
             return expected;
         }
+
+        protected static void DumpBoardToConsole(ChessBoard board) 
+            => BoardConsoleWriter.Write(board);
+
+        protected static void DumpBoardLocations(IEnumerable<BoardLocation> attacking)
+        {
+            var boardLocations = attacking as IList<BoardLocation> ?? attacking.ToList();
+            Console.Write($"{string.Join(",", boardLocations)}");
+            Console.WriteLine($" - {boardLocations.Count()}");
+        }
     }
 
     public class BoardConsoleWriter
     {
-        private const bool UseColours = false;
+        private const bool UseColours = true;
+        private const bool ShowThreat = true;
         public static void Write(ChessBoard board, ThreatAnalyser threats = null)
         {
             var consoleBoard = CreateConsoleBoard(board, threats);
@@ -160,28 +151,30 @@ namespace CSharpChess.UnitTests.Helpers
 
         private static Dictionary<BoardLocation, Action> CreateConsoleBoard(ChessBoard board, ThreatAnalyser threats)
         {
-            var t = threats ?? new ThreatAnalyser(board).BuildTable();
+            var t = threats ?? new ThreatAnalyser(board);
 
             var consoleBoard = new Dictionary<BoardLocation, Action>();
 
-
             foreach (var boardPiece in board.Pieces)
             {
-                var underThreat = t.DefendingAt(boardPiece.Location, boardPiece.Piece.Colour).Any();
-
+                var underThreat = t.For(boardPiece.Piece.Colour,boardPiece.Location).Threats.Any();
                 Action write = () =>
                 {
-                    if (underThreat && UseColours)
+                    if (ShowThreat && underThreat && UseColours)
                     {
-                        Console.BackgroundColor = ConsoleColor.Red;
-                    }
-                    if (underThreat && !UseColours)
-                    {
-                        Console.Write("X");
+                        if (UseColours)
+                        {
+                            Console.BackgroundColor = ConsoleColor.Red;
+                        }
+                        else
+                        {
+                            Console.Write("X");
+                        }
                     }
                     else
                         Console.Write(OneCharBoard.ToChar(boardPiece));
-                    if (underThreat && UseColours)
+
+                    if (UseColours)
                     {
                         Console.ResetColor();
                     }

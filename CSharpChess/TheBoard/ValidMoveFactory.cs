@@ -6,7 +6,7 @@ namespace CSharpChess.TheBoard
 {
     public class ValidMoveFactory
     {
-        private readonly IDictionary<Chess.PieceNames, ValidMoveGeneratorBase> _generators = new Dictionary<Chess.PieceNames, ValidMoveGeneratorBase>
+        public readonly IDictionary<Chess.PieceNames, ValidMoveGeneratorBase> For = new Dictionary<Chess.PieceNames, ValidMoveGeneratorBase>
         {
             {Chess.PieceNames.Pawn, new PawnValidMoveGenerator() },
             {Chess.PieceNames.Knight, new KnightValidMoveGenerator() },
@@ -20,8 +20,8 @@ namespace CSharpChess.TheBoard
         {
             var pieceName = board[at].Piece.Name;
 
-            if (_generators.ContainsKey(pieceName))
-                return _generators[pieceName].ValidMoves(board, at);
+            if (For.ContainsKey(pieceName))
+                return For[pieceName].ValidMoves(board, at);
 
             throw new NotImplementedException($"ValidMoveGenerator for {pieceName} not yet implemented.");
         }
@@ -29,8 +29,8 @@ namespace CSharpChess.TheBoard
         {
             var pieceName = board[at].Piece.Name;
 
-            if (_generators.ContainsKey(pieceName))
-                return _generators[pieceName].ValidThreats(board, at);
+            if (For.ContainsKey(pieceName))
+                return For[pieceName].ValidThreats(board, at);
 
             throw new NotImplementedException($"ValidMoveGenerator for {pieceName} not yet implemented.");
         }

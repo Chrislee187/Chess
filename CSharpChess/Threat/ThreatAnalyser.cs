@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.TheBoard;
@@ -10,68 +11,77 @@ namespace CSharpChess.Threat
         private readonly ChessBoard _board;
         private readonly ValidMoveFactory _validMoveFactory = new ValidMoveFactory();
 
-        private readonly IDictionary<Chess.Colours, ThreatDictionary> _attacksForPlayer;
-        private static IEnumerable<BoardLocation> EmptyLocations = new List<BoardLocation>();
+        private IDictionary<Chess.Colours, IDictionary<BoardLocation, ThreatDictionary>> ThreatsFor { get; }
+
         public ThreatAnalyser(ChessBoard board)
         {
             _board = board;
-            _attacksForPlayer = new ConcurrentDictionary<Chess.Colours, ThreatDictionary>();
+            ThreatsFor = new ConcurrentDictionary<Chess.Colours, IDictionary<BoardLocation, ThreatDictionary>>();
+
+            BuildTable(board);
         }
 
-        public ThreatAnalyser BuildTable()
+        public ThreatDictionary For(Chess.Colours colour, BoardLocation location)
         {
-            _attacksForPlayer.Clear();
-            _attacksForPlayer.Add(Chess.Colours.White, new ThreatDictionary());
-            _attacksForPlayer.Add(Chess.Colours.Black, new ThreatDictionary());
-
-            foreach (var attackerColour in _attacksForPlayer.Keys)
+            if (ThreatsFor.ContainsKey(colour))
             {
-                AddThreatsForPlayer(_attacksForPlayer[attackerColour], attackerColour);
-            }
-
-            return this;
-        }
-
-        /// <summary>
-        /// Return the BoardLocation instances that the supplied BoardLocation is Threatening
-        /// </summary>
-        /// <param name="boardLocation"></param>
-        /// <returns></returns>
-        public IEnumerable<BoardLocation> AttacksFrom(BoardLocation boardLocation) 
-            => _attacksForPlayer[_board.ColourOfPiece(boardLocation)][boardLocation];
-
-        /// <summary>
-        /// Returns the BoardLocation instances that are placing the supplied BoardLocation under Threat
-        /// </summary>
-        /// <param name="boardLocation"></param>
-        /// <param name="asPlayer"></param>
-        /// <returns></returns>
-        public IEnumerable<BoardLocation> DefendingAt(BoardLocation boardLocation, Chess.Colours asPlayer)
-        {
-            return _attacksForPlayer
-                    .SelectMany(kvp => kvp.Value)
-                    .Where(v => v.Value.Contains(boardLocation)).Select( v=> v.Key);
-        }
-
-        private void AddThreatsForPlayer(ThreatDictionary threatDict, Chess.Colours attackerColour)
-        {
-            foreach (var boardPiece in _board.Pieces.Where(bp => bp.Piece.Is(attackerColour)))
-            {
-                var validMoves = _validMoveFactory.GetThreateningMoves(_board, boardPiece.Location).ToList();
-
-                var threateningMoves = new List<BoardLocation>();
-
-                if (validMoves.Any())
+                var t = ThreatsFor[colour];
+                if (t.ContainsKey(location))
                 {
-                    threateningMoves.AddRange(validMoves);
+                    return t[location];
                 }
-                threatDict.Add(boardPiece.Location, threateningMoves.ToList());
+            }
+            return new ThreatDictionary();
+        }
+
+        private void BuildTable(ChessBoard board)
+        {
+            ThreatsFor.Clear();
+
+            foreach (Chess.Colours attackerColour in Enum.GetValues(typeof(Chess.Colours)))
+            {
+                if(attackerColour != Chess.Colours.None)
+                    ThreatsFor.Add(attackerColour, BuildThreatDictionaryFor(board, attackerColour));
             }
         }
 
-        private class ThreatDictionary : Dictionary<BoardLocation, IEnumerable<BoardLocation>>
+        private IDictionary<BoardLocation,ThreatDictionary> BuildThreatDictionaryFor(ChessBoard board, Chess.Colours attackerColour)
         {
+            var dict = new Dictionary<BoardLocation, ThreatDictionary>();
+            foreach (var boardPiece in board.Pieces.Where(bp => bp.Piece.Is(attackerColour)))
+            {
+                var factory = _validMoveFactory.For[boardPiece.Piece.Name];
 
+                var moves = factory.Moves(board, boardPiece.Location);
+                var takes = factory.Takes(board, boardPiece.Location);
+                var covers = factory.Covers(board, boardPiece.Location);
+                var threats = factory.ValidThreats(board, boardPiece.Location).Select(l => new ChessMove(boardPiece.Location, l, MoveType.Unknown));
+                dict.Add(boardPiece.Location, new ThreatDictionary(boardPiece.Location, moves, takes, covers, threats));
+            }
+
+            return dict;
+        }
+
+        public class ThreatDictionary 
+        {
+            public BoardLocation Location { get; }
+            public IEnumerable<ChessMove> Moves { get; } = new List<ChessMove>();
+            public IEnumerable<ChessMove> Takes { get; } = new List<ChessMove>();
+            public IEnumerable<ChessMove> Covers { get; } = new List<ChessMove>();
+            public IEnumerable<ChessMove> Threats { get; } = new List<ChessMove>();
+
+            public ThreatDictionary(BoardLocation location, IEnumerable<ChessMove> moves, IEnumerable<ChessMove> takes, IEnumerable<ChessMove> covers, IEnumerable<ChessMove> threats)
+            {
+                Location = location;
+                Moves = moves;
+                Takes = takes;
+                Covers = covers;
+                Threats = threats;
+            }
+
+            public ThreatDictionary()
+            {
+            }
         }
     }
 }

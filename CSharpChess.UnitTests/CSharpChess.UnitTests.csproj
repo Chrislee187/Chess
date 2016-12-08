@@ -59,7 +59,6 @@
     <Compile Include="Threat\queens.cs" />
     <Compile Include="Threat\rooks.cs" />
     <Compile Include="Threat\pawns.cs" />
-    <Compile Include="Threat\ThreatAnalysis.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\from_starting_position.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\captures.cs" />
     <Compile Include="ValidMoveGeneration\Kings\captures.cs" />

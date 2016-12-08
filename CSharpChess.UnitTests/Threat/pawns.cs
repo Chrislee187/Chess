@@ -20,24 +20,14 @@ namespace CSharpChess.UnitTests.Threat
         {
             _newBoard = BoardBuilder.NewGame;
             _newBoardThreats = new ThreatAnalyser(_newBoard);
-            _newBoardThreats.BuildTable();
         }
 
         [Test]
         public void pawn_at_B2_generates_threat_against_A3_and_C3()
         {
-            Assert.That(_newBoardThreats.AttacksFrom(BoardLocation.At("B2")), Contains.Item((BoardLocation) "A3"));
-            Assert.That(_newBoardThreats.AttacksFrom(BoardLocation.At("B2")), Contains.Item((BoardLocation) "C3"));
+            Assert.That(_newBoardThreats.For(Chess.Colours.White,BoardLocation.At("B2")).Threats.Select(t => t.To), Contains.Item((BoardLocation) "A3"));
+            Assert.That(_newBoardThreats.For(Chess.Colours.White,BoardLocation.At("B2")).Threats.Select(t => t.To), Contains.Item((BoardLocation) "C3"));
             DumpBoardToConsole(_newBoard);
-        }
-
-        [Test]
-        public void A3_and_C3_have_threat_from_B2()
-        {
-            Assert.That(_newBoardThreats.DefendingAt(BoardLocation.At("A3"), Chess.Colours.Black),
-                Contains.Item(BoardLocation.At("B2")));
-            Assert.That(_newBoardThreats.DefendingAt(BoardLocation.At("C3"), Chess.Colours.Black),
-                Contains.Item(BoardLocation.At("B2")));
         }
 
         [Test]
@@ -53,7 +43,8 @@ namespace CSharpChess.UnitTests.Threat
                     var pawnFile = defender == Chess.Colours.White ? 7 : 2;
                     var pawnLocation = BoardLocation.At(file, pawnFile);
 
-                    CollectionAssert.DoesNotContain(_newBoardThreats.DefendingAt(loc, defender), pawnLocation);
+                    var threats = _newBoardThreats.For(_newBoard[loc].Piece.Colour,loc).Threats;
+                    CollectionAssert.DoesNotContain(threats, pawnLocation);
                 }
             }
         }
@@ -63,8 +54,8 @@ namespace CSharpChess.UnitTests.Threat
         {
             Assert.That(_newBoard.Pieces
                     .Where(p => p.Piece.Is(Chess.PieceNames.Pawn))
-                    .Where(p => !_newBoardThreats.AttacksFrom(p.Location).Any())
-                , Is.Empty);
+                    .Select(p => _newBoardThreats.For(p.Piece.Colour, p.Location).Threats)
+                , Is.Not.Empty);
         }
     }
 }

@@ -20,6 +20,14 @@ namespace CSharpChess.ValidMoves
             return threats;
         }
 
+        public IEnumerable<ChessMove> AllPossible(ChessBoard board, BoardLocation at)
+        {
+            var threats = new List<ChessMove>();
+            threats.AddRange(Moves(board, at));
+            threats.AddRange(Takes(board, at));
+            threats.AddRange(Covers(board, at));
+            return threats;
+        }
         protected ValidMoveGeneratorBase(Chess.PieceNames forPiece)
         {
             ForPiece = forPiece;
