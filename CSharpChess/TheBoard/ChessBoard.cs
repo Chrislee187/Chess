@@ -150,6 +150,12 @@ namespace CSharpChess.TheBoard
                 case MoveType.Promotion:
                     if (IsNotEmptyAt(move.To)) TakeSquare(move.To);
                     break;
+                case MoveType.Castle:
+                    var rookMove = CastleRookMove(move, this[move.From], moveType);
+                    var rookPiece = this[rookMove.From];
+
+                    MoveAPiece(rookPiece, rookMove, moveType);
+                    break;
             }
         }
 
@@ -166,9 +172,42 @@ namespace CSharpChess.TheBoard
 
         private void MovePiece(ChessMove move, BoardPiece boardPiece, MoveType moveType)
         {
+            MoveAPiece(boardPiece, move, moveType);
+        }
+
+        private void MoveAPiece(BoardPiece boardPiece, ChessMove move, MoveType moveType)
+        {
             ClearSquare(move.From);
             boardPiece.MoveTo(move.To, moveType);
             this[move.To] = boardPiece;
+        }
+
+        private static ChessMove CastleRookMove(ChessMove move, BoardPiece boardPiece, MoveType moveType)
+        {
+            ChessMove rookMove = null;
+            if (moveType == MoveType.Castle)
+            {
+                /*
+                 * Get rook location for correct side
+                 * Gt rook destination for correct side
+                 * Move rook to new position, with clears as normal
+                 */
+                BoardLocation rook;
+                BoardLocation rookTo;
+                if (move.To.File == Chess.ChessFile.C)
+                {
+                    rook = BoardLocation.At(Chess.ChessFile.A, boardPiece.Location.Rank);
+                    rookTo = BoardLocation.At(Chess.ChessFile.D, boardPiece.Location.Rank);
+                }
+                else
+                {
+                    rook = BoardLocation.At(Chess.ChessFile.H, boardPiece.Location.Rank);
+                    rookTo = BoardLocation.At(Chess.ChessFile.F, boardPiece.Location.Rank);
+                }
+
+                rookMove = new ChessMove(rook, rookTo, MoveType.Castle);
+            }
+            return rookMove;
         }
 
         private static MoveType IfUnknownMoveType(MoveType moveType, MoveType @default) 
