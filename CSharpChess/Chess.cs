@@ -35,7 +35,7 @@ namespace CSharpChess
             }
             public static bool IsValidLocation(BoardLocation boardLocation)
             {
-                return IsValidLocation((int) boardLocation.File, boardLocation.Rank);
+                return IsValidLocation((int)boardLocation.File, boardLocation.Rank);
             }
 
             public const string NewBoardAsOneChar =
@@ -95,6 +95,28 @@ namespace CSharpChess
                         ? blackPawnsEnPassantFromRank : 0;
 
             }
+
+            public static ChessMove CreateRookMoveForCastling(ChessMove move)
+            {
+                ChessMove rookMove = null;
+                BoardLocation rook;
+                BoardLocation rookTo;
+                if (move.To.File == Chess.ChessFile.C)
+                {
+                    rook = BoardLocation.At(Chess.ChessFile.A, move.From.Rank);
+                    rookTo = BoardLocation.At(Chess.ChessFile.D, move.From.Rank);
+                }
+                else
+                {
+                    rook = BoardLocation.At(Chess.ChessFile.H, move.From.Rank);
+                    rookTo = BoardLocation.At(Chess.ChessFile.F, move.From.Rank);
+                }
+
+                rookMove = new ChessMove(rook, rookTo, MoveType.Castle);
+                return rookMove;
+            }
+
+
         }
 
         public static Colours ColourOfEnemy(Colours colour)
@@ -125,7 +147,7 @@ namespace CSharpChess
             public static bool InvalidRank(int rank) => !Ranks.Contains(rank);
 
             public static bool InvalidFile(ChessFile file) => InvalidFile((int)file);
-            public static bool InvalidFile(int file) => Files.All(f => (int) f != file);
+            public static bool InvalidFile(int file) => Files.All(f => (int)f != file);
 
             public static void ThrowInvalidRank(int rank)
             {
@@ -140,7 +162,7 @@ namespace CSharpChess
 
             public static void ThrowInvalidFile(ChessFile file)
             {
-                ThrowInvalidFile((int) file);
+                ThrowInvalidFile((int)file);
             }
         }
 
@@ -195,7 +217,7 @@ namespace CSharpChess
 
             public static class Knights
             {
-                private static readonly IEnumerable<Tuple<int,int>> MoveMatrix = new List<Tuple<int, int>>
+                private static readonly IEnumerable<Tuple<int, int>> MoveMatrix = new List<Tuple<int, int>>
                 {
                     Tuple.Create(Movement.Right(1), Movement.Up(2)),
                     Tuple.Create(Movement.Right(2), Movement.Up(1)),
@@ -211,13 +233,13 @@ namespace CSharpChess
                 {
                     return MoveMatrix.Where(t =>
                     {
-                        var file = (int) from.File + t.Item1;
+                        var file = (int)from.File + t.Item1;
                         var rank = from.Rank + t.Item2;
 
                         return Board.IsValidLocation(file, rank);
                     }).Select(t =>
                     {
-                        var file = (int) from.File + t.Item1;
+                        var file = (int)from.File + t.Item1;
                         var rank = from.Rank + t.Item2;
                         return BoardLocation.At(file, rank);
                     });

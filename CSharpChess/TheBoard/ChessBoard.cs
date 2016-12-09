@@ -108,7 +108,7 @@ namespace CSharpChess.TheBoard
 
                 PreMoveActions(move, moveType);
 
-                MovePiece(move, boardPiece, moveType);
+                MovePiece(move, moveType);
 
                 return PostMoveTidyUp(move, moveType, boardPiece);
             }
@@ -151,10 +151,8 @@ namespace CSharpChess.TheBoard
                     if (IsNotEmptyAt(move.To)) TakeSquare(move.To);
                     break;
                 case MoveType.Castle:
-                    var rookMove = CastleRookMove(move, this[move.From], moveType);
-                    var rookPiece = this[rookMove.From];
-
-                    MoveAPiece(rookPiece, rookMove, moveType);
+                    var rookMove = Chess.Pieces.CreateRookMoveForCastling(move);
+                    MovePiece(rookMove, MoveType.Castle);
                     break;
             }
         }
@@ -170,44 +168,12 @@ namespace CSharpChess.TheBoard
             this[at] = new BoardPiece(at, new ChessPiece(colour, pieceName));
         }
 
-        private void MovePiece(ChessMove move, BoardPiece boardPiece, MoveType moveType)
+        private void MovePiece(ChessMove move, MoveType moveType)
         {
-            MoveAPiece(boardPiece, move, moveType);
-        }
-
-        private void MoveAPiece(BoardPiece boardPiece, ChessMove move, MoveType moveType)
-        {
+            var piece = this[move.From];
             ClearSquare(move.From);
-            boardPiece.MoveTo(move.To, moveType);
-            this[move.To] = boardPiece;
-        }
-
-        private static ChessMove CastleRookMove(ChessMove move, BoardPiece boardPiece, MoveType moveType)
-        {
-            ChessMove rookMove = null;
-            if (moveType == MoveType.Castle)
-            {
-                /*
-                 * Get rook location for correct side
-                 * Gt rook destination for correct side
-                 * Move rook to new position, with clears as normal
-                 */
-                BoardLocation rook;
-                BoardLocation rookTo;
-                if (move.To.File == Chess.ChessFile.C)
-                {
-                    rook = BoardLocation.At(Chess.ChessFile.A, boardPiece.Location.Rank);
-                    rookTo = BoardLocation.At(Chess.ChessFile.D, boardPiece.Location.Rank);
-                }
-                else
-                {
-                    rook = BoardLocation.At(Chess.ChessFile.H, boardPiece.Location.Rank);
-                    rookTo = BoardLocation.At(Chess.ChessFile.F, boardPiece.Location.Rank);
-                }
-
-                rookMove = new ChessMove(rook, rookTo, MoveType.Castle);
-            }
-            return rookMove;
+            piece.MoveTo(move.To, moveType);
+            this[move.To] = piece;
         }
 
         private static MoveType IfUnknownMoveType(MoveType moveType, MoveType @default) 
