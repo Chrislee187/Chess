@@ -12,7 +12,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
         public void can_move_in_four_diagonal_directions()
         {
             const string asOneChar = "........" +
-                                     ".P.P.P.." +
+                                     ".p.P.P.." +
                                      "........" +
                                      ".P.B.P.." +
                                      "........" +
@@ -24,7 +24,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
             var expected = BoardLocation.List("E6", "E4", "C6", "C4");
 
             var generator = new BishopValidMoveGenerator();
-            var chessMoves = generator.ValidMoves(board, "D5");
+            var chessMoves = generator.Moves(board,BoardLocation.At("D5"));
 
             AssertMovesContainsExpectedWithType(chessMoves, expected, MoveType.Move);
         }

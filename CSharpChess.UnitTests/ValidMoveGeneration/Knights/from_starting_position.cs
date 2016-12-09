@@ -19,20 +19,38 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
         {
             var board = BoardBuilder.NewGame;
 
-            var validMoves = new KnightValidMoveGenerator().ValidMoves(board, knightLocation);
+            var moves = new KnightValidMoveGenerator().Moves(board,BoardLocation.At(knightLocation)).ToList();
 
-            AssertMovesContainsExpectedWithType(validMoves, expectedLocations.Select(l => BoardLocation.At(l)), MoveType.Move);
+            AssertMovesContainsExpectedWithType(moves, expectedLocations.Select(l => BoardLocation.At(l)), MoveType.Move);
         }
 
-        [Test]
-        public void covers_pawns_to_its_front_sides()
+        [TestCase("B1", new[] { "D2" })]
+        [TestCase("G1", new[] { "E2" })]
+        [TestCase("B8", new[] { "D7" })]
+        [TestCase("G8", new[] { "E7" })]
+        public void covers_pawns_to_its_inner_sides(string knightLocation, IEnumerable<string> expectedLocations)
         {
             var board = BoardBuilder.NewGame;
-            var boardLocation = BoardLocation.At("B1");
+            var boardLocation = BoardLocation.At(knightLocation);
 
-            var covers = new KnightValidMoveGenerator().Covers(board, boardLocation).Select(m => m.To).ToList();
+            var covers = new KnightValidMoveGenerator().Covers(board, boardLocation).ToList();
 
-            Assert.That(covers, Contains.Item(BoardLocation.At("D2")));
+            AssertMovesContainsExpectedWithType(covers, expectedLocations.Select(l => BoardLocation.At(l)), MoveType.Cover);
         }
+
+        [TestCase("B1")]
+        [TestCase("G1")]
+        [TestCase("B8")]
+        [TestCase("G8")]
+        public void has_no_takes(string knightLocation)
+        {
+            var board = BoardBuilder.NewGame;
+            var boardLocation = BoardLocation.At(knightLocation);
+
+            var covers = new KnightValidMoveGenerator().Takes(board, boardLocation).ToList();
+
+            Assert.That(covers, Is.Empty);
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CSharpChess.TheBoard;
 
 namespace CSharpChess.ValidMoves
@@ -29,8 +30,14 @@ namespace CSharpChess.ValidMoves
             return result;
         }
 
-        public override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at) =>
-            AddMoveIf(board, at, (b, f, t) => b.IsEmptyAt(t), MoveType.Move);
+        public override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
+        {
+            var moves = AddMoveIf(board, at, (b, f, t) => b.IsEmptyAt(t), MoveType.Move);
+
+            // TODO: Castles
+
+            return moves;
+        }
 
         public override IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at) =>
             AddMoveIf(board, at, (b, f, t) => board.IsEmptyAt(t) || !board.IsEmptyAt(t) && board[f].Piece.Colour == board[t].Piece.Colour, MoveType.Cover);

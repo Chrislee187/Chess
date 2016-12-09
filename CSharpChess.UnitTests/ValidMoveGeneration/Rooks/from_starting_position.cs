@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
 using NUnit.Framework;
@@ -24,7 +25,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Rooks
         {
             var board = BoardBuilder.NewGame;
 
-            var validMoves = _generator.ValidMoves(board, location);
+            var validMoves = _generator.Moves(board, BoardLocation.At(location));
 
             Assert.That(validMoves.Count(), Is.EqualTo(0));
         }

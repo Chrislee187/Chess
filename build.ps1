@@ -1,0 +1,1 @@
+& 'C:\Src\Chess\packages\NUnit.ConsoleRunner.3.5.0\tools\nunit3-console.exe' .\CSharpChess.UnitTests\bin\Debug\CSharpChess.UnitTests.dll

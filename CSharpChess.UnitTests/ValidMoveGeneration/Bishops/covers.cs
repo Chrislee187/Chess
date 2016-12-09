@@ -8,17 +8,17 @@ using NUnit.Framework;
 namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
 {
     [TestFixture]
-    public class captures : BoardAssertions
+    public class covers : BoardAssertions
     {
         [Test]
-        public void can_take_in_four_diagonal_directions()
+        public void can_cover_in_four_diagonal_directions()
         {
             const string asOneChar = "........" +
-                                     ".p.p.p.." +
+                                     ".P.p.P.." +
                                      "........" +
                                      ".p.B.p.." +
                                      "........" +
-                                     ".p.p.p.." +
+                                     ".P.p.P.." +
                                      "........" +
                                      "........";
 
@@ -26,11 +26,9 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
             var expectedTakes = BoardLocation.List("F7", "F3", "B7", "B3");
 
             var generator = new BishopValidMoveGenerator();
-            var chessMoves = generator.Takes(board,BoardLocation.At("D5")).ToList();
-
-            AssertMovesContainsExpectedWithType(chessMoves, expectedTakes, MoveType.Take);
+            var chessMoves = generator.Covers(board, BoardLocation.At("D5")).ToList();
+            AssertMovesContainsExpectedWithType(chessMoves, expectedTakes, MoveType.Cover);
         }
-
 
     }
 }

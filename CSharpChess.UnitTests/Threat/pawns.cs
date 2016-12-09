@@ -27,7 +27,6 @@ namespace CSharpChess.UnitTests.Threat
         {
             Assert.That(_newBoardThreats.For(Chess.Colours.White,BoardLocation.At("B2")).Threats.Select(t => t.To), Contains.Item((BoardLocation) "A3"));
             Assert.That(_newBoardThreats.For(Chess.Colours.White,BoardLocation.At("B2")).Threats.Select(t => t.To), Contains.Item((BoardLocation) "C3"));
-            DumpBoardToConsole(_newBoard);
         }
 
         [Test]

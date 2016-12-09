@@ -5,6 +5,7 @@ using System.Linq;
 using CSharpChess.TheBoard;
 using CSharpChess.Threat;
 using NUnit.Framework;
+#pragma warning disable 162
 
 namespace CSharpChess.UnitTests.Helpers
 {
@@ -75,7 +76,7 @@ namespace CSharpChess.UnitTests.Helpers
                 m.To.Equals(BoardLocation.At("A3"))
                 && m.MoveType == MoveType.Move);
 
-            Assert.IsNotNull(found, $"MoveType of '{moveType}' to ${location} not found!.");
+            Assert.IsNotNull(found, $"MoveType of '{moveType}' to '{location}' not found!.");
         }
 
         protected static void AssertAllMovesAreOfType(IEnumerable<ChessMove> moves, MoveType moveType) 
@@ -132,7 +133,7 @@ namespace CSharpChess.UnitTests.Helpers
 
     public class BoardConsoleWriter
     {
-        private const bool UseColours = true;
+        private const bool UseColours = false;
         private const bool ShowThreat = true;
         public static void Write(ChessBoard board, ThreatAnalyser threats = null)
         {
@@ -157,22 +158,25 @@ namespace CSharpChess.UnitTests.Helpers
 
             foreach (var boardPiece in board.Pieces)
             {
-                var underThreat = t.For(boardPiece.Piece.Colour,boardPiece.Location).Threats.Any();
+                var hasThreats = t.For(boardPiece.Piece.Colour,boardPiece.Location).Threats.Any();
                 Action write = () =>
                 {
-                    if (ShowThreat && underThreat && UseColours)
+                    if (ShowThreat && hasThreats)
                     {
                         if (UseColours)
                         {
                             Console.BackgroundColor = ConsoleColor.Red;
                         }
-                        else
-                        {
-                            Console.Write("X");
-                        }
+                    }
+
+                    if (ShowThreat && hasThreats)
+                    {
+                        Console.Write("X");
                     }
                     else
+                    {
                         Console.Write(OneCharBoard.ToChar(boardPiece));
+                    }
 
                     if (UseColours)
                     {

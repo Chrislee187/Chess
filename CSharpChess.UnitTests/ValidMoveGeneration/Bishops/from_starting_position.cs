@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
@@ -8,8 +9,16 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
 {
     [TestFixture]
     // ReSharper disable once InconsistentNaming
-    public partial class from_starting_position : BoardAssertions
+    public class from_starting_position : BoardAssertions
     {
+        private BishopValidMoveGenerator _generator;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _generator = new BishopValidMoveGenerator();
+        }
+
         [TestCase("B1")]
         [TestCase("G1")]
         [TestCase("B8")]
@@ -18,21 +27,37 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
         {
             var board = BoardBuilder.NewGame;
 
-            var validMoves = new BishopValidMoveGenerator().ValidMoves(board, knightLocation);
+            var moves = _generator.Moves(board, BoardLocation.At(knightLocation));
 
-            Assert.That(validMoves.Count(), Is.EqualTo(0));
+            Assert.That(moves, Is.Empty);
         }
 
-        [Test]
-        public void covers_pawns_to_its_front_sides()
+        [TestCase("C1", new [] {"B2","D2"})]
+        [TestCase("F1", new [] {"E2","G2"})]
+        [TestCase("C8", new [] {"B7","D7"})]
+        [TestCase("G8", new[] { "E7", "G7" })]
+        public void covers_pawns_to_its_front_sides(string location, IEnumerable<string> expected )
         {
             var board = BoardBuilder.NewGame;
             var boardLocation = BoardLocation.At("C1");
 
-            var covers = new BishopValidMoveGenerator().Covers(board, boardLocation).Select(m => m.To).ToList();
+            var covers = _generator.Covers(board, boardLocation).Select(m => m.To).ToList();
 
             Assert.That(covers, Contains.Item(BoardLocation.At("B2")));
             Assert.That(covers, Contains.Item(BoardLocation.At("D2")));
+        }
+
+        [TestCase("B1")]
+        [TestCase("G1")]
+        [TestCase("B8")]
+        [TestCase("G8")]
+        public void have_no_takes_at_start(string location)
+        {
+            var board = BoardBuilder.NewGame;
+
+            var moves = _generator.Takes(board, BoardLocation.At(location));
+
+            Assert.That(moves, Is.Empty);
         }
     }
 }

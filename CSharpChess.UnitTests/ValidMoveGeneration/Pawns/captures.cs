@@ -10,6 +10,13 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
     // ReSharper disable once InconsistentNaming
     public class captures : BoardAssertions
     {
+        private PawnValidMoveGenerator _pawnValidMoveGenerator;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _pawnValidMoveGenerator = new PawnValidMoveGenerator();
+        }
         [Test]
         public void can_enpassant()
         {
@@ -30,7 +37,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             var result = board.Move("c2c4");
             Assert.That(result.Succeeded);
 
-            var moves = new PawnValidMoveGenerator().ValidMoves(board, "D4");
+            var moves = _pawnValidMoveGenerator.Takes(board, BoardLocation.At("D4"));
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.TakeEnPassant);
         }
@@ -47,11 +54,9 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var expected = BoardLocation.List();
-
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
-            var moves = new PawnValidMoveGenerator().ValidMoves(board, "A2").ToList();
+            var moves = _pawnValidMoveGenerator.Takes(board, BoardLocation.At("A2")).ToList();
 
             Assert.That(moves, Is.Empty);
 
@@ -73,7 +78,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
-            var moves = new PawnValidMoveGenerator().ValidMoves(board, "A2");
+            var moves = _pawnValidMoveGenerator.Moves(board, BoardLocation.At("A2"));
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
         }
@@ -94,7 +99,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
-            var moves = new PawnValidMoveGenerator().ValidMoves(board, "C2");
+            var moves = _pawnValidMoveGenerator.Takes(board, BoardLocation.At("C2"));
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.Take);
         }

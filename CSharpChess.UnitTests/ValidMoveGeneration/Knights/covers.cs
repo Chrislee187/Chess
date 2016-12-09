@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
 {
     [TestFixture]
-    public class captures : BoardAssertions
+    public class covers : BoardAssertions
     {
         private KnightValidMoveGenerator _knightValidMoveGenerator;
 
@@ -19,22 +19,22 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
         }
 
         [Test]
-        public void can_capture()
+        public void b1_covers_d2()
         {
             const string asOneChar = "rnbqkbnr" +
                                      "pppppppp" +
                                      "........" +
                                      "........" +
                                      "........" +
-                                     "..p....." +
+                                     "........" +
                                      "PPPPPPPP" +
                                      "RNBQKBNR";
-            var expected = BoardLocation.List("C3");
+            var expected = BoardLocation.List("d2");
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
-            var moves = _knightValidMoveGenerator.Takes(board, BoardLocation.At("B1")).ToList();
+            var moves = _knightValidMoveGenerator.Covers(board, BoardLocation.At("B1")).ToList();
 
-            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Take);
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Cover);
         }
     }
 }
