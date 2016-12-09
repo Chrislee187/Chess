@@ -18,4 +18,6 @@ namespace CSharpChess.Extensions
             }
         }
     }
+
+
 }

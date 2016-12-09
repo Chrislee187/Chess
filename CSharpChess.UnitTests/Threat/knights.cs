@@ -25,20 +25,20 @@ namespace CSharpChess.UnitTests.Threat
         [Test]
         public void knight_at_B1_can_move_to_A3_and_C3()
         {
-            Assert.That(_newBoardThreats.For(Chess.Colours.White,BoardLocation.At("B1")).Moves.Select(t => t.To), Contains.Item((BoardLocation) "A3"));
-            Assert.That(_newBoardThreats.For(Chess.Colours.White,BoardLocation.At("B1")).Moves.Select(t => t.To), Contains.Item((BoardLocation) "C3"));
+            Assert.That(_newBoardThreats.For(BoardLocation.At("B1")).Moves.Select(t => t.To), Contains.Item((BoardLocation) "A3"));
+            Assert.That(_newBoardThreats.For(BoardLocation.At("B1")).Moves.Select(t => t.To), Contains.Item((BoardLocation) "C3"));
         }
 
         [Test]
         public void knight_at_B1_has_no_takes()
         {
-            Assert.That(_newBoardThreats.For(Chess.Colours.White, BoardLocation.At("B1")).Takes.Any(), Is.False);
+            Assert.That(_newBoardThreats.For(BoardLocation.At("B1")).Takes.Any(), Is.False);
         }
 
         [Test]
         public void knight_at_B1_covers_d2()
         {
-            Assert.That(_newBoardThreats.For(Chess.Colours.White, BoardLocation.At("B1")).Covers.Select(t => t.To), Contains.Item((BoardLocation)"D2"));
+            Assert.That(_newBoardThreats.For(BoardLocation.At("B1")).Covers.Select(t => t.To), Contains.Item((BoardLocation)"D2"));
         }
     }
 }

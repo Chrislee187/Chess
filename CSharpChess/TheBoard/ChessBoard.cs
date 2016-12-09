@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpChess.ValidMoves;
+using CSharpChess.Threat;
 
 namespace CSharpChess.TheBoard
 {
     public class ChessBoard
     {
-        
+        private ThreatAnalyser _threatAnalyser;
         private readonly BoardPiece[,] _boardPieces = new BoardPiece[9,9];
         private readonly ValidMoveFactory _validMoveFactory = new ValidMoveFactory();
         private Chess.Colours ToPlay { get; set; } = Chess.Colours.None;
@@ -46,6 +46,12 @@ namespace CSharpChess.TheBoard
             }
         }
 
+        // ReSharper disable once MemberCanBePrivate.Global
+        public BoardPiece this[int file, int rank]
+        {
+            get { return GetPiece((Chess.ChessFile)file, rank); }
+            private set { _boardPieces[file, rank] = value; }
+        }
         public BoardPiece this[Chess.ChessFile file, int rank]
         {
             get { return this[(int)file, rank]; }
@@ -55,13 +61,6 @@ namespace CSharpChess.TheBoard
         {
             get { return this[location.File, location.Rank]; }
             private set { this[location.File, location.Rank] = value; }
-        }
-
-        // ReSharper disable once MemberCanBePrivate.Global
-        public BoardPiece this[int file, int rank]
-        {
-            get { return GetPiece((Chess.ChessFile)file, rank); }
-            private set { _boardPieces[file, rank] = value; }
         }
         public BoardPiece this[string location]
         {
@@ -80,6 +79,7 @@ namespace CSharpChess.TheBoard
             else
                 EmptyBoard();
 
+            _threatAnalyser = new ThreatAnalyser(this);
             // TODO: Build Initial threat lists            
         }
 
@@ -90,6 +90,7 @@ namespace CSharpChess.TheBoard
             {
                 this[boardPiece.Location] = boardPiece;
             }
+            _threatAnalyser = new ThreatAnalyser(this);
             ToPlay = toPlay;
         }
 
@@ -104,6 +105,7 @@ namespace CSharpChess.TheBoard
             if (validMove != null)
             {
                 // TODO: Update threat lists            
+
                 var moveType = IfUnknownMoveType(move.MoveType, validMove.MoveType);
 
                 PreMoveActions(move, moveType);
@@ -118,27 +120,6 @@ namespace CSharpChess.TheBoard
 
         public Chess.Colours ColourOfPiece(BoardLocation at) => this[at].Piece.Colour;
         public Chess.PieceNames NameOfPiece(BoardLocation at) => this[at].Piece.Name;
-
-        private MoveResult PostMoveTidyUp(ChessMove move, MoveType moveType, BoardPiece boardPiece)
-        {
-            MoveResult result;
-            switch (moveType)
-            {
-                case MoveType.TakeEnPassant:
-                    var takenLocation = new BoardLocation(move.To.File, move.From.Rank);
-                    TakeSquare(takenLocation);
-                    result = UpdateTurn(MoveResult.Enpassant(move));
-                    break;
-                case MoveType.Promotion:
-                    Promote(move.To, boardPiece.Piece.Colour, move.PromotedTo);
-                    result = UpdateTurn(MoveResult.Promotion(move));
-                    break;
-                default:
-                    result = UpdateTurn(MoveResult.Success(move, moveType));
-                    break;
-            }
-            return result;
-        }
 
         private void PreMoveActions(ChessMove move, MoveType moveType)
         {
@@ -176,6 +157,27 @@ namespace CSharpChess.TheBoard
             this[move.To] = piece;
         }
 
+        private MoveResult PostMoveTidyUp(ChessMove move, MoveType moveType, BoardPiece boardPiece)
+        {
+            MoveResult result;
+            switch (moveType)
+            {
+                case MoveType.TakeEnPassant:
+                    var takenLocation = new BoardLocation(move.To.File, move.From.Rank);
+                    TakeSquare(takenLocation);
+                    result = UpdateTurn(MoveResult.Enpassant(move));
+                    break;
+                case MoveType.Promotion:
+                    Promote(move.To, boardPiece.Piece.Colour, move.PromotedTo);
+                    result = UpdateTurn(MoveResult.Promotion(move));
+                    break;
+                default:
+                    result = UpdateTurn(MoveResult.Success(move, moveType));
+                    break;
+            }
+            return result;
+        }
+
         private static MoveType IfUnknownMoveType(MoveType moveType, MoveType @default) 
             => moveType == MoveType.Unknown 
                 ? @default 
@@ -206,6 +208,39 @@ namespace CSharpChess.TheBoard
 
         public bool IsNotEmptyAt(string location)
             => !IsEmptyAt((BoardLocation) location);
+
+        private IEnumerable<BoardPiece> Rank(int rank)
+        {
+            Chess.Validations.ThrowInvalidRank(rank);
+            foreach (var file in Chess.Files)
+            {
+                yield return this[file, rank];
+            }
+        }
+
+        private IEnumerable<BoardPiece> File(Chess.ChessFile file)
+        {
+            Chess.Validations.ThrowInvalidFile(file);
+            foreach (var rank in Chess.Ranks)
+            {
+                yield return this[file, rank];
+            }
+        }
+
+        private MoveResult UpdateTurn(MoveResult result)
+        {
+            if (ToPlay == Chess.Colours.White) ToPlay = Chess.Colours.Black;
+            else if(ToPlay == Chess.Colours.Black) ToPlay = Chess.Colours.White;
+
+            return result;
+        }
+
+        private BoardPiece GetPiece(Chess.ChessFile file, int rank)
+        {
+            Chess.Validations.ThrowInvalidRank(rank);
+            Chess.Validations.ThrowInvalidFile(file);
+            return _boardPieces[(int)file, rank];
+        }
 
         private void NewBoard()
         {
@@ -248,14 +283,14 @@ namespace CSharpChess.TheBoard
             _boardPieces[(int)Chess.ChessFile.G, 2] = new BoardPiece(7, 2, Chess.Pieces.White.Pawn);
             _boardPieces[(int)Chess.ChessFile.H, 2] = new BoardPiece(8, 2, Chess.Pieces.White.Pawn);
 
-            _boardPieces[(int) Chess.ChessFile.A, 1] = new BoardPiece(1,1, Chess.Pieces.White.Rook);
-            _boardPieces[(int) Chess.ChessFile.B, 1] = new BoardPiece(2,1, Chess.Pieces.White.Knight);
-            _boardPieces[(int) Chess.ChessFile.C, 1] = new BoardPiece(3,1, Chess.Pieces.White.Bishop);
-            _boardPieces[(int) Chess.ChessFile.D, 1] = new BoardPiece(4,1, Chess.Pieces.White.Queen);
-            _boardPieces[(int) Chess.ChessFile.E, 1] = new BoardPiece(5,1, Chess.Pieces.White.King);
-            _boardPieces[(int) Chess.ChessFile.F, 1] = new BoardPiece(6,1, Chess.Pieces.White.Bishop);
-            _boardPieces[(int) Chess.ChessFile.G, 1] = new BoardPiece(7,1, Chess.Pieces.White.Knight);
-            _boardPieces[(int) Chess.ChessFile.H, 1] = new BoardPiece(8,1, Chess.Pieces.White.Rook);
+            _boardPieces[(int)Chess.ChessFile.A, 1] = new BoardPiece(1, 1, Chess.Pieces.White.Rook);
+            _boardPieces[(int)Chess.ChessFile.B, 1] = new BoardPiece(2, 1, Chess.Pieces.White.Knight);
+            _boardPieces[(int)Chess.ChessFile.C, 1] = new BoardPiece(3, 1, Chess.Pieces.White.Bishop);
+            _boardPieces[(int)Chess.ChessFile.D, 1] = new BoardPiece(4, 1, Chess.Pieces.White.Queen);
+            _boardPieces[(int)Chess.ChessFile.E, 1] = new BoardPiece(5, 1, Chess.Pieces.White.King);
+            _boardPieces[(int)Chess.ChessFile.F, 1] = new BoardPiece(6, 1, Chess.Pieces.White.Bishop);
+            _boardPieces[(int)Chess.ChessFile.G, 1] = new BoardPiece(7, 1, Chess.Pieces.White.Knight);
+            _boardPieces[(int)Chess.ChessFile.H, 1] = new BoardPiece(8, 1, Chess.Pieces.White.Rook);
         }
 
         private void EmptyBoard()
@@ -272,63 +307,6 @@ namespace CSharpChess.TheBoard
                     }
                 }
             }
-        }
-
-        private IEnumerable<BoardPiece> Rank(int rank)
-        {
-            Chess.Validations.ThrowInvalidRank(rank);
-            foreach (var file in Chess.Files)
-            {
-                yield return this[file, rank];
-            }
-        }
-
-        private IEnumerable<BoardPiece> File(Chess.ChessFile file)
-        {
-            Chess.Validations.ThrowInvalidFile(file);
-            foreach (var rank in Chess.Ranks)
-            {
-                yield return this[file, rank];
-            }
-        }
-
-        private MoveResult UpdateTurn(MoveResult result)
-        {
-            if (ToPlay == Chess.Colours.White) ToPlay = Chess.Colours.Black;
-            else if(ToPlay == Chess.Colours.Black) ToPlay = Chess.Colours.White;
-
-            return result;
-        }
-
-        private BoardPiece GetPiece(Chess.ChessFile file, int rank)
-        {
-            Chess.Validations.ThrowInvalidRank(rank);
-            Chess.Validations.ThrowInvalidFile(file);
-            return _boardPieces[(int)file, rank];
-        }
-
-        private sealed class BoardPiecesEqualityComparer : IEqualityComparer<ChessBoard>
-        {
-            public bool Equals(ChessBoard x, ChessBoard y)
-            {
-                if (ReferenceEquals(x, y)) return true;
-                if (ReferenceEquals(x, null)) return false;
-                if (ReferenceEquals(y, null)) return false;
-                if (x.GetType() != y.GetType()) return false;
-                return Equals(x._boardPieces, y._boardPieces);
-            }
-
-            public int GetHashCode(ChessBoard obj)
-            {
-                return (obj._boardPieces != null ? obj._boardPieces.GetHashCode() : 0);
-            }
-        }
-
-        private static readonly IEqualityComparer<ChessBoard> BoardPiecesComparerInstance = new BoardPiecesEqualityComparer();
-
-        public static IEqualityComparer<ChessBoard> BoardPiecesComparer
-        {
-            get { return BoardPiecesComparerInstance; }
         }
     }
 

@@ -8,47 +8,29 @@ namespace CSharpChess.Threat
 {
     public class ThreatAnalyser
     {
-        private readonly ChessBoard _board;
         private readonly ValidMoveFactory _validMoveFactory = new ValidMoveFactory();
 
-        private IDictionary<Chess.Colours, IDictionary<BoardLocation, ThreatDictionary>> ThreatsFor { get; }
+        private IDictionary<BoardLocation, ThreatDictionary> ThreatsFor { get; }
 
         public ThreatAnalyser(ChessBoard board)
         {
-            _board = board;
-            ThreatsFor = new ConcurrentDictionary<Chess.Colours, IDictionary<BoardLocation, ThreatDictionary>>();
+            ThreatsFor = new ConcurrentDictionary<BoardLocation, ThreatDictionary>();
 
             BuildTable(board);
         }
 
-        public ThreatDictionary For(Chess.Colours colour, BoardLocation location)
+        public ThreatDictionary For(BoardLocation location)
         {
-            if (ThreatsFor.ContainsKey(colour))
-            {
-                var t = ThreatsFor[colour];
-                if (t.ContainsKey(location))
-                {
-                    return t[location];
-                }
-            }
-            return new ThreatDictionary();
+            return ThreatsFor.ContainsKey(location) 
+                ? ThreatsFor[location] 
+                : new ThreatDictionary(Chess.Colours.None);
         }
 
         private void BuildTable(ChessBoard board)
         {
             ThreatsFor.Clear();
 
-            foreach (Chess.Colours attackerColour in Enum.GetValues(typeof(Chess.Colours)))
-            {
-                if(attackerColour != Chess.Colours.None)
-                    ThreatsFor.Add(attackerColour, BuildThreatDictionaryFor(board, attackerColour));
-            }
-        }
-
-        private IDictionary<BoardLocation,ThreatDictionary> BuildThreatDictionaryFor(ChessBoard board, Chess.Colours attackerColour)
-        {
-            var dict = new Dictionary<BoardLocation, ThreatDictionary>();
-            foreach (var boardPiece in board.Pieces.Where(bp => bp.Piece.Is(attackerColour)))
+            foreach (var boardPiece in board.Pieces.Where(bp => bp.Piece.IsNot(Chess.PieceNames.Blank)))
             {
                 var factory = _validMoveFactory.For[boardPiece.Piece.Name];
 
@@ -56,32 +38,47 @@ namespace CSharpChess.Threat
                 var takes = factory.Takes(board, boardPiece.Location);
                 var covers = factory.Covers(board, boardPiece.Location);
                 var threats = factory.ValidThreats(board, boardPiece.Location).Select(l => new ChessMove(boardPiece.Location, l, MoveType.Unknown));
-                dict.Add(boardPiece.Location, new ThreatDictionary(boardPiece.Location, moves, takes, covers, threats));
+                ThreatsFor.Add(boardPiece.Location, new ThreatDictionary(boardPiece.Location, moves, takes, covers, threats, boardPiece.Piece.Colour));
             }
-
-            return dict;
         }
 
         public class ThreatDictionary 
         {
             public BoardLocation Location { get; }
+            public Chess.Colours LocationOwner { get; }
             public IEnumerable<ChessMove> Moves { get; } = new List<ChessMove>();
             public IEnumerable<ChessMove> Takes { get; } = new List<ChessMove>();
             public IEnumerable<ChessMove> Covers { get; } = new List<ChessMove>();
             public IEnumerable<ChessMove> Threats { get; } = new List<ChessMove>();
-
-            public ThreatDictionary(BoardLocation location, IEnumerable<ChessMove> moves, IEnumerable<ChessMove> takes, IEnumerable<ChessMove> covers, IEnumerable<ChessMove> threats)
+            public ThreatDictionary(BoardLocation location, IEnumerable<ChessMove> moves, IEnumerable<ChessMove> takes, IEnumerable<ChessMove> covers, IEnumerable<ChessMove> threats, Chess.Colours locationOwner)
             {
                 Location = location;
                 Moves = moves;
                 Takes = takes;
                 Covers = covers;
                 Threats = threats;
+                LocationOwner = locationOwner;
             }
 
-            public ThreatDictionary()
+            public ThreatDictionary(Chess.Colours locationOwner)
             {
+                LocationOwner = locationOwner;
             }
+        }
+
+        public IEnumerable<ChessMove> ThreatsAgainst(Chess.Colours asPlayer, BoardLocation at)
+        {
+            var enemy = Chess.ColourOfEnemy(asPlayer);
+
+            var enemyThreats = ThreatsFor
+                .Where(kvp => kvp.Value.LocationOwner == enemy);
+
+            IEnumerable<ChessMove> moves = enemyThreats
+                .SelectMany(kvp => kvp.Value.Moves).Where(m => m.To.Equals(at));
+            IEnumerable<ChessMove> takes = enemyThreats
+                .SelectMany(kvp => kvp.Value.Takes).Where(m => m.To.Equals(at));
+
+            return moves.Concat(takes);
         }
     }
 }

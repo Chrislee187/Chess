@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.TheBoard;
+using CSharpChess.Threat;
 
 namespace CSharpChess.ValidMoves
 {
@@ -21,13 +22,24 @@ namespace CSharpChess.ValidMoves
                 var to = StraightLineValidMoveGenerator.ApplyDirection(at, direction);
 
                 if (to != null
-                    && predicate(board, at, to))
+                    && predicate(board, at, to)
+                    && wouldNotBeInCheck(board, to, board[at].Piece.Colour)
+                    )
                 {
                     result.Add(new ChessMove(at, to, moveType));
                 }
             }
 
             return result;
+        }
+
+        private bool wouldNotBeInCheck(ChessBoard board, BoardLocation at, Chess.Colours asPlayer)
+        {
+            // TODO: Need to place the analyser outside of the generators, recursion alert
+//            var a = new ThreatAnalyser(board);
+//
+//            return a.ThreatsAgainst(asPlayer, at).Any();
+            throw new ArgumentException();
         }
 
         public override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)

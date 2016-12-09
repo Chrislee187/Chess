@@ -25,8 +25,8 @@ namespace CSharpChess.UnitTests.Threat
         [Test]
         public void pawn_at_B2_generates_threat_against_A3_and_C3()
         {
-            Assert.That(_newBoardThreats.For(Chess.Colours.White,BoardLocation.At("B2")).Threats.Select(t => t.To), Contains.Item((BoardLocation) "A3"));
-            Assert.That(_newBoardThreats.For(Chess.Colours.White,BoardLocation.At("B2")).Threats.Select(t => t.To), Contains.Item((BoardLocation) "C3"));
+            Assert.That(_newBoardThreats.For(BoardLocation.At("B2")).Threats.Select(t => t.To), Contains.Item((BoardLocation) "A3"));
+            Assert.That(_newBoardThreats.For(BoardLocation.At("B2")).Threats.Select(t => t.To), Contains.Item((BoardLocation) "C3"));
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace CSharpChess.UnitTests.Threat
                     var pawnFile = defender == Chess.Colours.White ? 7 : 2;
                     var pawnLocation = BoardLocation.At(file, pawnFile);
 
-                    var threats = _newBoardThreats.For(_newBoard[loc].Piece.Colour,loc).Threats;
+                    var threats = _newBoardThreats.For(loc).Threats;
                     CollectionAssert.DoesNotContain(threats, pawnLocation);
                 }
             }
@@ -53,7 +53,7 @@ namespace CSharpChess.UnitTests.Threat
         {
             Assert.That(_newBoard.Pieces
                     .Where(p => p.Piece.Is(Chess.PieceNames.Pawn))
-                    .Select(p => _newBoardThreats.For(p.Piece.Colour, p.Location).Threats)
+                    .Select(p => _newBoardThreats.For(p.Location).Threats)
                 , Is.Not.Empty);
         }
     }

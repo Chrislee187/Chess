@@ -52,5 +52,27 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
 
             AssertMovesContains(chessMoves, expected, MoveType.Castle);
         }
+
+        [Test]
+        public void check_blocks_all_movement()
+        {
+            const string asOneChar = "...rkr.." +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "...n...." +
+                                     "R...K..R";
+
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+
+            var generator = new KingValidMoveGenerator();
+            var chessMoves = generator.Moves(board, BoardLocation.At("E1"));
+
+            Assert.True(chessMoves.Any(m => m.MoveType != MoveType.Castle));
+            Assert.False(chessMoves.Any(m => m.To.ToString() == "D1"));
+            Assert.False(chessMoves.Any(m => m.To.ToString() == "F1"));
+        }
     }
 }

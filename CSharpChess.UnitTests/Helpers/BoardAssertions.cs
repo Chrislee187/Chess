@@ -101,7 +101,7 @@ namespace CSharpChess.UnitTests.Helpers
                 {
                     var expected = expectedThreatsBuilder(piece.Location, vertDirection).ToList();
 
-                    var threatDictionary = analyser.For(piece.Piece.Colour,piece.Location);
+                    var threatDictionary = analyser.For(piece.Location);
                     CollectionAssert.IsSubsetOf(expected, threatDictionary.Threats.Select(t => t.To));
 
                     foreach (var boardLocation in expected)
@@ -167,7 +167,7 @@ namespace CSharpChess.UnitTests.Helpers
 
             foreach (var boardPiece in board.Pieces)
             {
-                var hasThreats = t.For(boardPiece.Piece.Colour,boardPiece.Location).Threats.Any();
+                var hasThreats = t.For(boardPiece.Location).Threats.Any();
                 Action write = () =>
                 {
                     if (ShowThreat && hasThreats)
