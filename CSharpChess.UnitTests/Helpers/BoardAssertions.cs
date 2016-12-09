@@ -70,13 +70,22 @@ namespace CSharpChess.UnitTests.Helpers
             Assert.That(movesOfType.Count(), Is.EqualTo(expectedLocations.Count()));
         }
 
+        protected static void AssertMovesContains(IEnumerable<ChessMove> moves, IEnumerable<string> locations,
+            MoveType moveType)
+        {
+            foreach (var location in locations)
+            {
+                AssertMovesContains(moves, location, moveType);
+            }
+        }
+
         protected static void AssertMovesContains(IEnumerable<ChessMove> moves, string location, MoveType moveType)
         {
             var found = moves.FirstOrDefault( m => 
-                m.To.Equals(BoardLocation.At("A3"))
-                && m.MoveType == MoveType.Move);
+                m.To.Equals(BoardLocation.At(location))
+                && m.MoveType == moveType);
 
-            Assert.IsNotNull(found, $"MoveType of '{moveType}' to '{location}' not found!.");
+            Assert.IsNotNull(found, $"MoveType of '{moveType}' to '{location}' not found in '{string.Join(",",moves)}'!");
         }
 
         protected static void AssertAllMovesAreOfType(IEnumerable<ChessMove> moves, MoveType moveType) 

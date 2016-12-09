@@ -24,7 +24,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
             AssertMovesContainsExpectedWithType(moves, expectedLocations.Select(l => BoardLocation.At(l)), MoveType.Move);
         }
 
-        [TestCase("B1", new[] { "D2" })]
+        [TestCase("B1", new string[] { "D2" })]
         [TestCase("G1", new[] { "E2" })]
         [TestCase("B8", new[] { "D7" })]
         [TestCase("G8", new[] { "E7" })]

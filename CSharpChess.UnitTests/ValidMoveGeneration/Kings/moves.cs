@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
@@ -31,25 +32,25 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
             AssertMovesContainsExpectedWithType(chessMoves, expected, MoveType.Move);
         }
 
-        [Test, Explicit]
-        public void white_can_castle_left()
+        [TestCase("E1", new [] {"C1","G1"})]
+        [TestCase("E8", new [] {"C8","G8"})]
+        public void can_castle(string location, IEnumerable<string> expected )
         {
-            const string asOneChar = "........" +
+            const string asOneChar = "r...k..r" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
-                                     "R...K...";
+                                     "R...K..R";
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
-            var expected = "C1";
 
             var generator = new KingValidMoveGenerator();
-            var chessMoves = generator.Moves(board, BoardLocation.At("D5"));
+            var chessMoves = generator.Moves(board, BoardLocation.At(location));
 
-            AssertMovesContains(chessMoves, expected, MoveType.Move);
+            AssertMovesContains(chessMoves, expected, MoveType.Castle);
         }
     }
 }
