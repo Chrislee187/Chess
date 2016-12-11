@@ -4,11 +4,11 @@ using CSharpChess.TheBoard;
 using static CSharpChess.Chess.Rules;
 namespace CSharpChess.ValidMoves
 {
-    public class StraightLineValidMoveGenerator : ValidMoveGeneratorBase
+    public class StraightLineMoveGenerator : MoveGeneratorBase
     {
         private readonly IEnumerable<MovementTransformation> _directions;
 
-        protected StraightLineValidMoveGenerator(IEnumerable<MovementTransformation> directions)
+        protected StraightLineMoveGenerator(IEnumerable<MovementTransformation> directions)
         {
             _directions = directions;
         }

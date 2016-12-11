@@ -16,7 +16,7 @@ namespace CSharpChess
             public enum PieceNames { Pawn, Rook, Bishop, Knight, King, Queen, Blank = -9999 }
 
             public enum ChessFile { A = 1, B, C, D, E, F, G, H };
-            public static IEnumerable<ChessFile> Files => EnumExtensions.All<ChessFile>();
+            public static IEnumerable<ChessFile> Files => EnumExtensions.GetAll<ChessFile>();
 
             public static IEnumerable<int> Ranks => Enumerable.Range(1, 8);
 
@@ -105,7 +105,7 @@ namespace CSharpChess
             {
                 public static MovementTransformation Create(int x, int y) => new MovementTransformation(x, y);
 
-                public static IEnumerable<BoardLocation> ApplyTo(IEnumerable<MovementTransformation> movements, BoardLocation loc)
+                public static IEnumerable<BoardLocation> ApplyTo(BoardLocation loc, IEnumerable<MovementTransformation> movements)
                     => movements.Select(m => m.ApplyTo(loc)).Where(l => l != null);
 
                 internal delegate int Transform(int i);

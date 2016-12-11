@@ -9,12 +9,12 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Rooks
     [TestFixture]
     public class moves : BoardAssertions
     {
-        private RookValidMoveGenerator _generator;
+        private RookMoveGenerator _generator;
 
         [SetUp]
         public void SetUp()
         {
-            _generator = new RookValidMoveGenerator();
+            _generator = new RookMoveGenerator();
         }
         [Test]
         public void can_move_in_four_horizontal_directions()

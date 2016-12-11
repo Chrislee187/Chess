@@ -5,13 +5,13 @@ using CSharpChess.TheBoard;
 
 namespace CSharpChess.ValidMoves
 {
-    public class PawnValidMoveGenerator : ValidMoveGeneratorBase
+    public class PawnMoveGenerator : MoveGeneratorBase
     {
         public override IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at)
         {
             return ValidMoves(board, at)
                 .Concat(ValidTakes(board, at))
-                .Concat(ValidCovers(board, at));
+                .Concat(ValidCovers(board, at)).ToList();
         }
 
         private IEnumerable<ChessMove> ValidTakes(ChessBoard board, BoardLocation at)
@@ -76,14 +76,6 @@ namespace CSharpChess.ValidMoves
             }
 
             return validMoves;
-        }
-
-        protected override IEnumerable<BoardLocation> Threats(ChessBoard board, BoardLocation at)
-        {
-            var threats = new List<BoardLocation>();
-            threats.AddRange(EnPassantLocations(board, at));
-            threats.AddRange(CaptureLocations(board, at));
-            return threats;
         }
 
         private static IEnumerable<BoardLocation> ValidCaptures(ChessBoard board, BoardLocation at) 

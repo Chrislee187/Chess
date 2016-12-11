@@ -10,12 +10,12 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
     [TestFixture]
     public class covers : BoardAssertions
     {
-        private KnightValidMoveGenerator _knightValidMoveGenerator;
+        private KnightMoveGenerator _knightMoveGenerator;
 
         [SetUp]
         public void SetUp()
         {
-            _knightValidMoveGenerator = new KnightValidMoveGenerator();
+            _knightMoveGenerator = new KnightMoveGenerator();
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
             var expected = BoardLocation.List("d2");
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
-            var moves = _knightValidMoveGenerator.Covers(board, BoardLocation.At("B1")).ToList();
+            var moves = _knightMoveGenerator.Covers(board, BoardLocation.At("B1")).ToList();
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.Cover);
         }

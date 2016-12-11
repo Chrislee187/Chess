@@ -40,11 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ChessBoardExtensions.cs" />
+    <Compile Include="Extensions\ChessMoveListExtensions.cs" />
+    <Compile Include="Extensions\MoveTypeExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="OneCharBoard.cs" />
     <Compile Include="TheBoard\BoardLocation.cs" />
     <Compile Include="TheBoard\BoardPiece.cs" />
-    <Compile Include="TheBoard\BoardLine.cs" />
     <Compile Include="Chess.cs" />
     <Compile Include="TheBoard\ChessBoard.cs" />
     <Compile Include="TheBoard\ChessMove.cs" />
@@ -54,17 +56,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TheBoard\MoveResult.cs" />
     <Compile Include="TheBoard\PgnChessMove.cs" />
-    <Compile Include="TheBoard\ValidMoveFactory.cs" />
-    <Compile Include="Threat\ThreatAnalyser.cs" />
-    <Compile Include="Threat\ThreatDictionary.cs" />
-    <Compile Include="ValidMoves\BishopValidMoveGenerator.cs" />
-    <Compile Include="ValidMoves\KnightValidMoveGenerator.cs" />
-    <Compile Include="ValidMoves\PawnValidMoveGenerator.cs" />
-    <Compile Include="ValidMoves\KingValidMoveGenerator.cs" />
-    <Compile Include="ValidMoves\QueenValidMoveGenerator.cs" />
-    <Compile Include="ValidMoves\RookValidMoveGenerator.cs" />
-    <Compile Include="ValidMoves\StraightLineValidMoveGenerator.cs" />
-    <Compile Include="ValidMoves\ValidMoveGeneratorBase.cs" />
+    <Compile Include="TheBoard\MoveFactory.cs" />
+    <Compile Include="ValidMoves\BishopMoveGenerator.cs" />
+    <Compile Include="ValidMoves\IMoveGenerator.cs" />
+    <Compile Include="ValidMoves\KnightMoveGenerator.cs" />
+    <Compile Include="ValidMoves\PawnMoveGenerator.cs" />
+    <Compile Include="ValidMoves\KingMoveGenerator.cs" />
+    <Compile Include="ValidMoves\QueenMoveGenerator.cs" />
+    <Compile Include="ValidMoves\RookMoveGenerator.cs" />
+    <Compile Include="ValidMoves\StraightLineMoveGenerator.cs" />
+    <Compile Include="ValidMoves\MoveGeneratorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

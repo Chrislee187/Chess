@@ -10,12 +10,12 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Rooks
     // ReSharper disable once InconsistentNaming
     public class from_starting_position : BoardAssertions
     {
-        private RookValidMoveGenerator _generator;
+        private RookMoveGenerator _generator;
 
         [SetUp]
         public void SetUp()
         {
-            _generator = new RookValidMoveGenerator();
+            _generator = new RookMoveGenerator();
         }
         [TestCase("A1")]
         [TestCase("H1")]

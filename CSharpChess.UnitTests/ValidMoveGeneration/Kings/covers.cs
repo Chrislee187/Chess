@@ -11,12 +11,12 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
     // ReSharper disable once InconsistentNaming
     public class covers : BoardAssertions
     {
-        private KingValidMoveGenerator _kingValidMoveGenerator;
+        private KingMoveGenerator _kingMoveGenerator;
 
         [SetUp]
         public void SetUp()
         {
-            _kingValidMoveGenerator = new KingValidMoveGenerator();
+            _kingMoveGenerator = new KingMoveGenerator();
         }
 
         [TestCase("E1", new [] {"D1","D2","E2","F2","F1"})]
@@ -25,7 +25,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
         {
             var board = BoardBuilder.NewGame;
 
-            var validMoves = _kingValidMoveGenerator.Covers(board, BoardLocation.At(location));
+            var validMoves = _kingMoveGenerator.Covers(board, BoardLocation.At(location));
 
             AssertMovesContainsExpectedWithType(validMoves, expected.Select(BoardLocation.At), MoveType.Cover);
         }

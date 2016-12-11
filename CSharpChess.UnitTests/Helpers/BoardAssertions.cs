@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CSharpChess.TheBoard;
-using CSharpChess.Threat;
 using NUnit.Framework;
 #pragma warning disable 162
 
@@ -89,29 +88,6 @@ namespace CSharpChess.UnitTests.Helpers
 
         protected static void AssertAllMovesAreOfType(IEnumerable<ChessMove> moves, MoveType moveType) 
             => Assert.That(moves.All(m => m.MoveType == moveType), "Unexpected MoveType found");
-
-        protected static void AssertPiecesGeneratesVerticalThreat(ChessBoard customBoard, Chess.Board.PieceNames pieceName, Func<BoardLocation, int, IEnumerable<BoardLocation>> expectedThreatsBuilder)
-        {
-            var analyser = new ThreatAnalyser(customBoard);
-
-            foreach (var piece in customBoard.Pieces.Where(p => p.Piece.Is(pieceName)))
-            {
-                foreach (var vertDirection in new[] { 1, -1 })
-                {
-                    var expected = expectedThreatsBuilder(piece.Location, vertDirection).ToList();
-
-                    var threatDictionary = analyser.For(piece.Location);
-                    CollectionAssert.IsSubsetOf(expected, threatDictionary.Threats.Select(t => t.To));
-
-                    foreach (var boardLocation in expected)
-                    {
-                        var defending = threatDictionary.Covers;
-                        Assert.That(defending.Any(d => d.From.Equals(piece.Location)), $"{piece.Location} not found in {string.Join(",",defending)}");
-                    }
-                }
-            }
-
-        }
 
         protected IEnumerable<BoardLocation> BuildVerticalThreats(BoardLocation fromPieceAtLocation, int vertDirectionModifier)
         {

@@ -19,7 +19,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
         {
             var board = BoardBuilder.NewGame;
 
-            var moves = new KnightValidMoveGenerator().Moves(board,BoardLocation.At(knightLocation)).ToList();
+            var moves = new KnightMoveGenerator().Moves(board,BoardLocation.At(knightLocation)).ToList();
 
             AssertMovesContainsExpectedWithType(moves, expectedLocations.Select(l => BoardLocation.At(l)), MoveType.Move);
         }
@@ -33,7 +33,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
             var board = BoardBuilder.NewGame;
             var boardLocation = BoardLocation.At(knightLocation);
 
-            var covers = new KnightValidMoveGenerator().Covers(board, boardLocation).ToList();
+            var covers = new KnightMoveGenerator().Covers(board, boardLocation).ToList();
 
             AssertMovesContainsExpectedWithType(covers, expectedLocations.Select(l => BoardLocation.At(l)), MoveType.Cover);
         }
@@ -47,7 +47,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
             var board = BoardBuilder.NewGame;
             var boardLocation = BoardLocation.At(knightLocation);
 
-            var covers = new KnightValidMoveGenerator().Takes(board, boardLocation).ToList();
+            var covers = new KnightMoveGenerator().Takes(board, boardLocation).ToList();
 
             Assert.That(covers, Is.Empty);
         }

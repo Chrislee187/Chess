@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
@@ -27,7 +28,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
             var expected = BoardLocation.List("E6", "E4", "C6", "C4", "D6", "E5", "D4", "C5");
 
-            var generator = new KingValidMoveGenerator();
+            var generator = new KingMoveGenerator();
             var chessMoves = generator.Moves(board, BoardLocation.At("D5"));
 
             AssertMovesContainsExpectedWithType(chessMoves, expected, MoveType.Move);
@@ -48,7 +49,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
-            var generator = new KingValidMoveGenerator();
+            var generator = new KingMoveGenerator();
             var chessMoves = generator.Moves(board, BoardLocation.At(location));
 
             AssertMovesContains(chessMoves, expected, MoveType.Castle);
@@ -64,16 +65,16 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
                                      "........" +
                                      "........" +
                                      "...n...." +
-                                     "R...K..R";
+                                     ".R..K.R.";
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
-            var generator = new KingValidMoveGenerator();
+            var generator = new KingMoveGenerator();
             var chessMoves = generator.Moves(board, BoardLocation.At("E1")).ToList();
-
-            Assert.True(chessMoves.Any(m => m.MoveType != MoveType.Castle));
-            Assert.False(chessMoves.Any(m => m.To.ToString() == "D1"), chessMoves.ToStringList());
-            Assert.False(chessMoves.Any(m => m.To.ToString() == "F1"), chessMoves.ToStringList());
+            Assert.That(chessMoves.Count(), Is.EqualTo(2), chessMoves.ToStringList());
+            Assert.True(chessMoves.Any(m => m.MoveType != MoveType.Castle), chessMoves.ToStringList());
+            AssertMovesContains(chessMoves, new [] {"D1"}, MoveType.Move);
+            AssertMovesContains(chessMoves, new [] {"E2"}, MoveType.Move);
         }
     }
 }

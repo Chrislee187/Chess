@@ -11,22 +11,22 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
     public class captures : BoardAssertions
     {
         [Test]
-        public void can_take_in_eight_directions()
+        public void can_take()
         {
             // TODO: Will need to split this up once checks are implemented.
             const string asOneChar = "........" +
                                      "........" +
-                                     "..rbr..." +
-                                     "..nKn..." +
+                                     "........" +
+                                     "...K...." +
                                      "..ppp..." +
                                      "........" +
                                      "........" +
                                      "........";
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
-            var expectedTakes = BoardLocation.List("C6", "D6", "E6", "C5", "E5", "C4", "D4", "E4");
+            var expectedTakes = BoardLocation.List("D4", "C4", "E4");
 
-            var generator = new KingValidMoveGenerator();
+            var generator = new KingMoveGenerator();
             var chessMoves = generator.Takes(board, BoardLocation.At("D5")).ToList();
 
             AssertMovesContainsExpectedWithType(chessMoves, expectedTakes, MoveType.Take);

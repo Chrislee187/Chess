@@ -11,12 +11,12 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
     // ReSharper disable once InconsistentNaming
     public class from_starting_position : BoardAssertions
     {
-        private BishopValidMoveGenerator _generator;
+        private BishopMoveGenerator _generator;
 
         [SetUp]
         public void SetUp()
         {
-            _generator = new BishopValidMoveGenerator();
+            _generator = new BishopMoveGenerator();
         }
 
         [TestCase("B1")]

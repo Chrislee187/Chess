@@ -6,19 +6,19 @@ using static CSharpChess.Chess.Rules;
 
 namespace CSharpChess.ValidMoves
 {
-    public class KnightValidMoveGenerator : ValidMoveGeneratorBase
+    public class KnightMoveGenerator : MoveGeneratorBase
     {
         public override IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at)
         {
             return ValidMoves(board, at)
                 .Concat(ValidTakes(board, at))
-                .Concat(ValidCovers(board, at));
+                .Concat(ValidCovers(board, at)).ToList();
         }
 
         private IEnumerable<ChessMove> AddMoveIf(ChessBoard board, BoardLocation at,
                 Func<ChessBoard, BoardLocation, BoardLocation, bool> predicate,
                 MoveType moveType)
-            => MovementTransformation.ApplyTo(Knights.MoveMatrix, at)
+            => MovementTransformation.ApplyTo(at, Knights.MoveMatrix)
                 .Where(to => predicate(board, at, to))
                 .Select(m => new ChessMove(at, m, moveType));
 

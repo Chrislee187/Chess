@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 
 namespace CSharpChess
@@ -43,10 +44,11 @@ namespace CSharpChess
         public OneCharBoard(ChessBoard board)
         {
             var ranks = new string[8];
-
-            foreach (var boardRank in board.Ranks.OrderBy(r => r.Rank))
+            var id = 1;
+            foreach (var boardRank in board.Ranks())
             {
-                ranks[boardRank.Rank-1] = boardRank.ToString();
+                ranks[id -1] = new string(boardRank.Select(ToChar).ToArray());
+                id++;
             }
             Ranks = ranks;
         }

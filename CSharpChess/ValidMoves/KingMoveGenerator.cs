@@ -6,41 +6,50 @@ using static CSharpChess.Chess.Rules;
 
 namespace CSharpChess.ValidMoves
 {
-    public class KingValidMoveGenerator : ValidMoveGeneratorBase
+    public class KingMoveGenerator : MoveGeneratorBase
     {
         public override IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at)
         {
+            // TODO: This is common in all top level move generators, sort it out
             return ValidMoves(board, at)
                 .Concat(ValidTakes(board, at))
-                .Concat(ValidCovers(board, at));
+                .Concat(ValidCovers(board, at)).ToList();
         }
 
         private IEnumerable<ChessMove> AddMoveIf(ChessBoard board, BoardLocation at,
             Func<ChessBoard, BoardLocation, BoardLocation, bool> predicate, MoveType moveType)
         {
             var result = new List<ChessMove>();
-            var possibleMoves = MovementTransformation.ApplyTo(KingAndQueen.DirectionTransformations, at);
+            var possibleMoves = MovementTransformation.ApplyTo(at, KingAndQueen.DirectionTransformations);
             foreach (var to in possibleMoves)
             {
-                if (predicate(board, at, to)
-                    //&& wouldNotBeInCheck(board, to, board[at].Piece.Colour)
-                    )
+                if (predicate(board, at, to))
                 {
                     result.Add(new ChessMove(at, to, moveType));
                 }
             }
 
-            return result;
+            return result; //Where(r => !InCheck(board, r.To, board[at].Piece.Colour));
+
         }
 
-        private bool wouldNotBeInCheck(ChessBoard board, BoardLocation at, Chess.Board.Colours asPlayer)
-        {
-            // TODO: Need to place the analyser outside of the generators, recursion alert
-//            var a = new ThreatAnalyser(board);
-//
-//            return a.ThreatsAgainst(asPlayer, at).Any();
-            throw new ArgumentException();
-        }
+//        private bool InCheck(ChessBoard board, BoardLocation at, Chess.Board.Colours asPlayer)
+//        {
+////            board.Pieces.EnemyOf(asPlayer).ToList()[3].MoveFactory
+////                .Moves(board, BoardLocation.At("F8")).ToList().Any(m => m.To.Equals(at))
+////
+////            var enemyPieces = board.Pieces.EnemyOf(asPlayer);
+////            Func<ChessBoard, BoardPiece, BoardLocation, bool> pieceIsAttackingLocation =
+////                delegate(ChessBoard b, BoardPiece p, BoardLocation l)
+////                {
+////                    var moves = p.MoveFactory.Moves(board, p.Location).ToList();
+////                    var covers = p.MoveFactory.Covers(board, p.Location).ToList();
+////                    return false; //moves.Any(m => m.To.Equals(l))|| covers.Any(m => m.To.Equals(l));
+////                };
+////            var checkPieces = enemyPieces.Where(p => pieceIsAttackingLocation(board, p, at));
+////
+////            return checkPieces.Any();
+//        }
 
         private IEnumerable<ChessMove> ValidMoves(ChessBoard board, BoardLocation at)
         {
@@ -69,28 +78,16 @@ namespace CSharpChess.ValidMoves
             var leftRookLoc = BoardLocation.At(Chess.Board.ChessFile.A, at.Rank);
             var rightRookLoc = BoardLocation.At(Chess.Board.ChessFile.H, at.Rank);
 
-            ChessMove to = CanCastle(board, at, leftRookLoc);
+            ChessMove to = board.CanCastle(at, leftRookLoc);
             if (to != null) moves.Add(to);
 
-            to = CanCastle(board, at, rightRookLoc);
+            to = board.CanCastle(at, rightRookLoc);
             if (to != null) moves.Add(to);
 
             return moves;
         }
 
-        private static ChessMove CanCastle(ChessBoard board, BoardLocation at, BoardLocation leftRookLoc)
-        {
-            var rookLoc = board[leftRookLoc];
-            if (rookLoc.Piece.IsNot(Chess.Board.PieceNames.Rook) || rookLoc.MoveHistory.Any()) return null;
-
-            var mustBeEmpty = LocationsBetweenAndNotUnderAttack(at, rookLoc.Location);
-            if (mustBeEmpty.Any(board.IsNotEmptyAt)) return null;
-
-            var castleFile = rookLoc.Location.File == Chess.Board.ChessFile.A ? Chess.Board.ChessFile.C : Chess.Board.ChessFile.G;
-            return new ChessMove(at, BoardLocation.At(castleFile, at.Rank), MoveType.Castle);
-        }
-
-        private static IEnumerable<BoardLocation> LocationsBetweenAndNotUnderAttack(BoardLocation at, BoardLocation rookLoc)
+        public static IEnumerable<BoardLocation> LocationsBetweenAndNotUnderAttack(BoardLocation at, BoardLocation rookLoc)
         {
             int from, to;
             if (rookLoc.File == Chess.Board.ChessFile.A)

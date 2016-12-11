@@ -3,7 +3,7 @@ namespace CSharpChess.TheBoard
 {
     public class ChessPiece
     {
-        public static ChessPiece NullPiece = new ChessPiece(Chess.Board.Colours.None, Chess.Board.PieceNames.Blank);
+        public static readonly ChessPiece NullPiece = new ChessPiece(Chess.Board.Colours.None, Chess.Board.PieceNames.Blank);
 
         public Chess.Board.Colours Colour { get; }
         public Chess.Board.PieceNames Name { get; }

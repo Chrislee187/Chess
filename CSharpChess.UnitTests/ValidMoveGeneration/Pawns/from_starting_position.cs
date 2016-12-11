@@ -9,14 +9,14 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
     // ReSharper disable once InconsistentNaming
     public class from_starting_position : BoardAssertions
     {
-        private PawnValidMoveGenerator _pawnValidMoveGenerator;
+        private PawnMoveGenerator _pawnMoveGenerator;
         const int WhitePawnRank = 2;
         const int BlackPawnRank = 7;
 
         [SetUp]
         public void SetUp()
         {
-            _pawnValidMoveGenerator = new PawnValidMoveGenerator();
+            _pawnMoveGenerator = new PawnMoveGenerator();
         }
         [Test]
         public void can_move_one_or_two_squares()
@@ -31,9 +31,11 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 var blackExpected = BoardLocation.List($"{blackPawn.File}{blackPawn.Rank - 1}",
                     $"{blackPawn.File}{blackPawn.Rank - 2}");
 
-                AssertMovesContainsExpectedWithType(_pawnValidMoveGenerator.Moves(board, whitePawn),
-                    whiteExpected, MoveType.Move);
-                AssertMovesContainsExpectedWithType(_pawnValidMoveGenerator.Moves(board, blackPawn),
+                var chessMoves = new PawnMoveGenerator().Moves(board, whitePawn);
+                AssertMovesContainsExpectedWithType(chessMoves, whiteExpected, MoveType.Move);
+
+
+                AssertMovesContainsExpectedWithType(new PawnMoveGenerator().Moves(board, blackPawn),
                     blackExpected, MoveType.Move);
             }
         }
@@ -44,8 +46,8 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             var board = BoardBuilder.NewGame;
             foreach (var file in Chess.Board.Files)
             {
-                Assert.That(_pawnValidMoveGenerator.Covers(board, BoardLocation.At(file, WhitePawnRank)), Is.Empty);
-                Assert.That(_pawnValidMoveGenerator.Covers(board, BoardLocation.At(file, BlackPawnRank)), Is.Empty);
+                Assert.That(_pawnMoveGenerator.Covers(board, BoardLocation.At(file, WhitePawnRank)), Is.Empty);
+                Assert.That(_pawnMoveGenerator.Covers(board, BoardLocation.At(file, BlackPawnRank)), Is.Empty);
             }
         }
 
@@ -55,8 +57,8 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             var board = BoardBuilder.NewGame;
             foreach (var file in Chess.Board.Files)
             {
-                Assert.That(_pawnValidMoveGenerator.Takes(board, BoardLocation.At(file, WhitePawnRank)), Is.Empty);
-                Assert.That(_pawnValidMoveGenerator.Takes(board, BoardLocation.At(file, BlackPawnRank)), Is.Empty);
+                Assert.That(_pawnMoveGenerator.Takes(board, BoardLocation.At(file, WhitePawnRank)), Is.Empty);
+                Assert.That(_pawnMoveGenerator.Takes(board, BoardLocation.At(file, BlackPawnRank)), Is.Empty);
             }
         }
     }

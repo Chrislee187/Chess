@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using CSharpChess.ValidMoves;
 
 namespace CSharpChess.TheBoard
 {
@@ -7,11 +9,10 @@ namespace CSharpChess.TheBoard
         public static BoardPiece Empty(BoardLocation fromLocation) => new BoardPiece(fromLocation, ChessPiece.NullPiece);
 
         private readonly List<ChessMove> _moveHistory = new List<ChessMove>();
-
-        public IEnumerable<ChessMove> MoveHistory { get { return _moveHistory; } }
-
-        public BoardLocation Location { get; set; }
-
+        private readonly Func<IMoveGenerator> _moveGenerator;
+        private readonly MoveFactory _moveFactory = new MoveFactory();
+        public IEnumerable<ChessMove> MoveHistory => _moveHistory;
+        public BoardLocation Location { get; private set; }
         public ChessPiece Piece { get; }
 
         public BoardPiece(int file, int rank, ChessPiece chessPiece)
@@ -25,6 +26,11 @@ namespace CSharpChess.TheBoard
         {
             Location = location;
             Piece = piece;
+
+            if(piece.Name != Chess.Board.PieceNames.Blank)
+            {
+                _moveGenerator = _moveFactory.For[piece.Name];
+            }
         }
 
         public void MoveTo(BoardLocation moveTo, MoveType type)
@@ -37,6 +43,11 @@ namespace CSharpChess.TheBoard
         {
             _moveHistory.Add(ChessMove.Taken(takenLocation));
         }
+
+        public IEnumerable<ChessMove> Moves(ChessBoard board) => _moveGenerator().Moves(board, Location);
+        public IEnumerable<ChessMove> Covers(ChessBoard board) => _moveGenerator().Covers(board, Location);
+        public IEnumerable<ChessMove> Takes(ChessBoard board) => _moveGenerator().Takes(board, Location);
+
 
         public override string ToString()
         {

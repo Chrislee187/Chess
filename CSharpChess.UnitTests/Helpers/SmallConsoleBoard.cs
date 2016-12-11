@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.TheBoard;
-using CSharpChess.Threat;
 
 namespace CSharpChess.UnitTests.Helpers
 {
@@ -11,9 +10,9 @@ namespace CSharpChess.UnitTests.Helpers
         // TODO: Refactor to use same pattern as Medium
         private const bool UseColours = false;
         private const bool ShowThreat = true;
-        public static void Write(ChessBoard board, ThreatAnalyser threats = null)
+        public static void Write(ChessBoard board)
         {
-            var consoleBoard = CreateConsoleBoard(board, threats);
+            var consoleBoard = CreateConsoleBoard(board);
 
             foreach (var rank in Chess.Board.Ranks.Reverse())
             {
@@ -26,15 +25,13 @@ namespace CSharpChess.UnitTests.Helpers
 
         }
 
-        private static Dictionary<BoardLocation, Action> CreateConsoleBoard(ChessBoard board, ThreatAnalyser threats)
+        private static Dictionary<BoardLocation, Action> CreateConsoleBoard(ChessBoard board)
         {
-            var t = threats ?? new ThreatAnalyser(board);
-
             var consoleBoard = new Dictionary<BoardLocation, Action>();
 
             foreach (var boardPiece in board.Pieces)
             {
-                var hasThreats = t.For(boardPiece.Location).Threats.Any();
+                var hasThreats = false; //boardPiece.MoveFactory.All(board, boardPiece.Location).Any();
                 Action write = () =>
                 {
                     if (ShowThreat && hasThreats)

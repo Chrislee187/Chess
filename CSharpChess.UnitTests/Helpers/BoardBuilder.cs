@@ -6,7 +6,7 @@ namespace CSharpChess.UnitTests.Helpers
     {
         public static ChessBoard EmptyBoard => new ChessBoard(false);
 
-        public static ChessBoard NewGame => new ChessBoard(true);
+        public static ChessBoard NewGame => new ChessBoard();
 
         public static ChessBoard CustomBoard(string boardInOneCharNotation, Chess.Board.Colours toPlay)
         {

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.ValidMoves;
 
 namespace CSharpChess.TheBoard
 {
     public class ChessBoard
     {
         private readonly BoardPiece[,] _boardPieces = new BoardPiece[9,9];
-        private readonly ValidMoveFactory _validMoveFactory = new ValidMoveFactory();
+        private readonly MoveFactory _moveFactory = new MoveFactory();
         private Chess.Board.Colours ToPlay { get; set; } = Chess.Board.Colours.None;
 
         public IEnumerable<BoardPiece> Pieces
@@ -23,27 +24,8 @@ namespace CSharpChess.TheBoard
                 }
             }
         }
-        [Obsolete("Stop using it!!!!!!!!", false)]
-        public IEnumerable<BoardRank> Ranks
-        {
-            get
-            {
-                foreach (var rank in Chess.Board.Ranks)
-                {
-                    yield return new BoardRank(rank, Rank(rank).ToArray());
-                }
-            }
-        }
-        public IEnumerable<BoardFile> Files
-        {
-            get
-            {
-                foreach (var file in Chess.Board.Files)
-                {
-                    yield return new BoardFile(file, File(file).ToArray());
-                }
-            }
-        }
+
+        #region this[] and other public stuff
 
         // ReSharper disable once MemberCanBePrivate.Global
         public BoardPiece this[int file, int rank]
@@ -67,6 +49,29 @@ namespace CSharpChess.TheBoard
             // ReSharper disable once UnusedMember.Local
             private set { this[(BoardLocation) location] = value; }
         }
+
+        public bool CanTakeAt(BoardLocation takeLocation, Chess.Board.Colours attackerColour)
+            => IsNotEmptyAt(takeLocation)
+               && this[takeLocation].Piece.Colour == Chess.ColourOfEnemy(attackerColour);
+
+        public bool IsCoveringAt(BoardLocation coverLocation, Chess.Board.Colours attackerColour)
+            => IsNotEmptyAt(coverLocation)
+               && this[coverLocation].Piece.Colour == attackerColour;
+
+        public bool IsEmptyAt(BoardLocation location)
+            => this[location].Piece.Equals(ChessPiece.NullPiece);
+
+        public bool IsNotEmptyAt(BoardLocation location)
+            => !IsEmptyAt(location);
+
+        public bool IsEmptyAt(string location)
+            => this[(BoardLocation)location].Piece.Equals(ChessPiece.NullPiece);
+
+        public bool IsNotEmptyAt(string location)
+            => !IsEmptyAt((BoardLocation)location);
+        
+
+        #endregion
 
         public ChessBoard(bool newGame = true)
         {
@@ -101,25 +106,23 @@ namespace CSharpChess.TheBoard
             var validMove = CheckMoveIsValid(move);
             if (validMove != null)
             {
-                var moveType = IfUnknownMoveType(move.MoveType, validMove.MoveType);
-
-                PreMoveActions(move, moveType);
-
-                MovePiece(move, moveType);
-
-                return PostMoveTidyUp(move, moveType, boardPiece);
+                return PerformBoardMovement(move, validMove, boardPiece);
             }
 
             throw new ArgumentException($"Invalid move {move}", nameof(move));
         }
 
-        public bool CanTakeAt(BoardLocation takeLocation, Chess.Board.Colours attackerColour)
-            => IsNotEmptyAt(takeLocation)
-            && this[takeLocation].Piece.Colour == Chess.ColourOfEnemy(attackerColour);
+        // TODO: Move to a seperate class?
+        private MoveResult PerformBoardMovement(ChessMove move, ChessMove validMove, BoardPiece boardPiece)
+        {
+            var moveType = IfUnknownMoveType(move.MoveType, validMove.MoveType);
 
-        public bool IsCoveringAt(BoardLocation coverLocation, Chess.Board.Colours attackerColour)
-            => IsNotEmptyAt(coverLocation)
-            && this[coverLocation].Piece.Colour == attackerColour;
+            PreMoveActions(move, moveType);
+
+            MovePiece(move, moveType);
+
+            return PostMoveTidyUp(move, moveType, boardPiece);
+        }
 
         private void PreMoveActions(ChessMove move, MoveType moveType)
         {
@@ -185,44 +188,15 @@ namespace CSharpChess.TheBoard
 
         private ChessMove CheckMoveIsValid(ChessMove move)
         {
-            var validMove = _validMoveFactory.GetValidMoves(this, move.From)
-                                .FirstOrDefault(vm => vm.Equals(move));
-            return validMove;
+            var moveGen = _moveFactory.For[this[move.From].Piece.Name]();
+            return moveGen
+                .All(this, move.From)
+                .FirstOrDefault(vm => vm.Equals(move));
         }
 
         private void ClearSquare(BoardLocation takenLocation)
         {
             this[takenLocation] = BoardPiece.Empty(takenLocation);
-        }
-
-        public bool IsEmptyAt(BoardLocation location) 
-            => this[location].Piece.Equals(ChessPiece.NullPiece);
-
-        public bool IsNotEmptyAt(BoardLocation location) 
-            => !IsEmptyAt(location);
-
-        public bool IsEmptyAt(string location)
-            => this[(BoardLocation) location].Piece.Equals(ChessPiece.NullPiece);
-
-        public bool IsNotEmptyAt(string location)
-            => !IsEmptyAt((BoardLocation) location);
-
-        private IEnumerable<BoardPiece> Rank(int rank)
-        {
-            Chess.Validations.ThrowInvalidRank(rank);
-            foreach (var file in Chess.Board.Files)
-            {
-                yield return this[file, rank];
-            }
-        }
-
-        private IEnumerable<BoardPiece> File(Chess.Board.ChessFile file)
-        {
-            Chess.Validations.ThrowInvalidFile(file);
-            foreach (var rank in Chess.Board.Ranks)
-            {
-                yield return this[file, rank];
-            }
         }
 
         private MoveResult UpdateTurn(MoveResult result)
@@ -305,6 +279,18 @@ namespace CSharpChess.TheBoard
                     }
                 }
             }
+        }
+
+        public ChessMove CanCastle(BoardLocation at, BoardLocation leftRookLoc)
+        {
+            var rookLoc = this[leftRookLoc];
+            if (rookLoc.Piece.IsNot(Chess.Board.PieceNames.Rook) || rookLoc.MoveHistory.Any()) return null;
+
+            var mustBeEmpty = KingMoveGenerator.LocationsBetweenAndNotUnderAttack(at, rookLoc.Location);
+            if (mustBeEmpty.Any(IsNotEmptyAt)) return null;
+
+            var castleFile = rookLoc.Location.File == Chess.Board.ChessFile.A ? Chess.Board.ChessFile.C : Chess.Board.ChessFile.G;
+            return new ChessMove(at, BoardLocation.At(castleFile, at.Rank), MoveType.Castle);
         }
     }
 

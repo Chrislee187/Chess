@@ -25,7 +25,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
             var expectedTakes = BoardLocation.List("F7", "F3", "B7", "B3");
 
-            var generator = new BishopValidMoveGenerator();
+            var generator = new BishopMoveGenerator();
             var chessMoves = generator.Takes(board,BoardLocation.At("D5")).ToList();
 
             AssertMovesContainsExpectedWithType(chessMoves, expectedTakes, MoveType.Take);

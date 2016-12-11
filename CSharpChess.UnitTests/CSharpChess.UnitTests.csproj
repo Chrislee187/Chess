@@ -60,10 +60,6 @@
     <Compile Include="Helpers\MediumConsoleBoard.cs" />
     <Compile Include="Helpers\SmallConsoleBoard.cs" />
     <Compile Include="TheBoard\PsgChessMoveTests.cs" />
-    <Compile Include="Threat\knights.cs" />
-    <Compile Include="Threat\queens.cs" />
-    <Compile Include="Threat\rooks.cs" />
-    <Compile Include="Threat\pawns.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\covers.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\from_starting_position.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\captures.cs" />
