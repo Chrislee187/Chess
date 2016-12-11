@@ -56,7 +56,7 @@ namespace CSharpChess.TheBoard
     {
         public int File => Id;
 
-        public BoardFile(Chess.ChessFile file, BoardPiece[] fileArray) : base((int) file, fileArray)
+        public BoardFile(Chess.Board.ChessFile file, BoardPiece[] fileArray) : base((int) file, fileArray)
         {
         }
 

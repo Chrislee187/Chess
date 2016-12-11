@@ -19,11 +19,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "........" +
                                      "B.......";
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var result = board.Move("a1h8");
 
-            AssertMoveSucceeded(result, board, "a1h8", new ChessPiece(Chess.Colours.White, Chess.PieceNames.Bishop));
+            AssertMoveSucceeded(result, board, "a1h8", new ChessPiece(Chess.Board.Colours.White, Chess.Board.PieceNames.Bishop));
         }
 
         [Test]
@@ -37,11 +37,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "........" +
                                      "B.......";
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var result = board.Move("a1h8");
 
-            AssertTakeSucceeded(result, board, "a1h8", new ChessPiece(Chess.Colours.White, Chess.PieceNames.Bishop));
+            AssertTakeSucceeded(result, board, "a1h8", new ChessPiece(Chess.Board.Colours.White, Chess.Board.PieceNames.Bishop));
         }
     }
 }

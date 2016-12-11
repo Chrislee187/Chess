@@ -6,11 +6,11 @@ namespace CSharpChess.TheBoard
     public class ChessMove
     {
         public ChessMove(string from, string to, MoveType moveType,
-            Chess.PieceNames promotedTo = Chess.PieceNames.Blank) : this((BoardLocation) from, (BoardLocation) to, moveType, promotedTo)
+            Chess.Board.PieceNames promotedTo = Chess.Board.PieceNames.Blank) : this((BoardLocation) from, (BoardLocation) to, moveType, promotedTo)
         {
         }
 
-        public ChessMove(BoardLocation from, BoardLocation to, MoveType moveType, Chess.PieceNames promotedTo = Chess.PieceNames.Blank)
+        public ChessMove(BoardLocation from, BoardLocation to, MoveType moveType, Chess.Board.PieceNames promotedTo = Chess.Board.PieceNames.Blank)
         {
             From = from;
             To = to;
@@ -21,7 +21,7 @@ namespace CSharpChess.TheBoard
         public BoardLocation From { get; protected set; }
         public BoardLocation To { get; protected set; }
         public MoveType MoveType { get; protected set; }
-        public Chess.PieceNames PromotedTo { get; }
+        public Chess.Board.PieceNames PromotedTo { get; }
         public static ChessMove Taken(BoardLocation location) => new ChessMove(location, MoveType.Taken);
 
         private ChessMove(BoardLocation location, MoveType taken)
@@ -72,20 +72,20 @@ namespace CSharpChess.TheBoard
             }
 
             var promotedTo = GetPromotionPiece(left);
-            if(promotedTo != Chess.PieceNames.Blank)
+            if(promotedTo != Chess.Board.PieceNames.Blank)
                 moveType = MoveType.Promotion;
 
             return new ChessMove(from, to, moveType, promotedTo);
         }
 
-        private static Chess.PieceNames GetPromotionPiece(string piece)
+        private static Chess.Board.PieceNames GetPromotionPiece(string piece)
         {
             switch (piece.ToUpper())
             {
-                case "R": return Chess.PieceNames.Rook;
-                case "B": return Chess.PieceNames.Bishop;
-                case "N": return Chess.PieceNames.Knight;
-                case "Q": return Chess.PieceNames.Queen;
+                case "R": return Chess.Board.PieceNames.Rook;
+                case "B": return Chess.Board.PieceNames.Bishop;
+                case "N": return Chess.Board.PieceNames.Knight;
+                case "Q": return Chess.Board.PieceNames.Queen;
             }
 
             throw new ArgumentException($"'{piece}' is not a valid promotion", nameof(piece));

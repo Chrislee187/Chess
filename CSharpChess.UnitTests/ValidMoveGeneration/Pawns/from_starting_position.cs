@@ -22,7 +22,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
         public void can_move_one_or_two_squares()
         {
             var board = BoardBuilder.NewGame;
-            foreach (var file in Chess.Files)
+            foreach (var file in Chess.Board.Files)
             {
                 var whitePawn = BoardLocation.At(file, WhitePawnRank);
                 var blackPawn = BoardLocation.At(file, BlackPawnRank);
@@ -42,7 +42,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
         public void covers_nothing()
         {
             var board = BoardBuilder.NewGame;
-            foreach (var file in Chess.Files)
+            foreach (var file in Chess.Board.Files)
             {
                 Assert.That(_pawnValidMoveGenerator.Covers(board, BoardLocation.At(file, WhitePawnRank)), Is.Empty);
                 Assert.That(_pawnValidMoveGenerator.Covers(board, BoardLocation.At(file, BlackPawnRank)), Is.Empty);
@@ -53,7 +53,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
         public void has_no_takes()
         {
             var board = BoardBuilder.NewGame;
-            foreach (var file in Chess.Files)
+            foreach (var file in Chess.Board.Files)
             {
                 Assert.That(_pawnValidMoveGenerator.Takes(board, BoardLocation.At(file, WhitePawnRank)), Is.Empty);
                 Assert.That(_pawnValidMoveGenerator.Takes(board, BoardLocation.At(file, BlackPawnRank)), Is.Empty);

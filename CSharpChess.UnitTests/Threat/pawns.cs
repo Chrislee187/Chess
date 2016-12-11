@@ -32,14 +32,14 @@ namespace CSharpChess.UnitTests.Threat
         [Test]
         public void normal_pawn_movement_does_not_generate_threat()
         {
-            foreach (Chess.ChessFile file in Enum.GetValues(typeof(Chess.ChessFile)))
+            foreach (Chess.Board.ChessFile file in Enum.GetValues(typeof(Chess.Board.ChessFile)))
             {
                 foreach (var threatRank in new[] {3, 4, 5, 6})
                 {
                     var loc = BoardLocation.At(file, threatRank);
 
-                    var defender = threatRank < 5 ? Chess.Colours.Black : Chess.Colours.White;
-                    var pawnFile = defender == Chess.Colours.White ? 7 : 2;
+                    var defender = threatRank < 5 ? Chess.Board.Colours.Black : Chess.Board.Colours.White;
+                    var pawnFile = defender == Chess.Board.Colours.White ? 7 : 2;
                     var pawnLocation = BoardLocation.At(file, pawnFile);
 
                     var threats = _newBoardThreats.For(loc).Threats;
@@ -52,7 +52,7 @@ namespace CSharpChess.UnitTests.Threat
         public void pawns_generate_threat()
         {
             Assert.That(_newBoard.Pieces
-                    .Where(p => p.Piece.Is(Chess.PieceNames.Pawn))
+                    .Where(p => p.Piece.Is(Chess.Board.PieceNames.Pawn))
                     .Select(p => _newBoardThreats.For(p.Location).Threats)
                 , Is.Not.Empty);
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CSharpChess.TheBoard;
 using CSharpChess.Threat;
 using CSharpChess.UnitTests.Helpers;

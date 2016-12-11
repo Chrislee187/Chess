@@ -6,19 +6,19 @@ namespace CSharpChess.TheBoard
     public class BoardLocation
     {
         public int Rank { get; }
-        public Chess.ChessFile File { get; }
+        public Chess.Board.ChessFile File { get; }
 
-        public BoardLocation(Chess.ChessFile file, int rank)
+        public BoardLocation(Chess.Board.ChessFile file, int rank)
         {
             File = file;
             Rank = rank;
         }
 
-        public static BoardLocation At(Chess.ChessFile file, int rank) 
+        public static BoardLocation At(Chess.Board.ChessFile file, int rank) 
             => new BoardLocation(file, rank);
 
         public static BoardLocation At(int file, int rank) 
-            => new BoardLocation((Chess.ChessFile)file, rank);
+            => new BoardLocation((Chess.Board.ChessFile)file, rank);
 
         public static BoardLocation At(string at) 
             => (BoardLocation) at;
@@ -43,7 +43,7 @@ namespace CSharpChess.TheBoard
             if (s.Length != 2) throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
 
             int rank;
-            Chess.ChessFile file;
+            Chess.Board.ChessFile file;
             if (!Enum.TryParse(s[0].ToString().ToUpper(), out file)) throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
             if (!int.TryParse(s[1].ToString(), out rank)) throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
 
@@ -59,7 +59,7 @@ namespace CSharpChess.TheBoard
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((BoardLocation) obj);
         }
 

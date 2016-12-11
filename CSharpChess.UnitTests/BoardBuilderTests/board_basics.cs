@@ -19,22 +19,11 @@ namespace CSharpChess.UnitTests.BoardBuilderTests
         {
             _board = BoardBuilder.NewGame;
         }
-        [Test]
-        public void can_supply_ranks()
-        {
-
-            foreach (var boardRank in _board.Ranks)
-            {
-                Assert.That(boardRank.Count(), Is.EqualTo(8));   
-            }
-
-            Assert.That(_board.Ranks.DistinctBy(br => br.Rank).Count(), Is.EqualTo(8));
-        }
 
         [Test]
         public void can_supply_files()
         {
-            foreach (var boardFile in _board.Ranks)
+            foreach (var boardFile in _board.Files)
             {
                 Assert.That(boardFile.Count(), Is.EqualTo(8));
             }
@@ -49,7 +38,7 @@ namespace CSharpChess.UnitTests.BoardBuilderTests
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 // ReSharper disable once UnusedVariable
-                var x = _board[(Chess.ChessFile) file, rank];
+                var x = _board[(Chess.Board.ChessFile) file, rank];
             });
         }
     }

@@ -43,7 +43,7 @@ namespace ConsoleSpikes
         {
             var board = BoardBuilder.NewGame;
 
-            BoardConsoleWriter.Write(board);
+            SmallConsoleBoard.Write(board);
 
         }
 

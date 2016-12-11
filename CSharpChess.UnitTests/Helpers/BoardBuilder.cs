@@ -8,7 +8,7 @@ namespace CSharpChess.UnitTests.Helpers
 
         public static ChessBoard NewGame => new ChessBoard(true);
 
-        public static ChessBoard CustomBoard(string boardInOneCharNotation, Chess.Colours toPlay)
+        public static ChessBoard CustomBoard(string boardInOneCharNotation, Chess.Board.Colours toPlay)
         {
             var customboard = ChessBoardHelper.OneCharBoardToBoardPieces(boardInOneCharNotation);
             var board = new ChessBoard(customboard, toPlay);

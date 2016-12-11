@@ -9,9 +9,9 @@ namespace CSharpChess.UnitTests.Threat
         [Test]
         public void queens_generate_vertical_threat()
         {
-            var customBoard = BoardBuilder.CustomBoard(NoPawnBoard, Chess.Colours.White);
+            var customBoard = BoardBuilder.CustomBoard(NoPawnBoard, Chess.Board.Colours.White);
 
-            AssertPiecesGeneratesVerticalThreat(customBoard, Chess.PieceNames.Queen, BuildVerticalThreats);
+            AssertPiecesGeneratesVerticalThreat(customBoard, Chess.Board.PieceNames.Queen, BuildVerticalThreats);
         }
     }
 }

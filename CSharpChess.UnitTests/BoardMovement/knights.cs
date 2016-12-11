@@ -35,11 +35,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                         "........" +
                         "........";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var result = board.Move("d4e6");
 
-            AssertTakeSucceeded(result, board, "d4e6", new ChessPiece(Chess.Colours.White, Chess.PieceNames.Knight));
+            AssertTakeSucceeded(result, board, "d4e6", new ChessPiece(Chess.Board.Colours.White, Chess.Board.PieceNames.Knight));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
@@ -23,7 +24,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
                                      "........" +
                                      "........";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
             var expected = BoardLocation.List("E6", "E4", "C6", "C4", "D6", "E5", "D4", "C5");
 
             var generator = new KingValidMoveGenerator();
@@ -45,7 +46,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
                                      "........" +
                                      "R...K..R";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var generator = new KingValidMoveGenerator();
             var chessMoves = generator.Moves(board, BoardLocation.At(location));
@@ -65,14 +66,14 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
                                      "...n...." +
                                      "R...K..R";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var generator = new KingValidMoveGenerator();
-            var chessMoves = generator.Moves(board, BoardLocation.At("E1"));
+            var chessMoves = generator.Moves(board, BoardLocation.At("E1")).ToList();
 
             Assert.True(chessMoves.Any(m => m.MoveType != MoveType.Castle));
-            Assert.False(chessMoves.Any(m => m.To.ToString() == "D1"));
-            Assert.False(chessMoves.Any(m => m.To.ToString() == "F1"));
+            Assert.False(chessMoves.Any(m => m.To.ToString() == "D1"), chessMoves.ToStringList());
+            Assert.False(chessMoves.Any(m => m.To.ToString() == "F1"), chessMoves.ToStringList());
         }
     }
 }

@@ -19,11 +19,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "........" +
                                      "K.......";
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var result = board.Move("a1a2");
 
-            AssertMoveSucceeded(result, board, "a1a2", new ChessPiece(Chess.Colours.White, Chess.PieceNames.King));
+            AssertMoveSucceeded(result, board, "a1a2", new ChessPiece(Chess.Board.Colours.White, Chess.Board.PieceNames.King));
         }
 
         [Test]
@@ -37,11 +37,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "p......." +
                                      "K.......";
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var result = board.Move("a1a2");
 
-            AssertTakeSucceeded(result, board, "a1a2", new ChessPiece(Chess.Colours.White, Chess.PieceNames.King));
+            AssertTakeSucceeded(result, board, "a1a2", new ChessPiece(Chess.Board.Colours.White, Chess.Board.PieceNames.King));
         }
 
 
@@ -61,15 +61,15 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "R...K..R";
 
             var km = (ChessMove)kingMove;
-            var colour = km.From.Rank == 1 ? Chess.Colours.White : Chess.Colours.Black;
+            var colour = km.From.Rank == 1 ? Chess.Board.Colours.White : Chess.Board.Colours.Black;
             var board = BoardBuilder.CustomBoard(asOneChar, colour);
 
             var rm = (ChessMove)expectedRookMove;
             var moveResult = board.Move(km);
 
             Assert.That(moveResult.Succeeded, $"Failed: {kingMove}.");
-            Assert.That(board[km.To].Piece.Is(colour, Chess.PieceNames.King));
-            Assert.That(board[rm.To].Piece.Is(colour, Chess.PieceNames.Rook));
+            Assert.That(board[km.To].Piece.Is(colour, Chess.Board.PieceNames.King));
+            Assert.That(board[rm.To].Piece.Is(colour, Chess.Board.PieceNames.Rook));
             Assert.That(board.IsEmptyAt(km.From));
             Assert.That(board.IsEmptyAt(rm.From));
 

@@ -70,8 +70,7 @@ namespace CSharpChess.UnitTests.Helpers
             Assert.That(movesOfType.Count(), Is.EqualTo(expectedLocations.Count()));
         }
 
-        protected static void AssertMovesContains(IEnumerable<ChessMove> moves, IEnumerable<string> locations,
-            MoveType moveType)
+        protected static void AssertMovesContains(IEnumerable<ChessMove> moves, IEnumerable<string> locations, MoveType moveType)
         {
             foreach (var location in locations)
             {
@@ -79,7 +78,7 @@ namespace CSharpChess.UnitTests.Helpers
             }
         }
 
-        protected static void AssertMovesContains(IEnumerable<ChessMove> moves, string location, MoveType moveType)
+        private static void AssertMovesContains(IEnumerable<ChessMove> moves, string location, MoveType moveType)
         {
             var found = moves.FirstOrDefault( m => 
                 m.To.Equals(BoardLocation.At(location))
@@ -91,7 +90,7 @@ namespace CSharpChess.UnitTests.Helpers
         protected static void AssertAllMovesAreOfType(IEnumerable<ChessMove> moves, MoveType moveType) 
             => Assert.That(moves.All(m => m.MoveType == moveType), "Unexpected MoveType found");
 
-        protected static void AssertPiecesGeneratesVerticalThreat(ChessBoard customBoard, Chess.PieceNames pieceName, Func<BoardLocation, int, IEnumerable<BoardLocation>> expectedThreatsBuilder)
+        protected static void AssertPiecesGeneratesVerticalThreat(ChessBoard customBoard, Chess.Board.PieceNames pieceName, Func<BoardLocation, int, IEnumerable<BoardLocation>> expectedThreatsBuilder)
         {
             var analyser = new ThreatAnalyser(customBoard);
 
@@ -130,72 +129,13 @@ namespace CSharpChess.UnitTests.Helpers
         }
 
         protected static void DumpBoardToConsole(ChessBoard board) 
-            => BoardConsoleWriter.Write(board);
+            => SmallConsoleBoard.Write(board);
 
         protected static void DumpBoardLocations(IEnumerable<BoardLocation> attacking)
         {
             var boardLocations = attacking as IList<BoardLocation> ?? attacking.ToList();
             Console.Write($"{string.Join(",", boardLocations)}");
             Console.WriteLine($" - {boardLocations.Count()}");
-        }
-    }
-
-    public class BoardConsoleWriter
-    {
-        private const bool UseColours = false;
-        private const bool ShowThreat = true;
-        public static void Write(ChessBoard board, ThreatAnalyser threats = null)
-        {
-            var consoleBoard = CreateConsoleBoard(board, threats);
-
-            foreach (var rank in Chess.Ranks.Reverse())
-            {
-                foreach (var file in Chess.Files)
-                {
-                    consoleBoard[BoardLocation.At((int) file, rank)]();
-                }
-                Console.Write("\n");
-            }
-
-        }
-
-        private static Dictionary<BoardLocation, Action> CreateConsoleBoard(ChessBoard board, ThreatAnalyser threats)
-        {
-            var t = threats ?? new ThreatAnalyser(board);
-
-            var consoleBoard = new Dictionary<BoardLocation, Action>();
-
-            foreach (var boardPiece in board.Pieces)
-            {
-                var hasThreats = t.For(boardPiece.Location).Threats.Any();
-                Action write = () =>
-                {
-                    if (ShowThreat && hasThreats)
-                    {
-                        if (UseColours)
-                        {
-                            Console.BackgroundColor = ConsoleColor.Red;
-                        }
-                    }
-
-                    if (ShowThreat && hasThreats)
-                    {
-                        Console.Write("X");
-                    }
-                    else
-                    {
-                        Console.Write(OneCharBoard.ToChar(boardPiece));
-                    }
-
-                    if (UseColours)
-                    {
-                        Console.ResetColor();
-                    }
-                };
-
-                consoleBoard.Add(boardPiece.Location, write);
-            }
-            return consoleBoard;
         }
     }
 }

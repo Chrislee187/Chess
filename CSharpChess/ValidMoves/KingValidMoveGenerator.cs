@@ -2,28 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.TheBoard;
-using CSharpChess.Threat;
+using static CSharpChess.Chess.Rules;
 
 namespace CSharpChess.ValidMoves
 {
     public class KingValidMoveGenerator : ValidMoveGeneratorBase
     {
-        public KingValidMoveGenerator() : base(Chess.PieceNames.King)
-        { }
+        public override IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at)
+        {
+            return ValidMoves(board, at)
+                .Concat(ValidTakes(board, at))
+                .Concat(ValidCovers(board, at));
+        }
 
         private IEnumerable<ChessMove> AddMoveIf(ChessBoard board, BoardLocation at,
             Func<ChessBoard, BoardLocation, BoardLocation, bool> predicate, MoveType moveType)
         {
             var result = new List<ChessMove>();
-            var directions = Chess.Rules.KingAndQueen.DirectionTransformations;
-            
-            foreach (var direction in directions)
+            var possibleMoves = MovementTransformation.ApplyTo(KingAndQueen.DirectionTransformations, at);
+            foreach (var to in possibleMoves)
             {
-                var to = StraightLineValidMoveGenerator.ApplyDirection(at, direction);
-
-                if (to != null
-                    && predicate(board, at, to)
-                    && wouldNotBeInCheck(board, to, board[at].Piece.Colour)
+                if (predicate(board, at, to)
+                    //&& wouldNotBeInCheck(board, to, board[at].Piece.Colour)
                     )
                 {
                     result.Add(new ChessMove(at, to, moveType));
@@ -33,7 +33,7 @@ namespace CSharpChess.ValidMoves
             return result;
         }
 
-        private bool wouldNotBeInCheck(ChessBoard board, BoardLocation at, Chess.Colours asPlayer)
+        private bool wouldNotBeInCheck(ChessBoard board, BoardLocation at, Chess.Board.Colours asPlayer)
         {
             // TODO: Need to place the analyser outside of the generators, recursion alert
 //            var a = new ThreatAnalyser(board);
@@ -42,7 +42,7 @@ namespace CSharpChess.ValidMoves
             throw new ArgumentException();
         }
 
-        public override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
+        private IEnumerable<ChessMove> ValidMoves(ChessBoard board, BoardLocation at)
         {
             var moves = new List<ChessMove>();
             moves.AddRange(AddMoveIf(board, at, (b, f, t) => b.IsEmptyAt(t), MoveType.Move));
@@ -53,15 +53,21 @@ namespace CSharpChess.ValidMoves
             return moves;
         }
 
+        private IEnumerable<ChessMove> ValidCovers(ChessBoard board, BoardLocation at) =>
+            AddMoveIf(board, at, (b, f, t) => board.IsCoveringAt(t, board[f].Piece.Colour), MoveType.Cover);
+
+        private IEnumerable<ChessMove> ValidTakes(ChessBoard board, BoardLocation at) =>
+            AddMoveIf(board, at, (b, f, t) => b.CanTakeAt(t, b[f].Piece.Colour), MoveType.Take);
+
         private IEnumerable<ChessMove> Castles(ChessBoard board, BoardLocation at)
         {
             var moves = new List<ChessMove>();
 
             var piece = board[at];
-            if (piece.Piece.IsNot(Chess.PieceNames.King) || piece.MoveHistory.Any()) return moves;
+            if (piece.Piece.IsNot(Chess.Board.PieceNames.King) || piece.MoveHistory.Any()) return moves;
 
-            var leftRookLoc = BoardLocation.At(Chess.ChessFile.A, at.Rank);
-            var rightRookLoc = BoardLocation.At(Chess.ChessFile.H, at.Rank);
+            var leftRookLoc = BoardLocation.At(Chess.Board.ChessFile.A, at.Rank);
+            var rightRookLoc = BoardLocation.At(Chess.Board.ChessFile.H, at.Rank);
 
             ChessMove to = CanCastle(board, at, leftRookLoc);
             if (to != null) moves.Add(to);
@@ -75,19 +81,19 @@ namespace CSharpChess.ValidMoves
         private static ChessMove CanCastle(ChessBoard board, BoardLocation at, BoardLocation leftRookLoc)
         {
             var rookLoc = board[leftRookLoc];
-            if (rookLoc.Piece.IsNot(Chess.PieceNames.Rook) || rookLoc.MoveHistory.Any()) return null;
+            if (rookLoc.Piece.IsNot(Chess.Board.PieceNames.Rook) || rookLoc.MoveHistory.Any()) return null;
 
-            var mustBeEmpty = LocationsBetween(at, rookLoc.Location);
+            var mustBeEmpty = LocationsBetweenAndNotUnderAttack(at, rookLoc.Location);
             if (mustBeEmpty.Any(board.IsNotEmptyAt)) return null;
 
-            var castleFile = rookLoc.Location.File == Chess.ChessFile.A ? Chess.ChessFile.C : Chess.ChessFile.G;
+            var castleFile = rookLoc.Location.File == Chess.Board.ChessFile.A ? Chess.Board.ChessFile.C : Chess.Board.ChessFile.G;
             return new ChessMove(at, BoardLocation.At(castleFile, at.Rank), MoveType.Castle);
         }
 
-        private static IEnumerable<BoardLocation> LocationsBetween(BoardLocation at, BoardLocation rookLoc)
+        private static IEnumerable<BoardLocation> LocationsBetweenAndNotUnderAttack(BoardLocation at, BoardLocation rookLoc)
         {
             int from, to;
-            if (rookLoc.File == Chess.ChessFile.A)
+            if (rookLoc.File == Chess.Board.ChessFile.A)
             {
                 @from = 2;
                 to = (int) at.File - 1;
@@ -102,10 +108,5 @@ namespace CSharpChess.ValidMoves
             return mustBeEmpty;
         }
 
-        public override IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at) =>
-            AddMoveIf(board, at, (b, f, t) => board.IsEmptyAt(t) || !board.IsEmptyAt(t) && board[f].Piece.Colour == board[t].Piece.Colour, MoveType.Cover);
-
-        public override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at) => 
-            AddMoveIf(board, at, (b, f, t) => Chess.CanTakeAt(b, t, b[f].Piece.Colour), MoveType.Take);
     }
 }

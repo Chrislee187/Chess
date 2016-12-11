@@ -49,12 +49,16 @@
     <Compile Include="BoardMovement\rooks.cs" />
     <Compile Include="BoardMovement\knights.cs" />
     <Compile Include="BoardMovement\bishops.cs" />
+    <Compile Include="ConsoleBoardWriters\Spikes.cs" />
     <Compile Include="Helpers\BoardAssertions.cs" />
     <Compile Include="Helpers\BoardBuilder.cs" />
     <Compile Include="BoardBuilderTests\board_basics.cs" />
     <Compile Include="BoardBuilderTests\default_boards.cs" />
     <Compile Include="Helpers\ChessBoardHelper.cs" />
     <Compile Include="BoardMovement\pawns.cs" />
+    <Compile Include="Helpers\ConsolePanel.cs" />
+    <Compile Include="Helpers\MediumConsoleBoard.cs" />
+    <Compile Include="Helpers\SmallConsoleBoard.cs" />
     <Compile Include="TheBoard\PsgChessMoveTests.cs" />
     <Compile Include="Threat\knights.cs" />
     <Compile Include="Threat\queens.cs" />

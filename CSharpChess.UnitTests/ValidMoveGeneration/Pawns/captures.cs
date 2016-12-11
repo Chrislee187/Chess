@@ -32,7 +32,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var expected = BoardLocation.List("C3");
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var result = board.Move("c2c4");
             Assert.That(result.Succeeded);
@@ -54,7 +54,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var moves = _pawnValidMoveGenerator.Takes(board, BoardLocation.At("A2")).ToList();
 
@@ -76,7 +76,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var expected = BoardLocation.List("A3");
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var moves = _pawnValidMoveGenerator.Moves(board, BoardLocation.At("A2"));
 
@@ -97,7 +97,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var expected = BoardLocation.List("B3", "D3");
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var moves = _pawnValidMoveGenerator.Takes(board, BoardLocation.At("C2"));
 

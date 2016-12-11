@@ -14,7 +14,7 @@ namespace CSharpChess.TheBoard
             }
             else
             {
-                var pawnFile = (Chess.ChessFile) Enum.Parse(typeof(Chess.ChessFile), pgnMove[idx++].ToString(), true);
+                var pawnFile = (Chess.Board.ChessFile) Enum.Parse(typeof(Chess.Board.ChessFile), pgnMove[idx++].ToString(), true);
                 int rank;
                 if (pgnMove[idx] == 'x')
                 {
@@ -33,7 +33,7 @@ namespace CSharpChess.TheBoard
 
         private static bool IsKnownPiece(char c)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

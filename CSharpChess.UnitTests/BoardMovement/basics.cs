@@ -20,7 +20,7 @@ namespace CSharpChess.UnitTests.BoardMovement
         [Test]
         public void white_cannot_move_when_blacks_turn()
         {
-            var board = BoardBuilder.CustomBoard(ChessBoardHelper.NewBoardInOneCharNotation, Chess.Colours.Black);
+            var board = BoardBuilder.CustomBoard(ChessBoardHelper.NewBoardInOneCharNotation, Chess.Board.Colours.Black);
 
             var result = board.Move("D2-D4");
 

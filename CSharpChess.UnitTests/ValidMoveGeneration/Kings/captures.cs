@@ -23,7 +23,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
                                      "........" +
                                      "........";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
             var expectedTakes = BoardLocation.List("C6", "D6", "E6", "C5", "E5", "C4", "D4", "E4");
 
             var generator = new KingValidMoveGenerator();

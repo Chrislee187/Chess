@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;

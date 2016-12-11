@@ -1,101 +1,56 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.TheBoard;
-
+using static CSharpChess.Chess.Rules;
 namespace CSharpChess.ValidMoves
 {
     public class StraightLineValidMoveGenerator : ValidMoveGeneratorBase
     {
-        private readonly IEnumerable<Tuple<int, int>> _directions;
+        private readonly IEnumerable<MovementTransformation> _directions;
 
-        // TODO: Sort out the Tuple
-        protected StraightLineValidMoveGenerator(IEnumerable<Tuple<int, int>> directions, Chess.PieceNames name) : base(name)
+        protected StraightLineValidMoveGenerator(IEnumerable<MovementTransformation> directions)
         {
             _directions = directions;
         }
 
-        public override IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
+        public override IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at)
         {
             var result = new List<ChessMove>();
             var directions = _directions;
-
+            var piece = board[at].Piece;
             foreach (var direction in directions)
             {
-                result.AddRange(
-                    GetUntilNotEmpty(board, at, direction)
-                        .Select(loc => new ChessMove(at, loc, MoveType.Move))
-                );
-            }
+                var locations = GetUntilNotEmpty(board, at, direction).ToList();
 
-            return result;
-        }
+                result.AddRange(locations.Select(loc => new ChessMove(at, loc, MoveType.Move)));
 
-        public override IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
-        {
-            var result = new List<ChessMove>();
-            var directions = _directions;
+                var last = locations.Any() ? locations.Last() : at;
+                var next = direction.ApplyTo(last);
 
-            foreach (var direction in directions)
-            {
-                var lastEmpty = GetUntilNotEmpty(board, at, direction)?
-                                    .LastOrDefault();
-
-                if (lastEmpty != null)
+                if (next != null)
                 {
-                    var to = ApplyDirection(lastEmpty, direction);
-
-                    if (to != null 
-                        && board[to].Piece.Colour == Chess.ColourOfEnemy(board[at].Piece.Colour))
-                            result.Add(new ChessMove(at, to, MoveType.Take));
+                    var moveType = board[next].Piece.Colour == piece.Colour
+                        ? MoveType.Cover
+                        : board.CanTakeAt(next, piece.Colour)
+                            ? MoveType.Take
+                            : MoveType.Unknown;
+                    result.Add(new ChessMove(at, next, moveType));
                 }
             }
+
             return result;
         }
 
-        public override IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at)
-        {
-            var result = new List<ChessMove>();
-            var directions = _directions;
-
-            foreach (var direction in directions)
-            {
-                var lastEmpty = GetUntilNotEmpty(board, at, direction)?
-                                    .LastOrDefault() ?? at;
-
-                var to = ApplyDirection(lastEmpty, direction);
-
-                if (to != null)
-                {
-                    if(board.IsEmptyAt(to) 
-                        || (!board.IsEmptyAt(to) && board[to].Piece.Colour == board[at].Piece.Colour))
-                            result.Add(new ChessMove(at, to, MoveType.Cover));
-
-                }
-            }
-            return result;
-        }
-
-
-        public static BoardLocation ApplyDirection(BoardLocation from, Tuple<int, int> direction)
-        {
-            var file = (int)from.File + direction.Item1;
-            var rank = from.Rank + direction.Item2;
-            return !Chess.Board.IsValidLocation(file, rank)
-                ? null
-                : new BoardLocation((Chess.ChessFile)file, rank);
-        }
-
-        private IEnumerable<BoardLocation> GetUntilNotEmpty(ChessBoard board, BoardLocation at, Tuple<int, int> direction)
+        private IEnumerable<BoardLocation> GetUntilNotEmpty(ChessBoard board, BoardLocation at, MovementTransformation movement)
         {
             var result = new List<BoardLocation>();
 
-            var to = ApplyDirection(at, direction);
+            var to = movement.ApplyTo(at);
 
             while (to != null && board.IsEmptyAt(to))
             {
                 result.Add(to);
-                to = ApplyDirection(to, direction);
+                to = movement.ApplyTo(to);
             }
             return result;
         }

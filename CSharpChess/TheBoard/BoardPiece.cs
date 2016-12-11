@@ -15,14 +15,11 @@ namespace CSharpChess.TheBoard
         public ChessPiece Piece { get; }
 
         public BoardPiece(int file, int rank, ChessPiece chessPiece)
-        {
-            Location = new BoardLocation((Chess.ChessFile) file, rank);
-            Piece = chessPiece;
-        }
-        public BoardPiece(Chess.ChessFile file, int rank, ChessPiece chessPiece)
+            : this (new BoardLocation((Chess.Board.ChessFile) file, rank), chessPiece)
+        {}
+        public BoardPiece(Chess.Board.ChessFile file, int rank, ChessPiece chessPiece)
             : this(new BoardLocation(file, rank), chessPiece)
-        {
-        }
+        {}
 
         public BoardPiece(BoardLocation location, ChessPiece piece)
         {
