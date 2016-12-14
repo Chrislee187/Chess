@@ -1,5 +1,9 @@
-﻿using CSharpChess.TheBoard;
+﻿using System.Collections.Generic;
+using System.Linq;
+using CSharpChess.Extensions;
+using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
+using CSharpChess.ValidMoves;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.BoardMovement
@@ -73,6 +77,31 @@ namespace CSharpChess.UnitTests.BoardMovement
             Assert.That(board.IsEmptyAt(km.From));
             Assert.That(board.IsEmptyAt(rm.From));
 
+        }
+
+        [Test]
+        public void cannot_move_into_check()
+        {
+            const string asOneChar = "...rkr.." +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "...n...." +
+                                     ".R..K.R.";
+
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
+
+            var at = BoardLocation.At("E1");
+            var expected = new[] {"D1", "E2"};
+            var notExpected = new[] {"F1", "F2"};
+            var chessMoves = board.MovesFor(at).Moves().ToList();
+
+            AssertMovesContains(chessMoves, expected, MoveType.Move);
+            AssertMovesDoesNotContain(chessMoves, notExpected, MoveType.Move);
+            // TODO: Assert does not contain the others
+            Assert.That(chessMoves.Count(), Is.EqualTo(2), chessMoves.ToStringList());
         }
     }
 }

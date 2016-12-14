@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 using static CSharpChess.Chess.Rules;
 
@@ -13,7 +14,8 @@ namespace CSharpChess.ValidMoves
             // TODO: This is common in all top level move generators, sort it out
             return ValidMoves(board, at)
                 .Concat(ValidTakes(board, at))
-                .Concat(ValidCovers(board, at)).ToList();
+                .Concat(ValidCovers(board, at)).ToList()
+                ;
         }
 
         private IEnumerable<ChessMove> AddMoveIf(ChessBoard board, BoardLocation at,
@@ -29,27 +31,9 @@ namespace CSharpChess.ValidMoves
                 }
             }
 
-            return result; //Where(r => !InCheck(board, r.To, board[at].Piece.Colour));
+            return result;
 
         }
-
-//        private bool InCheck(ChessBoard board, BoardLocation at, Chess.Board.Colours asPlayer)
-//        {
-////            board.Pieces.EnemyOf(asPlayer).ToList()[3].MoveFactory
-////                .Moves(board, BoardLocation.At("F8")).ToList().Any(m => m.To.Equals(at))
-////
-////            var enemyPieces = board.Pieces.EnemyOf(asPlayer);
-////            Func<ChessBoard, BoardPiece, BoardLocation, bool> pieceIsAttackingLocation =
-////                delegate(ChessBoard b, BoardPiece p, BoardLocation l)
-////                {
-////                    var moves = p.MoveFactory.Moves(board, p.Location).ToList();
-////                    var covers = p.MoveFactory.Covers(board, p.Location).ToList();
-////                    return false; //moves.Any(m => m.To.Equals(l))|| covers.Any(m => m.To.Equals(l));
-////                };
-////            var checkPieces = enemyPieces.Where(p => pieceIsAttackingLocation(board, p, at));
-////
-////            return checkPieces.Any();
-//        }
 
         private IEnumerable<ChessMove> ValidMoves(ChessBoard board, BoardLocation at)
         {

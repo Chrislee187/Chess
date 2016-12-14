@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
@@ -26,7 +27,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
             var expectedTakes = BoardLocation.List("F7", "F3", "B7", "B3");
 
             var generator = new BishopMoveGenerator();
-            var chessMoves = generator.Takes(board,BoardLocation.At("D5")).ToList();
+            var chessMoves = generator.All(board,BoardLocation.At("D5")).Takes().ToList();
 
             AssertMovesContainsExpectedWithType(chessMoves, expectedTakes, MoveType.Take);
         }

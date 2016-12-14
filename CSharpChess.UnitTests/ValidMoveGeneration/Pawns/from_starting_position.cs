@@ -1,4 +1,5 @@
-﻿using CSharpChess.TheBoard;
+﻿using CSharpChess.Extensions;
+using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
 using NUnit.Framework;
@@ -31,11 +32,11 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 var blackExpected = BoardLocation.List($"{blackPawn.File}{blackPawn.Rank - 1}",
                     $"{blackPawn.File}{blackPawn.Rank - 2}");
 
-                var chessMoves = new PawnMoveGenerator().Moves(board, whitePawn);
+                var chessMoves = new PawnMoveGenerator().All(board, whitePawn).Moves();
                 AssertMovesContainsExpectedWithType(chessMoves, whiteExpected, MoveType.Move);
 
 
-                AssertMovesContainsExpectedWithType(new PawnMoveGenerator().Moves(board, blackPawn),
+                AssertMovesContainsExpectedWithType(new PawnMoveGenerator().All(board, blackPawn).Moves(),
                     blackExpected, MoveType.Move);
             }
         }
@@ -46,8 +47,8 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             var board = BoardBuilder.NewGame;
             foreach (var file in Chess.Board.Files)
             {
-                Assert.That(_pawnMoveGenerator.Covers(board, BoardLocation.At(file, WhitePawnRank)), Is.Empty);
-                Assert.That(_pawnMoveGenerator.Covers(board, BoardLocation.At(file, BlackPawnRank)), Is.Empty);
+                Assert.That(_pawnMoveGenerator.All(board, BoardLocation.At(file, WhitePawnRank)).Covers(), Is.Empty);
+                Assert.That(_pawnMoveGenerator.All(board, BoardLocation.At(file, BlackPawnRank)).Covers(), Is.Empty);
             }
         }
 
@@ -57,8 +58,8 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             var board = BoardBuilder.NewGame;
             foreach (var file in Chess.Board.Files)
             {
-                Assert.That(_pawnMoveGenerator.Takes(board, BoardLocation.At(file, WhitePawnRank)), Is.Empty);
-                Assert.That(_pawnMoveGenerator.Takes(board, BoardLocation.At(file, BlackPawnRank)), Is.Empty);
+                Assert.That(_pawnMoveGenerator.All(board, BoardLocation.At(file, WhitePawnRank)).Takes(), Is.Empty);
+                Assert.That(_pawnMoveGenerator.All(board, BoardLocation.At(file, BlackPawnRank)).Takes(), Is.Empty);
             }
         }
     }

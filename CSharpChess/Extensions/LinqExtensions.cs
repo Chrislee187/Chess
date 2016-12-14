@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpChess.Extensions
 {
@@ -16,6 +17,11 @@ namespace CSharpChess.Extensions
                     yield return element;
                 }
             }
+        }
+
+        public static bool None<TSource>(this IEnumerable<TSource> source)
+        {
+            return !source.Any();
         }
     }
 

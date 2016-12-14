@@ -8,11 +8,7 @@ namespace CSharpChess.TheBoard
     {
         public readonly IDictionary<Chess.Board.PieceNames, Func<IMoveGenerator>> For = new Dictionary<Chess.Board.PieceNames, Func<IMoveGenerator>>
         {
-            {Chess.Board.PieceNames.Pawn, () =>
-            {
-                Console.WriteLine("Creating PawnMG");
-                return new PawnMoveGenerator();
-            } },
+            {Chess.Board.PieceNames.Pawn, () =>new PawnMoveGenerator() },
             {Chess.Board.PieceNames.Knight, () => new KnightMoveGenerator() },
             {Chess.Board.PieceNames.Rook, () => new RookMoveGenerator() },
             {Chess.Board.PieceNames.Bishop, () => new BishopMoveGenerator() },

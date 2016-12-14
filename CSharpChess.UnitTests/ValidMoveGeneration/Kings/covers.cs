@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
@@ -25,7 +26,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
         {
             var board = BoardBuilder.NewGame;
 
-            var validMoves = _kingMoveGenerator.Covers(board, BoardLocation.At(location));
+            var validMoves = _kingMoveGenerator.All(board, BoardLocation.At(location)).Covers();
 
             AssertMovesContainsExpectedWithType(validMoves, expected.Select(BoardLocation.At), MoveType.Cover);
         }

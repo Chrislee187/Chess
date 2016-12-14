@@ -13,13 +13,15 @@ namespace CSharpChess.Extensions
         {
             return moves.Any(m => loc.Equals(m.To));
         }
-    }
 
-    public static class BoardPieceExtensions
-    {
-        public static IEnumerable<BoardPiece> EnemyOf(this IEnumerable<BoardPiece> pieces, Chess.Board.Colours player)
-        {
-            return pieces.Where(p => p.Piece.Is(Chess.ColourOfEnemy(player)));
-        }
+        public static IEnumerable<ChessMove> Moves(this IEnumerable<ChessMove> moves) =>
+            moves.Where(m => m.MoveType.IsMove());
+
+        public static IEnumerable<ChessMove> Covers(this IEnumerable<ChessMove> moves) =>
+            moves.Where(m => m.MoveType.IsCover());
+
+        public static IEnumerable<ChessMove> Takes(this IEnumerable<ChessMove> moves) =>
+            moves.Where(m => m.MoveType.IsTake());
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
@@ -32,7 +33,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
             var expected = BoardLocation.List("C3");
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
-            var moves = _knightMoveGenerator.Takes(board, BoardLocation.At("B1")).ToList();
+            var moves = _knightMoveGenerator.All(board, BoardLocation.At("B1")).Takes().ToList();
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.Take);
         }

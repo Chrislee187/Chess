@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CSharpChess.TheBoard;
+using CSharpChess.ValidMoves;
 
 namespace CSharpChess.Extensions
 {
@@ -28,6 +31,37 @@ namespace CSharpChess.Extensions
                 }
                 yield return list;
             }
+        }
+
+        public static ChessMove CanCastle(this ChessBoard board, BoardLocation at, BoardLocation rookLoc) => 
+            Chess.Board.CanCastle(board, at, rookLoc);
+
+        public static bool InCheckAt(this ChessBoard board, BoardLocation at, Chess.Board.Colours asPlayer)
+            => Chess.Board.InCheckAt(board, at, asPlayer);
+
+        public static bool IsEmptyAt(this ChessBoard board, BoardLocation location)
+            => Chess.Board.IsEmptyAt(board, location);
+
+        public static bool IsEmptyAt(this ChessBoard board, string location)
+            => IsEmptyAt(board, BoardLocation.At(location));
+
+        public static bool IsNotEmptyAt(this ChessBoard board, BoardLocation location)
+            => !IsEmptyAt(board, location);
+
+        public static bool IsNotEmptyAt(this ChessBoard board, string location)
+            => !IsEmptyAt(board, BoardLocation.At(location));
+
+        public static bool CanTakeAt(this ChessBoard board, BoardLocation takeLocation, Chess.Board.Colours attackerColour)
+            => IsNotEmptyAt(board, takeLocation)
+               && board[takeLocation].Piece.Colour == Chess.ColourOfEnemy(attackerColour);
+
+        public static bool IsCoveringAt(this ChessBoard board, BoardLocation coverLocation, Chess.Board.Colours attackerColour)
+            => IsNotEmptyAt(board, coverLocation)
+               && board[coverLocation].Piece.Colour == attackerColour;
+
+        public static bool KingNotMovingIntoCheck(this ChessBoard board, ChessMove m)
+        {
+            return !InCheckAt(board, m.To, board[m.From].Piece.Colour);
         }
     }
 }

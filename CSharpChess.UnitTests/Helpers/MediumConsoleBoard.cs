@@ -45,9 +45,13 @@ namespace CSharpChess.UnitTests.Helpers
         {
             IDictionary<BoardLocation, ConsolePanel> panels = new ConcurrentDictionary<BoardLocation, ConsolePanel>();
 
-            foreach (var boardPiece in _board.Pieces)
+            foreach (var file in Chess.Board.Files)
             {
-                panels.Add(boardPiece.Location, CreateConsoleCell(boardPiece));
+                foreach (var rank in Chess.Board.Ranks)
+                {
+                    var at = BoardLocation.At(file,rank);
+                    panels.Add(at, CreateConsoleCell(_board[at]));
+                }
             }
             return panels;
         }

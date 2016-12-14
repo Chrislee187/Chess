@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
@@ -37,7 +38,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             var result = board.Move("c2c4");
             Assert.That(result.Succeeded);
 
-            var moves = _pawnMoveGenerator.Takes(board, BoardLocation.At("D4"));
+            var moves = _pawnMoveGenerator.All(board, BoardLocation.At("D4")).Takes();
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.TakeEnPassant);
         }
@@ -56,7 +57,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
-            var moves = _pawnMoveGenerator.Takes(board, BoardLocation.At("A2")).ToList();
+            var moves = _pawnMoveGenerator.All(board, BoardLocation.At("A2")).Takes().ToList();
 
             Assert.That(moves, Is.Empty);
 
@@ -78,7 +79,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
-            var moves = _pawnMoveGenerator.Moves(board, BoardLocation.At("A2"));
+            var moves = _pawnMoveGenerator.All(board, BoardLocation.At("A2")).Moves();
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.Move);
         }
@@ -99,7 +100,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
-            var moves = _pawnMoveGenerator.Takes(board, BoardLocation.At("C2"));
+            var moves = _pawnMoveGenerator.All(board, BoardLocation.At("C2")).Takes();
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.Take);
         }

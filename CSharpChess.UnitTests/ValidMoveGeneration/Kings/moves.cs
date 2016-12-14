@@ -29,7 +29,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
             var expected = BoardLocation.List("E6", "E4", "C6", "C4", "D6", "E5", "D4", "C5");
 
             var generator = new KingMoveGenerator();
-            var chessMoves = generator.Moves(board, BoardLocation.At("D5"));
+            var chessMoves = generator.All(board, BoardLocation.At("D5")).Moves();
 
             AssertMovesContainsExpectedWithType(chessMoves, expected, MoveType.Move);
         }
@@ -50,31 +50,10 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var generator = new KingMoveGenerator();
-            var chessMoves = generator.Moves(board, BoardLocation.At(location));
+            var chessMoves = generator.All(board, BoardLocation.At(location)).Moves();
 
             AssertMovesContains(chessMoves, expected, MoveType.Castle);
         }
 
-        [Test]
-        public void check_blocks_all_movement()
-        {
-            const string asOneChar = "...rkr.." +
-                                     "........" +
-                                     "........" +
-                                     "........" +
-                                     "........" +
-                                     "........" +
-                                     "...n...." +
-                                     ".R..K.R.";
-
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
-
-            var generator = new KingMoveGenerator();
-            var chessMoves = generator.Moves(board, BoardLocation.At("E1")).ToList();
-            Assert.That(chessMoves.Count(), Is.EqualTo(2), chessMoves.ToStringList());
-            Assert.True(chessMoves.Any(m => m.MoveType != MoveType.Castle), chessMoves.ToStringList());
-            AssertMovesContains(chessMoves, new [] {"D1"}, MoveType.Move);
-            AssertMovesContains(chessMoves, new [] {"E2"}, MoveType.Move);
-        }
     }
 }

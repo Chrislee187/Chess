@@ -44,5 +44,10 @@ namespace CSharpChess.TheBoard
                 return ((int) Colour*397) ^ (int) Name;
             }
         }
+
+        public ChessPiece Clone()
+        {
+            return new ChessPiece(Colour, Name);
+        }
     }
 }

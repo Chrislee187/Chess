@@ -1,4 +1,6 @@
-﻿using CSharpChess.TheBoard;
+﻿using System.Linq;
+using CSharpChess.Extensions;
+using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
 using NUnit.Framework;
@@ -24,9 +26,30 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
             var expected = BoardLocation.List("E6", "E4", "C6", "C4");
 
             var generator = new BishopMoveGenerator();
-            var chessMoves = generator.Moves(board,BoardLocation.At("D5"));
+            var chessMoves = generator.All(board,BoardLocation.At("D5")).Moves();
 
             AssertMovesContainsExpectedWithType(chessMoves, expected, MoveType.Move);
+        }
+
+        [Test]
+        public void cannot_uncover_check()
+        {
+            const string asOneChar = "........" +
+                                     "........" +
+                                     "........" +
+                                     "...r...." +
+                                     "........" +
+                                     "...P...." +
+                                     "...B...." +
+                                     "...K....";
+
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
+
+            var generator = new BishopMoveGenerator();
+            var at = BoardLocation.At("D2");
+
+            var chessMoves = board.MovesFor(at).ToList();
+            Assert.True(chessMoves.None(), chessMoves.ToStringList());
         }
     }
 }

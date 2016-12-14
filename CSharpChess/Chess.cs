@@ -3,14 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
+using CSharpChess.ValidMoves;
 
 namespace CSharpChess
 {
     public static class Chess
     {
-
         public static class Board
         {
+            public static ChessMove CanCastle(ChessBoard board, BoardLocation at, BoardLocation rookLoc)
+            {
+                var rookPiece = board[rookLoc];
+                if (rookPiece.Piece.IsNot(Chess.Board.PieceNames.Rook) || rookPiece.MoveHistory.Any()) return null;
+
+                var mustBeEmpty = KingMoveGenerator.LocationsBetweenAndNotUnderAttack(at, rookPiece.Location);
+                if (mustBeEmpty.Any(board.IsNotEmptyAt)) return null;
+
+                var castleFile = rookPiece.Location.File == Chess.Board.ChessFile.A ? Chess.Board.ChessFile.C : Chess.Board.ChessFile.G;
+                return new ChessMove(at, BoardLocation.At(castleFile, at.Rank), MoveType.Castle);
+            }
+
+            public static bool InCheckAt(ChessBoard board, BoardLocation at, Chess.Board.Colours asPlayer)
+            {
+                var enemyPieces = board.Pieces.EnemyOf(asPlayer);
+                Func<ChessBoard, BoardPiece, BoardLocation, bool> pieceIsAttackingLocation =
+                    delegate (ChessBoard b, BoardPiece p, BoardLocation l)
+                    {
+                        return b[p.Location].AllMoves.Moves()
+                            .Concat(b[p.Location].AllMoves.Covers())
+                            .Any(m => m.To.Equals(l));
+                    };
+                var checkPieces = enemyPieces.Where(p => pieceIsAttackingLocation(board, p, at));
+
+                return checkPieces.Any();
+            }
+
+            public static bool IsEmptyAt(ChessBoard board, BoardLocation location)
+                => board[location].Piece.Equals(ChessPiece.NullPiece);
+
+            public static bool IsNotEmptyAt(ChessBoard board, BoardLocation location)
+                => !IsEmptyAt(board, location);
+
+            public static bool IsEmptyAt(ChessBoard board, string location)
+                => board[(BoardLocation)location].Piece.Equals(ChessPiece.NullPiece);
+
+            public static bool IsNotEmptyAt(ChessBoard board, string location)
+                => !IsEmptyAt(board, (BoardLocation)location);
+
+
             public enum Colours { White, Black, None = -9999 }
 
             public enum PieceNames { Pawn, Rook, Bishop, Knight, King, Queen, Blank = -9999 }
@@ -43,7 +83,6 @@ namespace CSharpChess
 
             }
         }
-
 
         public static Board.Colours ColourOfEnemy(Board.Colours colour) => colour == Board.Colours.Black
             ? Board.Colours.White

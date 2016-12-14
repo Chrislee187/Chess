@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
@@ -27,7 +28,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
         {
             var board = BoardBuilder.NewGame;
 
-            var moves = _generator.Moves(board, BoardLocation.At(knightLocation));
+            var moves = _generator.All(board, BoardLocation.At(knightLocation)).Moves();
 
             Assert.That(moves, Is.Empty);
         }
@@ -41,7 +42,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
             var board = BoardBuilder.NewGame;
             var boardLocation = BoardLocation.At("C1");
 
-            var covers = _generator.Covers(board, boardLocation).Select(m => m.To).ToList();
+            var covers = _generator.All(board, boardLocation).Covers().Select(m => m.To).ToList();
 
             Assert.That(covers, Contains.Item(BoardLocation.At("B2")));
             Assert.That(covers, Contains.Item(BoardLocation.At("D2")));
@@ -55,7 +56,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
         {
             var board = BoardBuilder.NewGame;
 
-            var moves = _generator.Takes(board, BoardLocation.At(location));
+            var moves = _generator.All(board, BoardLocation.At(location)).Takes();
 
             Assert.That(moves, Is.Empty);
         }

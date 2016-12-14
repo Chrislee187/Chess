@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 using static CSharpChess.Chess.Rules;
 namespace CSharpChess.ValidMoves

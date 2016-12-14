@@ -1,4 +1,5 @@
-﻿using CSharpChess.TheBoard;
+﻿using CSharpChess.Extensions;
+using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using CSharpChess.ValidMoves;
 using NUnit.Framework;
@@ -31,7 +32,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Rooks
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
             var expected = BoardLocation.List("D6", "E5", "D4", "C5");
 
-            var chessMoves = _generator.Moves(board, BoardLocation.At("D5"));
+            var chessMoves = _generator.All(board, BoardLocation.At("D5")).Moves();
 
             AssertMovesContainsExpectedWithType(chessMoves, expected, MoveType.Move);
         }

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using CSharpChess.ValidMoves;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpChess.TheBoard
 {
@@ -8,10 +7,11 @@ namespace CSharpChess.TheBoard
     {
         public static BoardPiece Empty(BoardLocation fromLocation) => new BoardPiece(fromLocation, ChessPiece.NullPiece);
 
+        private IEnumerable<ChessMove> _moves;
+
         private readonly List<ChessMove> _moveHistory = new List<ChessMove>();
-        private readonly Func<IMoveGenerator> _moveGenerator;
-        private readonly MoveFactory _moveFactory = new MoveFactory();
         public IEnumerable<ChessMove> MoveHistory => _moveHistory;
+
         public BoardLocation Location { get; private set; }
         public ChessPiece Piece { get; }
 
@@ -29,29 +29,35 @@ namespace CSharpChess.TheBoard
 
             if(piece.Name != Chess.Board.PieceNames.Blank)
             {
-                _moveGenerator = _moveFactory.For[piece.Name];
             }
         }
 
-        public void MoveTo(BoardLocation moveTo, MoveType type)
+        internal void MoveTo(BoardLocation moveTo, MoveType type)
         {
             _moveHistory.Add(new ChessMove(Location, moveTo, type));
             Location = moveTo;
         }
 
-        public void Taken(BoardLocation takenLocation)
+        internal void Taken(BoardLocation takenLocation)
         {
             _moveHistory.Add(ChessMove.Taken(takenLocation));
         }
 
-        public IEnumerable<ChessMove> Moves(ChessBoard board) => _moveGenerator().Moves(board, Location);
-        public IEnumerable<ChessMove> Covers(ChessBoard board) => _moveGenerator().Covers(board, Location);
-        public IEnumerable<ChessMove> Takes(ChessBoard board) => _moveGenerator().Takes(board, Location);
-
+        internal IEnumerable<ChessMove> AllMoves => _moves;
 
         public override string ToString()
         {
             return $"{Piece} @ {Location}";
+        }
+
+        internal void SetAll(IEnumerable<ChessMove> moves)
+        {
+            _moves = moves;
+        }
+
+        public BoardPiece Clone()
+        {
+            return new BoardPiece(Location.File, Location.Rank, Piece.Clone());
         }
     }
 }

@@ -24,7 +24,7 @@ namespace CSharpChess
             if(p =='.' || p ==' ') return Chess.Board.PieceNames.Blank;
 
             var valid = OneCharPieceNames.Where(c => char.ToUpper(p) == c.Value).ToList();
-            if (!valid.Any())
+            if (valid.None())
                 throw new ArgumentException($"Invalid One Char representations of a chess piece found '{p}'", nameof(p));
 
             var pieceNames = OneCharPieceNames.First(c => char.ToUpper(p) == c.Value).Key;
