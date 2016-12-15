@@ -1,4 +1,4 @@
-namespace CSharpChess.ValidMoves
+namespace CSharpChess.MoveGeneration
 {
     public class QueenMoveGenerator : StraightLineMoveGenerator
     {

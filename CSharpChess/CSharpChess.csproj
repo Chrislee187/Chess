@@ -58,16 +58,16 @@
     <Compile Include="TheBoard\MoveHandler.cs" />
     <Compile Include="TheBoard\MoveResult.cs" />
     <Compile Include="TheBoard\PgnChessMove.cs" />
-    <Compile Include="TheBoard\MoveFactory.cs" />
-    <Compile Include="ValidMoves\BishopMoveGenerator.cs" />
-    <Compile Include="ValidMoves\IMoveGenerator.cs" />
-    <Compile Include="ValidMoves\KnightMoveGenerator.cs" />
-    <Compile Include="ValidMoves\PawnMoveGenerator.cs" />
-    <Compile Include="ValidMoves\KingMoveGenerator.cs" />
-    <Compile Include="ValidMoves\QueenMoveGenerator.cs" />
-    <Compile Include="ValidMoves\RookMoveGenerator.cs" />
-    <Compile Include="ValidMoves\StraightLineMoveGenerator.cs" />
-    <Compile Include="ValidMoves\MoveGeneratorBase.cs" />
+    <Compile Include="MoveGeneration\BishopMoveGenerator.cs" />
+    <Compile Include="MoveGeneration\IMoveGenerator.cs" />
+    <Compile Include="MoveGeneration\KnightMoveGenerator.cs" />
+    <Compile Include="MoveGeneration\MoveFactory.cs" />
+    <Compile Include="MoveGeneration\PawnMoveGenerator.cs" />
+    <Compile Include="MoveGeneration\KingMoveGenerator.cs" />
+    <Compile Include="MoveGeneration\QueenMoveGenerator.cs" />
+    <Compile Include="MoveGeneration\RookMoveGenerator.cs" />
+    <Compile Include="MoveGeneration\StraightLineMoveGenerator.cs" />
+    <Compile Include="MoveGeneration\MoveGeneratorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

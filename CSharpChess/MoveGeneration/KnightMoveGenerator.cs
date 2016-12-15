@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
-using static CSharpChess.Chess.Rules;
 
-namespace CSharpChess.ValidMoves
+namespace CSharpChess.MoveGeneration
 {
     public class KnightMoveGenerator : MoveGeneratorBase
     {
@@ -19,7 +18,7 @@ namespace CSharpChess.ValidMoves
         private IEnumerable<ChessMove> AddMoveIf(ChessBoard board, BoardLocation at,
                 Func<ChessBoard, BoardLocation, BoardLocation, bool> predicate,
                 MoveType moveType)
-            => MovementTransformation.ApplyTo(at, Knights.MoveMatrix)
+            => Chess.Rules.MovementTransformation.ApplyTo(at, Chess.Rules.Knights.MoveMatrix)
                 .Where(to => predicate(board, at, to))
                 .Select(m => new ChessMove(at, m, moveType));
 

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
-using CSharpChess.ValidMoves;
 
 namespace CSharpChess
 {

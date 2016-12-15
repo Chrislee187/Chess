@@ -4,7 +4,7 @@ using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 
-namespace CSharpChess.ValidMoves
+namespace CSharpChess.MoveGeneration
 {
     ///  <summary>
     ///  Move Generators are expected to generate a list of the available moves to a Piece on a supplied board.

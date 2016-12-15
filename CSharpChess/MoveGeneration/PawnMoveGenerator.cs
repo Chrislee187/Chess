@@ -4,7 +4,7 @@ using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
 
-namespace CSharpChess.ValidMoves
+namespace CSharpChess.MoveGeneration
 {
     public class PawnMoveGenerator : MoveGeneratorBase
     {

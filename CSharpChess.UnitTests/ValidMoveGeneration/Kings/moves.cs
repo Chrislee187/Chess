@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Extensions;
+using CSharpChess.MoveGeneration;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
-using CSharpChess.ValidMoves;
 using NUnit.Framework;
 
 // ReSharper disable InconsistentNaming

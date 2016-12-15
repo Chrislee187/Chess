@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
-using static CSharpChess.Chess.Rules;
-namespace CSharpChess.ValidMoves
+
+namespace CSharpChess.MoveGeneration
 {
     public class StraightLineMoveGenerator : MoveGeneratorBase
     {
-        private readonly IEnumerable<MovementTransformation> _directions;
+        private readonly IEnumerable<Chess.Rules.MovementTransformation> _directions;
 
-        protected StraightLineMoveGenerator(IEnumerable<MovementTransformation> directions)
+        protected StraightLineMoveGenerator(IEnumerable<Chess.Rules.MovementTransformation> directions)
         {
             _directions = directions;
         }
@@ -42,7 +42,7 @@ namespace CSharpChess.ValidMoves
             return result;
         }
 
-        private IEnumerable<BoardLocation> GetUntilNotEmpty(ChessBoard board, BoardLocation at, MovementTransformation movement)
+        private IEnumerable<BoardLocation> GetUntilNotEmpty(ChessBoard board, BoardLocation at, Chess.Rules.MovementTransformation movement)
         {
             var result = new List<BoardLocation>();
 

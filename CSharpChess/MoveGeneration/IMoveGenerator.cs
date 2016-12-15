@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CSharpChess.TheBoard;
 
-namespace CSharpChess.ValidMoves
+namespace CSharpChess.MoveGeneration
 {
     public interface IMoveGenerator
     {

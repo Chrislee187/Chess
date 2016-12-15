@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using CSharpChess.ValidMoves;
 
-namespace CSharpChess.TheBoard
+namespace CSharpChess.MoveGeneration
 {
     public class MoveFactory
     {

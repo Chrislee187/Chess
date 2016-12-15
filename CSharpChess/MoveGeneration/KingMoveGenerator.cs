@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
-using static CSharpChess.Chess.Rules;
 
-namespace CSharpChess.ValidMoves
+namespace CSharpChess.MoveGeneration
 {
     public class KingMoveGenerator : MoveGeneratorBase
     {
@@ -22,7 +21,7 @@ namespace CSharpChess.ValidMoves
             Func<ChessBoard, BoardLocation, BoardLocation, bool> predicate, MoveType moveType)
         {
             var result = new List<ChessMove>();
-            var possibleMoves = MovementTransformation.ApplyTo(at, KingAndQueen.DirectionTransformations);
+            var possibleMoves = Chess.Rules.MovementTransformation.ApplyTo(at, Chess.Rules.KingAndQueen.DirectionTransformations);
             foreach (var to in possibleMoves)
             {
                 if (predicate(board, at, to))

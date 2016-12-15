@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CSharpChess.Extensions;
+using CSharpChess.MoveGeneration;
 
 namespace CSharpChess.TheBoard
 {
