@@ -56,7 +56,7 @@ namespace CSharpChess.MoveGeneration
             var moves = new List<ChessMove>();
 
             var piece = board[at];
-            if (piece.Piece.IsNot(Chess.Board.PieceNames.King) || piece.MoveHistory.Any()) return moves;
+            if (piece.Piece.IsNot(Chess.PieceNames.King) || piece.MoveHistory.Any()) return moves;
 
             var leftRookLoc = BoardLocation.At(Chess.Board.ChessFile.A, at.Rank);
             var rightRookLoc = BoardLocation.At(Chess.Board.ChessFile.H, at.Rank);

@@ -25,7 +25,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
                                      "........" +
                                      "........";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
             var expected = BoardLocation.List("E6", "E4", "C6", "C4", "D6", "E5", "D4", "C5");
 
             var generator = new KingMoveGenerator();
@@ -47,7 +47,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
                                      "........" +
                                      "R...K..R";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
             var generator = new KingMoveGenerator();
             var chessMoves = generator.All(board, BoardLocation.At(location)).Moves();

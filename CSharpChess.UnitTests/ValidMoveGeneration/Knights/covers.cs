@@ -31,7 +31,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
                                      "PPPPPPPP" +
                                      "RNBQKBNR";
             var expected = BoardLocation.List("d2");
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
             var moves = _knightMoveGenerator.All(board, BoardLocation.At("B1")).Covers().ToList();
 

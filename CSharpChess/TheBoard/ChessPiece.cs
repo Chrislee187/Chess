@@ -3,23 +3,23 @@ namespace CSharpChess.TheBoard
 {
     public class ChessPiece
     {
-        public static readonly ChessPiece NullPiece = new ChessPiece(Chess.Board.Colours.None, Chess.Board.PieceNames.Blank);
+        public static readonly ChessPiece NullPiece = new ChessPiece(Chess.Colours.None, Chess.PieceNames.Blank);
 
-        public Chess.Board.Colours Colour { get; }
-        public Chess.Board.PieceNames Name { get; }
+        public Chess.Colours Colour { get; }
+        public Chess.PieceNames Name { get; }
 
-        public ChessPiece(Chess.Board.Colours colour, Chess.Board.PieceNames name)
+        public ChessPiece(Chess.Colours colour, Chess.PieceNames name)
         {
             Name = name;
             Colour = colour;
         }
 
-        public bool Is(Chess.Board.Colours colour, Chess.Board.PieceNames name) => Is(colour) && Is(name);
-        public bool Is(Chess.Board.Colours colour) => Colour == colour;
-        public bool Is(Chess.Board.PieceNames name) => name == Name;
-        public bool IsNot(Chess.Board.Colours colour, Chess.Board.PieceNames name) => IsNot(colour) && IsNot(name);
-        public bool IsNot(Chess.Board.Colours colour) => Colour != colour;
-        public bool IsNot(Chess.Board.PieceNames name) => name != Name;
+        public bool Is(Chess.Colours colour, Chess.PieceNames name) => Is(colour) && Is(name);
+        public bool Is(Chess.Colours colour) => Colour == colour;
+        public bool Is(Chess.PieceNames name) => name == Name;
+        public bool IsNot(Chess.Colours colour, Chess.PieceNames name) => IsNot(colour) && IsNot(name);
+        public bool IsNot(Chess.Colours colour) => Colour != colour;
+        public bool IsNot(Chess.PieceNames name) => name != Name;
 
         public override string ToString() => $"{Colour} {Name}";
 

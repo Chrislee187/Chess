@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.Extensions;
 
 namespace CSharpChess.TheBoard
 {
@@ -27,7 +28,7 @@ namespace CSharpChess.TheBoard
             Location = location;
             Piece = piece;
 
-            if(piece.Name != Chess.Board.PieceNames.Blank)
+            if(piece.Name != Chess.PieceNames.Blank)
             {
             }
         }
@@ -43,7 +44,7 @@ namespace CSharpChess.TheBoard
             _moveHistory.Add(ChessMove.Taken(takenLocation));
         }
 
-        internal IEnumerable<ChessMove> AllMoves => _moves;
+        internal IEnumerable<ChessMove> PossibleMoves => _moves.Where(m => !m.MoveType.IsCover());
 
         public override string ToString()
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CSharpChess.Extensions;
+using CSharpChess.Mechanics;
 using CSharpChess.TheBoard;
 using NUnit.Framework;
 #pragma warning disable 162
@@ -43,7 +44,7 @@ namespace CSharpChess.UnitTests.Helpers
         private static void AssertMoveTypeSucceeded(MoveResult result, ChessBoard board, string move, ChessPiece chessPiece, MoveType moveType)
         {
             var m = (ChessMove)move;
-            Assert.True(result.Succeeded);
+            Assert.True(result.Succeeded, result.Message);
             Assert.That(result.MoveType, Is.EqualTo(moveType));
             Assert.True(board.IsEmptyAt(m.From), $"Move start square '{m.From}' not empty, contains '{board[m.From].Piece}'.");
             Assert.True(board.IsNotEmptyAt(m.To), "Move destination square empty.");
@@ -107,7 +108,7 @@ namespace CSharpChess.UnitTests.Helpers
             for (int i = 1; i <= 7; i++)
             {
                 var rank = fromPieceAtLocation.Rank + (i * vertDirectionModifier);
-                if (Chess.Board.IsValidLocation((int)fromPieceAtLocation.File, rank))
+                if (Chess.Board.Validations.IsValidLocation((int)fromPieceAtLocation.File, rank))
                 {
                     expected.Add(BoardLocation.At(fromPieceAtLocation.File, rank));
                 }

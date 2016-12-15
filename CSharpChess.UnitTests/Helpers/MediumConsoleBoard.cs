@@ -14,7 +14,12 @@ namespace CSharpChess.UnitTests.Helpers
         private const int ConsoleCellSize = CellBorderWidth + PieceCellSize;
         private readonly ChessBoard _board;
 
-        public MediumConsoleBoard(ChessBoard board)
+        public static string ToString(ChessBoard board)
+        {
+            return new MediumConsoleBoard(board).Build().ToString();
+        }
+
+    public MediumConsoleBoard(ChessBoard board)
         {
             _board = board;
         }

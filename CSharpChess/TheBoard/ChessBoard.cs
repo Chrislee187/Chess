@@ -3,73 +3,119 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using CSharpChess.Extensions;
+using CSharpChess.Mechanics;
 
 namespace CSharpChess.TheBoard
 {
     public class ChessBoard
     {
-        private readonly BoardPiece[,] _boardPieces = new BoardPiece[9,9];
-        public Chess.Board.Colours WhoseTurn { get; set; }
-
+        private readonly BoardPiece[,] _boardPieces = new BoardPiece[9, 9];
+        public Chess.Colours WhoseTurn { get; set; }
+        private readonly bool _constructing;
         public ChessBoard(bool newGame = true)
         {
+            BoardCreatedCounter();
+            _constructing = true;
             if (newGame)
             {
-                NewBoard();
-                GameState = Chess.GameState.WaitingForMove;
-                WhoseTurn = Chess.Board.Colours.White;
+                Counter.Time(Metrics.Timers.Board.New, () => { 
+                    NewBoard();
+                    GameState = Chess.GameState.WaitingForMove;
+                    WhoseTurn = Chess.Colours.White;
+                    MoveHandler = new MoveHandler(this);
+                });
             }
             else
             {
-                EmptyBoard();
-                GameState = Chess.GameState.Unknown;
-                WhoseTurn = Chess.Board.Colours.None;
+                Counter.Time(Metrics.Timers.Board.Empty, () =>
+                {
+                    EmptyBoard();
+                    GameState = Chess.GameState.Unknown;
+                    WhoseTurn = Chess.Colours.None;
+                    MoveHandler = new MoveHandler(this);
+                });
             }
 
-            MoveHandler = new MoveHandler(this);
+            _constructing = false;
         }
 
-        public ChessBoard(IEnumerable<BoardPiece> pieces, Chess.Board.Colours whoseTurn)
+        private static void BoardCreatedCounter()
         {
-            EmptyBoard();
-            foreach (var boardPiece in pieces)
-            {
-                this[boardPiece.Location] = boardPiece;
-            }
-            GameState = Chess.GameState.WaitingForMove;
+            Counter.Increment(Metrics.Counters.Board.Created);
+        }
 
-            WhoseTurn = whoseTurn;
-            MoveHandler = new MoveHandler(this);
-            ValidateInitialBoardState();
-            UpdateGameState();
+        public ChessBoard(IEnumerable<BoardPiece> pieces, Chess.Colours whoseTurn)
+        {
+            BoardCreatedCounter();
+            _constructing = true;
+            Counter.Time(Metrics.Timers.Board.Custom, () =>
+            {
+                EmptyBoard();
+                foreach (var boardPiece in pieces)
+                {
+                    this[boardPiece.Location] = boardPiece;
+                }
+                GameState = Chess.GameState.WaitingForMove;
+
+                WhoseTurn = whoseTurn;
+                MoveHandler = new MoveHandler(this);
+                ValidateInitialBoardState();
+                UpdateGameState();
+            });
+            _constructing = false;
         }
 
         private void UpdateGameState()
         {
-            var whiteKing = this.GetKingFor(Chess.Board.Colours.White);
-            var blackKing = this.GetKingFor(Chess.Board.Colours.Black);
+            foreach (var attacker in Chess.BothColours)
+            {
+                var defender = Chess.ColourOfEnemy(attacker);
+                var king = this.GetKingFor(defender);
+                if (Pieces.OfColour(attacker).Any(p => p.PossibleMoves.ContainsMoveTo(king.Location)))
+                {
+                    GameState = defender == Chess.Colours.Black
+                        ? Chess.GameState.BlackKingInCheck
+                        : Chess.GameState.WhiteKingInCheck;
 
-            if (Pieces.OfColour(blackKing.Piece.Colour).Any(p => p.AllMoves.ContainsMoveTo(whiteKing.Location)))
-                GameState = Chess.GameState.WhiteKingInCheck;
-            else if (Pieces.OfColour(whiteKing.Piece.Colour).Any(p => p.AllMoves.ContainsMoveTo(blackKing.Location)))
-                GameState = Chess.GameState.BlackKingInCheck;
+                    UpdateGameStateForCheckMate(defender);
+                }
+            }
+        }
+
+        /// <summary>
+        /// WARNING: If _constructing is true, this recurses until death trying to check the move lists
+        /// </summary>
+        /// <param name="defender"></param>
+        private void UpdateGameStateForCheckMate(Chess.Colours defender)
+        {
+            if (!_constructing)
+            {
+                var c = ShallowClone();
+                if (c.Pieces.OfColour(defender).SelectMany(o => MovesFor(o.Location)).None())
+                {
+                    GameState = defender == Chess.Colours.Black
+                        ? Chess.GameState.CheckMateWhiteWins
+                        : Chess.GameState.CheckMateBlackWins;
+                }
+            }
         }
 
         private void ValidateInitialBoardState()
         {
-            if (this.GetKingFor(Chess.Board.Colours.Black) == null)
+            if (this.GetKingFor(Chess.Colours.Black) == null)
                 throw new InvalidBoardStateException("Black king not found", this);
 
-            if (this.GetKingFor(Chess.Board.Colours.White) == null)
+            if (this.GetKingFor(Chess.Colours.White) == null)
                 throw new InvalidBoardStateException("White king not found", this);
         }
 
         public MoveResult Move(string move) => Move((ChessMove)move);
         public MoveResult Move(ChessMove move)
         {
+            ThrowIfGameOver();
             var boardPiece = this[move.From];
 
-            if (boardPiece.Piece.Colour != WhoseTurn && WhoseTurn != Chess.Board.Colours.None)
+            if (boardPiece.Piece.Colour != WhoseTurn && WhoseTurn != Chess.Colours.None)
                 return MoveResult.IncorrectPlayer(move);
 
             var validMove = CheckMoveIsValid(move);
@@ -94,23 +140,9 @@ namespace CSharpChess.TheBoard
         /// <returns></returns>
         public IEnumerable<ChessMove> MovesFor(BoardLocation at)
         {
-            var chessMoves = this[at].AllMoves
-                .Where(this.DoesNotMoveKingThroughCheck)
-                .Where(this.MoveDoesNotPutOwnKingInCheck)
-                ;
+            var chessMoves = this[at].PossibleMoves
+                .Where(m => !Chess.Board.Validations.MovesLeaveOwnSideInCheck(this, m));
             return chessMoves;
-        }
-
-        private bool DoesNotMoveKingThroughCheck(ChessMove move)
-        {
-            if (move.MoveType != MoveType.Castle) return true;
-            var piece = this[move.From];
-            var locs = Chess.Board.CastleLocationsBetween(move.From, move.To);
-            var clone = ShallowClone();
-            var boardPieces = clone.Pieces.OfColour(Chess.ColourOfEnemy(piece.Piece.Colour)).ToList();
-            return boardPieces
-                .SelectMany(p => p.AllMoves)
-                .None(moves => locs.Any(l => l.Equals(moves.To)));
         }
 
         internal void MovePiece(ChessMove move, MoveType moveType)
@@ -119,12 +151,71 @@ namespace CSharpChess.TheBoard
             ClearSquare(move.From);
             piece.MoveTo(move.To, moveType);
             this[move.To] = piece;
+            MoveHandler.RebuildMoveLists();
         }
 
         public void ClearSquare(BoardLocation takenLocation) => this[takenLocation] = BoardPiece.Empty(takenLocation);
 
-        private ChessMove CheckMoveIsValid(ChessMove move) 
+        private ChessMove CheckMoveIsValid(ChessMove move)
             => MovesFor(move.From).Where(m => !m.MoveType.IsCover()).FirstOrDefault(vm => vm.Equals(move));
+
+        #region this[] and other basic public stuff
+        // ReSharper disable once MemberCanBePrivate.Global
+        public BoardPiece this[int file, int rank]
+        {
+            get { return GetPiece((Chess.Board.ChessFile)file, rank); }
+            internal set { _boardPieces[file, rank] = value; }
+        }
+        public BoardPiece this[Chess.Board.ChessFile file, int rank]
+        {
+            get { return this[(int)file, rank]; }
+            internal set { this[(int)file, rank] = value; }
+        }
+        public BoardPiece this[BoardLocation location]
+        {
+            get { return this[location.File, location.Rank]; }
+            internal set { this[location.File, location.Rank] = value; }
+        }
+        public BoardPiece this[string location]
+        {
+            get { return this[(BoardLocation)location]; }
+            // ReSharper disable once UnusedMember.Local
+            internal set { this[(BoardLocation)location] = value; }
+        }
+        private BoardPiece GetPiece(Chess.Board.ChessFile file, int rank)
+        {
+            Chess.Board.Validations.ThrowInvalidRank(rank);
+            Chess.Board.Validations.ThrowInvalidFile(file);
+            return _boardPieces[(int)file, rank];
+        }
+
+        public IEnumerable<BoardPiece> Pieces
+        {
+            get
+            {
+                foreach (var rank in Chess.Board.Ranks)
+                {
+                    foreach (var file in Chess.Board.Files)
+                    {
+                        if (this[file, rank].Piece.Name != Chess.PieceNames.Blank)
+                            yield return this[file, rank];
+                    }
+                }
+            }
+            set { throw new NotImplementedException(); }
+        }
+
+        internal MoveHandler MoveHandler { get; private set; }
+        public Chess.GameState GameState { get; private set; }
+
+        public ChessBoard ShallowClone()
+            => new ChessBoard(Pieces.Select(bp => bp.Clone()), WhoseTurn);
+
+        private void ThrowIfGameOver()
+        {
+            if (GameState == Chess.GameState.CheckMateBlackWins || GameState == Chess.GameState.CheckMateWhiteWins)
+                throw new Exception("Game over moves no longer accepted.");
+        }
 
         private void NewBoard()
         {
@@ -191,58 +282,6 @@ namespace CSharpChess.TheBoard
                 }
             }
         }
-
-        #region this[] and other basic public stuff
-        // ReSharper disable once MemberCanBePrivate.Global
-        public BoardPiece this[int file, int rank]
-        {
-            get { return GetPiece((Chess.Board.ChessFile)file, rank); }
-            internal set { _boardPieces[file, rank] = value; }
-        }
-        public BoardPiece this[Chess.Board.ChessFile file, int rank]
-        {
-            get { return this[(int)file, rank]; }
-            internal set { this[(int)file, rank] = value; }
-        }
-        public BoardPiece this[BoardLocation location]
-        {
-            get { return this[location.File, location.Rank]; }
-            internal set { this[location.File, location.Rank] = value; }
-        }
-        public BoardPiece this[string location]
-        {
-            get { return this[(BoardLocation)location]; }
-            // ReSharper disable once UnusedMember.Local
-            internal set { this[(BoardLocation)location] = value; }
-        }
-        private BoardPiece GetPiece(Chess.Board.ChessFile file, int rank)
-        {
-            Chess.Validations.ThrowInvalidRank(rank);
-            Chess.Validations.ThrowInvalidFile(file);
-            return _boardPieces[(int)file, rank];
-        }
-
-        public IEnumerable<BoardPiece> Pieces
-        {
-            get
-            {
-                foreach (var rank in Chess.Board.Ranks)
-                {
-                    foreach (var file in Chess.Board.Files)
-                    {
-                        if (this[file, rank].Piece.Name != Chess.Board.PieceNames.Blank)
-                            yield return this[file, rank];
-                    }
-                }
-            }
-            set { throw new NotImplementedException(); }
-        }
-
-        internal MoveHandler MoveHandler { get; }
-        public Chess.GameState GameState { get; private set; }
-
-        public ChessBoard ShallowClone()
-            => new ChessBoard(Pieces.Select(bp => bp.Clone()), WhoseTurn);
         #endregion
 
         /// <summary>
@@ -254,6 +293,7 @@ namespace CSharpChess.TheBoard
         {
             MovePiece(move, move.MoveType);
         }
+
     }
 
     [Serializable]

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
@@ -23,11 +22,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "........" +
                                      "K.......";
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
             var result = board.Move("a1a2");
 
-            AssertMoveSucceeded(result, board, "a1a2", new ChessPiece(Chess.Board.Colours.White, Chess.Board.PieceNames.King));
+            AssertMoveSucceeded(result, board, "a1a2", new ChessPiece(Chess.Colours.White, Chess.PieceNames.King));
         }
 
         [Test]
@@ -41,11 +40,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "p......." +
                                      "K.......";
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
             var result = board.Move("a1a2");
 
-            AssertTakeSucceeded(result, board, "a1a2", new ChessPiece(Chess.Board.Colours.White, Chess.Board.PieceNames.King));
+            AssertTakeSucceeded(result, board, "a1a2", new ChessPiece(Chess.Colours.White, Chess.PieceNames.King));
         }
 
 
@@ -65,15 +64,15 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "R...K..R";
 
             var km = (ChessMove)kingMove;
-            var colour = km.From.Rank == 1 ? Chess.Board.Colours.White : Chess.Board.Colours.Black;
+            var colour = km.From.Rank == 1 ? Chess.Colours.White : Chess.Colours.Black;
             var board = BoardBuilder.CustomBoard(asOneChar, colour);
 
             var rm = (ChessMove)expectedRookMove;
             var moveResult = board.Move(km);
 
             Assert.That(moveResult.Succeeded, $"Failed: {kingMove}.");
-            Assert.That(board[km.To].Piece.Is(colour, Chess.Board.PieceNames.King));
-            Assert.That(board[rm.To].Piece.Is(colour, Chess.Board.PieceNames.Rook));
+            Assert.That(board[km.To].Piece.Is(colour, Chess.PieceNames.King));
+            Assert.That(board[rm.To].Piece.Is(colour, Chess.PieceNames.Rook));
             Assert.That(board.IsEmptyAt(km.From));
             Assert.That(board.IsEmptyAt(rm.From));
 
@@ -92,13 +91,12 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "R...K..R";
 
             var km = (ChessMove)"E1G1";
-            var colour = km.From.Rank == 1 ? Chess.Board.Colours.White : Chess.Board.Colours.Black;
+            var colour = km.From.Rank == 1 ? Chess.Colours.White : Chess.Colours.Black;
             var board = BoardBuilder.CustomBoard(asOneChar, colour);
 
             var moves = board.MovesFor(km.From).ToList();
             Assert.That(moves.Any());
             var moveResult = board.Move(km);
-            Console.WriteLine(new MediumConsoleBoard(board).Build().ToString());
             Assert.False(moveResult.Succeeded, $"Failed: {km} move through check");
         }
 
@@ -114,7 +112,7 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "...n...." +
                                      ".R..K.R.";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
             var at = BoardLocation.At("E1");
             var expected = new[] {"D1", "E2"};
@@ -139,11 +137,29 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "....R..." +
                                      "....K...";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.Black);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.Black);
             Assert.That(board.GameState, Is.EqualTo(Chess.GameState.BlackKingInCheck));
             var result = board.Move("H8H7");
             Assert.That(result.Succeeded, Is.False);
             Assert.That(result.Message, Is.Not.Empty);
+        }
+
+        [Test]
+        public void detects_checkmate()
+        {
+            const string asOneChar = "....k..." +
+                                     ".R.....R" +
+                                     "...B...." +
+                                     "...B...." +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "....K...";
+
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var result = board.Move("B7B8");
+            Assert.That(result.Succeeded, Is.True);
+            Assert.That(board.GameState, Is.EqualTo(Chess.GameState.CheckMateWhiteWins));
         }
     }
 

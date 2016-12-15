@@ -32,13 +32,16 @@ namespace CSharpChess.Extensions
         }
 
         public static ChessMove CanCastle(this ChessBoard board, BoardLocation at, BoardLocation rookLoc) => 
-            Chess.Board.CanCastle(board, at, rookLoc);
+            Chess.Board.Validations.CanCastle(board, at, rookLoc);
 
-        public static bool InCheckAt(this ChessBoard board, BoardLocation at, Chess.Board.Colours asPlayer)
-            => Chess.Board.InCheckAt(board, at, asPlayer);
+        public static bool InCheckAt(this ChessBoard board, BoardLocation at, Chess.Colours asPlayer)
+            => Chess.Board.Validations.InCheckAt(board, at, asPlayer);
 
         public static bool IsEmptyAt(this ChessBoard board, BoardLocation location)
-            => Chess.Board.IsEmptyAt(board, location);
+            => Chess.Board.Validations.IsEmptyAt(board, location);
+
+        public static bool MovesLeaveOwnSideInCheck(this ChessBoard board, ChessMove move)
+            => Chess.Board.Validations.MovesLeaveOwnSideInCheck(board, move);
 
         public static bool IsEmptyAt(this ChessBoard board, string location)
             => IsEmptyAt(board, BoardLocation.At(location));
@@ -49,18 +52,15 @@ namespace CSharpChess.Extensions
         public static bool IsNotEmptyAt(this ChessBoard board, string location)
             => !IsEmptyAt(board, BoardLocation.At(location));
 
-        public static bool CanTakeAt(this ChessBoard board, BoardLocation takeLocation, Chess.Board.Colours attackerColour)
+        public static bool CanTakeAt(this ChessBoard board, BoardLocation takeLocation, Chess.Colours attackerColour)
             => IsNotEmptyAt(board, takeLocation)
-               && board[takeLocation].Piece.Colour == Chess.ColourOfEnemy(attackerColour);
+               && board[takeLocation].Piece.Is(Chess.ColourOfEnemy(attackerColour));
 
-        public static bool IsCoveringAt(this ChessBoard board, BoardLocation coverLocation, Chess.Board.Colours attackerColour)
+        public static bool IsCoveringAt(this ChessBoard board, BoardLocation coverLocation, Chess.Colours attackerColour)
             => IsNotEmptyAt(board, coverLocation)
-               && board[coverLocation].Piece.Colour == attackerColour;
+               && board[coverLocation].Piece.Is(attackerColour);
 
-        public static bool MoveDoesNotPutOwnKingInCheck(this ChessBoard board, ChessMove move) 
-            => Chess.Board.MoveDoesNotPutOwnKingInCheck(board, move);
-
-        public static BoardPiece GetKingFor(this ChessBoard board, Chess.Board.Colours colour) 
-            => board.Pieces.FirstOrDefault(p => p.Piece.Is(colour, Chess.Board.PieceNames.King));
+        public static BoardPiece GetKingFor(this ChessBoard board, Chess.Colours colour) 
+            => board.Pieces.FirstOrDefault(p => p.Piece.Is(colour, Chess.PieceNames.King));
     }
 }

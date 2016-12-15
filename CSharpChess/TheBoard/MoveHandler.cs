@@ -89,7 +89,7 @@ namespace CSharpChess.TheBoard
             _chessBoard.ClearSquare(takenLocation);
         }
 
-        private void Promote(BoardLocation at, Chess.Board.Colours colour, Chess.Board.PieceNames pieceName)
+        private void Promote(BoardLocation at, Chess.Colours colour, Chess.PieceNames pieceName)
         {
             _chessBoard[at] = new BoardPiece(at, new ChessPiece(colour, pieceName));
         }
@@ -99,8 +99,8 @@ namespace CSharpChess.TheBoard
 
         private void NextTurn()
         {
-            if (_chessBoard.WhoseTurn == Chess.Board.Colours.White) _chessBoard.WhoseTurn = Chess.Board.Colours.Black;
-            else if(_chessBoard.WhoseTurn == Chess.Board.Colours.Black) _chessBoard.WhoseTurn = Chess.Board.Colours.White;
+            if (_chessBoard.WhoseTurn == Chess.Colours.White) _chessBoard.WhoseTurn = Chess.Colours.Black;
+            else if(_chessBoard.WhoseTurn == Chess.Colours.Black) _chessBoard.WhoseTurn = Chess.Colours.White;
         }
     }
 }

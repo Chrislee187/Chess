@@ -10,18 +10,18 @@ namespace CSharpChess
     {
         public IEnumerable<string> Ranks { get; }
 
-        public static Chess.Board.Colours PieceColour(char p)
+        public static Chess.Colours PieceColour(char p)
         {
-            if(p =='.' || p ==' ') return Chess.Board.Colours.None;
+            if(p =='.' || p ==' ') return Chess.Colours.None;
 
             return char.IsLower(p)
-                ? Chess.Board.Colours.Black
-                : Chess.Board.Colours.White;
+                ? Chess.Colours.Black
+                : Chess.Colours.White;
         }
 
-        public static Chess.Board.PieceNames PieceName(char p)
+        public static Chess.PieceNames PieceName(char p)
         {
-            if(p =='.' || p ==' ') return Chess.Board.PieceNames.Blank;
+            if(p =='.' || p ==' ') return Chess.PieceNames.Blank;
 
             var valid = OneCharPieceNames.Where(c => char.ToUpper(p) == c.Value).ToList();
             if (valid.None())
@@ -35,7 +35,7 @@ namespace CSharpChess
         public static char ToChar(BoardPiece p)
         {
             var c = OneCharPieceNames[p.Piece.Name].ToString();
-            if (p.Piece.Colour == Chess.Board.Colours.Black) c = c.ToLower();
+            if (p.Piece.Colour == Chess.Colours.Black) c = c.ToLower();
             return c[0];
         }
 
@@ -54,15 +54,15 @@ namespace CSharpChess
         }
 
 
-        private static readonly Dictionary<Chess.Board.PieceNames, char> OneCharPieceNames = new Dictionary<Chess.Board.PieceNames, char>
+        private static readonly Dictionary<Chess.PieceNames, char> OneCharPieceNames = new Dictionary<Chess.PieceNames, char>
         {
-            {Chess.Board.PieceNames.Blank, '.' },
-            {Chess.Board.PieceNames.Rook, 'R' },
-            {Chess.Board.PieceNames.Knight, 'N' },
-            {Chess.Board.PieceNames.Bishop, 'B' },
-            {Chess.Board.PieceNames.Queen, 'Q' },
-            {Chess.Board.PieceNames.King, 'K' },
-            {Chess.Board.PieceNames.Pawn, 'P' }
+            {Chess.PieceNames.Blank, '.' },
+            {Chess.PieceNames.Rook, 'R' },
+            {Chess.PieceNames.Knight, 'N' },
+            {Chess.PieceNames.Bishop, 'B' },
+            {Chess.PieceNames.Queen, 'Q' },
+            {Chess.PieceNames.King, 'K' },
+            {Chess.PieceNames.Pawn, 'P' }
         };
     }
 }

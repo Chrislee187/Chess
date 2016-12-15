@@ -18,11 +18,11 @@ namespace CSharpChess.UnitTests.TheBoard
             Assert.That(chessMove.To.Rank, Is.EqualTo(toRank));
         }
 
-        [TestCase("A7A8Q", Chess.Board.PieceNames.Queen)]
-        [TestCase("A7-A8N", Chess.Board.PieceNames.Knight)]
-        [TestCase("A7A8=R", Chess.Board.PieceNames.Rook)]
-        [TestCase("A7-A8=b", Chess.Board.PieceNames.Bishop)]
-        public void can_explicitly_parse_move_strings_with_promotions(string move, Chess.Board.PieceNames pieceName)
+        [TestCase("A7A8Q", Chess.PieceNames.Queen)]
+        [TestCase("A7-A8N", Chess.PieceNames.Knight)]
+        [TestCase("A7A8=R", Chess.PieceNames.Rook)]
+        [TestCase("A7-A8=b", Chess.PieceNames.Bishop)]
+        public void can_explicitly_parse_move_strings_with_promotions(string move, Chess.PieceNames pieceName)
         {
             var chessMove = (ChessMove)move;
 

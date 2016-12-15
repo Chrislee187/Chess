@@ -40,11 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chess.Board.cs" />
+    <Compile Include="Chess.Board.Validations.cs" />
+    <Compile Include="Chess.Pieces.cs" />
+    <Compile Include="Chess.Rules.cs" />
     <Compile Include="Extensions\BoardPieceExtensions.cs" />
     <Compile Include="Extensions\ChessBoardExtensions.cs" />
     <Compile Include="Extensions\ChessMoveListExtensions.cs" />
     <Compile Include="Extensions\MoveTypeExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Mechanics\Counter.cs" />
+    <Compile Include="Mechanics\Metrics.cs" />
     <Compile Include="OneCharBoard.cs" />
     <Compile Include="TheBoard\BoardLocation.cs" />
     <Compile Include="TheBoard\BoardPiece.cs" />

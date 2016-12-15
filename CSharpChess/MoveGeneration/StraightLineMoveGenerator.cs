@@ -34,7 +34,7 @@ namespace CSharpChess.MoveGeneration
                         ? MoveType.Cover
                         : board.CanTakeAt(next, piece.Colour)
                             ? MoveType.Take
-                            : MoveType.Unknown;
+                            : MoveType.Move;
                     result.Add(new ChessMove(at, next, moveType));
                 }
             }

@@ -22,7 +22,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
                                      "........" +
                                      ".......K";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
             var expected = BoardLocation.List("E6", "E4", "C6", "C4");
 
             var generator = new BishopMoveGenerator();
@@ -43,7 +43,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
                                      "...B...." +
                                      "...K....";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
             var generator = new BishopMoveGenerator();
             var at = BoardLocation.At("D2");
