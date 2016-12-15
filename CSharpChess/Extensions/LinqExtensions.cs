@@ -9,8 +9,8 @@ namespace CSharpChess.Extensions
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>
             (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
-            HashSet<TKey> seenKeys = new HashSet<TKey>();
-            foreach (TSource element in source)
+            var seenKeys = new HashSet<TKey>();
+            foreach (var element in source)
             {
                 if (seenKeys.Add(keySelector(element)))
                 {
@@ -19,10 +19,11 @@ namespace CSharpChess.Extensions
             }
         }
 
-        public static bool None<TSource>(this IEnumerable<TSource> source)
-        {
-            return !source.Any();
-        }
+        public static bool None<TSource>(this IEnumerable<TSource> source) 
+            => !source.Any();
+
+        public static bool None<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> selector) 
+            => !source.Any(selector);
     }
 
 

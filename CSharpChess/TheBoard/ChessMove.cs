@@ -36,7 +36,6 @@ namespace CSharpChess.TheBoard
         }
 
         #region object overrides
-        // TODO: Change to explicit
         public static explicit operator ChessMove(string move)
         {
             var moveType = MoveType.Unknown;

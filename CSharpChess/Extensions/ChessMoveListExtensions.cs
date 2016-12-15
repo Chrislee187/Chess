@@ -6,13 +6,11 @@ namespace CSharpChess.Extensions
 {
     public static class ChessMoveListExtensions
     {
-        public static string ToStringList(this IEnumerable<ChessMove> moves) 
+        public static string ToCSV(this IEnumerable<ChessMove> moves) 
             => string.Join(", ", moves);
 
-        public static bool ContainsMoveTo(this IEnumerable<ChessMove> moves, BoardLocation loc)
-        {
-            return moves.Any(m => loc.Equals(m.To));
-        }
+        public static bool ContainsMoveTo(this IEnumerable<ChessMove> moves, BoardLocation loc) 
+            => moves.Any(m => loc.Equals(m.To));
 
         public static IEnumerable<ChessMove> Moves(this IEnumerable<ChessMove> moves) =>
             moves.Where(m => m.MoveType.IsMove());

@@ -25,12 +25,11 @@ namespace CSharpChess
 
             public static bool InCheckAt(ChessBoard board, BoardLocation at, Chess.Board.Colours asPlayer)
             {
-                var enemyPieces = board.Pieces.EnemyOf(asPlayer);
+                var enemyPieces = board.Pieces.OfColour(ColourOfEnemy(asPlayer));
                 Func<ChessBoard, BoardPiece, BoardLocation, bool> pieceIsAttackingLocation =
                     delegate (ChessBoard b, BoardPiece p, BoardLocation l)
                     {
-                        return b[p.Location].AllMoves.Moves()
-                            .Concat(b[p.Location].AllMoves.Covers())
+                        return b[p.Location].AllMoves
                             .Any(m => m.To.Equals(l));
                     };
                 var checkPieces = enemyPieces.Where(p => pieceIsAttackingLocation(board, p, at));
@@ -49,6 +48,16 @@ namespace CSharpChess
 
             public static bool IsNotEmptyAt(ChessBoard board, string location)
                 => !IsEmptyAt(board, (BoardLocation)location);
+
+            public static bool MoveDoesNotPutOwnKingInCheck(ChessBoard board, ChessMove move)
+            {
+                var clone = board.ShallowClone();
+                var moversPiece = board[move.From].Piece;
+                clone.MovePiece(move);
+                clone.MoveHandler.RebuildMoveLists();
+                var moversKing = clone.GetKingFor(moversPiece.Colour);
+                return !InCheckAt(clone, moversKing.Location, moversPiece.Colour);
+            }
 
 
             public enum Colours { White, Black, None = -9999 }

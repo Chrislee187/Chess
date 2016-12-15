@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.TheBoard;
-using CSharpChess.ValidMoves;
 
 namespace CSharpChess.Extensions
 {
@@ -59,9 +57,10 @@ namespace CSharpChess.Extensions
             => IsNotEmptyAt(board, coverLocation)
                && board[coverLocation].Piece.Colour == attackerColour;
 
-        public static bool KingNotMovingIntoCheck(this ChessBoard board, ChessMove m)
-        {
-            return !InCheckAt(board, m.To, board[m.From].Piece.Colour);
-        }
+        public static bool MoveDoesNotPutOwnKingInCheck(this ChessBoard board, ChessMove move) 
+            => Chess.Board.MoveDoesNotPutOwnKingInCheck(board, move);
+
+        public static BoardPiece GetKingFor(this ChessBoard board, Chess.Board.Colours colour) 
+            => board.Pieces.First(p => p.Piece.Is(colour, Chess.Board.PieceNames.King));
     }
 }

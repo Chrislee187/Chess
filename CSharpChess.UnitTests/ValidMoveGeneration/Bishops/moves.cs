@@ -39,7 +39,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
                                      "........" +
                                      "...r...." +
                                      "........" +
-                                     "...P...." +
+                                     "........" +
                                      "...B...." +
                                      "...K....";
 
@@ -49,7 +49,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
             var at = BoardLocation.At("D2");
 
             var chessMoves = board.MovesFor(at).ToList();
-            Assert.True(chessMoves.None(), chessMoves.ToStringList());
+            Assert.True(chessMoves.None(), chessMoves.ToCSV());
         }
     }
 }

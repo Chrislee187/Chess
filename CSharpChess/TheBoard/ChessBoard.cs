@@ -9,8 +9,7 @@ namespace CSharpChess.TheBoard
     public class ChessBoard
     {
         private readonly BoardPiece[,] _boardPieces = new BoardPiece[9,9];
-        private readonly MoveFactory _moveFactory = new MoveFactory();
-        private Chess.Board.Colours WhoseTurn { get; set; }
+        public Chess.Board.Colours WhoseTurn { get; set; }
 
         public ChessBoard(bool newGame = true)
         {
@@ -25,7 +24,7 @@ namespace CSharpChess.TheBoard
                 WhoseTurn = Chess.Board.Colours.None;
             }
 
-            RebuildMoveLists();
+            MoveHandler = new MoveHandler(this);
         }
 
         public ChessBoard(IEnumerable<BoardPiece> pieces, Chess.Board.Colours whoseTurn)
@@ -36,7 +35,7 @@ namespace CSharpChess.TheBoard
                 this[boardPiece.Location] = boardPiece;
             }
             WhoseTurn = whoseTurn;
-            RebuildMoveLists();
+            MoveHandler = new MoveHandler(this);
         }
 
         public MoveResult Move(string move) => Move((ChessMove)move);
@@ -50,125 +49,34 @@ namespace CSharpChess.TheBoard
             var validMove = CheckMoveIsValid(move);
             if (validMove != null)
             {
-                return PerformBoardMovement(move, validMove, boardPiece);
+                return MoveHandler.Move(move, validMove, boardPiece);
             }
 
             throw new ArgumentException($"Invalid move {move}", nameof(move));
         }
 
+        /// <summary>
+        /// Using available MoveGenerators return the moves available to the piece at the specified the location
+        /// </summary>
+        /// <param name="at"></param>
+        /// <returns></returns>
         public IEnumerable<ChessMove> MovesFor(BoardLocation at)
         {
-            var movingPiece = this[at];
-            var moves = movingPiece.AllMoves;
-            if (movingPiece.Piece.Is(Chess.Board.PieceNames.King))
-            {
-                moves = moves.Where(this.KingNotMovingIntoCheck);
-            }
-            else
-            {
-                // TODO: moves = moves.Where(MoveDoesNotLeaveMyKingInCheck);
-            }
-            return moves;
+            return this[at].AllMoves.Where(this.MoveDoesNotPutOwnKingInCheck);
         }
 
-        private void RebuildMoveLists()
-        {
-            foreach (var boardPiece in Pieces)
-            {
-                RebuildMoveListFor(boardPiece);
-            }
-        }
-        private void RebuildMoveListFor(BoardPiece boardPiece)
-        {
-            var all = _moveFactory.For[boardPiece.Piece.Name]().All(this, boardPiece.Location);
-            boardPiece.SetAll(all.ToList());
-        }
-
-        private MoveResult PerformBoardMovement(ChessMove move, ChessMove validMove, BoardPiece boardPiece)
-        {
-            var moveType = IfUnknownMoveType(move.MoveType, validMove.MoveType);
-
-            PreMoveActions(move, moveType);
-
-            MovePiece(move, moveType);
-
-            var movePerformed = PostMoveTidyUp(move, moveType, boardPiece);
-
-            RebuildMoveLists();
-
-            return movePerformed;
-            
-        }
-
-        private void PreMoveActions(ChessMove move, MoveType moveType)
-        {
-            switch (moveType)
-            {
-                case MoveType.Take:
-                    TakeSquare(move.To);
-                    break;
-                case MoveType.Promotion:
-                    if (this.IsNotEmptyAt(move.To)) TakeSquare(move.To);
-                    break;
-                case MoveType.Castle:
-                    var rookMove = Chess.Rules.KingAndQueen.CreateRookMoveForCastling(move);
-                    MovePiece(rookMove, MoveType.Castle);
-                    break;
-            }
-        }
-        private void MovePiece(ChessMove move, MoveType moveType)
+        public void MovePiece(ChessMove move, MoveType moveType)
         {
             var piece = this[move.From];
             ClearSquare(move.From);
             piece.MoveTo(move.To, moveType);
             this[move.To] = piece;
         }
-        private MoveResult PostMoveTidyUp(ChessMove move, MoveType moveType, BoardPiece boardPiece)
-        {
-            MoveResult result;
-            switch (moveType)
-            {
-                case MoveType.TakeEnPassant:
-                    var takenLocation = new BoardLocation(move.To.File, move.From.Rank);
-                    TakeSquare(takenLocation);
-                    result = MoveResult.Enpassant(move);
-                    break;
-                case MoveType.Promotion:
-                    Promote(move.To, boardPiece.Piece.Colour, move.PromotedTo);
-                    result = MoveResult.Promotion(move);
-                    break;
-                default:
-                    result = MoveResult.Success(move, moveType);
-                    break;
-            }
-            NextTurn();
-            return result;
-        }
 
-        private void TakeSquare(BoardLocation takenLocation)
-        {
-            this[takenLocation].Taken(takenLocation);
-            ClearSquare(takenLocation);
-        }
-        private void ClearSquare(BoardLocation takenLocation) => this[takenLocation] = BoardPiece.Empty(takenLocation);
-        private void Promote(BoardLocation at, Chess.Board.Colours colour, Chess.Board.PieceNames pieceName)
-        {
-            this[at] = new BoardPiece(at, new ChessPiece(colour, pieceName));
-        }
-
-        private static MoveType IfUnknownMoveType(MoveType moveType, MoveType @default) 
-            => moveType == MoveType.Unknown 
-                ? @default 
-                : moveType;
+        public void ClearSquare(BoardLocation takenLocation) => this[takenLocation] = BoardPiece.Empty(takenLocation);
 
         private ChessMove CheckMoveIsValid(ChessMove move) 
             => this[move.From].AllMoves.FirstOrDefault(vm => vm.Equals(move));
-
-        private void NextTurn()
-        {
-            if (WhoseTurn == Chess.Board.Colours.White) WhoseTurn = Chess.Board.Colours.Black;
-            else if(WhoseTurn == Chess.Board.Colours.Black) WhoseTurn = Chess.Board.Colours.White;
-        }
 
         private void NewBoard()
         {
@@ -241,23 +149,23 @@ namespace CSharpChess.TheBoard
         public BoardPiece this[int file, int rank]
         {
             get { return GetPiece((Chess.Board.ChessFile)file, rank); }
-            private set { _boardPieces[file, rank] = value; }
+            internal set { _boardPieces[file, rank] = value; }
         }
         public BoardPiece this[Chess.Board.ChessFile file, int rank]
         {
             get { return this[(int)file, rank]; }
-            private set { this[(int)file, rank] = value; }
+            internal set { this[(int)file, rank] = value; }
         }
         public BoardPiece this[BoardLocation location]
         {
             get { return this[location.File, location.Rank]; }
-            private set { this[location.File, location.Rank] = value; }
+            internal set { this[location.File, location.Rank] = value; }
         }
         public BoardPiece this[string location]
         {
             get { return this[(BoardLocation)location]; }
             // ReSharper disable once UnusedMember.Local
-            private set { this[(BoardLocation)location] = value; }
+            internal set { this[(BoardLocation)location] = value; }
         }
         private BoardPiece GetPiece(Chess.Board.ChessFile file, int rank)
         {
@@ -282,8 +190,20 @@ namespace CSharpChess.TheBoard
             set { throw new NotImplementedException(); }
         }
 
+        internal MoveHandler MoveHandler { get; }
+
         public ChessBoard ShallowClone()
             => new ChessBoard(Pieces.Select(bp => bp.Clone()), WhoseTurn);
         #endregion
+
+        /// <summary>
+        /// Special internal access to the move method to allow playing moves out
+        /// quickly, typically on cloned boards to calculate something post-move
+        /// </summary>
+        /// <param name="move"></param>
+        internal void MovePiece(ChessMove move)
+        {
+            MovePiece(move, move.MoveType);
+        }
     }
 }
