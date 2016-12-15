@@ -41,7 +41,6 @@ namespace CSharpChess.TheBoard
             RebuildMoveLists();
 
             return movePerformed;
-            
         }
 
         private void PreMoveActions(ChessMove move, MoveType moveType)

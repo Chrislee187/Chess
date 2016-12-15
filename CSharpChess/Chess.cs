@@ -10,6 +10,12 @@ namespace CSharpChess
 {
     public static class Chess
     {
+
+        public enum GameState
+        {
+            BlackKingInCheck, WhiteKingInCheck, WaitingForMove,
+            Unknown
+        }
         public static class Board
         {
             public static ChessMove CanCastle(ChessBoard board, BoardLocation kingLocation, BoardLocation rookLoc)
@@ -44,9 +50,9 @@ namespace CSharpChess
             {
                 var clone = board.ShallowClone();
                 var moversPiece = board[move.From].Piece;
+                var moversKing = clone.GetKingFor(moversPiece.Colour);
                 clone.MovePiece(move);
                 clone.MoveHandler.RebuildMoveLists();
-                var moversKing = clone.GetKingFor(moversPiece.Colour);
                 return !InCheckAt(clone, moversKing.Location, moversPiece.Colour);
             }
 

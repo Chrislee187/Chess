@@ -127,5 +127,25 @@ namespace CSharpChess.UnitTests.BoardMovement
             // TODO: Assert does not contain the others
             Assert.That(chessMoves.Count(), Is.EqualTo(2), chessMoves.ToCSV());
         }
+
+        [Test]
+        public void move_must_resolve_check()
+        {
+            const string asOneChar = ".R..k..r" +
+                                     "........" +
+                                     "...B...." +
+                                     "...B...." +
+                                     "........" +
+                                     "........" +
+                                     "....R..." +
+                                     "....K...";
+
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.Black);
+            Assert.That(board.GameState, Is.EqualTo(Chess.GameState.BlackKingInCheck));
+            var result = board.Move("H8H7");
+            Assert.That(result.Succeeded, Is.False);
+            Assert.That(result.Message, Is.Not.Empty);
+        }
     }
+
 }
