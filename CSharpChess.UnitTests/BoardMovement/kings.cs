@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
@@ -15,7 +16,7 @@ namespace CSharpChess.UnitTests.BoardMovement
         [Test]
         public void can_move_with_a_king()
         {
-            const string asOneChar = "........" +
+            const string asOneChar = ".......k" +
                                      "........" +
                                      "........" +
                                      "........" +
@@ -33,7 +34,7 @@ namespace CSharpChess.UnitTests.BoardMovement
         [Test]
         public void can_take_with_a_king()
         {
-            const string asOneChar = "........" +
+            const string asOneChar = ".......k" +
                                      "........" +
                                      "........" +
                                      "........" +
@@ -77,6 +78,29 @@ namespace CSharpChess.UnitTests.BoardMovement
             Assert.That(board.IsEmptyAt(km.From));
             Assert.That(board.IsEmptyAt(rm.From));
 
+        }
+
+        [Test]
+        public void cannot_castle_through_check()
+        {
+            const string asOneChar = "r...k.r." +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "........" +
+                                     "R...K..R";
+
+            var km = (ChessMove)"E1G1";
+            var colour = km.From.Rank == 1 ? Chess.Board.Colours.White : Chess.Board.Colours.Black;
+            var board = BoardBuilder.CustomBoard(asOneChar, colour);
+
+            var moves = board.MovesFor(km.From).ToList();
+            Assert.That(moves.Any());
+            var moveResult = board.Move(km);
+            Console.WriteLine(new MediumConsoleBoard(board).Build().ToString());
+            Assert.False(moveResult.Succeeded, $"Failed: {km} move through check");
         }
 
         [Test]

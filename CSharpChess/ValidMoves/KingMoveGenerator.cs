@@ -71,23 +71,5 @@ namespace CSharpChess.ValidMoves
             return moves;
         }
 
-        public static IEnumerable<BoardLocation> LocationsBetweenAndNotUnderAttack(BoardLocation at, BoardLocation rookLoc)
-        {
-            int from, to;
-            if (rookLoc.File == Chess.Board.ChessFile.A)
-            {
-                @from = 2;
-                to = (int) at.File - 1;
-            }
-            else
-            {
-                @from = (int) at.File + 1;
-                to = 7;
-            }
-
-            var mustBeEmpty = Enumerable.Range(@from, to - from +1).Select(v => BoardLocation.At(v, at.Rank));
-            return mustBeEmpty;
-        }
-
     }
 }

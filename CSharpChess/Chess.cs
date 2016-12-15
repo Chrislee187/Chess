@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.TheBoard;
@@ -11,19 +12,21 @@ namespace CSharpChess
     {
         public static class Board
         {
-            public static ChessMove CanCastle(ChessBoard board, BoardLocation at, BoardLocation rookLoc)
+            public static ChessMove CanCastle(ChessBoard board, BoardLocation kingLocation, BoardLocation rookLoc)
             {
                 var rookPiece = board[rookLoc];
-                if (rookPiece.Piece.IsNot(Chess.Board.PieceNames.Rook) || rookPiece.MoveHistory.Any()) return null;
+                if (rookPiece.Piece.IsNot(PieceNames.Rook) || rookPiece.MoveHistory.Any()) return null;
 
-                var mustBeEmpty = KingMoveGenerator.LocationsBetweenAndNotUnderAttack(at, rookPiece.Location);
-                if (mustBeEmpty.Any(board.IsNotEmptyAt)) return null;
+                var kingPiece = board[kingLocation];
+                if (kingPiece.Piece.IsNot(PieceNames.King) || kingPiece.MoveHistory.Any()) return null;
 
-                var castleFile = rookPiece.Location.File == Chess.Board.ChessFile.A ? Chess.Board.ChessFile.C : Chess.Board.ChessFile.G;
-                return new ChessMove(at, BoardLocation.At(castleFile, at.Rank), MoveType.Castle);
+                if (!CastleLocationsAreEmpty(board, kingLocation, rookPiece.Location)) return null;
+
+                var castleFile = rookPiece.Location.File == ChessFile.A ? ChessFile.C : ChessFile.G;
+                return new ChessMove(kingLocation, BoardLocation.At(castleFile, kingLocation.Rank), MoveType.Castle);
             }
 
-            public static bool InCheckAt(ChessBoard board, BoardLocation at, Chess.Board.Colours asPlayer)
+            public static bool InCheckAt(ChessBoard board, BoardLocation at, Colours asPlayer)
             {
                 var enemyPieces = board.Pieces.OfColour(ColourOfEnemy(asPlayer));
                 Func<ChessBoard, BoardPiece, BoardLocation, bool> pieceIsAttackingLocation =
@@ -37,6 +40,41 @@ namespace CSharpChess
                 return checkPieces.Any();
             }
 
+            public static bool MoveDoesNotPutOwnKingInCheck(ChessBoard board, ChessMove move)
+            {
+                var clone = board.ShallowClone();
+                var moversPiece = board[move.From].Piece;
+                clone.MovePiece(move);
+                clone.MoveHandler.RebuildMoveLists();
+                var moversKing = clone.GetKingFor(moversPiece.Colour);
+                return !InCheckAt(clone, moversKing.Location, moversPiece.Colour);
+            }
+
+            public static bool CastleLocationsAreEmpty(ChessBoard board, BoardLocation king, BoardLocation rook)
+            {
+                var mustBeEmpty = CastleLocationsBetween(king, rook);
+
+                return mustBeEmpty.All(board.IsEmptyAt);
+            }
+
+            public static IEnumerable<BoardLocation> CastleLocationsBetween(BoardLocation fromLoc, BoardLocation toLoc)
+            {
+                int fromFile, toFile;
+                if (toLoc.File == ChessFile.C)
+                {
+                    fromFile = (int) ChessFile.C;
+                    toFile = (int) ChessFile.D;
+                }
+                else
+                {
+                    fromFile = (int) ChessFile.F;
+                    toFile = (int) ChessFile.G;
+                }
+
+                return Enumerable.Range(fromFile, toFile - fromFile + 1).Select(v => BoardLocation.At(v, fromLoc.Rank));
+            }
+
+
             public static bool IsEmptyAt(ChessBoard board, BoardLocation location)
                 => board[location].Piece.Equals(ChessPiece.NullPiece);
 
@@ -48,16 +86,6 @@ namespace CSharpChess
 
             public static bool IsNotEmptyAt(ChessBoard board, string location)
                 => !IsEmptyAt(board, (BoardLocation)location);
-
-            public static bool MoveDoesNotPutOwnKingInCheck(ChessBoard board, ChessMove move)
-            {
-                var clone = board.ShallowClone();
-                var moversPiece = board[move.From].Piece;
-                clone.MovePiece(move);
-                clone.MoveHandler.RebuildMoveLists();
-                var moversKing = clone.GetKingFor(moversPiece.Colour);
-                return !InCheckAt(clone, moversKing.Location, moversPiece.Colour);
-            }
 
 
             public enum Colours { White, Black, None = -9999 }
@@ -91,6 +119,7 @@ namespace CSharpChess
                         ? -1 : 0;
 
             }
+
         }
 
         public static Board.Colours ColourOfEnemy(Board.Colours colour) => colour == Board.Colours.Black

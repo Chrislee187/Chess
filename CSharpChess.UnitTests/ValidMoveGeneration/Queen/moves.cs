@@ -13,14 +13,14 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Queen
         [Test]
         public void can_move_in_eight_directions()
         {
-            const string asOneChar = "........" +
+            const string asOneChar = ".......k" +
                                      ".P.P.P.." +
                                      "........" +
                                      ".P.Q.P.." +
                                      "........" +
                                      ".P.P.P.." +
                                      "........" +
-                                     "........";
+                                     ".......K";
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
             var expected = BoardLocation.List("E6", "E4", "C6", "C4", "D6", "E5", "D4", "C5");

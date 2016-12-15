@@ -13,13 +13,13 @@ namespace CSharpChess.UnitTests.BoardMovement
         [Test]
         public void can_move_with_a_rook()
         {
-            const string asOneChar = "........" +
+            const string asOneChar = "..k....." +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
-                                     "........" +
+                                     ".......K" +
                                      "R.......";
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
@@ -32,13 +32,13 @@ namespace CSharpChess.UnitTests.BoardMovement
         public void can_take_with_a_rook()
         {
             const string asOneChar = "r......." +
+                                     ".......k" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
-                                     "........" +
-                                     "R.......";
+                                     "R......K";
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var result = board.Move("a1a8");

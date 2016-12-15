@@ -39,7 +39,7 @@ namespace CSharpChess.ValidMoves
             var newMove = new ChessMove(at, boardLocation, PromotedTo(boardLocation, chessPiece.Colour, MoveType.Move));
 
             var validMoves = new List<ChessMove>();
-            if (board.IsEmptyAt(newMove.To))
+            if (Chess.Board.IsValidLocation(boardLocation) && board.IsEmptyAt(newMove.To))
             {
                 validMoves.Add(newMove);
                 if (board[at].Location.Rank == Chess.Rules.Pawns.StartingPawnRankFor(chessPiece.Colour) )
@@ -63,7 +63,8 @@ namespace CSharpChess.ValidMoves
             var newMove = new ChessMove(at, boardLocation, PromotedTo(boardLocation, chessPiece.Colour, MoveType.Move));
 
             var validMoves = new List<ChessMove>();
-            if (!board.IsEmptyAt(newMove.To) && board.IsCoveringAt(newMove.To, chessPiece.Colour))
+            if (Chess.Board.IsValidLocation(boardLocation) && !board.IsEmptyAt(newMove.To) 
+                && board.IsCoveringAt(newMove.To, chessPiece.Colour))
             {
                 validMoves.Add(newMove);
                 if (board[at].Location.Rank == Chess.Rules.Pawns.StartingPawnRankFor(chessPiece.Colour))
@@ -99,7 +100,7 @@ namespace CSharpChess.ValidMoves
             foreach (var direction in directions)
             {
                 BoardLocation loc;
-                if ((loc = positionCalculator(board, at, direction)) != null)
+                if ((loc = positionCalculator(board, at, direction)) != null && Chess.Board.IsValidLocation(loc))
                 {
                     positions.Add(loc);
                 }

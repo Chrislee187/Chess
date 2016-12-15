@@ -22,14 +22,14 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Rooks
         public void can_take_in_four_directions()
         {
             //                        ABCDEFGH
-            const string asOneChar = "........" + // 8
+            const string asOneChar = ".......k" + // 8
                                      "...p...." + // 7
                                      "........" + // 6
                                      ".p.R.p.." + // 5
                                      "........" + // 4
                                      "...p...." + // 3
                                      "........" + // 2
-                                     "........";  // 1
+                                     ".......K";  // 1
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
             var expectedTakes = BoardLocation.List("D7", "F5", "D3", "B5");

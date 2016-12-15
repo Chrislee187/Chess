@@ -61,6 +61,6 @@ namespace CSharpChess.Extensions
             => Chess.Board.MoveDoesNotPutOwnKingInCheck(board, move);
 
         public static BoardPiece GetKingFor(this ChessBoard board, Chess.Board.Colours colour) 
-            => board.Pieces.First(p => p.Piece.Is(colour, Chess.Board.PieceNames.King));
+            => board.Pieces.FirstOrDefault(p => p.Piece.Is(colour, Chess.Board.PieceNames.King));
     }
 }

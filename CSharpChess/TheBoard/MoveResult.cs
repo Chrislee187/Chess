@@ -2,7 +2,7 @@
 {
     public class MoveResult
     {
-        public string Message { get; set; }
+        public string Message { get; private set; }
         public bool Succeeded { get; }
         public MoveType MoveType { get; }
         public ChessMove Move { get; private set; }
@@ -38,6 +38,11 @@
         {
             return new MoveResult(true, move, MoveType.Promotion);
         }
+
+        public static MoveResult Failure(string message, ChessMove move)
+        {
+            return new MoveResult(false, move, message);
+        }
     }
 
     public enum MoveType
@@ -46,7 +51,7 @@
         Promotion,
         Unknown,
         Taken,
-        Cover
+        Cover, Invalid
     }
 
 }

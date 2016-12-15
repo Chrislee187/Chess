@@ -22,14 +22,14 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
         public void all_moves_generated()
         {
             var asOneChar =
-                    "........" +
+                    ".......k" +
                     "........" +
                     "........" +
                     "........" +
                     "...N...." +
                     "........" +
                     "........" +
-                    "........";
+                    ".......K";
             var expected = BoardLocation.List("E6", "F5", "F3", "E2", "C2", "B3", "B5", "C6");
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 

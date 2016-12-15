@@ -16,7 +16,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
         [Test]
         public void can_move_in_eight_directions()
         {
-            const string asOneChar = "........" +
+            const string asOneChar = ".......k" +
                                      "........" +
                                      "........" +
                                      "...K...." +

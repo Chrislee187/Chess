@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using CSharpChess.Extensions;
 using CSharpChess.ValidMoves;
 
@@ -34,8 +35,20 @@ namespace CSharpChess.TheBoard
             {
                 this[boardPiece.Location] = boardPiece;
             }
+
+            ValidateBoardState();
+
             WhoseTurn = whoseTurn;
             MoveHandler = new MoveHandler(this);
+        }
+
+        private void ValidateBoardState()
+        {
+            if (this.GetKingFor(Chess.Board.Colours.Black) == null)
+                throw new InvalidBoardStateException("Black king not found", this);
+
+            if (this.GetKingFor(Chess.Board.Colours.White) == null)
+                throw new InvalidBoardStateException("White king not found", this);
         }
 
         public MoveResult Move(string move) => Move((ChessMove)move);
@@ -52,7 +65,7 @@ namespace CSharpChess.TheBoard
                 return MoveHandler.Move(move, validMove, boardPiece);
             }
 
-            throw new ArgumentException($"Invalid move {move}", nameof(move));
+            return MoveResult.Failure($"Invalid move {move}", move);
         }
 
         /// <summary>
@@ -62,7 +75,23 @@ namespace CSharpChess.TheBoard
         /// <returns></returns>
         public IEnumerable<ChessMove> MovesFor(BoardLocation at)
         {
-            return this[at].AllMoves.Where(this.MoveDoesNotPutOwnKingInCheck);
+            var chessMoves = this[at].AllMoves
+                .Where(this.DoesNotMoveKingThroughCheck)
+                .Where(this.MoveDoesNotPutOwnKingInCheck)
+                ;
+            return chessMoves;
+        }
+
+        private bool DoesNotMoveKingThroughCheck(ChessMove move)
+        {
+            if (move.MoveType != MoveType.Castle) return true;
+            var piece = this[move.From];
+            var locs = Chess.Board.CastleLocationsBetween(move.From, move.To);
+            var clone = ShallowClone();
+            var boardPieces = clone.Pieces.OfColour(Chess.ColourOfEnemy(piece.Piece.Colour)).ToList();
+            return boardPieces
+                .SelectMany(p => p.AllMoves)
+                .None(moves => locs.Any(l => l.Equals(moves.To)));
         }
 
         public void MovePiece(ChessMove move, MoveType moveType)
@@ -76,7 +105,7 @@ namespace CSharpChess.TheBoard
         public void ClearSquare(BoardLocation takenLocation) => this[takenLocation] = BoardPiece.Empty(takenLocation);
 
         private ChessMove CheckMoveIsValid(ChessMove move) 
-            => this[move.From].AllMoves.FirstOrDefault(vm => vm.Equals(move));
+            => MovesFor(move.From).FirstOrDefault(vm => vm.Equals(move));
 
         private void NewBoard()
         {
@@ -204,6 +233,20 @@ namespace CSharpChess.TheBoard
         internal void MovePiece(ChessMove move)
         {
             MovePiece(move, move.MoveType);
+        }
+    }
+
+    [Serializable]
+    public class InvalidBoardStateException : Exception
+    {
+        public InvalidBoardStateException(string message, ChessBoard board) : base(message)
+        {
+        }
+
+        protected InvalidBoardStateException(
+            SerializationInfo info,
+            StreamingContext context) : base(info, context)
+        {
         }
     }
 }

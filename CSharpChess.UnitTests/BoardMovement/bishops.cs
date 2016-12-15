@@ -11,14 +11,14 @@ namespace CSharpChess.UnitTests.BoardMovement
         [Test]
         public void can_move_with_a_bishop()
         {
-            const string asOneChar = "........" +
+            const string asOneChar = "k......." +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
-                                     "B.......";
+                                     "B......K";
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var result = board.Move("a1h8");
@@ -29,14 +29,14 @@ namespace CSharpChess.UnitTests.BoardMovement
         [Test]
         public void can_take_with_a_bishop()
         {
-            const string asOneChar = ".......r" +
+            const string asOneChar = "k......r" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
                                      "........" +
-                                     "B.......";
+                                     "B.....K.";
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
 
             var result = board.Move("a1h8");

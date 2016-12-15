@@ -63,7 +63,7 @@ namespace CSharpChess.UnitTests.BoardMovement
             var asOneChar =
                 "........" +
                 "P......." +
-                "........" +
+                ".......k" +
                 "........" +
                 "........" +
                 "........" +

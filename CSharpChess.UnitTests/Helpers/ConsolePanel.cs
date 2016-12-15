@@ -10,11 +10,12 @@ namespace CSharpChess.UnitTests.Helpers
         private int Width { get; }
         private int Height { get; }
         private readonly char[,] _panel;
+
         public ConsolePanel(int width, int height)
         {
             Width = width;
             Height = height;
-            _panel= new char[width,height];
+            _panel = new char[width, height];
         }
 
         // ReSharper disable once UnusedMethodReturnValue.Global
@@ -35,7 +36,7 @@ namespace CSharpChess.UnitTests.Helpers
             {
                 int newX = x + x1;
                 CheckXY(newX, y);
-                _panel[newX-1, y - 1] = s[x1];
+                _panel[newX - 1, y - 1] = s[x1];
             }
 
             return this;
@@ -43,7 +44,7 @@ namespace CSharpChess.UnitTests.Helpers
 
         private void CheckXY(int x, int y)
         {
-            if(x < 1 || y < 1)
+            if (x < 1 || y < 1)
                 throw new ArgumentException($"Panel co-ordinates are one-based.");
 
             if (x > Width || y > Height)
@@ -71,14 +72,14 @@ namespace CSharpChess.UnitTests.Helpers
             {
                 for (var x = 1; x <= Width; x++)
                 {
-                    yield return new Tuple<int, int>(x,y);
+                    yield return new Tuple<int, int>(x, y);
                 }
             }
         }
 
         public void Fill(char c)
         {
-            TopLeftToBottomRight().ToList().ForEach(t => _panel[t.Item1-1, t.Item2-1] = c);
+            TopLeftToBottomRight().ToList().ForEach(t => _panel[t.Item1 - 1, t.Item2 - 1] = c);
         }
 
         public string[] ToStrings()
@@ -97,6 +98,12 @@ namespace CSharpChess.UnitTests.Helpers
             }
             return s.ToArray();
         }
-        protected char this[int x, int y] => _panel[x,y];
+
+        protected char this[int x, int y] => _panel[x, y];
+
+        public override string ToString()
+        {
+            return string.Join("\n", ToStrings());
+        }
     }
 }

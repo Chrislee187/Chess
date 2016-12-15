@@ -14,14 +14,14 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Queen
         [Test]
         public void can_take_in_eight_directions()
         {
-            const string asOneChar = "........" +
+            const string asOneChar = ".......k" +
                                      ".p.p.p.." +
                                      "........" +
                                      ".p.Q.p.." +
                                      "........" +
                                      ".p.p.p.." +
                                      "........" +
-                                     "........";
+                                     ".......K";
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Board.Colours.White);
             var expectedTakes = BoardLocation.List("F7", "F3", "B7", "B3", "D7", "F5", "D3", "B5");

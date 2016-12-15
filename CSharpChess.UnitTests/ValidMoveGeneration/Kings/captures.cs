@@ -15,7 +15,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Kings
         public void can_take()
         {
             // TODO: Will need to split this up once checks are implemented.
-            const string asOneChar = "........" +
+            const string asOneChar = ".......k" +
                                      "........" +
                                      "........" +
                                      "...K...." +
