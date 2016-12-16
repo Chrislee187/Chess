@@ -49,8 +49,11 @@
     <Compile Include="Extensions\ChessMoveListExtensions.cs" />
     <Compile Include="Extensions\MoveTypeExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Mechanics\Counter.cs" />
-    <Compile Include="Mechanics\Metrics.cs" />
+    <Compile Include="System\Metrics\TimerIds.cs" />
+    <Compile Include="System\Metrics\Counters.cs" />
+    <Compile Include="System\Metrics\CounterIds.cs" />
+    <Compile Include="System\Metrics\Timers.cs" />
+    <Compile Include="System\Metrics\Timings.cs" />
     <Compile Include="OneCharBoard.cs" />
     <Compile Include="TheBoard\BoardLocation.cs" />
     <Compile Include="TheBoard\BoardPiece.cs" />

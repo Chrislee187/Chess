@@ -2,34 +2,25 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using CSharpChess.Extensions;
 
-namespace CSharpChess.Mechanics
+namespace CSharpChess.System.Metrics
 {
-    public static class Counter
+    public static class Timers
     {
         public static bool OutputTimesToConsole = false;
         public static bool DisableTiming = false;
-        private static readonly ConcurrentDictionary<string, long> InMemCounter = new ConcurrentDictionary<string, long>();
         private static readonly ConcurrentDictionary<string, List<decimal>>  InMemTimings = new ConcurrentDictionary<string, List<decimal>>();
-        public static void Increment(string counterKey)
-        {
-            InMemCounter.AddOrUpdate(counterKey, 1, (s, l) => l+1);
-        }
+        public static IEnumerable<string> TimerKeys => InMemTimings.Keys;
 
-        public static long GetCountFor(string counterKey)
+        public static Timings GetTimingsFor(string counterKey)
         {
-            long result = 0;
-            InMemCounter.TryGetValue(counterKey, out result);
-            return result;
-        }
-            
-        public static decimal GetAvgTimeFor(string counterKey)
-        {
-            if (!InMemTimings.ContainsKey(counterKey)) return 0m;
+            if (!InMemTimings.ContainsKey(counterKey)) return Timings.Empty;
 
             var timings = InMemTimings[counterKey];
-            return timings.Any() ? timings.Average() : 0m;
+            if(timings.None()) return Timings.Empty;
+
+            return new Timings(timings);
         }
 
         public static void Time(string timerKey, Action action, bool toConsole = false)

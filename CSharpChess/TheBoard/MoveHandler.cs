@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.MoveGeneration;
+using CSharpChess.System.Metrics;
 
 namespace CSharpChess.TheBoard
 {
@@ -12,7 +13,7 @@ namespace CSharpChess.TheBoard
         public MoveHandler(ChessBoard chessBoard)
         {
             _chessBoard = chessBoard;
-            RebuildMoveLists();
+            Timers.Time("board-creation.rebuild-movelists", RebuildMoveLists);
         }
 
         internal void RebuildMoveLists()

@@ -10,7 +10,8 @@ namespace CSharpChess
         public static partial class Board
         {
             public enum ChessFile { A = 1, B, C, D, E, F, G, H };
-            public static IEnumerable<ChessFile> Files => EnumExtensions.GetAll<ChessFile>();
+//            public static IEnumerable<ChessFile> Files => EnumExtensions.GetAll<ChessFile>();
+            public static IEnumerable<ChessFile> Files => new List<ChessFile> {ChessFile.A, ChessFile.B, ChessFile.C, ChessFile.D, ChessFile.E, ChessFile.F, ChessFile.G, ChessFile.H};
 
             public static IEnumerable<int> Ranks => Enumerable.Range(1, 8);
 

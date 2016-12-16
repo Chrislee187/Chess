@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using CSharpChess.Extensions;
-using CSharpChess.Mechanics;
+using CSharpChess.System.Metrics;
 
 namespace CSharpChess.TheBoard
 {
@@ -18,7 +18,7 @@ namespace CSharpChess.TheBoard
             _constructing = true;
             if (newGame)
             {
-                Counter.Time(Metrics.Timers.Board.New, () => { 
+                Timers.Time(TimerIds.Board.New, () => { 
                     NewBoard();
                     GameState = Chess.GameState.WaitingForMove;
                     WhoseTurn = Chess.Colours.White;
@@ -27,7 +27,7 @@ namespace CSharpChess.TheBoard
             }
             else
             {
-                Counter.Time(Metrics.Timers.Board.Empty, () =>
+                Timers.Time(TimerIds.Board.Empty, () =>
                 {
                     EmptyBoard();
                     GameState = Chess.GameState.Unknown;
@@ -41,14 +41,14 @@ namespace CSharpChess.TheBoard
 
         private static void BoardCreatedCounter()
         {
-            Counter.Increment(Metrics.Counters.Board.Created);
+            Counters.Increment(CounterIds.Board.Created);
         }
 
         public ChessBoard(IEnumerable<BoardPiece> pieces, Chess.Colours whoseTurn)
         {
             BoardCreatedCounter();
             _constructing = true;
-            Counter.Time(Metrics.Timers.Board.Custom, () =>
+            Timers.Time(TimerIds.Board.Custom, () =>
             {
                 EmptyBoard();
                 foreach (var boardPiece in pieces)
@@ -83,7 +83,8 @@ namespace CSharpChess.TheBoard
         }
 
         /// <summary>
-        /// WARNING: If _constructing is true, this recurses until death trying to check the move lists
+        /// WARNING: If called during object construction this will recurse indefinetly as it tries
+        /// to generate the move lists to see if any kings are in check
         /// </summary>
         /// <param name="defender"></param>
         private void UpdateGameStateForCheckMate(Chess.Colours defender)
@@ -98,15 +99,6 @@ namespace CSharpChess.TheBoard
                         : Chess.GameState.CheckMateBlackWins;
                 }
             }
-        }
-
-        private void ValidateInitialBoardState()
-        {
-            if (this.GetKingFor(Chess.Colours.Black) == null)
-                throw new InvalidBoardStateException("Black king not found", this);
-
-            if (this.GetKingFor(Chess.Colours.White) == null)
-                throw new InvalidBoardStateException("White king not found", this);
         }
 
         public MoveResult Move(string move) => Move((ChessMove)move);
@@ -282,6 +274,17 @@ namespace CSharpChess.TheBoard
                 }
             }
         }
+
+
+        private void ValidateInitialBoardState()
+        {
+            if (this.GetKingFor(Chess.Colours.Black) == null)
+                throw new InvalidBoardStateException("Black king not found", this);
+
+            if (this.GetKingFor(Chess.Colours.White) == null)
+                throw new InvalidBoardStateException("White king not found", this);
+        }
+
         #endregion
 
         /// <summary>

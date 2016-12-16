@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CSharpChess.Extensions;
-using CSharpChess.Mechanics;
 using CSharpChess.TheBoard;
 using NUnit.Framework;
 #pragma warning disable 162
