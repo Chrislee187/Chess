@@ -80,8 +80,11 @@ namespace CSharpChess.UnitTests
         /// </summary>
         private static void AssertBoardsAreCreatedWithinAReasonableTime()
         {
-            AssertTimerAverageIsWithinRequiredTime(TimerIds.Board.New, MAX_AvgNewBoardBuildtimeInMicroSeconds);
-            AssertTimerAverageIsWithinRequiredTime(TimerIds.Board.Custom, MAX_AvgCustomBoardBuildtimeInMicroSeconds);
+            if(Timers.GetTimingsFor(TimerIds.Board.New).Count > 1)
+                AssertTimerAverageIsWithinRequiredTime(TimerIds.Board.New, MAX_AvgNewBoardBuildtimeInMicroSeconds);
+
+            if (Timers.GetTimingsFor(TimerIds.Board.Custom).Count > 1)
+                AssertTimerAverageIsWithinRequiredTime(TimerIds.Board.Custom, MAX_AvgCustomBoardBuildtimeInMicroSeconds);
         }
 
         private static void AssertTimerAverageIsWithinRequiredTime(string timerId, long maxAverage)

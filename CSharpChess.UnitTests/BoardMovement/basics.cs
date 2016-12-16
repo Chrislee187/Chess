@@ -1,4 +1,5 @@
-﻿using CSharpChess.UnitTests.Helpers;
+﻿using System.Linq;
+using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.BoardMovement
@@ -37,5 +38,16 @@ namespace CSharpChess.UnitTests.BoardMovement
             Assert.That(result.Succeeded, Is.False);
         }
 
+
+        [Test]
+        public void fools_mate()
+        {
+            var board = BoardBuilder.NewGame;
+            var moves = new[] {"f2f3", "e7e5", "g2g4", "d8h4"};
+
+            moves.ToList().ForEach(m => board.Move(m));
+
+            Assert.That(board.GameState, Is.EqualTo(Chess.GameState.CheckMateBlackWins));
+        }
     }
 }

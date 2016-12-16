@@ -14,6 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{B3E8239B
 		build.ps1 = build.ps1
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{FF4031A4-D959-4F95-9162-1F482C7ACE92}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\samplescreen.txt = Docs\samplescreen.txt
+		Docs\specs.txt = Docs\specs.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

@@ -13,6 +13,9 @@ namespace CSharpChess.System.Metrics
         /// Average of values, excludes first value to filter out any warm-up time.
         /// </summary>
         public decimal Average { get; }
+
+        public int Count { get; private set; }
+
         public static readonly Timings Empty = new Timings();
 
         private Timings()
@@ -28,6 +31,8 @@ namespace CSharpChess.System.Metrics
             Average = times.Count() > 1 
                 ? times.OrderBy(t => t).Skip(1).Average()
                 : times.First();
+
+            Count = times.Count();
         }
     }
 }
