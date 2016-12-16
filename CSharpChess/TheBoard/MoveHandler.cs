@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using CSharpChess.Extensions;
 using CSharpChess.MoveGeneration;
+using CSharpChess.System.Extensions;
 using CSharpChess.System.Metrics;
 
 namespace CSharpChess.TheBoard

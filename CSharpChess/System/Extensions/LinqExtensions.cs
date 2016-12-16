@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CSharpChess.Extensions
+namespace CSharpChess.System.Extensions
 {
     public static class LinqExtensions
     {

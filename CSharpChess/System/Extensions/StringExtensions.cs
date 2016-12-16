@@ -1,7 +1,6 @@
 ﻿using System.Linq;
-using System.Text;
 
-namespace CSharpChess.Extensions
+namespace CSharpChess.System.Extensions
 {
     public static class StringExtensions
     {

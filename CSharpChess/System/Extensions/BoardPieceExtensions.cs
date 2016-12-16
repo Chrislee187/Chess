@@ -2,7 +2,7 @@
 using System.Linq;
 using CSharpChess.TheBoard;
 
-namespace CSharpChess.Extensions
+namespace CSharpChess.System.Extensions
 {
     public static class BoardPieceExtensions
     {

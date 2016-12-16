@@ -44,11 +44,11 @@
     <Compile Include="Chess.Board.Validations.cs" />
     <Compile Include="Chess.Pieces.cs" />
     <Compile Include="Chess.Rules.cs" />
-    <Compile Include="Extensions\BoardPieceExtensions.cs" />
-    <Compile Include="Extensions\ChessBoardExtensions.cs" />
-    <Compile Include="Extensions\ChessMoveListExtensions.cs" />
-    <Compile Include="Extensions\MoveTypeExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="System\Extensions\BoardPieceExtensions.cs" />
+    <Compile Include="System\Extensions\ChessBoardExtensions.cs" />
+    <Compile Include="System\Extensions\ChessMoveListExtensions.cs" />
+    <Compile Include="System\Extensions\MoveTypeExtensions.cs" />
+    <Compile Include="System\Extensions\StringExtensions.cs" />
     <Compile Include="System\Metrics\TimerIds.cs" />
     <Compile Include="System\Metrics\Counters.cs" />
     <Compile Include="System\Metrics\CounterIds.cs" />
@@ -61,8 +61,8 @@
     <Compile Include="TheBoard\ChessBoard.cs" />
     <Compile Include="TheBoard\ChessMove.cs" />
     <Compile Include="TheBoard\ChessPiece.cs" />
-    <Compile Include="Extensions\EnumExtensions.cs" />
-    <Compile Include="Extensions\LinqExtensions.cs" />
+    <Compile Include="System\Extensions\EnumExtensions.cs" />
+    <Compile Include="System\Extensions\LinqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TheBoard\MoveHandler.cs" />
     <Compile Include="TheBoard\MoveResult.cs" />
@@ -81,6 +81,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
