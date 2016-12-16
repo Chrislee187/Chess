@@ -296,14 +296,18 @@ namespace CSharpChess.TheBoard
         {
             MovePiece(move, move.MoveType);
         }
-
     }
 
     [Serializable]
     public class InvalidBoardStateException : Exception
     {
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
+        // ReSharper disable once MemberCanBePrivate.Global
+        public ChessBoard Board { get; }
+
         public InvalidBoardStateException(string message, ChessBoard board) : base(message)
         {
+            Board = board;
         }
 
         protected InvalidBoardStateException(

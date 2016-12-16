@@ -8,7 +8,7 @@ namespace CSharpChess.UnitTests.BoardMovement
     // ReSharper disable once InconsistentNaming
     public class rooks : BoardAssertions
     {
-        private ChessPiece PieceUnderTest = new ChessPiece(Chess.Colours.White, Chess.PieceNames.Rook);
+        private readonly ChessPiece _pieceUnderTest = new ChessPiece(Chess.Colours.White, Chess.PieceNames.Rook);
 
         [Test]
         public void can_move_with_a_rook()
@@ -25,7 +25,7 @@ namespace CSharpChess.UnitTests.BoardMovement
 
             var result = board.Move("a1a8");
 
-            AssertMoveSucceeded(result, board, "a1a8", PieceUnderTest);
+            AssertMoveSucceeded(result, board, "a1a8", _pieceUnderTest);
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace CSharpChess.UnitTests.BoardMovement
 
             var result = board.Move("a1a8");
 
-            AssertTakeSucceeded(result, board, "a1A8", PieceUnderTest);
+            AssertTakeSucceeded(result, board, "a1A8", _pieceUnderTest);
         }
     }
 }

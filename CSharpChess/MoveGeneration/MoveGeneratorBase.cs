@@ -24,39 +24,6 @@ namespace CSharpChess.MoveGeneration
     ///  </summary>
     public abstract class MoveGeneratorBase : IMoveGenerator
     {
-        private readonly IDictionary<BoardLocation, IEnumerable<ChessMove>> _movesCache = new ConcurrentDictionary<BoardLocation, IEnumerable<ChessMove>>();
-        private readonly IDictionary<BoardLocation, IEnumerable<ChessMove>> _coversCache = new ConcurrentDictionary<BoardLocation, IEnumerable<ChessMove>>();
-        private readonly IDictionary<BoardLocation, IEnumerable<ChessMove>> _takesCache = new ConcurrentDictionary<BoardLocation, IEnumerable<ChessMove>>();
-
         public abstract IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at);
-
-        protected IEnumerable<ChessMove> Moves(ChessBoard board, BoardLocation at)
-        {
-            if (!_movesCache.ContainsKey(at))
-            {
-                _movesCache[at] = All(board, at).Where(m => m.MoveType.IsMove());
-            }
-
-            return _movesCache[at];
-        }
-
-        protected IEnumerable<ChessMove> Takes(ChessBoard board, BoardLocation at)
-        {
-            if (!_takesCache.ContainsKey(at))
-            {
-                _takesCache[at] = All(board, at).Where(m => m.MoveType.IsTake());
-            }
-            return _takesCache[at];
-        }
-
-        protected IEnumerable<ChessMove> Covers(ChessBoard board, BoardLocation at)
-        {
-            if (!_coversCache.ContainsKey(at))
-            {
-                _coversCache[at] = All(board, at).Where(m => m.MoveType.IsCover());
-            }
-            return _coversCache[at];
-        }
-
     }
 }
