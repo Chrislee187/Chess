@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace CSharpChess
 {
@@ -9,39 +11,33 @@ namespace CSharpChess
         public static partial class Board
         {
             public enum ChessFile { A = 1, B, C, D, E, F, G, H };
-//            public static IEnumerable<ChessFile> Files => EnumExtensions.GetAll<ChessFile>();
             public static IEnumerable<ChessFile> Files => new List<ChessFile> {ChessFile.A, ChessFile.B, ChessFile.C, ChessFile.D, ChessFile.E, ChessFile.F, ChessFile.G, ChessFile.H};
+            public static IEnumerable<int> Ranks => new [] {1,2,3,4,5,6,7,8};
 
-            public static IEnumerable<int> Ranks => Enumerable.Range(1, 8);
-
-            // These need to be an enum
-            public const int LeftDirectionModifier = -1;
-            public const int RightDirectionModifier = 1;
+            public enum DirectionModifiers 
+            {
+                LeftDirectionModifier = -1,
+                RightDirectionModifier = 1,
+                UpBoardDirectionModifer = 1,
+                DownBoardDirectionModifer = -1,
+                NoDirectionModifier = 0
+            }
 
             public static int ForwardDirectionModifierFor(ChessPiece piece)
             {
-                return piece.Colour == Colours.White
-                    ? +1
+                return (int) (piece.Colour == Colours.White
+                    ? DirectionModifiers.UpBoardDirectionModifer
                     : piece.Colour == Colours.Black
-                        ? -1 : 0;
+                        ? DirectionModifiers.DownBoardDirectionModifer : DirectionModifiers.NoDirectionModifier);
 
             }
 
-            public static IEnumerable<BoardLocation> CastleLocationsBetween(BoardLocation fromLoc, BoardLocation toLoc)
+            public static bool NotOnEdge(BoardLocation at, DirectionModifiers horizontal)
             {
-                int fromFile, toFile;
-                if (toLoc.File == ChessFile.C)
-                {
-                    fromFile = (int)ChessFile.C;
-                    toFile = (int)ChessFile.D;
-                }
-                else
-                {
-                    fromFile = (int)ChessFile.F;
-                    toFile = (int)ChessFile.G;
-                }
-
-                return Enumerable.Range(fromFile, toFile - fromFile + 1).Select(v => BoardLocation.At(v, fromLoc.Rank));
+                var notOnHorizontalEdge = horizontal > 0
+                    ? at.File < ChessFile.H
+                    : at.File > ChessFile.A;
+                return notOnHorizontalEdge;
             }
         }
     }

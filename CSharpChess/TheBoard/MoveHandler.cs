@@ -8,26 +8,11 @@ namespace CSharpChess.TheBoard
     public class MoveHandler
     {
         private readonly ChessBoard _chessBoard;
-        private readonly MoveFactory _moveFactory = new MoveFactory();
 
         public MoveHandler(ChessBoard chessBoard)
         {
             _chessBoard = chessBoard;
             Timers.Time("board-creation.rebuild-movelists", RebuildMoveLists);
-        }
-
-        internal void RebuildMoveLists()
-        {
-            foreach (var boardPiece in _chessBoard.Pieces)
-            {
-                RebuildMoveListFor(boardPiece);
-            }
-        }
-
-        private void RebuildMoveListFor(BoardPiece boardPiece)
-        {
-            var all = _moveFactory.For[boardPiece.Piece.Name]().All(_chessBoard, boardPiece.Location);
-            boardPiece.SetAll(all.ToList());
         }
 
         public MoveResult Move(ChessMove move, ChessMove validMove, BoardPiece boardPiece)
@@ -45,6 +30,20 @@ namespace CSharpChess.TheBoard
             return movePerformed;
         }
 
+        internal void RebuildMoveLists()
+        {
+            foreach (var boardPiece in _chessBoard.Pieces)
+            {
+                RebuildMoveListFor(boardPiece);
+            }
+        }
+
+        private void RebuildMoveListFor(BoardPiece boardPiece)
+        {
+            var all = MoveFactory.For[boardPiece.Piece.Name]().All(_chessBoard, boardPiece.Location);
+            boardPiece.SetAll(all.ToList());
+        }
+
         private void PreMoveActions(ChessMove move, MoveType moveType)
         {
             switch (moveType)
@@ -53,10 +52,10 @@ namespace CSharpChess.TheBoard
                     TakeSquare(move.To);
                     break;
                 case MoveType.Promotion:
-                    if (ChessBoardExtensions.IsNotEmptyAt(_chessBoard, move.To)) TakeSquare(move.To);
+                    if (_chessBoard.IsNotEmptyAt(move.To)) TakeSquare(move.To);
                     break;
                 case MoveType.Castle:
-                    var rookMove = Chess.Rules.KingAndQueen.CreateRookMoveForCastling(move);
+                    var rookMove = Chess.Rules.King.CreateRookMoveForCastling(move);
                     _chessBoard.MovePiece(rookMove, MoveType.Castle);
                     break;
             }
@@ -90,10 +89,8 @@ namespace CSharpChess.TheBoard
             _chessBoard.ClearSquare(takenLocation);
         }
 
-        private void Promote(BoardLocation at, Chess.Colours colour, Chess.PieceNames pieceName)
-        {
-            _chessBoard[at] = new BoardPiece(at, new ChessPiece(colour, pieceName));
-        }
+        private void Promote(BoardLocation at, Chess.Colours colour, Chess.PieceNames pieceName) 
+            => _chessBoard[at] = new BoardPiece(at, new ChessPiece(colour, pieceName));
 
         private static MoveType DefaultMoveType(MoveType moveType, MoveType @default) 
             => moveType == MoveType.Unknown ? @default : moveType;

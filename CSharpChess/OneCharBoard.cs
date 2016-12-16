@@ -28,7 +28,7 @@ namespace CSharpChess
                 throw new ArgumentException($"Invalid One Char representations of a chess piece found '{p}'", nameof(p));
 
             var pieceNames = OneCharPieceNames.First(c => char.ToUpper(p) == c.Value).Key;
-//            Console.WriteLine($"{pieceNames} == {p}");
+
             return pieceNames;
         }
 
@@ -52,7 +52,6 @@ namespace CSharpChess
             }
             Ranks = ranks;
         }
-
 
         private static readonly Dictionary<Chess.PieceNames, char> OneCharPieceNames = new Dictionary<Chess.PieceNames, char>
         {

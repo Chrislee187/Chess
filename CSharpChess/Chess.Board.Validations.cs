@@ -2,6 +2,8 @@
 using System.Linq;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
 
 namespace CSharpChess
 {
@@ -79,15 +81,14 @@ namespace CSharpChess
 
                     if (move.MoveType == MoveType.Castle)
                     {
-                        var locs = CastleLocationsBetween(move.From, move.To);
+                        var locs = Rules.King.CastleLocationsBetween(move.From, move.To);
                         var boardPieces = clone.Pieces.OfColour(ColourOfEnemy(moversPiece.Colour)).ToList();
                         var movesThruCheck = boardPieces
                             .SelectMany(p => p.PossibleMoves)
-                            .Any(moves => Enumerable.Any(locs, l => l.Equals(moves.To)));
+                            .Any(moves => locs.Any(l => l.Equals(moves.To)));
 
                         if (movesThruCheck) return true;
-                    };
-
+                    }
 
                     var moversKing = clone.GetKingFor(moversPiece.Colour);
                     clone.MovePiece(move);
@@ -96,7 +97,7 @@ namespace CSharpChess
                 }
 
                 public static bool CastleLocationsAreEmpty(ChessBoard board, BoardLocation king, BoardLocation rook)
-                    => CastleLocationsBetween(king, rook).All(board.IsEmptyAt);
+                    => Rules.King.CastleLocationsBetween(king, rook).All(board.IsEmptyAt);
 
             }
         }

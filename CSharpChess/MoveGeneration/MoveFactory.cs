@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace CSharpChess.MoveGeneration
 {
-    public class MoveFactory
+    public static class MoveFactory
     {
-        public readonly IDictionary<Chess.PieceNames, Func<IMoveGenerator>> For = new Dictionary<Chess.PieceNames, Func<IMoveGenerator>>
+        public static readonly IDictionary<Chess.PieceNames, Func<IMoveGenerator>> For = new Dictionary<Chess.PieceNames, Func<IMoveGenerator>>
         {
             {Chess.PieceNames.Pawn, () =>new PawnMoveGenerator() },
             {Chess.PieceNames.Knight, () => new KnightMoveGenerator() },

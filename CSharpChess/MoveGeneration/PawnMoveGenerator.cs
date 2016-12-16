@@ -92,9 +92,9 @@ namespace CSharpChess.MoveGeneration
         private static IEnumerable<BoardLocation> EnPassantLocations(ChessBoard board, BoardLocation at) 
             => CalcCaptureLocations(board, at, CalcEnPassantPosition);
 
-        private static IEnumerable<BoardLocation> CalcCaptureLocations(ChessBoard board, BoardLocation at, Func<ChessBoard, BoardLocation, int, BoardLocation> positionCalculator)
+        private static IEnumerable<BoardLocation> CalcCaptureLocations(ChessBoard board, BoardLocation at, Func<ChessBoard, BoardLocation, Chess.Board.DirectionModifiers, BoardLocation> positionCalculator)
         {
-            var directions = new[] { Chess.Board.LeftDirectionModifier, Chess.Board.RightDirectionModifier };
+            var directions = new[] { Chess.Board.DirectionModifiers.LeftDirectionModifier, Chess.Board.DirectionModifiers.RightDirectionModifier };
 
             var positions = new List<BoardLocation>();
             foreach (var direction in directions)
@@ -108,27 +108,27 @@ namespace CSharpChess.MoveGeneration
             return positions;
         }
 
-        private static BoardLocation CalcNormalTakePosition(ChessBoard board, BoardLocation at, int horizontal)
+        private static BoardLocation CalcNormalTakePosition(ChessBoard board, BoardLocation at, Chess.Board.DirectionModifiers horizontal)
         {
             var vertical = Chess.Board.ForwardDirectionModifierFor(board[at].Piece);
 
-            if (NotOnEdge(at, horizontal))
+            if (Chess.Board.NotOnEdge(at, horizontal))
             {
-                return BoardLocation.At((int)at.File + horizontal, at.Rank + vertical);
+                return BoardLocation.At((int)at.File + (int) horizontal, at.Rank + vertical);
             }
 
             return null;
         }
 
-        private static BoardLocation CalcEnPassantPosition(ChessBoard board, BoardLocation at, int horizontal)
+        private static BoardLocation CalcEnPassantPosition(ChessBoard board, BoardLocation at, Chess.Board.DirectionModifiers horizontal)
         {
             var vertical = Chess.Board.ForwardDirectionModifierFor(board[at].Piece);
 
             var enpassantRank = Chess.Rules.Pawns.EnpassantFromRankFor(board[at].Piece.Colour);
 
-            if (at.Rank == enpassantRank && NotOnEdge(at, horizontal))
+            if (at.Rank == enpassantRank && Chess.Board.NotOnEdge(at, horizontal))
             {
-                return BoardLocation.At((int) at.File + horizontal, at.Rank + vertical);
+                return BoardLocation.At((int) at.File + (int) horizontal, at.Rank + vertical);
             }
 
             return null;
@@ -139,14 +139,6 @@ namespace CSharpChess.MoveGeneration
             return location.Rank == Chess.Rules.Pawns.PromotionRankFor(colour)
                 ? MoveType.Promotion
                 : dflt;
-        }
-
-        private static bool NotOnEdge(BoardLocation at, int horizontal)
-        {
-            var notOnHorizontalEdge = horizontal > 0
-                ? at.File < Chess.Board.ChessFile.H
-                : at.File > Chess.Board.ChessFile.A;
-            return notOnHorizontalEdge;
         }
     }
 }

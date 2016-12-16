@@ -17,26 +17,26 @@ namespace CSharpChess
                 public static IEnumerable<BoardLocation> ApplyTo(BoardLocation loc, IEnumerable<MovementTransformation> movements)
                     => movements.Select(m => m.ApplyTo(loc)).Where(l => l != null);
 
-                internal delegate int Transform(int i);
+                public BoardLocation ApplyTo(BoardLocation from)
+                {
+                    var file = (int)from.File + _transformX;
+                    var rank = from.Rank + _transformY;
+                    return !Board.Validations.IsValidLocation(file, rank)
+                        ? null
+                        : new BoardLocation((Board.ChessFile)file, rank);
+                }
+
                 private readonly int _transformX;
                 private readonly int _transformY;
 
                 internal static class Movement
                 {
+                    internal delegate int Transform(int i);
                     internal static Transform Left => (i) => -1 * i;
                     internal static Transform Right => (i) => +1 * i;
                     internal static Transform Down => (i) => -1 * i;
                     internal static Transform Up => (i) => +1 * i;
                     internal static Func<int> None => () => 0;
-                }
-
-                public BoardLocation ApplyTo(BoardLocation from)
-                {
-                    var file = (int)@from.File + _transformX;
-                    var rank = @from.Rank + _transformY;
-                    return !Board.Validations.IsValidLocation(file, rank)
-                        ? null
-                        : new BoardLocation((Board.ChessFile)file, rank);
                 }
 
                 private MovementTransformation(int transformX, int transformY)
@@ -55,7 +55,7 @@ namespace CSharpChess
                     var takeLocation = new BoardLocation(newFile, at.Rank);
                     var piece = board[takeLocation].Piece;
                     var canTakeAPiece = board.IsNotEmptyAt(takeLocation)
-                                        && piece.Is(Chess.PieceNames.Pawn)
+                                        && piece.Is(PieceNames.Pawn)
                                         && piece.IsNot(board[at].Piece.Colour)
                                         && board[takeLocation].MoveHistory.Count() == 1
                         ;
@@ -64,34 +64,34 @@ namespace CSharpChess
                     return (canTakeAPiece && moveToSpotIsVacant);
                 }
 
-                public static int EnpassantFromRankFor(Chess.Colours colour)
+                public static int EnpassantFromRankFor(Colours colour)
                 {
                     const int whitePawnsEnPassantFromRank = 5;
                     const int blackPawnsEnPassantFromRank = 4;
 
-                    return colour == Chess.Colours.White
+                    return colour == Colours.White
                         ? whitePawnsEnPassantFromRank
-                        : colour == Chess.Colours.Black
+                        : colour == Colours.Black
                             ? blackPawnsEnPassantFromRank : 0;
 
                 }
                 
-                public static int StartingPawnRankFor(Chess.Colours chessPieceColour)
+                public static int StartingPawnRankFor(Colours chessPieceColour)
                 {
-                    if (chessPieceColour == Chess.Colours.White)
+                    if (chessPieceColour == Colours.White)
                         return 2;
 
-                    if (chessPieceColour == Chess.Colours.Black)
+                    if (chessPieceColour == Colours.Black)
                         return 7;
 
                     return 0;
                 }
 
-                public static int PromotionRankFor(Chess.Colours chessPieceColour)
+                public static int PromotionRankFor(Colours chessPieceColour)
                 {
-                    return chessPieceColour == Chess.Colours.Black
+                    return chessPieceColour == Colours.Black
                         ? 1
-                        : chessPieceColour == Chess.Colours.White
+                        : chessPieceColour == Colours.White
                             ? 8
                             : 0;
                 }
@@ -130,10 +130,15 @@ namespace CSharpChess
                     MovementTransformation.Create(MovementTransformation.Movement.Left(1), MovementTransformation.Movement.None())
                 };
             }
-            public static class KingAndQueen
+            public static class Queen
             {
                 public static IEnumerable<MovementTransformation> DirectionTransformations
                     => Bishops.DirectionTransformations.Concat(Rooks.DirectionTransformations);
+            }
+            public static class King
+            {
+                public static IEnumerable<MovementTransformation> DirectionTransformations
+                    => Queen.DirectionTransformations;
 
                 public static ChessMove CreateRookMoveForCastling(ChessMove move)
                 {
@@ -152,6 +157,25 @@ namespace CSharpChess
 
                     return new ChessMove(rook, rookTo, MoveType.Castle);
                 }
+
+                public static IEnumerable<BoardLocation> CastleLocationsBetween(BoardLocation fromLoc, BoardLocation toLoc)
+                {
+                    int fromFile, toFile;
+                    if (toLoc.File == Board.ChessFile.C)
+                    {
+                        fromFile = (int)Board.ChessFile.C;
+                        toFile = (int)Board.ChessFile.D;
+                    }
+                    else
+                    {
+                        fromFile = (int)Board.ChessFile.F;
+                        toFile = (int)Board.ChessFile.G;
+                    }
+
+                    return Enumerable.Range(fromFile, toFile - fromFile + 1).Select(v => BoardLocation.At(v, fromLoc.Rank));
+                }
+
+
             }
         }
     }

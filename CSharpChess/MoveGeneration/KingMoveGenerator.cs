@@ -21,7 +21,7 @@ namespace CSharpChess.MoveGeneration
             Func<ChessBoard, BoardLocation, BoardLocation, bool> predicate, MoveType moveType)
         {
             var result = new List<ChessMove>();
-            var possibleMoves = Chess.Rules.MovementTransformation.ApplyTo(at, Chess.Rules.KingAndQueen.DirectionTransformations);
+            var possibleMoves = Chess.Rules.MovementTransformation.ApplyTo(at, Chess.Rules.King.DirectionTransformations);
             foreach (var to in possibleMoves)
             {
                 if (predicate(board, at, to))

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 using NUnit.Framework;
-#pragma warning disable 162
 
 namespace CSharpChess.UnitTests.Helpers
 {
@@ -67,65 +65,41 @@ namespace CSharpChess.UnitTests.Helpers
             var movesOfType = actualMoves.Where(m => m.MoveType == moveType).ToList();
             CollectionAssert.AreEquivalent(expectedMoves, movesOfType);
 
-            Assert.That(movesOfType.Count(), Is.EqualTo(expectedLocations.Count()));
+            Assert.That(movesOfType.Count, Is.EqualTo(expectedLocations.Count));
         }
 
         protected static void AssertMovesContains(IEnumerable<ChessMove> moves, IEnumerable<string> locations, MoveType moveType)
         {
+            var chessMoves = moves as IList<ChessMove> ?? moves.ToList();
             foreach (var location in locations)
             {
-                AssertMovesContains(moves, location, moveType);
+                AssertMovesContains(chessMoves, location, moveType);
             }
         }
 
         protected static void AssertMovesDoesNotContain(IEnumerable<ChessMove> moves, IEnumerable<string> locations, MoveType moveType)
         {
+            var chessMoves = moves as IList<ChessMove> ?? moves.ToList();
             foreach (var location in locations)
             {
-                var found = moves.FirstOrDefault(m =>
+                var found = chessMoves.FirstOrDefault(m =>
                    m.To.Equals(BoardLocation.At(location))
                    && m.MoveType == moveType);
 
-                Assert.IsNull(found, $"MoveType of '{moveType}' to '{location}' unexpectedly found in '{string.Join(",", moves)}'!");
+                Assert.IsNull(found, $"MoveType of '{moveType}' to '{location}' unexpectedly found in '{string.Join(",", chessMoves)}'!");
             }
         }
         private static void AssertMovesContains(IEnumerable<ChessMove> moves, string location, MoveType moveType)
         {
-            var found = moves.FirstOrDefault( m => 
+            var chessMoves = moves as IList<ChessMove> ?? moves.ToList();
+            var found = chessMoves.FirstOrDefault( m => 
                 m.To.Equals(BoardLocation.At(location))
                 && m.MoveType == moveType);
 
-            Assert.IsNotNull(found, $"MoveType of '{moveType}' to '{location}' not found in '{string.Join(",",moves)}'!");
+            Assert.IsNotNull(found, $"MoveType of '{moveType}' to '{location}' not found in '{string.Join(",",chessMoves)}'!");
         }
 
         protected static void AssertAllMovesAreOfType(IEnumerable<ChessMove> moves, MoveType moveType) 
             => Assert.That(moves.All(m => m.MoveType == moveType), "Unexpected MoveType found");
-
-        protected IEnumerable<BoardLocation> BuildVerticalThreats(BoardLocation fromPieceAtLocation, int vertDirectionModifier)
-        {
-            var expected = new List<BoardLocation>();
-            for (int i = 1; i <= 7; i++)
-            {
-                var rank = fromPieceAtLocation.Rank + (i * vertDirectionModifier);
-                if (Chess.Board.Validations.IsValidLocation((int)fromPieceAtLocation.File, rank))
-                {
-                    expected.Add(BoardLocation.At(fromPieceAtLocation.File, rank));
-                }
-            }
-
-            return expected;
-        }
-
-        protected static void DumpBoardToConsole(ChessBoard board) 
-            => new MediumConsoleBoard(board).Build()
-                .ToStrings().ToList()
-                .ForEach(Console.WriteLine);
-
-        protected static void DumpBoardLocations(IEnumerable<BoardLocation> attacking)
-        {
-            var boardLocations = attacking as IList<BoardLocation> ?? attacking.ToList();
-            Console.Write($"{string.Join(",", boardLocations)}");
-            Console.WriteLine($" - {boardLocations.Count()}");
-        }
     }
 }

@@ -44,6 +44,8 @@
     <Compile Include="Chess.Board.Validations.cs" />
     <Compile Include="Chess.Pieces.cs" />
     <Compile Include="Chess.Rules.cs" />
+    <Compile Include="System\Extensions\BoardLocation.cs" />
+    <Compile Include="System\Extensions\BoardLocationExtensions.cs" />
     <Compile Include="System\Extensions\BoardPieceExtensions.cs" />
     <Compile Include="System\Extensions\ChessBoardExtensions.cs" />
     <Compile Include="System\Extensions\ChessMoveListExtensions.cs" />
@@ -55,7 +57,6 @@
     <Compile Include="System\Metrics\Timers.cs" />
     <Compile Include="System\Metrics\Timings.cs" />
     <Compile Include="OneCharBoard.cs" />
-    <Compile Include="TheBoard\BoardLocation.cs" />
     <Compile Include="TheBoard\BoardPiece.cs" />
     <Compile Include="Chess.cs" />
     <Compile Include="TheBoard\ChessBoard.cs" />

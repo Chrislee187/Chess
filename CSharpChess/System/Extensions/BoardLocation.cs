@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace CSharpChess.TheBoard
+namespace CSharpChess.System.Extensions
 {
     public class BoardLocation
     {
@@ -72,13 +72,5 @@ namespace CSharpChess.TheBoard
         }
 
         #endregion
-    }
-
-    public static class BoardLocationExtensions
-    {
-        public static BoardLocation ToBoardLocation(this string value)
-        {
-            return (BoardLocation) value;
-        }
     }
 }

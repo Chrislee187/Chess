@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
 namespace CSharpChess.MoveGeneration

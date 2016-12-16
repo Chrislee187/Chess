@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
 namespace CSharpChess.MoveGeneration
