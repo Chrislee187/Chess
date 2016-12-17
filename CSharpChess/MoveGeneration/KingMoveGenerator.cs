@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.System.Extensions;
@@ -8,48 +7,18 @@ namespace CSharpChess.MoveGeneration
 {
     public class KingMoveGenerator : MoveGeneratorBase
     {
-        public override IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at)
-        {
-            // TODO: This is common in all top level move generators, sort it out
-            return ValidMoves(board, at)
-                .Concat(ValidTakes(board, at))
-                .Concat(ValidCovers(board, at)).ToList()
-                ;
-        }
+        protected override IEnumerable<ChessMove> ValidMoves(ChessBoard board, BoardLocation at)
+            => AddTransformationsIf(board, at, (b, f, t) => b.IsEmptyAt(t), 
+                MoveType.Move, Chess.Rules.King.MovementTransformations)
+            .Concat(Castles(board, at));
 
-        private IEnumerable<ChessMove> AddMoveIf(ChessBoard board, BoardLocation at,
-            Func<ChessBoard, BoardLocation, BoardLocation, bool> predicate, MoveType moveType)
-        {
-            var result = new List<ChessMove>();
-            var possibleMoves = Chess.Rules.MovementTransformation.ApplyTo(at, Chess.Rules.King.DirectionTransformations);
-            foreach (var to in possibleMoves)
-            {
-                if (predicate(board, at, to))
-                {
-                    result.Add(new ChessMove(at, to, moveType));
-                }
-            }
+        protected override IEnumerable<ChessMove> ValidCovers(ChessBoard board, BoardLocation at) 
+            => AddTransformationsIf(board, at, (b, f, t) => board.IsCoveringAt(t, board[f].Piece.Colour), 
+                MoveType.Cover, Chess.Rules.King.MovementTransformations);
 
-            return result;
-
-        }
-
-        private IEnumerable<ChessMove> ValidMoves(ChessBoard board, BoardLocation at)
-        {
-            var moves = new List<ChessMove>();
-            moves.AddRange(AddMoveIf(board, at, (b, f, t) => b.IsEmptyAt(t), MoveType.Move));
-
-            // Castles
-            moves.AddRange(Castles(board, at));
-
-            return moves;
-        }
-
-        private IEnumerable<ChessMove> ValidCovers(ChessBoard board, BoardLocation at) =>
-            AddMoveIf(board, at, (b, f, t) => board.IsCoveringAt(t, board[f].Piece.Colour), MoveType.Cover);
-
-        private IEnumerable<ChessMove> ValidTakes(ChessBoard board, BoardLocation at) =>
-            AddMoveIf(board, at, (b, f, t) => b.CanTakeAt(t, b[f].Piece.Colour), MoveType.Take);
+        protected override IEnumerable<ChessMove> ValidTakes(ChessBoard board, BoardLocation at) 
+            => AddTransformationsIf(board, at, (b, f, t) => b.CanTakeAt(t, b[f].Piece.Colour), 
+                MoveType.Take, Chess.Rules.King.MovementTransformations);
 
         private IEnumerable<ChessMove> Castles(ChessBoard board, BoardLocation at)
         {
@@ -61,7 +30,7 @@ namespace CSharpChess.MoveGeneration
             var leftRookLoc = BoardLocation.At(Chess.Board.ChessFile.A, at.Rank);
             var rightRookLoc = BoardLocation.At(Chess.Board.ChessFile.H, at.Rank);
 
-            ChessMove to = board.CanCastle(at, leftRookLoc);
+            var to = board.CanCastle(at, leftRookLoc);
             if (to != null) moves.Add(to);
 
             to = board.CanCastle(at, rightRookLoc);
@@ -69,6 +38,5 @@ namespace CSharpChess.MoveGeneration
 
             return moves;
         }
-
     }
 }

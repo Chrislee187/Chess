@@ -12,7 +12,7 @@ namespace CSharpChess.TheBoard
         public MoveHandler(ChessBoard chessBoard)
         {
             _chessBoard = chessBoard;
-            Timers.Time("board-creation.rebuild-movelists", RebuildMoveLists);
+            RebuildMoveLists();
         }
 
         public MoveResult Move(ChessMove move, ChessMove validMove, BoardPiece boardPiece)
@@ -32,10 +32,14 @@ namespace CSharpChess.TheBoard
 
         internal void RebuildMoveLists()
         {
-            foreach (var boardPiece in _chessBoard.Pieces)
+            Counters.Increment(CounterIds.Board.MovelistRebuild);
+            Timers.Time("board-creation.rebuild-movelists", () =>
             {
-                RebuildMoveListFor(boardPiece);
-            }
+                foreach (var boardPiece in _chessBoard.Pieces)
+                {
+                    RebuildMoveListFor(boardPiece);
+                }
+            });
         }
 
         private void RebuildMoveListFor(BoardPiece boardPiece)

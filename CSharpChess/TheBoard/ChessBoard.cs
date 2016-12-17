@@ -16,38 +16,63 @@ namespace CSharpChess.TheBoard
         {
             BoardCreatedCounter();
             _constructing = true;
-            if (newGame)
+
+            SetEngineState(EngineState.Initialising, () =>
             {
-                Timers.Time(TimerIds.Board.New, () => { 
-                    NewBoard();
-                    GameState = Chess.GameState.WaitingForMove;
-                    WhoseTurn = Chess.Colours.White;
-                    MoveHandler = new MoveHandler(this);
-                });
-            }
-            else
-            {
-                Timers.Time(TimerIds.Board.Empty, () =>
+                if (newGame)
                 {
-                    EmptyBoard();
-                    GameState = Chess.GameState.Unknown;
-                    WhoseTurn = Chess.Colours.None;
-                    MoveHandler = new MoveHandler(this);
-                });
-            }
+                    InitialiseNewGameBoard();
+                }
+                else
+                {
+                    InitialiseEmptyBoard();
+                }
+            });
 
             _constructing = false;
-        }
-
-        private static void BoardCreatedCounter()
-        {
-            Counters.Increment(CounterIds.Board.Created);
         }
 
         public ChessBoard(IEnumerable<BoardPiece> pieces, Chess.Colours whoseTurn)
         {
             BoardCreatedCounter();
             _constructing = true;
+            _engineStates.Push(EngineState.Started);
+
+            Timers.Time(TimerIds.Board.Custom, () =>
+            {
+                SetEngineState(EngineState.Initialising, () =>
+                {
+                    InitialiseCustomBoard(pieces, whoseTurn);
+                });
+            });
+
+            _constructing = false;
+        }
+
+        private void InitialiseEmptyBoard()
+        {
+            Timers.Time(TimerIds.Board.Empty, () =>
+            {
+                EmptyBoard();
+                GameState = Chess.GameState.Unknown;
+                WhoseTurn = Chess.Colours.None;
+                MoveHandler = new MoveHandler(this);
+            });
+        }
+
+        private void InitialiseNewGameBoard()
+        {
+            Timers.Time(TimerIds.Board.New, () =>
+            {
+                NewBoard();
+                GameState = Chess.GameState.WaitingForMove;
+                WhoseTurn = Chess.Colours.White;
+                MoveHandler = new MoveHandler(this);
+            });
+        }
+
+        private void InitialiseCustomBoard(IEnumerable<BoardPiece> pieces, Chess.Colours whoseTurn)
+        {
             Timers.Time(TimerIds.Board.Custom, () =>
             {
                 EmptyBoard();
@@ -62,9 +87,22 @@ namespace CSharpChess.TheBoard
                 ValidateInitialBoardState();
                 UpdateGameState();
             });
-            _constructing = false;
         }
 
+        private readonly Stack<EngineState> _engineStates = new Stack<EngineState>();
+        public EngineState EngineState => _engineStates.Peek();
+        private void SetEngineState(EngineState state, Action action)
+        {
+            _engineStates.Push(state);
+            try
+            {
+                action();
+            }
+            finally
+            {
+                _engineStates.Pop();
+            }
+        }
         private void UpdateGameState()
         {
             foreach (var attacker in Chess.BothColours)
@@ -105,24 +143,30 @@ namespace CSharpChess.TheBoard
         public MoveResult Move(ChessMove move)
         {
             ThrowIfGameOver();
-            var boardPiece = this[move.From];
-
-            if (boardPiece.Piece.Colour != WhoseTurn && WhoseTurn != Chess.Colours.None)
-                return MoveResult.IncorrectPlayer(move);
-
-            var validMove = CheckMoveIsValid(move);
-            if (validMove != null)
+            MoveResult result = null;
+            SetEngineState(EngineState.Moving, () =>
             {
-                var moveResult = MoveHandler.Move(move, validMove, boardPiece);
+                var boardPiece = this[move.From];
 
-                if (moveResult.Succeeded)
+                if (boardPiece.Piece.Colour != WhoseTurn && WhoseTurn != Chess.Colours.None)
                 {
-                    UpdateGameState();
-                    return moveResult;
+                    result = MoveResult.IncorrectPlayer(move);
+                    return;
                 }
-            }
 
-            return MoveResult.Failure($"Invalid move {move}", move);
+                var validMove = CheckMoveIsValid(move);
+                if (validMove != null)
+                {
+                    var moveResult = MoveHandler.Move(move, validMove, boardPiece);
+
+                    if (moveResult.Succeeded)
+                    {
+                        UpdateGameState();
+                        result = moveResult;
+                    }
+                }
+            });
+            return result ?? MoveResult.Failure($"Invalid move {move}", move);
         }
 
         /// <summary>
@@ -132,9 +176,13 @@ namespace CSharpChess.TheBoard
         /// <returns></returns>
         public IEnumerable<ChessMove> MovesFor(BoardLocation at)
         {
-            var chessMoves = this[at].PossibleMoves
-                .Where(m => !Chess.Board.Validations.MovesLeaveOwnSideInCheck(this, m));
-            return chessMoves;
+            IEnumerable<ChessMove> result = null;
+            SetEngineState(EngineState.GeneratingPieceMoves, () =>
+            {
+                result = this[at].PossibleMoves
+                    .Where(m => !Chess.Board.Validations.MovesLeaveOwnSideInCheck(this, m));
+            });
+            return result ?? new List<ChessMove>();
         }
 
         internal void MovePiece(ChessMove move, MoveType moveType)
@@ -143,7 +191,8 @@ namespace CSharpChess.TheBoard
             ClearSquare(move.From);
             piece.MoveTo(move.To, moveType);
             this[move.To] = piece;
-            MoveHandler.RebuildMoveLists();
+
+            SetEngineState(EngineState.GeneratingMoveLists, () => MoveHandler.RebuildMoveLists());
         }
 
         public void ClearSquare(BoardLocation takenLocation) => this[takenLocation] = BoardPiece.Empty(takenLocation);
@@ -296,6 +345,18 @@ namespace CSharpChess.TheBoard
         {
             MovePiece(move, move.MoveType);
         }
+        private static void BoardCreatedCounter() => Counters.Increment(CounterIds.Board.Created);
+
+    }
+
+    public enum EngineState
+    {
+        Initialising,
+        Waiting,
+        GeneratingMoveLists,
+        Moving,
+        Started,
+        GeneratingPieceMoves
     }
 
     [Serializable]

@@ -7,21 +7,30 @@ namespace CSharpChess.MoveGeneration
 {
     public class StraightLineMoveGenerator : MoveGeneratorBase
     {
-        private readonly IEnumerable<Chess.Rules.MovementTransformation> _directions;
+        private readonly IEnumerable<Chess.Rules.TransformLocation> _directions;
 
-        protected StraightLineMoveGenerator(IEnumerable<Chess.Rules.MovementTransformation> directions)
+        protected StraightLineMoveGenerator(IEnumerable<Chess.Rules.TransformLocation> directions)
         {
             _directions = directions;
         }
 
-        public override IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at)
+        protected override IEnumerable<ChessMove> ValidMoves(ChessBoard board, BoardLocation at) 
+            => GenerateAll(board, at).Moves();
+
+        protected override IEnumerable<ChessMove> ValidCovers(ChessBoard board, BoardLocation at)
+            => GenerateAll(board, at).Covers();
+
+        protected override IEnumerable<ChessMove> ValidTakes(ChessBoard board, BoardLocation at)
+            => GenerateAll(board, at).Takes();
+
+        private IEnumerable<ChessMove> GenerateAll(ChessBoard board, BoardLocation at)
         {
             var result = new List<ChessMove>();
             var directions = _directions;
             var piece = board[at].Piece;
             foreach (var direction in directions)
             {
-                var locations = GetUntilNotEmpty(board, at, direction).ToList();
+                var locations = Chess.Rules.TransformLocation.MoveWhile(board, at, direction, (b, l) => b.IsEmptyAt(l)).ToList();
 
                 result.AddRange(locations.Select(loc => new ChessMove(at, loc, MoveType.Move)));
 
@@ -41,20 +50,5 @@ namespace CSharpChess.MoveGeneration
 
             return result;
         }
-
-        private IEnumerable<BoardLocation> GetUntilNotEmpty(ChessBoard board, BoardLocation at, Chess.Rules.MovementTransformation movement)
-        {
-            var result = new List<BoardLocation>();
-
-            var to = movement.ApplyTo(at);
-
-            while (to != null && board.IsEmptyAt(to))
-            {
-                result.Add(to);
-                to = movement.ApplyTo(to);
-            }
-            return result;
-        }
-
     }
 }

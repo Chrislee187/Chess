@@ -32,6 +32,7 @@ namespace CSharpChess.UnitTests
             // NOTE: Console output does not appear in R# runner output under this class's entry, 
             // it appears in the output of the last TestFixture run!
             OutputCounters();
+            Console.WriteLine();
             OutputTimers();
 
             AssertBoardsAreCreatedWithinAReasonableTime();
@@ -40,7 +41,7 @@ namespace CSharpChess.UnitTests
         private void OutputCounters()
         {
             Console.WriteLine("Counters");
-            foreach (var m in new[] {CounterIds.Board.Created})
+            foreach (var m in Counters.CounterKeys)
             {
                 Console.WriteLine($"{_titlePadder(m, TitleWidth)} : {_valuePadder(Counters.GetCountFor(m).ToString(), ValueWidth)}");
             }
@@ -50,7 +51,10 @@ namespace CSharpChess.UnitTests
         {
             Console.WriteLine("Timers");
             Console.WriteLine(BuildTimerTableLine());
-            Timers.TimerKeys.ToList().ForEach((k) => Console.WriteLine(BuildTimerTableLine(k)));
+            foreach (var k in Timers.TimerKeys)
+            {
+                Console.WriteLine(BuildTimerTableLine(k));
+            }
         }
 
         private string BuildTimerTableLine(string timerId = "")

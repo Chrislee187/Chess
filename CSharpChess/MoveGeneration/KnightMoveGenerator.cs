@@ -8,28 +8,16 @@ namespace CSharpChess.MoveGeneration
 {
     public class KnightMoveGenerator : MoveGeneratorBase
     {
-        public override IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at)
-        {
-            return ValidMoves(board, at)
-                .Concat(ValidTakes(board, at))
-                .Concat(ValidCovers(board, at)).ToList();
-        }
+        protected override IEnumerable<ChessMove> ValidMoves(ChessBoard board, BoardLocation at) 
+            => CreateMovesIf(board, at, (chessBoard, from, to) => chessBoard.IsEmptyAt(to), MoveType.Move);
 
-        private IEnumerable<ChessMove> AddMoveIf(ChessBoard board, BoardLocation at,
-                Func<ChessBoard, BoardLocation, BoardLocation, bool> predicate,
-                MoveType moveType)
-            => Chess.Rules.MovementTransformation.ApplyTo(at, Chess.Rules.Knights.MoveMatrix)
-                .Where(to => predicate(board, at, to))
-                .Select(m => new ChessMove(at, m, moveType));
+        protected override IEnumerable<ChessMove> ValidTakes(ChessBoard board, BoardLocation at) 
+            => CreateMovesIf(board, at, (chessBoard, from, to) => chessBoard.CanTakeAt(to, chessBoard[from].Piece.Colour), MoveType.Take);
 
-        private IEnumerable<ChessMove> ValidMoves(ChessBoard board, BoardLocation at) 
-            => AddMoveIf(board, at, (b, f, t) => b.IsEmptyAt(t), MoveType.Move);
+        protected override IEnumerable<ChessMove> ValidCovers(ChessBoard board, BoardLocation at)
+            => CreateMovesIf(board, at, (chessBoard, from, to) => chessBoard.IsCoveringAt(to, chessBoard[from].Piece.Colour), MoveType.Cover);
 
-        private IEnumerable<ChessMove> ValidTakes(ChessBoard board, BoardLocation at) 
-            => AddMoveIf(board, at, (b, f, t) => b.CanTakeAt(t, b[f].Piece.Colour), MoveType.Take);
-
-        private IEnumerable<ChessMove> ValidCovers(ChessBoard board, BoardLocation at)
-            => AddMoveIf(board, at, (b, f, t) => b.IsCoveringAt(t, b[f].Piece.Colour), MoveType.Cover);
-
+        private IEnumerable<ChessMove> CreateMovesIf(ChessBoard board, BoardLocation from, DestinationCheck destinationCheck, MoveType moveType)
+            =>AddTransformationsIf(board, from, destinationCheck, moveType, Chess.Rules.Knights.MovementTransformations);
     }
 }

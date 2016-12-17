@@ -20,10 +20,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{FF4031A4-D
 		Docs\specs.txt = Docs\specs.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -44,5 +43,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B3E8239B-EDFE-46F3-AACB-1F3434C26E64} = {81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}
+		{FF4031A4-D959-4F95-9162-1F482C7ACE92} = {81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}
 	EndGlobalSection
 EndGlobal

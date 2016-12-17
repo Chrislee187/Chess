@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.System.Extensions;
@@ -24,6 +23,36 @@ namespace CSharpChess.MoveGeneration
     ///  </summary>
     public abstract class MoveGeneratorBase : IMoveGenerator
     {
-        public abstract IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at);
+        public virtual IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at)
+        {
+            return ValidMoves(board, at)
+                .Concat(ValidTakes(board, at))
+                .Concat(ValidCovers(board, at)).ToList()
+                ;
+        }
+        /// <summary>
+        /// "Moves" are normal non-taking moves, includes castling, pawn promotions, etc.
+        /// </summary>
+        protected abstract IEnumerable<ChessMove> ValidMoves(ChessBoard board, BoardLocation at);
+        /// <summary>
+        /// "Takes" are normal taking moves
+        /// </summary>
+        protected abstract IEnumerable<ChessMove> ValidCovers(ChessBoard board, BoardLocation at);
+        /// <summary>
+        /// "Covers" are NOT actual moves but a list of any locations containing friendly pieces that
+        /// this piece could attack.
+        /// </summary>
+        protected abstract IEnumerable<ChessMove> ValidTakes(ChessBoard board, BoardLocation at);
+
+        protected delegate bool DestinationCheck(ChessBoard board, BoardLocation from, BoardLocation to);
+
+        protected static IEnumerable<ChessMove> AddTransformationsIf(ChessBoard board,
+            BoardLocation from,
+            DestinationCheck destinationCheck,
+            MoveType moveType,
+            IEnumerable<Chess.Rules.TransformLocation> directions)
+            => Chess.Rules.TransformLocation.ApplyManyTo(from, directions)
+                .Where(to => destinationCheck(board, from, to))
+                .Select(m => new ChessMove(from, m, moveType));
     }
 }
