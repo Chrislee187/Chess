@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
+using static CSharpChess.Chess.Board.LocationMover;
 
 namespace CSharpChess
 {
@@ -10,57 +11,6 @@ namespace CSharpChess
     {
         public static class Rules
         {
-            public class TransformLocation
-            {
-                public static TransformLocation Create(int x, int y) => new TransformLocation(x, y);
-
-                public static IEnumerable<BoardLocation> MoveWhile(ChessBoard board, BoardLocation from,
-                    TransformLocation transformation, Func<ChessBoard, BoardLocation, bool> @while)
-                {
-                    var result = new List<BoardLocation>();
-
-                    var to = transformation.ApplyTo(from);
-
-                    while (to != null && @while(board, to))
-                    {
-                        result.Add(to);
-                        to = transformation.ApplyTo(to);
-                    }
-                    return result;
-                }
-
-                public static IEnumerable<BoardLocation> ApplyManyTo(BoardLocation loc, IEnumerable<TransformLocation> movements)
-                    => movements.Select(m => m.ApplyTo(loc)).Where(l => l != null);
-
-                public BoardLocation ApplyTo(BoardLocation from)
-                {
-                    var file = (int)from.File + _transformX;
-                    var rank = from.Rank + _transformY;
-                    return !Board.Validations.IsValidLocation(file, rank)
-                        ? null
-                        : new BoardLocation((Board.ChessFile)file, rank);
-                }
-
-                private readonly int _transformX;
-                private readonly int _transformY;
-
-                internal static class Move
-                {
-                    internal delegate int Transform(int i);
-                    internal static Transform Left => (i) => -1 * i;
-                    internal static Transform Right => (i) => +1 * i;
-                    internal static Transform Down => (i) => -1 * i;
-                    internal static Transform Up => (i) => +1 * i;
-                    internal static Func<int> None => () => 0;
-                }
-
-                private TransformLocation(int transformX, int transformY)
-                {
-                    _transformX = transformX;
-                    _transformY = transformY;
-                }
-            }
-
             public static class Pawns
             {
                 // TODO: Unit Test this
@@ -113,46 +63,46 @@ namespace CSharpChess
             }
             public static class Knights
             {
-                public static readonly IEnumerable<TransformLocation> MovementTransformations = new List<TransformLocation>
+                public static readonly IEnumerable<Board.LocationMover> MovementTransformations = new List<Board.LocationMover>
                 {
-                    TransformLocation.Create(TransformLocation.Move.Right(1), TransformLocation.Move.Up(2)),
-                    TransformLocation.Create(TransformLocation.Move.Right(2), TransformLocation.Move.Up(1)),
-                    TransformLocation.Create(TransformLocation.Move.Right(2), TransformLocation.Move.Down(1)),
-                    TransformLocation.Create(TransformLocation.Move.Right(1), TransformLocation.Move.Down(2)),
-                    TransformLocation.Create(TransformLocation.Move.Left(1), TransformLocation.Move.Down(2)),
-                    TransformLocation.Create(TransformLocation.Move.Left(2), TransformLocation.Move.Down(1)),
-                    TransformLocation.Create(TransformLocation.Move.Left(2), TransformLocation.Move.Up (1)),
-                    TransformLocation.Create(TransformLocation.Move.Left(1), TransformLocation.Move.Up(2))
+                    Create(Moves.Right(1), Moves.Up(2)),
+                    Create(Moves.Right(2), Moves.Up(1)),
+                    Create(Moves.Right(2), Moves.Down(1)),
+                    Create(Moves.Right(1), Moves.Down(2)),
+                    Create(Moves.Left(1), Moves.Down(2)),
+                    Create(Moves.Left(2), Moves.Down(1)),
+                    Create(Moves.Left(2), Moves.Up (1)),
+                    Create(Moves.Left(1), Moves.Up(2))
                 };
             }
             public static class Bishops
             {
-                public static IEnumerable<TransformLocation> MovementTransformations => new List<TransformLocation>
+                public static IEnumerable<Board.LocationMover> MovementTransformations => new List<Board.LocationMover>
                 {
-                    TransformLocation.Create(TransformLocation.Move.Right(1), TransformLocation.Move.Up(1)),
-                    TransformLocation.Create(TransformLocation.Move.Right(1), TransformLocation.Move.Down(1)),
-                    TransformLocation.Create(TransformLocation.Move.Left(1), TransformLocation.Move.Up(1)),
-                    TransformLocation.Create(TransformLocation.Move.Left(1), TransformLocation.Move.Down(1))
+                    Create(Moves.Right(1), Moves.Up(1)),
+                    Create(Moves.Right(1), Moves.Down(1)),
+                    Create(Moves.Left(1), Moves.Up(1)),
+                    Create(Moves.Left(1), Moves.Down(1))
                 };
             }
             public static class Rooks
             {
-                public static IEnumerable<TransformLocation> MovementTransformations => new List<TransformLocation>
+                public static IEnumerable<Board.LocationMover> MovementTransformations => new List<Board.LocationMover>
                 {
-                    TransformLocation.Create(TransformLocation.Move.None(), TransformLocation.Move.Up(1)),
-                    TransformLocation.Create(TransformLocation.Move.Right(1), TransformLocation.Move.None()),
-                    TransformLocation.Create(TransformLocation.Move.None(), TransformLocation.Move.Down(1)),
-                    TransformLocation.Create(TransformLocation.Move.Left(1), TransformLocation.Move.None())
+                    Create(Moves.None(), Moves.Up(1)),
+                    Create(Moves.Right(1), Moves.None()),
+                    Create(Moves.None(), Moves.Down(1)),
+                    Create(Moves.Left(1), Moves.None())
                 };
             }
             public static class Queen
             {
-                public static IEnumerable<TransformLocation> MovementTransformations
+                public static IEnumerable<Board.LocationMover> MovementTransformations
                     => Bishops.MovementTransformations.Concat(Rooks.MovementTransformations);
             }
             public static class King
             {
-                public static IEnumerable<TransformLocation> MovementTransformations
+                public static IEnumerable<Board.LocationMover> MovementTransformations
                     => Queen.MovementTransformations;
 
                 public static ChessMove CreateRookMoveForCastling(ChessMove move)

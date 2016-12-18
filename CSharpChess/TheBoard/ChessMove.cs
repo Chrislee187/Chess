@@ -114,5 +114,10 @@ namespace CSharpChess.TheBoard
             }
         }
         #endregion
+
+        internal void UpdateUnknownMoveType(MoveType moveType)
+        {
+            MoveType = MoveType == MoveType.Unknown ? moveType : MoveType;
+        }
     }
 }

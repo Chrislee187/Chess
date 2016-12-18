@@ -120,8 +120,6 @@ namespace CSharpChess.UnitTests.BoardMovement
 
             AssertMovesContains(chessMoves, expected, MoveType.Move);
             AssertMovesDoesNotContain(chessMoves, notExpected, MoveType.Move);
-            // TODO: Assert does not contain the others
-            Assert.That(chessMoves.Count(), Is.EqualTo(2), chessMoves.ToCSV());
         }
 
         [Test]

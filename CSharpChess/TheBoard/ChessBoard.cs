@@ -169,11 +169,6 @@ namespace CSharpChess.TheBoard
             return result ?? MoveResult.Failure($"Invalid move {move}", move);
         }
 
-        /// <summary>
-        /// Using available MoveGenerators return the moves available to the piece at the specified the location
-        /// </summary>
-        /// <param name="at"></param>
-        /// <returns></returns>
         public IEnumerable<ChessMove> MovesFor(BoardLocation at)
         {
             IEnumerable<ChessMove> result = null;
@@ -185,17 +180,8 @@ namespace CSharpChess.TheBoard
             return result ?? new List<ChessMove>();
         }
 
-        internal void MovePiece(ChessMove move, MoveType moveType)
-        {
-            var piece = this[move.From];
-            ClearSquare(move.From);
-            piece.MoveTo(move.To, moveType);
-            this[move.To] = piece;
-
-            SetEngineState(EngineState.GeneratingMoveLists, () => MoveHandler.RebuildMoveLists());
-        }
-
-        public void ClearSquare(BoardLocation takenLocation) => this[takenLocation] = BoardPiece.Empty(takenLocation);
+        public void ClearSquare(BoardLocation takenLocation) 
+            => this[takenLocation] = BoardPiece.Empty(takenLocation);
 
         private ChessMove CheckMoveIsValid(ChessMove move)
             => MovesFor(move.From).Where(m => !m.MoveType.IsCover()).FirstOrDefault(vm => vm.Equals(move));
@@ -246,7 +232,7 @@ namespace CSharpChess.TheBoard
             set { throw new NotImplementedException(); }
         }
 
-        internal MoveHandler MoveHandler { get; private set; }
+        private MoveHandler MoveHandler { get; set; }
         public Chess.GameState GameState { get; private set; }
 
         public ChessBoard ShallowClone()
@@ -324,7 +310,6 @@ namespace CSharpChess.TheBoard
             }
         }
 
-
         private void ValidateInitialBoardState()
         {
             if (this.GetKingFor(Chess.Colours.Black) == null)
@@ -343,7 +328,7 @@ namespace CSharpChess.TheBoard
         /// <param name="move"></param>
         internal void MovePiece(ChessMove move)
         {
-            MovePiece(move, move.MoveType);
+            MoveHandler.MovePiece(move);
         }
         private static void BoardCreatedCounter() => Counters.Increment(CounterIds.Board.Created);
 

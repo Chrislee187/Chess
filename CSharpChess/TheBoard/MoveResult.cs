@@ -4,17 +4,15 @@
     {
         public string Message { get; private set; }
         public bool Succeeded { get; }
-        public MoveType MoveType { get; }
         public ChessMove Move { get; private set; }
 
-        private MoveResult(bool success, ChessMove move, MoveType moveType)
+        private MoveResult(bool success, ChessMove move)
         {
             Succeeded = success;
-            MoveType = moveType;
             Move = move;
         }
 
-        private MoveResult(bool success, ChessMove move, string message) : this(success, move, move.MoveType)
+        private MoveResult(bool success, ChessMove move, string message) : this(success, move)
         {
             Message = message;
         }
@@ -24,19 +22,19 @@
             return new MoveResult(false, move, "Incorrect Player");
         }
 
-        public static MoveResult Success(ChessMove move, MoveType moveType = MoveType.Move)
+        public static MoveResult Success(ChessMove move)
         {
-            return new MoveResult(true, move, moveType);
+            return new MoveResult(true, move);
         }
 
         public static MoveResult Enpassant(ChessMove move)
         {
-            return new MoveResult(true, move, MoveType.TakeEnPassant);
+            return new MoveResult(true, move);
         }
 
-        public static MoveResult Promotion(ChessMove move, MoveType moveType = MoveType.Promotion)
+        public static MoveResult Promotion(ChessMove move)
         {
-            return new MoveResult(true, move, MoveType.Promotion);
+            return new MoveResult(true, move);
         }
 
         public static MoveResult Failure(string message, ChessMove move)

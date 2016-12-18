@@ -43,7 +43,7 @@ namespace CSharpChess.UnitTests.BoardMovement
             var result = board.Move("d4c3");
 
             Assert.That(result.Succeeded, "Enpassant move failed");
-            Assert.That(result.MoveType, Is.EqualTo(MoveType.TakeEnPassant));
+            Assert.That(result.Move.MoveType, Is.EqualTo(MoveType.TakeEnPassant));
             Assert.That(board.IsEmptyAt("d4"), "Moved piece not removed from starting sqaure");
             Assert.That(board.IsEmptyAt("c4"), "Taken piece not removed");
             Assert.That(board["c3"].Piece.Is(Chess.Colours.Black, Chess.PieceNames.Pawn), "Moved piece not found on destination sqaure.");

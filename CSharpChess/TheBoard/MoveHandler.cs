@@ -5,6 +5,7 @@ using CSharpChess.System.Metrics;
 
 namespace CSharpChess.TheBoard
 {
+    // TODO: Unit-test against different move types
     public class MoveHandler
     {
         private readonly ChessBoard _chessBoard;
@@ -17,20 +18,30 @@ namespace CSharpChess.TheBoard
 
         public MoveResult Move(ChessMove move, ChessMove validMove, BoardPiece boardPiece)
         {
-            var moveType = DefaultMoveType(move.MoveType, validMove.MoveType);
+            move.UpdateUnknownMoveType(validMove.MoveType);
 
-            PreMoveActions(move, moveType);
+            PreMoveActions(move);
 
-            _chessBoard.MovePiece(move, moveType);
+            MovePiece(move);
 
-            var movePerformed = PostMoveActions(move, moveType, boardPiece);
+            var movePerformed = PostMoveActions(move, boardPiece);
 
             RebuildMoveLists();
 
             return movePerformed;
         }
 
-        internal void RebuildMoveLists()
+        internal void MovePiece(ChessMove move)
+        {
+            var piece = _chessBoard[move.From];
+            _chessBoard.ClearSquare(move.From);
+            piece.MoveTo(move.To, move.MoveType);
+            _chessBoard[move.To] = piece;
+
+            RebuildMoveLists();
+        }
+
+        private void RebuildMoveLists()
         {
             Counters.Increment(CounterIds.Board.MovelistRebuild);
             Timers.Time("board-creation.rebuild-movelists", () =>
@@ -48,9 +59,9 @@ namespace CSharpChess.TheBoard
             boardPiece.SetAll(all.ToList());
         }
 
-        private void PreMoveActions(ChessMove move, MoveType moveType)
+        private void PreMoveActions(ChessMove move)
         {
-            switch (moveType)
+            switch (move.MoveType)
             {
                 case MoveType.Take:
                     TakeSquare(move.To);
@@ -60,15 +71,15 @@ namespace CSharpChess.TheBoard
                     break;
                 case MoveType.Castle:
                     var rookMove = Chess.Rules.King.CreateRookMoveForCastling(move);
-                    _chessBoard.MovePiece(rookMove, MoveType.Castle);
+                    MovePiece(rookMove);
                     break;
             }
         }
 
-        private MoveResult PostMoveActions(ChessMove move, MoveType moveType, BoardPiece boardPiece)
+        private MoveResult PostMoveActions(ChessMove move, BoardPiece boardPiece)
         {
             MoveResult result;
-            switch (moveType)
+            switch (move.MoveType)
             {
                 case MoveType.TakeEnPassant:
                     var takenLocation = new BoardLocation(move.To.File, move.From.Rank);
@@ -80,7 +91,7 @@ namespace CSharpChess.TheBoard
                     result = MoveResult.Promotion(move);
                     break;
                 default:
-                    result = MoveResult.Success(move, moveType);
+                    result = MoveResult.Success(move);
                     break;
             }
             NextTurn();

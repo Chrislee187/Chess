@@ -42,7 +42,7 @@ namespace CSharpChess.UnitTests.Helpers
         {
             var m = (ChessMove)move;
             Assert.True(result.Succeeded, result.Message);
-            Assert.That(result.MoveType, Is.EqualTo(moveType));
+            Assert.That(result.Move.MoveType, Is.EqualTo(moveType));
             Assert.True(board.IsEmptyAt(m.From), $"Move start square '{m.From}' not empty, contains '{board[m.From].Piece}'.");
             Assert.True(board.IsNotEmptyAt(m.To), "Move destination square empty.");
             Assert.True(board[m.To].Piece.Is(chessPiece.Colour, chessPiece.Name),
@@ -96,7 +96,7 @@ namespace CSharpChess.UnitTests.Helpers
                 m.To.Equals(BoardLocation.At(location))
                 && m.MoveType == moveType);
 
-            Assert.IsNotNull(found, $"MoveType of '{moveType}' to '{location}' not found in '{string.Join(",",chessMoves)}'!");
+            Assert.IsNotNull(found, $"MoveType of '{moveType}' to '{location}' not found in '{chessMoves.ToCSV()}'!");
         }
 
         protected static void AssertAllMovesAreOfType(IEnumerable<ChessMove> moves, MoveType moveType) 

@@ -50,8 +50,8 @@ namespace CSharpChess.MoveGeneration
             BoardLocation from,
             DestinationCheck destinationCheck,
             MoveType moveType,
-            IEnumerable<Chess.Rules.TransformLocation> directions)
-            => Chess.Rules.TransformLocation.ApplyManyTo(from, directions)
+            IEnumerable<Chess.Board.LocationMover> directions)
+            => Chess.Board.LocationMover.ApplyToMany(from, directions)
                 .Where(to => destinationCheck(board, from, to))
                 .Select(m => new ChessMove(from, m, moveType));
     }
