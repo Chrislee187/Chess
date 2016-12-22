@@ -11,6 +11,7 @@ namespace CSharpChess
     {
         public static partial class Board
         {
+            // TODO: Unit Tests?
             public static class Validations
             {
                 public static bool IsValidLocation(int file, int rank) => !InvalidFile(file) && !InvalidRank(rank);
@@ -47,6 +48,7 @@ namespace CSharpChess
                 public static bool IsNotEmptyAt(ChessBoard board, string location)
                     => !IsEmptyAt(board, (BoardLocation)location);
 
+                // TODO: Unit Tests?
                 public static ChessMove CanCastle(ChessBoard board, BoardLocation kingLocation, BoardLocation rookLoc)
                 {
                     var rookPiece = board[rookLoc];

@@ -41,7 +41,7 @@ namespace CSharpChess.UnitTests
         private void OutputCounters()
         {
             Console.WriteLine("Counters");
-            foreach (var m in Counters.CounterKeys)
+            foreach (var m in Counters.CounterKeys.OrderBy(l => l))
             {
                 Console.WriteLine($"{_titlePadder(m, TitleWidth)} : {_valuePadder(Counters.GetCountFor(m).ToString(), ValueWidth)}");
             }
@@ -51,7 +51,7 @@ namespace CSharpChess.UnitTests
         {
             Console.WriteLine("Timers");
             Console.WriteLine(BuildTimerTableLine());
-            foreach (var k in Timers.TimerKeys)
+            foreach (var k in Timers.TimerKeys.OrderBy(l => l))
             {
                 Console.WriteLine(BuildTimerTableLine(k));
             }

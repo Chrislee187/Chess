@@ -119,5 +119,8 @@ namespace CSharpChess.TheBoard
         {
             MoveType = MoveType == MoveType.Unknown ? moveType : MoveType;
         }
+
+        public static ChessMove Create(BoardLocation from, BoardLocation to) 
+            => new ChessMove(@from, to, MoveType.Unknown);
     }
 }

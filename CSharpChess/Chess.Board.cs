@@ -24,6 +24,7 @@ namespace CSharpChess
                 NoDirectionModifier = 0
             }
 
+            // TODO: Unit Test these
             public static int ForwardDirectionModifierFor(ChessPiece piece)
             {
                 return (int) (piece.Colour == Colours.White

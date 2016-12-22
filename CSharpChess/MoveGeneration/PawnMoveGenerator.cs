@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
+using static CSharpChess.Chess.Board.Validations;
+using static CSharpChess.Chess.Rules.Pawns;
 
 namespace CSharpChess.MoveGeneration
 {
@@ -41,11 +43,11 @@ namespace CSharpChess.MoveGeneration
             var newMove = new ChessMove(at, boardLocation, PromotedTo(boardLocation, chessPiece.Colour, MoveType.Move));
 
             var validMoves = new List<ChessMove>();
-            if (Chess.Board.Validations.IsValidLocation(boardLocation)
+            if (IsValidLocation(boardLocation)
                 && destinationCheck(board, newMove.To, chessPiece.Colour))
             {
                 validMoves.Add(newMove);
-                if (board[at].Location.Rank == Chess.Rules.Pawns.StartingPawnRankFor(chessPiece.Colour))
+                if (board[at].Location.Rank == StartingPawnRankFor(chessPiece.Colour))
                 {
                     var location = new BoardLocation(at.File, at.Rank + (direction * 2));
                     newMove = new ChessMove(at, location, PromotedTo(location, chessPiece.Colour, MoveType.Move));
@@ -65,7 +67,9 @@ namespace CSharpChess.MoveGeneration
             => CreateTakeLocations(board, at, CalcTakeLocation);
 
         private static IEnumerable<BoardLocation> CalcEnPassants(ChessBoard board, BoardLocation at) 
-            => CreateEnPassantLocations(board, at).Where(p => Chess.Rules.Pawns.CanEnPassant(board, at, p));
+            => CreateEnPassantLocations(board, at)
+                .Where(p => 
+                    EnPassantRules.Check(board, ChessMove.Create(at, p)).All(rr => rr.Passed));
 
         private static IEnumerable<BoardLocation> CreateEnPassantLocations(ChessBoard board, BoardLocation at) 
             => CreateTakeLocations(board, at, CalcEnPassantLocation);
@@ -85,7 +89,7 @@ namespace CSharpChess.MoveGeneration
         {
             var vertical = Chess.Board.ForwardDirectionModifierFor(board[at].Piece);
 
-            var enpassantRank = Chess.Rules.Pawns.EnpassantFromRankFor(board[at].Piece.Colour);
+            var enpassantRank = EnpassantFromRankFor(board[at].Piece.Colour);
 
             if (at.Rank == enpassantRank && Chess.Board.NotOnEdge(at, direction))
             {
@@ -104,7 +108,7 @@ namespace CSharpChess.MoveGeneration
             foreach (var direction in directions)
             {
                 BoardLocation loc;
-                if ((loc = positionCalculator(board, at, direction)) != null && Chess.Board.Validations.IsValidLocation(loc))
+                if ((loc = positionCalculator(board, at, direction)) != null && IsValidLocation(loc))
                 {
                     positions.Add(loc);
                 }
@@ -114,7 +118,7 @@ namespace CSharpChess.MoveGeneration
 
         private static MoveType PromotedTo(BoardLocation location, Chess.Colours colour, MoveType dflt)
         {
-            return location.Rank == Chess.Rules.Pawns.PromotionRankFor(colour)
+            return location.Rank == PromotionRankFor(colour)
                 ? MoveType.Promotion
                 : dflt;
         }

@@ -4,9 +4,10 @@
     {
         public static class Board
         {
-            public const string New = "board-creation.new.μs";
-            public const string Empty = "board-creation.empty.μs";
-            public const string Custom = "board-creation.custom.μs";
+            public const string New = "board.creation.new";
+            public const string Empty = "board.creation.empty";
+            public const string Custom = "board.creation.custom";
+            public const string RebuildMoveList = "board.movelists.rebuild-all";
         }
     }
 }

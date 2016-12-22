@@ -18,7 +18,7 @@ namespace CSharpChess
             CheckMateBlackWins,
             CheckMateWhiteWins
         }
-
+        // TODO: Unit-Test
         public static Colours ColourOfEnemy(Colours colour) => colour == Colours.Black
             ? Colours.White
             : colour == Colours.White

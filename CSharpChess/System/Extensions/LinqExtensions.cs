@@ -24,6 +24,9 @@ namespace CSharpChess.System.Extensions
 
         public static bool None<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> selector) 
             => !source.Any(selector);
+
+        public static IEnumerable<string> ToStrings<TSource>(this IEnumerable<TSource> source ) 
+            => source.Select(i => i.ToString());
     }
 
 

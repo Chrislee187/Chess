@@ -9,26 +9,35 @@ namespace CSharpChess
 {
     public static partial class Chess
     {
+        // TODO: Unit Test all these "Rules"
         public static class Rules
         {
             public static class Pawns
             {
-                // TODO: Unit Test this
-                public static bool CanEnPassant(ChessBoard board, BoardLocation at, BoardLocation moveLocation)
-                {
-                    var newFile = moveLocation.File;
-                    var takeLocation = new BoardLocation(newFile, at.Rank);
-                    var piece = board[takeLocation].Piece;
-                    var canTakeAPiece = board.IsNotEmptyAt(takeLocation)
-                                        && piece.Is(PieceNames.Pawn)
-                                        && piece.IsNot(board[at].Piece.Colour)
-                                        && board[takeLocation].MoveHistory.Count() == 1
+                public static readonly RuleSet EnPassantRules = new RuleSet("pawn.enpassant")
+                    .Add("is-on-correct-rank-to-take",
+                        (board, move) => move.From.Rank == EnpassantFromRankFor(board[move.From].Piece.Colour))
+                    .Add("enemy-pawn-exists-for-enpassant", DestinationIsEnemyPawn)
+                    .Add("enemy-pawn-has-only-one-move-in-history", PawnBeingTakeWithEnpassantHasCorrectMoveHistory)
+                    .Add("friendly-pawn-destination-is-empty", (board, move) => board.IsEmptyAt(move.To))
                         ;
-                    var moveToSpotIsVacant = board.IsEmptyAt(moveLocation);
 
-                    return (canTakeAPiece && moveToSpotIsVacant);
+                public static bool DestinationIsEnemyPawn(ChessBoard board, ChessMove move)
+                {
+                    var newFile = move.To.File;
+                    var takeLocation = new BoardLocation(newFile, move.From.Rank);
+                    var piece = board[takeLocation].Piece;
+                    var enemyColour = ColourOfEnemy(board[move.From].Piece.Colour);
+
+                    return board[takeLocation].Piece.Is(enemyColour, PieceNames.Pawn);
                 }
-
+                public static bool PawnBeingTakeWithEnpassantHasCorrectMoveHistory(ChessBoard board, ChessMove move)
+                {
+                    var newFile = move.To.File;
+                    var takeLocation = new BoardLocation(newFile, move.From.Rank);
+                    var piece = board[takeLocation].Piece;
+                    return board[takeLocation].MoveHistory.Count() == 1;
+                }
                 public static int EnpassantFromRankFor(Colours colour)
                 {
                     const int whitePawnsEnPassantFromRank = 5;
@@ -40,7 +49,6 @@ namespace CSharpChess
                             ? blackPawnsEnPassantFromRank : 0;
 
                 }
-                
                 public static int StartingPawnRankFor(Colours chessPieceColour)
                 {
                     if (chessPieceColour == Colours.White)
@@ -51,7 +59,6 @@ namespace CSharpChess
 
                     return 0;
                 }
-
                 public static int PromotionRankFor(Colours chessPieceColour)
                 {
                     return chessPieceColour == Colours.Black

@@ -1,12 +1,15 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace CSharpChess.System.Metrics
 {
     public static class Counters
     {
-        public static IEnumerable<string> CounterKeys => InMemCounter.Keys;
         private static readonly ConcurrentDictionary<string, long> InMemCounter = new ConcurrentDictionary<string, long>();
+
+        public static IEnumerable<string> CounterKeys 
+            => InMemCounter.Keys;
 
         public static void Increment(string counterKey)
         {
@@ -18,6 +21,27 @@ namespace CSharpChess.System.Metrics
             long result = 0;
             InMemCounter.TryGetValue(counterKey, out result);
             return result;
+        }
+    }
+
+    public static class Logger
+    {
+        // TODO: Wire this up to NLog/log4net or something
+        private static readonly IDictionary<string, Action<string>> _loggers;
+
+        static Logger()
+        {
+            _loggers = new Dictionary<string, Action<string>>()
+            {{ "console", Console.WriteLine}}
+            ;
+        }
+
+        public static void Log(string message)
+        {
+            foreach (var loggersValue in _loggers.Values)
+            {
+                loggersValue(message);
+            }
         }
     }
 }

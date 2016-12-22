@@ -43,8 +43,8 @@ namespace CSharpChess.TheBoard
 
         private void RebuildMoveLists()
         {
-            Counters.Increment(CounterIds.Board.MovelistRebuild);
-            Timers.Time("board-creation.rebuild-movelists", () =>
+            Counters.Increment(CounterIds.Board.MovelistRebuildAll);
+            Timers.Time(TimerIds.Board.RebuildMoveList, () =>
             {
                 foreach (var boardPiece in _chessBoard.Pieces)
                 {
