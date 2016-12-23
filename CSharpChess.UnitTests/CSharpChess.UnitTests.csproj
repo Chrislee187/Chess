@@ -49,6 +49,7 @@
     <Compile Include="BoardMovement\rooks.cs" />
     <Compile Include="BoardMovement\knights.cs" />
     <Compile Include="BoardMovement\bishops.cs" />
+    <Compile Include="PgnParser\PgnParserTests.cs" />
     <Compile Include="Rules\PawnTests.cs" />
     <Compile Include="TestsSetupClass.cs" />
     <Compile Include="ConsoleBoardWriters\Spikes.cs" />
