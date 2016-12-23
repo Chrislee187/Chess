@@ -1,3 +1,22 @@
+
+
+Console Commands
+	"xx-yy"	- move
+	flip	- flip board view
+	resign	- concede the match
+	quit	- quit the app
+	restart
+	
+MenuCommand
+	string Verb
+	string Help
+	string params
+	Func<board, command params> action
+
+
+
+
+
 Console App
 	Simple console app to play chess against another player on network.
 	
@@ -9,70 +28,3 @@ Console App
 			Search for game_id and join it.
 
 
-
-How to detect check, 
-	detect player putting enemy in check
-	detect king moving in to check 
-	detect playing moving a piece which would result in leaving his own king in check
-	
-
-
-
-Ranks are the horizontal Numbers
-Files are the vertical Letters
- ABCDEFGH
-8rbkqgkbr
-7pppppppp
-6
-5
-4
-3
-2PPPPPPPP
-1RBKQGKBR
-
-Chess
-	Valid Move Generator
-		Given a board of any state
-			Generate valid moves available for any/all pieces
-			
-			
-			
-ChessBoard
-	Moves[] Moves
-	int CurrentMoveNumber
-	Colour WhoseTurn;
-	
-	BoardSquare[] Squares = new BoardPiece[8]
-	Move(BoardLocation From, BoardLocation To)
-
-BoardPiece
-	BoardLocation At;
-	ChessPiece Piece;
-	Moves[] ValidMoves; // Will need access to a Move factory
-	
-BoardSquare
-	BoardPiece? Piece;
-	BoardPiece[] Threats;
-
-BoardLocation
-	Files File;
-	int	  Rank
-	
-ChessPiece
-	Colour	White | Black
-	Name	Pawn | Rook | Knight | Bishop | King | Queen
-
-Enum Files
-Enum Files
-	A=1, B, C, D, E, F, G, H
-
-BoardBuilder
-	EmptyBoard
-	NewBoard
-	CustomBoard(OneCharString (Len = 64))
-	CustomBoard(OneCharPieces[64))
-	CustomBoard(BoardRanks[8] ranks)
-	SetRank(int rank, ChessPiece[] pieces)
-	SetRank(int rank, string pieces) // . - empty square, ' ' - leave contents intact
-	Set(int rank, Files file)
-	Set(int rank, int file)

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using ConsoleStuff.Tests;
+using ConsoleStuff.Tests.ConsolePanel;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 

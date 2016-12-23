@@ -27,18 +27,18 @@ namespace CSharpChess.System.Metrics
     public static class Logger
     {
         // TODO: Wire this up to NLog/log4net or something
-        private static readonly IDictionary<string, Action<string>> _loggers;
+        private static readonly IDictionary<string, Action<string>> Loggers;
 
         static Logger()
         {
-            _loggers = new Dictionary<string, Action<string>>()
+            Loggers = new Dictionary<string, Action<string>>()
             {{ "console", Console.WriteLine}}
             ;
         }
 
         public static void Log(string message)
         {
-            foreach (var loggersValue in _loggers.Values)
+            foreach (var loggersValue in Loggers.Values)
             {
                 loggersValue(message);
             }

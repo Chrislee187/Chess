@@ -58,7 +58,6 @@
     <Compile Include="BoardBuilderTests\default_boards.cs" />
     <Compile Include="Helpers\ChessBoardHelper.cs" />
     <Compile Include="BoardMovement\pawns.cs" />
-    <Compile Include="Helpers\ConsolePanel.cs" />
     <Compile Include="Helpers\MediumConsoleBoard.cs" />
     <Compile Include="Helpers\SmallConsoleBoard.cs" />
     <Compile Include="TheBoard\PsgChessMoveTests.cs" />
@@ -90,6 +89,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConsoleStuff.Tests\ConsoleStuff.Tests.csproj">
+      <Project>{56C63A93-0B42-4E3F-BFD9-DC189603B59E}</Project>
+      <Name>ConsoleStuff.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpChess\CSharpChess.csproj">
       <Project>{D49A0857-6DD8-4777-A297-56325CE9C7F6}</Project>
       <Name>CSharpChess</Name>

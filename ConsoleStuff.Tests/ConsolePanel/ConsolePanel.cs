@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 // ReSharper disable UnusedParameter.Local
 
-namespace CSharpChess.UnitTests.Helpers
+namespace ConsoleStuff.Tests.ConsolePanel
 {
     public class ConsolePanel
     {
-        private int Width { get; }
-        private int Height { get; }
+        public int Width { get; }
+        public int Height { get; }
         private readonly char[,] _panel;
+        private char this[int x, int y] => _panel[x, y];
 
         public ConsolePanel(int width, int height)
         {
@@ -22,12 +24,9 @@ namespace CSharpChess.UnitTests.Helpers
         public ConsolePanel PrintAt(int x, int y, char c)
         {
             CheckXY(x, y);
-
             _panel[x - 1, y - 1] = c;
-
             return this;
         }
-
 
         // ReSharper disable once UnusedMethodReturnValue.Global
         public ConsolePanel PrintAt(int x, int y, string s)
@@ -52,13 +51,13 @@ namespace CSharpChess.UnitTests.Helpers
         }
 
         // ReSharper disable once UnusedMethodReturnValue.Global
+
         public ConsolePanel PrintAt(int panelX, int panelY, ConsolePanel panel)
         {
             for (var y = 0; y < panel.Height; y++)
             {
                 for (var x = 0; x < panel.Width; x++)
                 {
-//                    _panel[(panelX-1) + x, (panelY-1) + y] = panel[x, y];
                     PrintAt((panelX) + x, (panelY) + y, panel[x, y]);
                 }
             }
@@ -98,8 +97,6 @@ namespace CSharpChess.UnitTests.Helpers
             }
             return s.ToArray();
         }
-
-        protected char this[int x, int y] => _panel[x, y];
 
         public override string ToString()
         {
