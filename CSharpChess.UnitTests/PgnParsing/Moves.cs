@@ -137,5 +137,33 @@ namespace CSharpChess.UnitTests.PgnParsing
             AssertPgnMoveQueryIs(third.Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "A5");
 
         }
+
+        [TestCase("O-O", "C1")]
+        [TestCase("O-O-O", "G1")]
+        public void can_parse_castle(string move, string kingDestination)
+        {
+            var turn = Chess.Colours.White;
+            PgnMoveQuery moveQuery;
+            var parsed = PgnMoveQuery.TryParse(turn, move, out moveQuery);
+
+            Assert.True(parsed);
+            Assert.True(moveQuery.Piece.Is(Chess.Colours.White, Chess.PieceNames.King));
+            Assert.That(moveQuery.FromFile, Is.EqualTo(Chess.Board.ChessFile.E));
+            Assert.That(moveQuery.Destination, Is.EqualTo(BoardLocation.At(kingDestination)));
+            Assert.That(moveQuery.MoveType, Is.EqualTo(MoveType.Castle));
+        }
+
+        [Test]
+        public void can_parse_basic_pieces_with_start_file()
+        {
+            var move = $"Nbd7";
+            var turn = Chess.Colours.White;
+            PgnMoveQuery moveQuery;
+            var parsed = PgnMoveQuery.TryParse(turn, move, out moveQuery);
+
+            Assert.True(parsed, "Did not parse!");
+            AssertPgnMoveQueryIs(moveQuery, Chess.Colours.White, Chess.PieceNames.Knight, MoveType.Move, "D7", Chess.Board.ChessFile.B);
+        }
+
     }
 }

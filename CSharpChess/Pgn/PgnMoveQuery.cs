@@ -40,32 +40,49 @@ namespace CSharpChess.Pgn
             {'R', Chess.PieceNames.Rook },
             {'Q', Chess.PieceNames.Queen },
             {'K', Chess.PieceNames.King },
+            {'O', Chess.PieceNames.King },
         };
 
         public static bool TryParse(Chess.Colours turn, string move, out PgnMoveQuery moveQuery)
         {
-            MoveType moveType = MoveType.Unknown;
-            Chess.Board.ChessFile fromFile = Chess.Board.ChessFile.None;
-            
-            string dest = "";
-            Chess.PieceNames pn = GetPieceName(move);
+            var moveType = MoveType.Unknown;
+            var fromFile = Chess.Board.ChessFile.None;
+            var dest = string.Empty;
+            var pn = GetPieceName(move);
 
             moveType = MoveType.Move;
 
-            if (BasicPawnMove(move))
+            // TODO: Redo using a token approach, char's as tokens
+
+            if (move.ToUpper() == "O-O" || move.ToUpper() == "O-O-O")
+            {
+                pn = Chess.PieceNames.King;
+                moveType = MoveType.Castle;
+                fromFile = Chess.Board.ChessFile.E;
+                dest = CalcKingDestinationForCastle(turn, move);
+            }
+            else if (BasicPawnMove(move))
             {
                 dest = move;
             }
             else
             {
-                if (move[1] == 'x')
+                if (MoveIsATake(move))
                 {
                     moveType = MoveType.Take;
-                    if (move.Length == 4)
+                    if (move.Length >= 4)
                     {
                         dest = move.Substring(2, 2);
-                        fromFile = BoardLocation.At($"{move[0]}1").File;
+                        fromFile = BoardLocation.At($"{move[2]}1").File;
                     }
+                }
+                else if (MoveContainsChessFileHint(move))
+                {
+                    var fileChar = move[1];
+
+                    if (!Enum.TryParse(fileChar.ToString().ToUpper(), out fromFile)) throw new ArgumentException($"Invalid Chess File {fileChar}", nameof(move));
+
+                    dest = move.Substring(2, 2);
                 }
                 else
                 {
@@ -79,6 +96,26 @@ namespace CSharpChess.Pgn
 
             moveQuery = new PgnMoveQuery(piece, destination, moveType, fromFile);
             return true;
+        }
+
+        private static bool MoveContainsChessFileHint(string move)
+        {
+            return move.Length == 4;
+        }
+
+        private static bool MoveIsATake(string move)
+        {
+            return move[1] == 'x';
+        }
+
+        private static string CalcKingDestinationForCastle(Chess.Colours turn, string move)
+        {
+            if (move.ToUpper() == "O-O")
+            {
+                return "C" + ((turn == Chess.Colours.White) ? "1" : "8");
+            }
+
+            return "G" + ((turn == Chess.Colours.White) ? "1" : "8");
         }
 
         private static bool BasicPawnMove(string move)

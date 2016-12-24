@@ -13,16 +13,17 @@ namespace CSharpChess.Pgn
             var moveIsFor = Chess.Colours.None;
             PgnMoveQuery white = null, black = null;
             string currentText = "";
+            int turnNumber = 0;
 
             Action resetTurnState = () =>
             {
+                Console.WriteLine($"Reseting after turn {turnNumber}");
                 moveIsFor = Chess.Colours.None;
                 currentText = string.Empty;
                 white = black = null;
             };
 
-            var tokens = new Stack<string>(text.Split(' ').Reverse());
-            int turnNumber = 0;
+            var tokens = new Stack<string>(text.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ").Split(' ').Reverse());
             while (tokens.Any())
             {
                 var token = tokens.Pop();
@@ -79,8 +80,16 @@ namespace CSharpChess.Pgn
                 throw new ArgumentException($"Parse error: {token}, expected move but don't know for which colour");
         }
 
-        private static int ParseTurnNumber(string token) 
-            => int.Parse(token.Substring(0, token.IndexOf(".")));
+        private static int ParseTurnNumber(string token)
+        {
+            int turnNumber;
+            var substring = token.Substring(0, token.IndexOf("."));
+            if(!int.TryParse(substring, out turnNumber))
+            {
+                throw new ArgumentException($"Couldn't parse '{substring}' as a turn number.");
+            }
+            return turnNumber;
+        }
 
         private static Chess.Colours ParseMoveColour(string token) 
             => token.Count(c => c == '.') == 1 

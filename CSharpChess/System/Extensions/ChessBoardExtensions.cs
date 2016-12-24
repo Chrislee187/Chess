@@ -1,17 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.TheBoard;
+using static CSharpChess.Chess;
 
 namespace CSharpChess.System.Extensions
 {
     public static class ChessBoardExtensions
     {
+        public static bool GameOver(this ChessBoard board)
+        {
+            var gameOverStates = new[] {GameState.CheckMateBlackWins, GameState.CheckMateWhiteWins, GameState.Stalemate};
+            return gameOverStates.Any(s => s == board.GameState);
+        }
         public static IEnumerable<IEnumerable<BoardPiece>> Ranks(this ChessBoard board)
         {
-            foreach (var rank in Chess.Board.Ranks)
+            foreach (var rank in Board.Ranks)
             {
                 var list = new List<BoardPiece>();
-                foreach (var chessFile in Chess.Board.Files)
+                foreach (var chessFile in Board.Files)
                 {
                     list.Add(board[BoardLocation.At(chessFile, rank)]);
                 }
@@ -20,10 +26,10 @@ namespace CSharpChess.System.Extensions
         }
         public static IEnumerable<IEnumerable<BoardPiece>> Files(this ChessBoard board)
         {
-            foreach (var chessFile in Chess.Board.Files)
+            foreach (var chessFile in Board.Files)
             {
                 var list = new List<BoardPiece>();
-                foreach (var rank in Chess.Board.Ranks)
+                foreach (var rank in Board.Ranks)
                 {
                     list.Add(board[BoardLocation.At(chessFile, rank)]);
                 }
@@ -32,16 +38,16 @@ namespace CSharpChess.System.Extensions
         }
 
         public static ChessMove CanCastle(this ChessBoard board, BoardLocation at, BoardLocation rookLoc) => 
-            Chess.Board.Validations.CanCastle(board, at, rookLoc);
+            Board.Validations.CanCastle(board, at, rookLoc);
 
-        public static bool InCheckAt(this ChessBoard board, BoardLocation at, Chess.Colours asPlayer)
-            => Chess.Board.Validations.InCheckAt(board, at, asPlayer);
+        public static bool InCheckAt(this ChessBoard board, BoardLocation at, Colours asPlayer)
+            => Board.Validations.InCheckAt(board, at, asPlayer);
 
         public static bool IsEmptyAt(this ChessBoard board, BoardLocation location)
-            => Chess.Board.Validations.IsEmptyAt(board, location);
+            => Board.Validations.IsEmptyAt(board, location);
 
         public static bool MovesLeaveOwnSideInCheck(this ChessBoard board, ChessMove move)
-            => Chess.Board.Validations.MovesLeaveOwnSideInCheck(board, move);
+            => Board.Validations.MovesLeaveOwnSideInCheck(board, move);
 
         public static bool IsEmptyAt(this ChessBoard board, string location)
             => IsEmptyAt(board, BoardLocation.At(location));
@@ -52,15 +58,15 @@ namespace CSharpChess.System.Extensions
         public static bool IsNotEmptyAt(this ChessBoard board, string location)
             => !IsEmptyAt(board, BoardLocation.At(location));
 
-        public static bool CanTakeAt(this ChessBoard board, BoardLocation takeLocation, Chess.Colours attackerColour)
+        public static bool CanTakeAt(this ChessBoard board, BoardLocation takeLocation, Colours attackerColour)
             => IsNotEmptyAt(board, takeLocation)
-               && board[takeLocation].Piece.Is(Chess.ColourOfEnemy(attackerColour));
+               && board[takeLocation].Piece.Is(ColourOfEnemy(attackerColour));
 
-        public static bool IsCoveringAt(this ChessBoard board, BoardLocation coverLocation, Chess.Colours attackerColour)
+        public static bool IsCoveringAt(this ChessBoard board, BoardLocation coverLocation, Colours attackerColour)
             => IsNotEmptyAt(board, coverLocation)
                && board[coverLocation].Piece.Is(attackerColour);
 
-        public static BoardPiece GetKingFor(this ChessBoard board, Chess.Colours colour) 
-            => board.Pieces.FirstOrDefault(p => p.Piece.Is(colour, Chess.PieceNames.King));
+        public static BoardPiece GetKingFor(this ChessBoard board, Colours colour) 
+            => board.Pieces.FirstOrDefault(p => p.Piece.Is(colour, PieceNames.King));
     }
 }
