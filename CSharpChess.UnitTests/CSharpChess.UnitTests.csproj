@@ -49,9 +49,9 @@
     <Compile Include="BoardMovement\rooks.cs" />
     <Compile Include="BoardMovement\knights.cs" />
     <Compile Include="BoardMovement\bishops.cs" />
-    <Compile Include="PgnParser\comments.cs" />
-    <Compile Include="PgnParser\PgnParserTests.cs" />
-    <Compile Include="PgnParser\PgnParserTestsBase.cs" />
+    <Compile Include="PgnParsing\comments.cs" />
+    <Compile Include="PgnParsing\Moves.cs" />
+    <Compile Include="PgnParsing\PgnParserTestsBase.cs" />
     <Compile Include="Rules\PawnTests.cs" />
     <Compile Include="TestsSetupClass.cs" />
     <Compile Include="ConsoleBoardWriters\Spikes.cs" />

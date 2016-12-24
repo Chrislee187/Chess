@@ -2,7 +2,7 @@
 using CSharpChess.TheBoard;
 using NUnit.Framework;
 
-namespace CSharpChess.UnitTests.PgnParser
+namespace CSharpChess.UnitTests.PgnParsing
 {
     [TestFixture]
     public class Comments : PgnParserTestsBase
