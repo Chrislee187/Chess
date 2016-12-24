@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
@@ -30,39 +32,47 @@ namespace CSharpChess.Pgn
             FromFile = fromFile;
         }
 
+        private static readonly IDictionary<char, Chess.PieceNames> PieceNameMap = new Dictionary<char, Chess.PieceNames>
+        {
+            {'P', Chess.PieceNames.Pawn },
+            {'N', Chess.PieceNames.Knight },
+            {'B', Chess.PieceNames.Bishop },
+            {'R', Chess.PieceNames.Rook },
+            {'Q', Chess.PieceNames.Queen },
+            {'K', Chess.PieceNames.King },
+        };
+
         public static bool TryParse(Chess.Colours turn, string move, out PgnMoveQuery moveQuery)
         {
-            Chess.PieceNames pn = Chess.PieceNames.Blank;
             MoveType moveType = MoveType.Unknown;
             Chess.Board.ChessFile fromFile = Chess.Board.ChessFile.None;
             
             string dest = "";
-            var firstChar = move[0];
-            if (char.IsUpper(firstChar))
-            {
-                throw new NotImplementedException("Non-pawn PGN moves not yet implemented");
-            }
+            Chess.PieceNames pn = GetPieceName(move);
 
-            pn = GetPieceName(firstChar);
+            moveType = MoveType.Move;
 
-            if (move.Length == 2)
+            if (BasicPawnMove(move))
             {
                 dest = move;
-                moveType = MoveType.Move;
             }
             else
             {
-                var secondChar = move[1];
-                if (secondChar == 'x')
+                if (move[1] == 'x')
                 {
                     moveType = MoveType.Take;
+                    if (move.Length == 4)
+                    {
+                        dest = move.Substring(2, 2);
+                        fromFile = BoardLocation.At($"{move[0]}1").File;
+                    }
+                }
+                else
+                {
+                    dest = move.Substring(1, 2);
                 }
 
-                if (move.Length == 4)
-                    dest = move.Substring(2, 2);
 
-                fromFile = BoardLocation.At($"{move[0]}1").File;
-                
             }
             var piece = new ChessPiece(turn, pn);
             var destination = BoardLocation.At(dest);
@@ -71,9 +81,30 @@ namespace CSharpChess.Pgn
             return true;
         }
 
-        private static Chess.PieceNames GetPieceName(char pieceChar)
+        private static bool BasicPawnMove(string move)
         {
-            return Chess.PieceNames.Pawn;
+            return move.Length == 2;
+        }
+
+        private static Chess.PieceNames GetPieceName(string move)
+        {
+            Chess.PieceNames result = Chess.PieceNames.Blank;
+            
+            var firstChar = move[0];
+            if (char.IsUpper(firstChar))
+            {
+                var pieceChar = char.ToUpper(firstChar);
+                if (!PieceNameMap.ContainsKey(pieceChar))
+                {
+                    throw new NotImplementedException($"'{pieceChar}' is not a valid SAN piece.");
+                }
+                result = PieceNameMap[pieceChar];
+            }
+            else
+            {
+                result = Chess.PieceNames.Pawn;
+            }
+            return result;
         }
     }
 }

@@ -1,68 +1,71 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpChess.System.Extensions;
 
 namespace CSharpChess.Pgn
 {
-    public class PgnTurnsParser
+    public static class PgnTurnsParser
     {
         public static bool TryParse(string text, out IEnumerable<PgnTurnQuery> pgnTurns)
         {
             var turns = new List<PgnTurnQuery>();
 
-            var tokens = new Stack<string>(text.Split(' ').Reverse());
-            var currentColour = Chess.Colours.None;
+            var moveIsFor = Chess.Colours.None;
             PgnMoveQuery white = null, black = null;
-            int turnNumber = 0;
             string currentText = "";
+
+            Action resetTurnState = () =>
+            {
+                moveIsFor = Chess.Colours.None;
+                currentText = string.Empty;
+                white = black = null;
+            };
+
+            var tokens = new Stack<string>(text.Split(' ').Reverse());
+            int turnNumber = 0;
             while (tokens.Any())
             {
                 var token = tokens.Pop();
                 currentText = $"{currentText}{token} ";
 
-                if (token.StartsWith(";"))
+                if (ContainsStartOfComment(token, ';')) IgnoreTillEndComment(token, tokens, ';', '\n');
+                else if (ContainsStartOfComment(token, '{')) IgnoreTillEndComment(token, tokens,'{', '}');
+                else if (IsNewTurn(token))
                 {
-                    IgnoreEndOfLineComment(token, tokens);
-                }
-                else if (token.EndsWith("."))
-                {
-                    var dotCount = token.Count(c => c == '.');
-                    if (currentColour == Chess.Colours.None)
+                    if (moveIsFor == Chess.Colours.None)
                     {
-                        turnNumber = int.Parse(token.Substring(0, token.IndexOf(".")));
-                        currentColour = dotCount == 1 ? Chess.Colours.White : Chess.Colours.Black;
+                        turnNumber = ParseTurnNumber(token);
+                        moveIsFor = ParseMoveColour(token);
                     }
                     else
                     {
                         tokens.Push(token);
 
                         turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
-                        currentColour = Chess.Colours.None;
+                        resetTurnState();
                     }
                 }
                 else
                 {
-                    if(currentColour == Chess.Colours.None) throw new ArgumentException();
+                    ExpectToKnowColour(moveIsFor, token);
 
-                    PgnMoveQuery moveQuery;
-                    var move = PgnMoveQuery.TryParse(currentColour, token, out moveQuery);
+                    var moveQuery = ParseMove(moveIsFor, token);
 
-                    if (currentColour == Chess.Colours.White)
+                    if (moveIsFor == Chess.Colours.White)
                     {
                         white = moveQuery;
-                        currentColour = Chess.Colours.Black;
+                        moveIsFor = Chess.Colours.Black;
                     }
                     else
                     {
                         black = moveQuery;
-
                         turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
-                        currentColour = Chess.Colours.None;
+                        resetTurnState();
                     }
                 }
             }
-            if (currentColour != Chess.Colours.None)
+
+            if (moveIsFor != Chess.Colours.None)
             {
                 turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
             }
@@ -70,10 +73,48 @@ namespace CSharpChess.Pgn
             return true;
         }
 
-        private static void IgnoreEndOfLineComment(string token, Stack<string> tokens)
+        private static void ExpectToKnowColour(Chess.Colours currentColour, string token)
         {
-            var comment = token;
-            while (tokens.Any() && !tokens.Peek().Contains("\n"))
+            if (currentColour == Chess.Colours.None)
+                throw new ArgumentException($"Parse error: {token}, expected move but don't know for which colour");
+        }
+
+        private static int ParseTurnNumber(string token) 
+            => int.Parse(token.Substring(0, token.IndexOf(".")));
+
+        private static Chess.Colours ParseMoveColour(string token) 
+            => token.Count(c => c == '.') == 1 
+                    ? Chess.Colours.White 
+                    : Chess.Colours.Black;
+
+        private static PgnMoveQuery ParseMove(Chess.Colours currentColour, string token)
+        {
+            PgnMoveQuery moveQuery;
+            if (!PgnMoveQuery.TryParse(currentColour, token, out moveQuery))
+                throw new ArgumentException($"'{token}' could be parsed as a Pgn move.");
+            return moveQuery;
+        }
+
+        private static bool IsNewTurn(string token)
+        {
+            return token.EndsWith(".");
+        }
+
+        private static bool ContainsStartOfComment(string token, char commentStartChar)
+        {
+            var idx = token.IndexOf(commentStartChar);
+
+            return token.Contains(commentStartChar.ToString());
+        }
+
+        private static void IgnoreTillEndComment(string token, Stack<string> tokens, char commentStart, char commentEnd)
+        {
+            var idx = token.IndexOf(commentStart);
+            if (idx == -1) return;
+
+            var preToken = token.Substring(0, idx);
+            var comment = "";
+            while (tokens.Any() && !tokens.Peek().Contains(commentEnd))
             {
                 comment = $"{comment} {tokens.Pop()}";
             }
@@ -81,11 +122,17 @@ namespace CSharpChess.Pgn
             if (tokens.Any())
             {
                 var lastCommentToken = tokens.Pop();
-                var split = lastCommentToken.Split('\n');
-                comment = $"{comment} {split[0]}";
-                if (split.Length > 1)
+                var split = lastCommentToken.Split(commentEnd).Where(s => !string.IsNullOrEmpty(s)).ToList();
+                if (split.Count > 1)
                 {
-                    tokens.Push(split.Skip(1).Aggregate("", (a, i) => $"{a} {i}"));
+                    comment = $"{comment} {split[0]}";
+                    var postToken = split.Skip(1).Aggregate("", (a, i) => $"{a} {i}");
+                    tokens.Push(postToken);
+
+                    if (!string.IsNullOrEmpty(preToken))
+                    {
+                        tokens.Push(preToken);
+                    }
                 }
             }
         }

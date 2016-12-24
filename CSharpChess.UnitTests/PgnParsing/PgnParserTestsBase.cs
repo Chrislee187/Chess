@@ -7,7 +7,7 @@ namespace CSharpChess.UnitTests.PgnParsing
 {
     public class PgnParserTestsBase
     {
-        protected static void AssertPgnMoveQueryIs(PgnMoveQuery query, Chess.Board.ChessFile chessFile, Chess.Colours colour, Chess.PieceNames pieceName, MoveType moveType, string destination)
+        protected static void AssertPgnMoveQueryIs(PgnMoveQuery query, Chess.Colours colour, Chess.PieceNames pieceName, MoveType moveType, string destination, Chess.Board.ChessFile chessFile = Chess.Board.ChessFile.None)
         {
             Assert.That(query.Piece, Is.EqualTo(new ChessPiece(colour, pieceName)));
             Assert.That(query.Destination.ToString(), Is.EqualTo(destination));
@@ -19,7 +19,7 @@ namespace CSharpChess.UnitTests.PgnParsing
         {
             IEnumerable<PgnTurnQuery> pgnTurns;
             var parsed = PgnTurnsParser.TryParse(text, out pgnTurns);
-            Assert.True(parsed);
+            Assert.True(parsed, $"'{text}' did not parse as a Pgn turn");
             return pgnTurns;
         }
 

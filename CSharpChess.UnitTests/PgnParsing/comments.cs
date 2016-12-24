@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CSharpChess.Pgn;
 using CSharpChess.TheBoard;
 using NUnit.Framework;
 
@@ -12,13 +13,12 @@ namespace CSharpChess.UnitTests.PgnParsing
         {
             var text = "3. e4 e5 ; An end of line comment";
 
-            var pgnTurns = AssertPgnTurnQueryParsed(text);
+            var pgnTurns = AssertPgnTurnQueryParsed(text).ToList();
 
             Assert.That(pgnTurns.Count(), Is.EqualTo(1));
-            var turn = pgnTurns.First();
 
-            AssertPgnMoveQueryIs(turn.White, Chess.Board.ChessFile.None, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
-            AssertPgnMoveQueryIs(turn.Black, Chess.Board.ChessFile.None, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "E5");
+            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
+            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "E5");
         }
 
         [Test]
@@ -26,12 +26,11 @@ namespace CSharpChess.UnitTests.PgnParsing
         {
             var text = "3. e4 ; An end of line comment";
 
-            var pgnTurns = AssertPgnTurnQueryParsed(text);
+            var pgnTurns = AssertPgnTurnQueryParsed(text).ToList();
 
             Assert.That(pgnTurns.Count(), Is.EqualTo(1));
-            var turn = pgnTurns.First();
 
-            AssertPgnMoveQueryIs(turn.White, Chess.Board.ChessFile.None, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
+            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
         }
 
         [Test]
@@ -39,25 +38,43 @@ namespace CSharpChess.UnitTests.PgnParsing
         {
             var text = "3... e5 ; An end of line comment";
 
-            var pgnTurns = AssertPgnTurnQueryParsed(text);
+            var pgnTurns = AssertPgnTurnQueryParsed(text).ToList();
 
             Assert.That(pgnTurns.Count(), Is.EqualTo(1));
-            var turn = pgnTurns.First();
 
-            AssertPgnMoveQueryIs(turn.Black, Chess.Board.ChessFile.None, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "E5");
+            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "E5");
         }
 
         [Test]
         public void inline_comments_are_ignored()
         {
-            var text = "3. e4 e5 { An in-line comment} 4. d4 d5";
+            var text = "3. e4 e5 { An in-line comment } 4. d4 d5";
 
-            var pgnTurns = AssertPgnTurnQueryParsed(text);
+            var pgnTurns = AssertPgnTurnQueryParsed(text).ToList();
 
-            Assert.That(pgnTurns.Count(), Is.EqualTo(1));
-            var turn = pgnTurns.First();
+            Assert.That(pgnTurns.Count(), Is.EqualTo(2));
 
-            AssertPgnMoveQueryIs(turn.White, Chess.Board.ChessFile.None, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
+            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
+            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "E5");
+
+            AssertPgnMoveQueryIs(pgnTurns[1].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "D4");
+            AssertPgnMoveQueryIs(pgnTurns[1].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "D5");
+        }
+
+        [Test]
+        public void inline_comments_with_bad_spacing_are_ignored()
+        {
+            var text = "3. e4 e5{An in-line comment}4. d4 d5";
+
+            var pgnTurns = AssertPgnTurnQueryParsed(text).ToList();
+
+            Assert.That(pgnTurns.Count(), Is.EqualTo(2));
+
+            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
+            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "E5");
+
+            AssertPgnMoveQueryIs(pgnTurns[1].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "D4");
+            AssertPgnMoveQueryIs(pgnTurns[1].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "D5");
         }
 
 
