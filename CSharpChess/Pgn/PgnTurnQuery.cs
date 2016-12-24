@@ -9,7 +9,7 @@ namespace CSharpChess.Pgn
         public PgnMoveQuery Black { get; private set; }
         public string PgnSource { get; }
 
-        public PgnTurnQuery(int turnNumber, PgnMoveQuery white, PgnMoveQuery black, string pgnSource)
+        public PgnTurnQuery(int turnNumber, PgnMoveQuery white, PgnMoveQuery black, string pgnSource = "")
         {
             Number = turnNumber;
             White = white;

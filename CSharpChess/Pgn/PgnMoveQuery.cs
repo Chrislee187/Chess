@@ -17,21 +17,24 @@ namespace CSharpChess.Pgn
 
     public class PgnMoveQuery
     {
+        public Chess.Board.ChessFile FromFile { get; }
         public MoveType MoveType { get; }
         public ChessPiece Piece { get; }
         public BoardLocation Destination { get; }
 
-        private PgnMoveQuery(ChessPiece piece, BoardLocation destination, MoveType moveType)
+        private PgnMoveQuery(ChessPiece piece, BoardLocation destination, MoveType moveType, Chess.Board.ChessFile fromFile = Chess.Board.ChessFile.None)
         {
             Destination = destination;
             Piece = piece;
             MoveType = moveType;
+            FromFile = fromFile;
         }
 
         public static bool TryParse(Chess.Colours turn, string move, out PgnMoveQuery moveQuery)
         {
             Chess.PieceNames pn = Chess.PieceNames.Blank;
             MoveType moveType = MoveType.Unknown;
+            Chess.Board.ChessFile fromFile = Chess.Board.ChessFile.None;
             
             string dest = "";
             var firstChar = move[0];
@@ -50,12 +53,21 @@ namespace CSharpChess.Pgn
             else
             {
                 var secondChar = move[1];
-                throw new NotImplementedException("Only Moves for pawns are supported not takes");
+                if (secondChar == 'x')
+                {
+                    moveType = MoveType.Take;
+                }
+
+                if (move.Length == 4)
+                    dest = move.Substring(2, 2);
+
+                fromFile = BoardLocation.At($"{move[0]}1").File;
+                
             }
             var piece = new ChessPiece(turn, pn);
             var destination = BoardLocation.At(dest);
 
-            moveQuery = new PgnMoveQuery(piece, destination, moveType);
+            moveQuery = new PgnMoveQuery(piece, destination, moveType, fromFile);
             return true;
         }
 

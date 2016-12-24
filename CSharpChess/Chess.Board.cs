@@ -11,7 +11,9 @@ namespace CSharpChess
     {
         public static partial class Board
         {
-            public enum ChessFile { A = 1, B, C, D, E, F, G, H };
+            public enum ChessFile { A = 1, B, C, D, E, F, G, H,
+                None = 0
+            };
             public static IEnumerable<ChessFile> Files => new List<ChessFile> {ChessFile.A, ChessFile.B, ChessFile.C, ChessFile.D, ChessFile.E, ChessFile.F, ChessFile.G, ChessFile.H};
             public static IEnumerable<int> Ranks => new [] {1,2,3,4,5,6,7,8};
 

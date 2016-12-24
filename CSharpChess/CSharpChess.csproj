@@ -44,7 +44,6 @@
     <Compile Include="Chess.Board.Validations.cs" />
     <Compile Include="Chess.Pieces.cs" />
     <Compile Include="Chess.Rules.cs" />
-    <Compile Include="Pgn\PgnParser.cs" />
     <Compile Include="Pgn\PgnMoveQuery.cs" />
     <Compile Include="Pgn\PgnTurnQuery.cs" />
     <Compile Include="Pgn\PgnTurnsParser.cs" />

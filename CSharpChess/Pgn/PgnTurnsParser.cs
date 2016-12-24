@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.System.Extensions;
 
 namespace CSharpChess.Pgn
 {
@@ -8,101 +9,85 @@ namespace CSharpChess.Pgn
     {
         public static bool TryParse(string text, out IEnumerable<PgnTurnQuery> pgnTurns)
         {
-            /*
-             * while not end of string
-             *  read turn number
-             *      read / create white move
-             *      read / create black move
-             */
             var turns = new List<PgnTurnQuery>();
-            var remaining = text;
 
-            Tuple<PgnMoveQuery, PgnMoveQuery> pgnQuery = new Tuple<PgnMoveQuery, PgnMoveQuery>(null, null);
-            while (!string.IsNullOrEmpty(remaining))
+            var tokens = new Stack<string>(text.Split(' ').Reverse());
+            var currentColour = Chess.Colours.None;
+            PgnMoveQuery white = null, black = null;
+            int turnNumber = 0;
+            string currentText = "";
+            while (tokens.Any())
             {
-                int turnNumber;
-                remaining = ReadTurnNumber(remaining, out turnNumber);
+                var token = tokens.Pop();
+                currentText = $"{currentText}{token} ";
 
-                Chess.Colours turn;
-                remaining = ReadWhoseTurn(remaining, out turn);
+                if (token.StartsWith(";"))
+                {
+                    IgnoreEndOfLineComment(token, tokens);
+                }
+                else if (token.EndsWith("."))
+                {
+                    var dotCount = token.Count(c => c == '.');
+                    if (currentColour == Chess.Colours.None)
+                    {
+                        turnNumber = int.Parse(token.Substring(0, token.IndexOf(".")));
+                        currentColour = dotCount == 1 ? Chess.Colours.White : Chess.Colours.Black;
+                    }
+                    else
+                    {
+                        tokens.Push(token);
 
-                remaining = ReadPgnMove(remaining, turn, out pgnQuery);
+                        turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
+                        currentColour = Chess.Colours.None;
+                    }
+                }
+                else
+                {
+                    if(currentColour == Chess.Colours.None) throw new ArgumentException();
 
-                turns.Add(new PgnTurnQuery(turnNumber, pgnQuery.Item1, pgnQuery.Item2, text));
+                    PgnMoveQuery moveQuery;
+                    var move = PgnMoveQuery.TryParse(currentColour, token, out moveQuery);
+
+                    if (currentColour == Chess.Colours.White)
+                    {
+                        white = moveQuery;
+                        currentColour = Chess.Colours.Black;
+                    }
+                    else
+                    {
+                        black = moveQuery;
+
+                        turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
+                        currentColour = Chess.Colours.None;
+                    }
+                }
+            }
+            if (currentColour != Chess.Colours.None)
+            {
+                turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
             }
             pgnTurns = turns;
             return true;
         }
 
-        private static string ReadPgnMove(string remaining, Chess.Colours turn, out Tuple<PgnMoveQuery, PgnMoveQuery> pgnQuery)
+        private static void IgnoreEndOfLineComment(string token, Stack<string> tokens)
         {
-            var moves = remaining.Split(' ');
-            PgnMoveQuery white = null, black = null;
-
-            int movesIdx = 0;
-            PgnMoveQuery moveQuery;
-            if (!PgnMoveQuery.TryParse(turn, moves[movesIdx], out moveQuery))
+            var comment = token;
+            while (tokens.Any() && !tokens.Peek().Contains("\n"))
             {
-                throw new ArgumentException($"Cannot parse {moves[movesIdx]} as a white move!");
+                comment = $"{comment} {tokens.Pop()}";
             }
 
-            white = moveQuery;
-            if (moves.Length == 2)
+            if (tokens.Any())
             {
-                if (!PgnMoveQuery.TryParse(Chess.Colours.Black, moves[movesIdx], out black))
+                var lastCommentToken = tokens.Pop();
+                var split = lastCommentToken.Split('\n');
+                comment = $"{comment} {split[0]}";
+                if (split.Length > 1)
                 {
-                    throw new ArgumentException($"Cannot parse {moves[movesIdx]} as a black move!");
+                    tokens.Push(split.Skip(1).Aggregate("", (a, i) => $"{a} {i}"));
                 }
             }
-            else
-            {
-                if (turn == Chess.Colours.Black)
-                {
-                    white = null;
-                    black = moveQuery;
-                }
-            }
-            pgnQuery = new Tuple<PgnMoveQuery, PgnMoveQuery>(white, black);
-
-            return moves.Skip(movesIdx + 1).Aggregate("", (s, a) => $"{s} {a}");
-        }
-
-        private static string ReadWhoseTurn(string remaining, out Chess.Colours turn)
-        {
-            var idx = 0;
-
-            while (remaining[idx++] == '.')
-            {}
-
-            if (idx == 2)
-            {
-                turn = Chess.Colours.White;
-            }
-            else if (idx == 4)
-            {
-                turn = Chess.Colours.Black;
-            }
-            else
-            {
-                throw new ArgumentException($"Turn could not be determined from '{remaining}'.");
-            }
-
-            return remaining.Substring(idx).Trim();
-        }
-
-        private static string ReadTurnNumber(string text, out int turnNumber)
-        {
-            var delim = text.IndexOf(".");
-
-            if (delim < 0)
-                throw new ArgumentException($"Turn delimiter (.) not found in '{text}'.", nameof(text));
-
-            var numb = text.Substring(0, delim);
-
-            if(!int.TryParse(numb, out turnNumber))
-                throw new ArgumentException($"'{numb}' is not a valid turn number.");
-
-            return text.Substring(delim).Trim();
         }
     }
 }
