@@ -23,7 +23,7 @@ namespace ConsoleStuff
     {
         private const int PieceCellSize = 3;
         private const int CellBorderWidth = 2;
-        private const int ConsoleCellSize = CellBorderWidth + PieceCellSize;
+        private const int ConsoleCellSize = (CellBorderWidth + PieceCellSize);
         private readonly ChessBoard _board;
 
         public static string ToString(ChessBoard board)
@@ -40,7 +40,7 @@ namespace ConsoleStuff
         {
             var panels = GetPiecePanels();
 
-            var boardSize = ConsoleCellSize * 8;
+            var boardSize = ((ConsoleCellSize -1) * 8) + 1; // Borders overlap
             var boardSquares = new ConsolePanel.ConsolePanel(boardSize, boardSize);
 
             foreach (var rank in Chess.Board.Ranks.Reverse())

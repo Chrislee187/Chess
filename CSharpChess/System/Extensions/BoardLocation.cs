@@ -40,13 +40,12 @@ namespace CSharpChess.System.Extensions
 
         public static explicit operator BoardLocation(string s)
         {
-            if (s.Length != 2) throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
+            if (s.Length != 2) throw new ArgumentException($"Invalid BoardLocation {s}");
 
             int rank;
             Chess.Board.ChessFile file;
-            if (!Enum.TryParse(s[0].ToString().ToUpper(), out file)) throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
-            if (!int.TryParse(s[1].ToString(), out rank))
-                throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
+            if (!Enum.TryParse(s[0].ToString().ToUpper(), out file)) throw new ArgumentException($"Invalid BoardLocation {s}");
+            if (!int.TryParse(s[1].ToString(), out rank))            throw new ArgumentException($"Invalid BoardLocation {s}");
 
             return new BoardLocation(file, rank);
         }

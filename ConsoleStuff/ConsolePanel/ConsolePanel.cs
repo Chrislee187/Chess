@@ -51,7 +51,6 @@ namespace ConsoleStuff.ConsolePanel
         }
 
         // ReSharper disable once UnusedMethodReturnValue.Global
-
         public ConsolePanel PrintAt(int panelX, int panelY, ConsolePanel panel)
         {
             for (var y = 0; y < panel.Height; y++)
@@ -97,7 +96,6 @@ namespace ConsoleStuff.ConsolePanel
             }
             return s.ToArray();
         }
-
         public override string ToString()
         {
             return string.Join("\n", ToStrings());

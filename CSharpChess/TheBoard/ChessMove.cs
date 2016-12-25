@@ -6,6 +6,15 @@ namespace CSharpChess.TheBoard
 {
     public class ChessMove
     {
+        public static ChessMove Null => new ChessMove();
+
+        private ChessMove()
+        {
+            From = To = null;
+            MoveType = MoveType.Unknown;
+            PromotedTo = Chess.PieceNames.Blank;;
+        }
+
         public ChessMove(string from, string to, MoveType moveType,
             Chess.PieceNames promotedTo = Chess.PieceNames.Blank) : this((BoardLocation) from, (BoardLocation) to, moveType, promotedTo)
         {
