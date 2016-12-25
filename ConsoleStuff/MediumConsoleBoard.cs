@@ -1,13 +1,24 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using ConsoleStuff.Tests.ConsolePanel;
 using CSharpChess;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
-namespace CsChess
+namespace ConsoleStuff
 {
+    /* 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     public class MediumConsoleBoard
     {
         private const int PieceCellSize = 3;
@@ -20,17 +31,17 @@ namespace CsChess
             return new MediumConsoleBoard(board).Build().ToString();
         }
 
-        public MediumConsoleBoard(ChessBoard board)
+        private MediumConsoleBoard(ChessBoard board)
         {
             _board = board;
         }
 
-        public ConsolePanel Build()
+        private ConsolePanel.ConsolePanel Build()
         {
             var panels = GetPiecePanels();
 
             var boardSize = ConsoleCellSize * 8;
-            var boardSquares = new ConsolePanel(boardSize, boardSize);
+            var boardSquares = new ConsolePanel.ConsolePanel(boardSize, boardSize);
 
             foreach (var rank in Chess.Board.Ranks.Reverse())
             {
@@ -47,9 +58,9 @@ namespace CsChess
             return boardSquares;
         }
 
-        private IDictionary<BoardLocation, ConsolePanel> GetPiecePanels()
+        private IDictionary<BoardLocation, ConsolePanel.ConsolePanel> GetPiecePanels()
         {
-            IDictionary<BoardLocation, ConsolePanel> panels = new ConcurrentDictionary<BoardLocation, ConsolePanel>();
+            IDictionary<BoardLocation, ConsolePanel.ConsolePanel> panels = new ConcurrentDictionary<BoardLocation, ConsolePanel.ConsolePanel>();
 
             foreach (var file in Chess.Board.Files)
             {
@@ -62,9 +73,9 @@ namespace CsChess
             return panels;
         }
 
-        private ConsolePanel CreateConsoleCell(BoardPiece boardPiece)
+        private ConsolePanel.ConsolePanel CreateConsoleCell(BoardPiece boardPiece)
         {
-            var cell = new ConsolePanel(PieceCellSize, PieceCellSize);
+            var cell = new ConsolePanel.ConsolePanel(PieceCellSize, PieceCellSize);
 
             var c = OneCharBoard.ToChar(boardPiece);
             c = c == '.' ? c = ' ' : c;
@@ -76,9 +87,9 @@ namespace CsChess
             return border;
         }
 
-        private static ConsolePanel CreateCellBorder()
+        private static ConsolePanel.ConsolePanel CreateCellBorder()
         {
-            var border = new ConsolePanel(ConsoleCellSize, ConsoleCellSize);
+            var border = new ConsolePanel.ConsolePanel(ConsoleCellSize, ConsoleCellSize);
             var edgeWith = PieceCellSize;
             border.PrintAt(1, 1, $"+{'-'.Repeat(edgeWith)}+");
 

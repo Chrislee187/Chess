@@ -1,6 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleStuff;
+using ConsoleStuff.Tests;
 using CSharpChess;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
@@ -19,10 +22,7 @@ namespace CsChess
             {
                 Console.WriteLine(MediumConsoleBoard.ToString(board));
 
-                if (showError)
-                {
-                    Console.WriteLine(moveResult.Message);
-                }
+                ShowError(showError, moveResult);
 
                 Console.Write($"Player {board.WhoseTurn} to play: ");
                 var cmd = Console.ReadLine();
@@ -38,6 +38,17 @@ namespace CsChess
             }
 
             Console.WriteLine($"Game over, {board.GameState}");
+        }
+
+        private static void ShowError(bool showError, MoveResult moveResult)
+        {
+            if (showError)
+            {
+                using (new ConsoleColour(ConsoleColor.Red, ConsoleColor.White))
+                {
+                    Console.WriteLine(moveResult.Message);
+                }
+            }
         }
     }
 }

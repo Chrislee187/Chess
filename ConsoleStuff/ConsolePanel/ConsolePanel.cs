@@ -4,7 +4,7 @@ using System.Linq;
 
 // ReSharper disable UnusedParameter.Local
 
-namespace ConsoleStuff.Tests.ConsolePanel
+namespace ConsoleStuff.ConsolePanel
 {
     public class ConsolePanel
     {

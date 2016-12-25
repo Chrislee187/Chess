@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ConsoleStuff.Tests.ConsolePanel
+namespace ConsoleStuff.ConsolePanel
 {
     public class StringListConsolePanel : ConsolePanel
     {

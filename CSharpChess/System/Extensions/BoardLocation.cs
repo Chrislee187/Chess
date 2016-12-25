@@ -45,7 +45,8 @@ namespace CSharpChess.System.Extensions
             int rank;
             Chess.Board.ChessFile file;
             if (!Enum.TryParse(s[0].ToString().ToUpper(), out file)) throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
-            if (!int.TryParse(s[1].ToString(), out rank)) throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
+            if (!int.TryParse(s[1].ToString(), out rank))
+                throw new ArgumentException($"Invalid BoardLocation {s}", nameof(s));
 
             return new BoardLocation(file, rank);
         }

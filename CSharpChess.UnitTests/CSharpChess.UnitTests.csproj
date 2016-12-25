@@ -97,6 +97,10 @@
       <Project>{56C63A93-0B42-4E3F-BFD9-DC189603B59E}</Project>
       <Name>ConsoleStuff.Tests</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ConsoleStuff\ConsoleStuff.csproj">
+      <Project>{277CDC54-3C8E-4044-8930-692E05689F97}</Project>
+      <Name>ConsoleStuff</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpChess\CSharpChess.csproj">
       <Project>{D49A0857-6DD8-4777-A297-56325CE9C7F6}</Project>
       <Name>CSharpChess</Name>
