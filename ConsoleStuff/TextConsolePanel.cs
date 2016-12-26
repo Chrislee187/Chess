@@ -1,0 +1,35 @@
+using System;
+using System.Linq;
+using CSharpChess.System.Extensions;
+
+namespace ConsoleStuff
+{
+    public class TextConsolePanel : ConsolePanel.ConsolePanel
+    {
+        public TextConsolePanel(string text) : this(text, -1, null)
+        { }
+        public TextConsolePanel(string text, int width) : this(text, width, null)
+        { }
+        public TextConsolePanel(string text, ConsoleCellColour errorTextColour) : this(text, -1, errorTextColour)
+        { }
+
+        public TextConsolePanel(string text, int width, ConsoleCellColour errorTextColour = null)
+        {
+            var lines = text.ToLines(StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            Height = lines.Count();
+            Width = width == -1 
+                ? lines.Max(x => x.Length) 
+                : width;
+
+            InitialisePanel();
+
+            var y = 1;
+                foreach (var line in lines)
+                {
+                    PrintAt(1, y++, line, errorTextColour);
+                }
+        }
+
+    }
+}

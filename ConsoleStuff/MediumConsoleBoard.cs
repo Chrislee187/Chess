@@ -31,12 +31,12 @@ namespace ConsoleStuff
             return new MediumConsoleBoard(board).Build().ToString();
         }
 
-        private MediumConsoleBoard(ChessBoard board)
+        public MediumConsoleBoard(ChessBoard board)
         {
             _board = board;
         }
 
-        private ConsolePanel.ConsolePanel Build()
+        public ConsolePanel.ConsolePanel Build()
         {
             var panels = GetPiecePanels();
 

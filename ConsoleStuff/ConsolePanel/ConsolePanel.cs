@@ -8,46 +8,65 @@ namespace ConsoleStuff.ConsolePanel
 {
     public class ConsolePanel
     {
-        public int Width { get; }
-        public int Height { get; }
-        private readonly char[,] _panel;
-        private char this[int x, int y] => _panel[x, y];
+        public class ConsoleCellColour
+        {
+            public static ConsoleCellColour FromConsole = new ConsoleCellColour(Console.ForegroundColor, Console.BackgroundColor);
 
+            public ConsoleColor Background { get; }
+            public ConsoleColor Foreground { get; }
+            public ConsoleCellColour(ConsoleColor foreground, ConsoleColor background)
+            {
+                Foreground = foreground;
+                Background = background;
+            }
+
+        }
+
+        public int Width { get; protected set; }
+        public int Height { get; protected set; }
+        private char[,] _cells;
+        private ConsoleCellColour[,] _consoleCellColours;
+
+        private char this[int x, int y] => _cells[x, y];
+
+        protected ConsolePanel()
+        {
+        }
         public ConsolePanel(int width, int height)
         {
             Width = width;
             Height = height;
-            _panel = new char[width, height];
+            InitialisePanel();
         }
 
         // ReSharper disable once UnusedMethodReturnValue.Global
-        public ConsolePanel PrintAt(int x, int y, char c)
+        public ConsolePanel PrintAt(int x, int y, char c, ConsoleCellColour cellColour = null)
         {
             CheckXY(x, y);
-            _panel[x - 1, y - 1] = c;
+            _cells[x - 1, y - 1] = c;
+            if (cellColour != null)
+            {
+                _consoleCellColours[x - 1, y - 1] = cellColour;
+            }
             return this;
         }
 
         // ReSharper disable once UnusedMethodReturnValue.Global
-        public ConsolePanel PrintAt(int x, int y, string s)
+        public ConsolePanel PrintAt(int x, int y, string s, ConsoleCellColour cellColour = null)
         {
-            for (int x1 = 0; x1 < s.Length; x1++)
+            var text = s;
+            if (x + s.Length - 1> Width)
             {
-                int newX = x + x1;
+                text = s.Substring(0, Width - x);
+            }
+            for (var x1 = 0; x1 < text.Length; x1++)
+            {
+                var newX = x + x1;
                 CheckXY(newX, y);
-                _panel[newX - 1, y - 1] = s[x1];
+                PrintAt(newX, y, s[x1], cellColour);
             }
 
             return this;
-        }
-
-        private void CheckXY(int x, int y)
-        {
-            if (x < 1 || y < 1)
-                throw new ArgumentException($"Panel co-ordinates are one-based.");
-
-            if (x > Width || y > Height)
-                throw new ArgumentException($"Panel co-ordinates are out of bounds.");
         }
 
         // ReSharper disable once UnusedMethodReturnValue.Global
@@ -57,11 +76,46 @@ namespace ConsoleStuff.ConsolePanel
             {
                 for (var x = 0; x < panel.Width; x++)
                 {
-                    PrintAt((panelX) + x, (panelY) + y, panel[x, y]);
+                    PrintAt((panelX) + x, (panelY) + y, panel[x, y], panel.GetCellColour(x+1,y+1));
                 }
             }
 
             return this;
+        }
+
+        public void Fill(char c)
+        {
+            TopLeftToBottomRight().ToList().ForEach(t => _cells[t.Item1 - 1, t.Item2 - 1] = c);
+        }
+
+        public string[] ToStrings()
+        {
+            var s = new List<string>();
+
+            for (var y = 1; y <= Height; y++)
+            {
+                var c = new List<char>();
+                for (var x = 1; x <= Width; x++)
+                {
+                    var item = _cells[x - 1, y - 1];
+                    c.Add(item == '\0' ? ' ' : item);
+                }
+                s.Add(new string(c.ToArray()));
+            }
+            return s.ToArray();
+        }
+        public override string ToString()
+        {
+            return string.Join("\n", ToStrings());
+        }
+
+        private void CheckXY(int x, int y)
+        {
+            if (x < 1 || y < 1)
+                throw new ArgumentException($"Panel co-ordinates are one-based.");
+
+            if (x > Width || y > Height)
+                throw new ArgumentException($"Panel co-ordinates are out of bounds.");
         }
 
         private IEnumerable<Tuple<int, int>> TopLeftToBottomRight()
@@ -75,30 +129,56 @@ namespace ConsoleStuff.ConsolePanel
             }
         }
 
-        public void Fill(char c)
+        protected void InitialisePanel()
         {
-            TopLeftToBottomRight().ToList().ForEach(t => _panel[t.Item1 - 1, t.Item2 - 1] = c);
+            _cells = new char[Width, Height];
+            _consoleCellColours = new ConsoleCellColour[Width, Height];
         }
 
-        public string[] ToStrings()
+        public Action ToColouredConsole()
         {
-            var s = new List<string>();
+            var cells = new List<Action>();
 
             for (var y = 1; y <= Height; y++)
             {
-                var c = new List<char>();
                 for (var x = 1; x <= Width; x++)
                 {
-                    var item = _panel[x - 1, y - 1];
-                    c.Add(item == '\0' ? ' ' : item);
+                    var x1 = x;
+                    var y1 = y;
+                    Action writeAction = () =>
+                    {
+                        var c = GetOutputCharacter(x1, y1);
+                        var colours = GetCellColour(x1, y1);
+                        using (new ChangeConsoleColour(colours))
+                        {
+                            Console.Write(c);
+                        }
+                    };
+                    cells.Add(writeAction);
                 }
-                s.Add(new string(c.ToArray()));
+                cells.Add(Console.WriteLine);
             }
-            return s.ToArray();
+            return () => cells.ForEach(c => c());
         }
-        public override string ToString()
+
+        private static void SetConsoleColours(ConsoleCellColour colours)
         {
-            return string.Join("\n", ToStrings());
+            Console.ForegroundColor = colours.Foreground;
+            Console.BackgroundColor = colours.Background;
+        }
+
+        private ConsoleCellColour GetCellColour(int x, int y)
+        {
+            var x1 = x - 1;
+            var y1 = y - 1;
+
+            return _consoleCellColours[x1, y1];
+        }
+
+        private char GetOutputCharacter(int x, int y)
+        {
+            var item = _cells[x - 1, y - 1];
+            return item == '\0' ? ' ' : item;
         }
     }
 }

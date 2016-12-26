@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
 using ConsoleStuff;
+using ConsoleStuff.ConsolePanel;
 using ConsoleStuff.Tests;
 using CSharpChess;
 using CSharpChess.System.Extensions;
@@ -19,10 +20,27 @@ namespace CsChess
 
             bool showError = false;
             MoveResult moveResult = null;
+            bool first = true;
+
+            Action<ConsolePanel> sizeConsoleWindow = (screen) =>
+            {
+                if (Console.WindowWidth < screen.Width) Console.WindowWidth = screen.Width;
+                if (Console.WindowHeight < screen.Height) Console.WindowHeight = screen.Height + 3;
+                Console.CursorLeft = 0;
+                Console.CursorTop = 0;
+            };
 
             while (!board.GameOver())
             {
-                DrawBoard(board, moveResult, showError);
+                var screen = DrawBoard(board, moveResult, showError);
+                if (first)
+                {
+                    sizeConsoleWindow(screen);
+                    first = false;
+                }
+                Console.CursorLeft = 0;
+                Console.CursorTop = screen.Height + 2;
+
                 var cmd = GetCommand(board);
 
                 if (string.IsNullOrEmpty(cmd))
@@ -64,19 +82,37 @@ namespace CsChess
             var cmd = Console.ReadLine();
             return cmd;
         }
-
-        private static void DrawBoard(ChessBoard board, MoveResult moveResult, bool showError)
+        private static ConsolePanel.ConsoleCellColour ErrorTextColour = new ConsolePanel.ConsoleCellColour(ConsoleColor.White, ConsoleColor.Red);
+        private static ConsolePanel DrawBoard(ChessBoard board, MoveResult moveResult, bool showError)
         {
             Console.Clear();
-            Console.WriteLine(MediumConsoleBoard.ToString(board));
-            ShowError(showError, moveResult);
+
+            var boardPanel = new MediumConsoleBoard(board).Build();
+
+            var errorPanel = new ConsolePanel(1,1);
+            if (showError && !moveResult.Succeeded)
+            {
+                errorPanel = new TextConsolePanel(moveResult.Message, ErrorTextColour);
+            }
+
+            var screenWidth = boardPanel.Width + 4 + errorPanel.Width;
+            var screen = new ConsolePanel(screenWidth, boardPanel.Height);
+
+            screen.PrintAt(1, 1, boardPanel);
+            screen.PrintAt(boardPanel.Width+3, 3, errorPanel);
+
+           screen.ToColouredConsole()();
+
+            return screen;
+//            Console.WriteLine(screen.ToString());
+            //ShowError(showError, moveResult);
         }
 
         private static void ShowError(bool showError, MoveResult moveResult)
         {
             if (showError)
             {
-                using (new ConsoleColour(ConsoleColor.Red, ConsoleColor.White))
+                using (new ChangeConsoleColour(ConsoleColor.Red, ConsoleColor.White))
                 {
                     Console.WriteLine(moveResult.Message);
                 }

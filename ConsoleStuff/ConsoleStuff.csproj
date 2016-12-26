@@ -40,11 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleColour.cs" />
+    <Compile Include="ChangeConsoleColour.cs" />
     <Compile Include="ConsolePanel\ConsolePanel.cs" />
     <Compile Include="ConsolePanel\StringListConsolePanel.cs" />
     <Compile Include="MediumConsoleBoard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextConsolePanel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpChess\CSharpChess.csproj">
