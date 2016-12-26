@@ -4,24 +4,11 @@ using System.Linq;
 
 // ReSharper disable UnusedParameter.Local
 
-namespace ConsoleStuff.ConsolePanel
+namespace ConsoleStuff.Panels
 {
+    // ReSharper disable UnusedMethodReturnValue.Global
     public class ConsolePanel
     {
-        public class ConsoleCellColour
-        {
-            public static ConsoleCellColour FromConsole = new ConsoleCellColour(Console.ForegroundColor, Console.BackgroundColor);
-
-            public ConsoleColor Background { get; }
-            public ConsoleColor Foreground { get; }
-            public ConsoleCellColour(ConsoleColor foreground, ConsoleColor background)
-            {
-                Foreground = foreground;
-                Background = background;
-            }
-
-        }
-
         public int Width { get; protected set; }
         public int Height { get; protected set; }
         private char[,] _cells;
@@ -39,20 +26,18 @@ namespace ConsoleStuff.ConsolePanel
             InitialisePanel();
         }
 
-        // ReSharper disable once UnusedMethodReturnValue.Global
-        public ConsolePanel PrintAt(int x, int y, char c, ConsoleCellColour cellColour = null)
+        public ConsolePanel PrintAt(int x, int y, char c, ConsoleCellColour colour = null)
         {
             CheckXY(x, y);
             _cells[x - 1, y - 1] = c;
-            if (cellColour != null)
+            if (colour != null)
             {
-                _consoleCellColours[x - 1, y - 1] = cellColour;
+                _consoleCellColours[x - 1, y - 1] = colour;
             }
             return this;
         }
 
-        // ReSharper disable once UnusedMethodReturnValue.Global
-        public ConsolePanel PrintAt(int x, int y, string s, ConsoleCellColour cellColour = null)
+        public ConsolePanel PrintAt(int x, int y, string s, ConsoleCellColour colour = null)
         {
             var text = s;
             if (x + s.Length - 1> Width)
@@ -63,29 +48,33 @@ namespace ConsoleStuff.ConsolePanel
             {
                 var newX = x + x1;
                 CheckXY(newX, y);
-                PrintAt(newX, y, s[x1], cellColour);
+                PrintAt(newX, y, s[x1], colour);
             }
 
             return this;
         }
 
-        // ReSharper disable once UnusedMethodReturnValue.Global
-        public ConsolePanel PrintAt(int panelX, int panelY, ConsolePanel panel)
+        public ConsolePanel PrintAt(int x, int y, ConsolePanel panel, ConsoleCellColour colour = null)
         {
-            for (var y = 0; y < panel.Height; y++)
+            for (var panelY = 0; panelY < panel.Height; panelY++)
             {
-                for (var x = 0; x < panel.Width; x++)
+                for (var panelX = 0; panelX < panel.Width; panelX++)
                 {
-                    PrintAt((panelX) + x, (panelY) + y, panel[x, y], panel.GetCellColour(x+1,y+1));
+                    var colourOverride = colour ?? panel.GetCellColour(panelX + 1, panelY + 1);
+
+                    PrintAt((x) + panelX, (y) + panelY, panel[panelX, panelY], colourOverride);
                 }
             }
 
             return this;
         }
 
-        public void Fill(char c)
+        public void Fill(char c, ConsoleCellColour consoleCellColour = null)
         {
-            TopLeftToBottomRight().ToList().ForEach(t => _cells[t.Item1 - 1, t.Item2 - 1] = c);
+            TopLeftToBottomRight().ToList().ForEach(t =>
+            {
+                PrintAt(t.Item1, t.Item2, c, consoleCellColour);
+            });
         }
 
         public string[] ToStrings()

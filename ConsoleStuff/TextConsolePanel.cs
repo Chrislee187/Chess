@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
+using ConsoleStuff.Panels;
 using CSharpChess.System.Extensions;
 
 namespace ConsoleStuff
 {
-    public class TextConsolePanel : ConsolePanel.ConsolePanel
+    public class TextConsolePanel : ConsolePanel
     {
         public TextConsolePanel(string text) : this(text, -1, null)
         { }

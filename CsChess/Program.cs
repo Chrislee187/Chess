@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
 using ConsoleStuff;
-using ConsoleStuff.ConsolePanel;
+using ConsoleStuff.Panels;
 using ConsoleStuff.Tests;
 using CSharpChess;
 using CSharpChess.System.Extensions;
@@ -82,7 +82,7 @@ namespace CsChess
             var cmd = Console.ReadLine();
             return cmd;
         }
-        private static ConsolePanel.ConsoleCellColour ErrorTextColour = new ConsolePanel.ConsoleCellColour(ConsoleColor.White, ConsoleColor.Red);
+        private static ConsoleCellColour ErrorTextColour = new ConsoleCellColour(ConsoleColor.White, ConsoleColor.Red);
         private static ConsolePanel DrawBoard(ChessBoard board, MoveResult moveResult, bool showError)
         {
             Console.Clear();

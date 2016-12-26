@@ -1,4 +1,5 @@
 ﻿using System;
+using ConsoleStuff.Panels;
 
 namespace ConsoleStuff
 {
@@ -14,7 +15,7 @@ namespace ConsoleStuff
             ChangeColour(background, foreground);
         }
 
-        public ChangeConsoleColour(ConsolePanel.ConsolePanel.ConsoleCellColour fromConsole)
+        public ChangeConsoleColour(ConsoleCellColour fromConsole)
         {
 
             if (fromConsole != null)

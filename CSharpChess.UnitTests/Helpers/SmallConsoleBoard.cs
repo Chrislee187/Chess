@@ -51,7 +51,7 @@ namespace CSharpChess.UnitTests.Helpers
                     }
                     else
                     {
-                        Console.Write(OneCharBoard.ToChar(boardPiece));
+                        Console.Write(OneCharBoard.ToChar(boardPiece.Piece));
                     }
 
                     if (UseColours)

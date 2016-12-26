@@ -1,4 +1,4 @@
-﻿using ConsoleStuff.ConsolePanel;
+﻿using ConsoleStuff.Panels;
 using NUnit.Framework;
 
 namespace ConsoleStuff.Tests

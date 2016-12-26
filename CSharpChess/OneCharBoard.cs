@@ -32,10 +32,10 @@ namespace CSharpChess
             return pieceNames;
         }
 
-        public static char ToChar(BoardPiece p)
+        public static char ToChar(ChessPiece chessPiece)
         {
-            var c = OneCharPieceNames[p.Piece.Name].ToString();
-            if (p.Piece.Colour == Chess.Colours.Black) c = c.ToLower();
+            var c = OneCharPieceNames[chessPiece.Name].ToString();
+            if (chessPiece.Colour == Chess.Colours.Black) c = c.ToLower();
             return c[0];
         }
 
@@ -47,7 +47,7 @@ namespace CSharpChess
             var id = 1;
             foreach (var boardRank in board.Ranks())
             {
-                ranks[id -1] = new string(boardRank.Select(ToChar).ToArray());
+                ranks[id -1] = new string(boardRank.Select(p => ToChar(p.Piece)).ToArray());
                 id++;
             }
             Ranks = ranks;
