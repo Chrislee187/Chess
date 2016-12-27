@@ -13,6 +13,7 @@ namespace ConsoleStuff
     {
         public bool ColouredSquares = true;
         public bool ShowRanksAndFiles = true;
+        public bool ShowMenu = true;
     }
 
 
@@ -25,19 +26,15 @@ namespace ConsoleStuff
         private const int ConsoleCellSize = (CellBorderWidth + PieceCellSize);
         private readonly ChessBoard _board;
 
-        public static string ToString(ChessBoard board)
-        {
-            return new MediumConsoleBoard(board).Build().ToString();
-        }
-
-        private BoardOptions _options = new BoardOptions();
+        private BoardOptions _options;
         public MediumConsoleBoard(ChessBoard board)
         {
             _board = board;
         }
 
-        public ConsolePanel Build()
+        public ConsolePanel Build(BoardOptions options = null)
         {
+            _options = options ?? new BoardOptions();
             var panels = GetPiecePanels();
 
             var boardSize = ((ConsoleCellSize -1) * 8) + 1; // Borders overlap

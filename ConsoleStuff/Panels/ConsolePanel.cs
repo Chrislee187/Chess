@@ -42,7 +42,7 @@ namespace ConsoleStuff.Panels
             var text = s;
             if (x + s.Length - 1> Width)
             {
-                text = s.Substring(0, Width - x);
+                text = s.Substring(0, Width - x + 1);
             }
             for (var x1 = 0; x1 < text.Length; x1++)
             {

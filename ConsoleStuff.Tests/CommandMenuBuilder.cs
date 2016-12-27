@@ -8,9 +8,9 @@ namespace ConsoleStuff.Tests
     public class CommandMenuBuilder
     {
         private readonly IList<Command> _commands = new List<Command>();
-        public CommandMenuBuilder WithItem(string verb, Action<string> action)
+        public CommandMenuBuilder WithItem(string verb, Action<string> action, string desc = "")
         {
-            _commands.Add(new Command(verb, action));
+            _commands.Add(new Command(verb, action, desc));
 
             return this;
         }

@@ -4,6 +4,7 @@ namespace ConsoleStuff.Tests.Commands
 {
     public class Command
     {
+        public string OneLiner { get; }
         public bool IsDefault { get; }
         public string Verb { get; }
         public Action<string> Action { get; }
@@ -14,8 +15,9 @@ namespace ConsoleStuff.Tests.Commands
             Action = command;
         }
 
-        public Command(string verb, Action<string> command, bool isDefault = false) : this(new MenuItem(verb), command)
+        public Command(string verb, Action<string> command, string oneLiner = "", bool isDefault = false) : this(new MenuItem(verb), command)
         {
+            OneLiner = oneLiner;
             IsDefault = isDefault;
         }
     }

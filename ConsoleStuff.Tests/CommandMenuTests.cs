@@ -22,6 +22,21 @@ namespace ConsoleStuff.Tests
         }
 
         [Test]
+        public void distinct_partial_can_be_used()
+        {
+            var wasCalled = false;
+            var command = new Command("simple", (mi) => wasCalled = false);
+            var command2 = new Command("reallysimple", (mi) => wasCalled = true);
+
+            var menu = new CommandMenu(command, command2);
+
+            var result = menu.Execute("real");
+            Assert.That(wasCalled, Is.True);
+            result = menu.Execute("simp");
+            Assert.That(wasCalled, Is.False);
+        }
+
+        [Test]
         public void verb_can_have_params()
         {
             const string expectedParamString = "param1 param2";
@@ -43,7 +58,7 @@ namespace ConsoleStuff.Tests
             bool defaultWasCalled = false;
 
             var aCommand = new Command("a-command", (p) => { aWasCalled = true; });
-            var anotherCommand = new Command("defaultcmd", (p) => { defaultWasCalled = true; }, true);
+            var anotherCommand = new Command("defaultcmd", (p) => { defaultWasCalled = true; }, isDefault: true);
 
             var menu = new CommandMenu(aCommand, anotherCommand);
 
@@ -57,10 +72,22 @@ namespace ConsoleStuff.Tests
         [Test]
         public void cannot_set_more_than_one_default()
         {
-            var aCommand = new Command("a-command", (p) => { }, true);
-            var anotherCommand = new Command("defaultcmd", (p) => { }, true);
+            var aCommand = new Command("a-command", (p) => { }, isDefault: true);
+            var anotherCommand = new Command("defaultcmd", (p) => { }, isDefault: true);
 
             Assert.Throws<ArgumentException>(() => new CommandMenu(aCommand, anotherCommand));
+        }
+
+        [Test]
+        public void command_help_list_is_generated()
+        {
+            var aCommand = new Command("a-command", (p) => {  }, "A one line command description");
+            var anotherCommand = new Command("defaultcmd", (p) => {  }, isDefault: true);
+
+            var menu = new CommandMenu(aCommand, anotherCommand);
+
+            Assert.That(menu.HelpText(), Is.Not.Empty);
+            Console.WriteLine(menu.HelpText());
         }
 
         private static void AssertCommandContentsExecuted(bool wasCalled) 
