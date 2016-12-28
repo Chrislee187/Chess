@@ -25,7 +25,7 @@ namespace CsChess
             MoveResult moveResult = null;
             bool first = true;
 
-            Action<ConsolePanel> sizeConsoleWindow = (screen) =>
+            Action<ConsolePanel> initialiseConsoleWindow = (screen) =>
             {
                 if (Console.WindowWidth < screen.Width) Console.WindowWidth = screen.Width;
                 if (Console.WindowHeight < screen.Height) Console.WindowHeight = screen.Height + 1;
@@ -41,7 +41,7 @@ namespace CsChess
                 var screen = DrawScreen(board, commandMenu, options, moveResult);
                 if (first)
                 {
-                    sizeConsoleWindow(screen);
+                    initialiseConsoleWindow(screen);
                     first = false;
                 }
                 Console.CursorTop = screen.Height -1;

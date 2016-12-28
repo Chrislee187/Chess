@@ -44,7 +44,6 @@
     <Compile Include="Panels\ConsoleCellColour.cs" />
     <Compile Include="Panels\ConsolePanel.cs" />
     <Compile Include="Panels\StringListConsolePanel.cs" />
-    <Compile Include="MediumConsoleBoard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextConsolePanel.cs" />
   </ItemGroup>

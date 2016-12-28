@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,23 +6,10 @@ using CSharpChess;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
-namespace ConsoleStuff
+namespace CsChess
 {
-    public class BoardOptions
+    public partial class MediumConsoleBoard
     {
-        public bool ColouredSquares = true;
-        public bool ShowRanksAndFiles = true;
-        public bool ShowMenu = true;
-    }
-
-
-    public class MediumConsoleBoard
-    {
-        private static readonly ConsoleCellColour BlackSquare = new ConsoleCellColour(ConsoleColor.White, ConsoleColor.Black);
-        private static readonly ConsoleCellColour WhiteSquare = new ConsoleCellColour(ConsoleColor.Black, ConsoleColor.White);
-        private const int PieceCellSize = 3;
-        private const int CellBorderWidth = 2;
-        private const int ConsoleCellSize = (CellBorderWidth + PieceCellSize);
         private readonly ChessBoard _board;
 
         private BoardOptions _options;
@@ -37,7 +23,7 @@ namespace ConsoleStuff
             _options = options ?? new BoardOptions();
             var panels = GetPiecePanels();
 
-            var boardSize = ((ConsoleCellSize -1) * 8) + 1; // Borders overlap
+            var boardSize = ((_options.BorderedCellSize -1) * 8) + 1; // Borders overlap
             var boardSquares = new ConsolePanel(boardSize, boardSize);
 
             foreach (var rank in Chess.Board.Ranks.Reverse())
@@ -47,8 +33,8 @@ namespace ConsoleStuff
                     var loc = BoardLocation.At(file, rank);
                     var panel = panels[loc];
 
-                    var panelX = (((int)file - 1) * (ConsoleCellSize - 1)) + 1;
-                    var panelY = ((8 - rank) * (ConsoleCellSize - 1)) + 1;
+                    var panelX = (((int)file - 1) * (_options.BorderedCellSize - 1)) + 1;
+                    var panelY = ((8 - rank) * (_options.BorderedCellSize - 1)) + 1;
                     boardSquares.PrintAt(panelX, panelY, panel);
                 }
             }
@@ -66,7 +52,7 @@ namespace ConsoleStuff
                 {
                     var at = BoardLocation.At(file, rank);
                     var colour = _options.ColouredSquares ?
-                            isBlackSquare ? BlackSquare : WhiteSquare
+                            isBlackSquare ? _options.BlackSquareColour : _options.WhiteSquareColour
                             : null;
 
                     panels.Add(at, CreateConsoleCell(_board[at], colour));
@@ -79,64 +65,50 @@ namespace ConsoleStuff
 
         private ConsolePanel CreateConsoleCell(BoardPiece boardPiece, ConsoleCellColour colour = null)
         {
-            var cell = CreateCellWithBorder();
+            var cell = new BorderedPanel(_options.BorderedCellSize, _options.BorderedCellSize);
             AddRanksAndFiles(cell, boardPiece.Location.File, boardPiece.Location.Rank);
-            AddPiece(cell, boardPiece.Piece, colour);
+            AddPiece(cell, boardPiece.Piece, _options, colour);
 
             return cell;
         }
 
-        private static void AddPiece(ConsolePanel border, ChessPiece chessPiece, ConsoleCellColour colour = null)
+        private static void AddPiece(ConsolePanel border, ChessPiece chessPiece, BoardOptions options, ConsoleCellColour colour = null)
         {
-            var cell = new ConsolePanel(PieceCellSize, PieceCellSize);
+            var cell = new ConsolePanel(options.PiecePanelSize, options.PiecePanelSize);
             cell.Fill(' ', colour);
 
             var c = OneCharBoard.ToChar(chessPiece);
             c = c == '.' ? c = ' ' : c;
 
-            cell.PrintAt(PieceCellSize / 2 + 1, PieceCellSize / 2 + 1, c, colour);
+            var x = (options.PiecePanelSize / 2) + 1;
+            cell.PrintAt(x, x, c, colour);
 
-            border.PrintAt(2, 2, cell);
+            var px = (options.BorderedCellSize - options.PiecePanelSize) / 2;
+            border.PrintAt(px + 1, px + 1, cell);
         }
 
         private void AddRanksAndFiles(ConsolePanel border, Chess.Board.ChessFile file, int rank)
         {
             if (_options.ShowRanksAndFiles)
             {
+                var midPoint = (_options.BorderedCellSize / 2) + 1;
                 if (file == Chess.Board.ChessFile.A)
                 {
-                    border.PrintAt(1, 3, rank.ToString().First());
+                    border.PrintAt(1, midPoint, rank.ToString().First());
                 }
                 if (file == Chess.Board.ChessFile.H)
                 {
-                    border.PrintAt(5, 3, rank.ToString().First());
+                    border.PrintAt(_options.BorderedCellSize, midPoint, rank.ToString().First());
                 }
                 if (rank == 1)
                 {
-                    border.PrintAt(3, 5, file.ToString());
+                    border.PrintAt(midPoint, _options.BorderedCellSize, file.ToString());
                 }
                 if (rank == 8)
                 {
-                    border.PrintAt(3, 1, file.ToString());
+                    border.PrintAt(midPoint, 1, file.ToString());
                 }
             }
-        }
-
-        private static ConsolePanel CreateCellWithBorder(ConsoleCellColour colour = null)
-        {
-            var border = new ConsolePanel(ConsoleCellSize, ConsoleCellSize);
-            var edgeWith = PieceCellSize;
-            var topBar = '-'.Repeat(edgeWith);
-            border.PrintAt(1, 1, $"+{topBar}+", colour);
-
-            int i = 0;
-            for (; i < edgeWith; i++)
-            {
-                border.PrintAt(1, 2 + i, $"|{' '.Repeat(edgeWith)}|", colour);
-            }
-            var bottomBar = '-'.Repeat(edgeWith);
-            border.PrintAt(1, i + 2, $"+{bottomBar}+", colour);
-            return border;
         }
     }
 }
