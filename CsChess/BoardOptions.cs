@@ -5,21 +5,23 @@ namespace CsChess
 {
     public class BoardOptions
     {
-        public BoardSize Size = BoardSize.Medium;
 
         public bool ColouredSquares = true;
         public bool ShowRanksAndFiles = true;
         public bool ShowMenu = true;
 
         // Board Rendering options
+        public BoardSize Size = BoardSize.medium;
         public ConsoleCellColour BlackSquareColour = new ConsoleCellColour(ConsoleColor.White, ConsoleColor.Black);
         public ConsoleCellColour WhiteSquareColour = new ConsoleCellColour(ConsoleColor.Black, ConsoleColor.White);
+
+        public int PiecePanelSize => ((int)Size);
         public int BorderedCellSize => PiecePanelSize + 2;
-        public int PiecePanelSize => ((int) Size);
     }
 
     public enum BoardSize
     {
-        Small = 1, Medium = 3, Large = 5
+        // NOTE: Keep these lower case to avoid issues with Enum.Parse
+        small = 1, medium = 3, large = 5
     }
 }

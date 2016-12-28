@@ -75,6 +75,7 @@ namespace CsChess
                 .WithItem("quit", (s) => Environment.Exit(0))
                 .WithItem("colour", (s) => options.ColouredSquares = !options.ColouredSquares, "Toggle coloured board")
                 .WithItem("locs", (s) => options.ShowRanksAndFiles = !options.ShowRanksAndFiles, "Toggle show ranks and files")
+                .WithItem("size", (s) => options.Size = (BoardSize)Enum.Parse(typeof(BoardSize), s.ToLower()), "small | medium | large")
                 .Build();
             return _commandMenu;
         }
