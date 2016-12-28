@@ -29,10 +29,17 @@ namespace ConsoleStuff.Tests.Commands
             }
             else
             {
-                var key = _commands.Keys.FirstOrDefault(k => k.StartsWith(verb));
-                if (key != null)
+                var key = _commands.Keys.Where(k => k.StartsWith(verb)).ToList();
+                if (key.Any())
                 {
-                    cmd = _commands[key];
+                    if (key.Count() == 1)
+                    {
+                        cmd = _commands[key.First()];
+                    }
+                    else
+                    {
+                        cmd = null;
+                    }
                 }
                 else
                 {
@@ -53,14 +60,17 @@ namespace ConsoleStuff.Tests.Commands
             foreach (var kvp in _commands)
             {
                 var v = kvp.Value;
-                sb.Append($"{kvp.Key.PadRight(15)}");
-
-                if(!string.IsNullOrEmpty(v.OneLiner))
+                if (v.Visible)
                 {
-                    sb.Append($" - {v.OneLiner}");
-                }
+                    sb.Append($"{kvp.Key.PadRight(15)}");
 
-                sb.AppendLine();
+                    if (!string.IsNullOrEmpty(v.OneLiner))
+                    {
+                        sb.Append($" - {v.OneLiner}");
+                    }
+
+                    sb.AppendLine();
+                }
             }
 
             return sb.ToString();

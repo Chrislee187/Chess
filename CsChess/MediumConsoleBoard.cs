@@ -12,15 +12,15 @@ namespace CsChess
     {
         private readonly ChessBoard _board;
 
-        private BoardOptions _options;
+        private Options _options;
         public MediumConsoleBoard(ChessBoard board)
         {
             _board = board;
         }
 
-        public ConsolePanel Build(BoardOptions options = null)
+        public ConsolePanel Build(Options options = null)
         {
-            _options = options ?? new BoardOptions();
+            _options = options ?? new Options();
             var panels = GetPiecePanels();
 
             var boardSize = ((_options.BorderedCellSize -1) * 8) + 1; // Borders overlap
@@ -72,7 +72,7 @@ namespace CsChess
             return cell;
         }
 
-        private static void AddPiece(ConsolePanel border, ChessPiece chessPiece, BoardOptions options, ConsoleCellColour colour = null)
+        private static void AddPiece(ConsolePanel border, ChessPiece chessPiece, Options options, ConsoleCellColour colour = null)
         {
             var cell = new ConsolePanel(options.PiecePanelSize, options.PiecePanelSize);
             cell.Fill(' ', colour);

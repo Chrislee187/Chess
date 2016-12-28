@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoardOptions.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="BorderedPanel.cs" />
     <Compile Include="MediumConsoleBoard.cs" />
     <Compile Include="Program.cs" />

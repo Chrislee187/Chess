@@ -3,7 +3,7 @@ using ConsoleStuff.Panels;
 
 namespace CsChess
 {
-    public class BoardOptions
+    public class Options
     {
 
         public bool ColouredSquares = true;
