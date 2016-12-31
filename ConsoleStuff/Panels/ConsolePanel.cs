@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 // ReSharper disable UnusedParameter.Local
@@ -16,11 +17,14 @@ namespace ConsoleStuff.Panels
 
         private char this[int x, int y] => _cells[x, y];
 
+        private readonly TextWriter Out = Console.Out;
+
         protected ConsolePanel()
         {
         }
         public ConsolePanel(int width, int height)
         {
+            Out = Console.Out;
             Width = width;
             Height = height;
             InitialisePanel();
@@ -47,7 +51,6 @@ namespace ConsoleStuff.Panels
             for (var x1 = 0; x1 < text.Length; x1++)
             {
                 var newX = x + x1;
-                CheckXY(newX, y);
                 PrintAt(newX, y, s[x1], colour);
             }
 
@@ -61,7 +64,6 @@ namespace ConsoleStuff.Panels
                 for (var panelX = 0; panelX < panel.Width; panelX++)
                 {
                     var colourOverride = colour ?? panel.GetCellColour(panelX + 1, panelY + 1);
-
                     PrintAt((x) + panelX, (y) + panelY, panel[panelX, panelY], colourOverride);
                 }
             }
@@ -140,20 +142,14 @@ namespace ConsoleStuff.Panels
                         var colours = GetCellColour(x1, y1);
                         using (new ChangeConsoleColour(colours))
                         {
-                            Console.Write(c);
+                            Out.Write(c);
                         }
                     };
                     cells.Add(writeAction);
                 }
-                cells.Add(Console.WriteLine);
+                cells.Add(Out.WriteLine);
             }
             return () => cells.ForEach(c => c());
-        }
-
-        private static void SetConsoleColours(ConsoleCellColour colours)
-        {
-            Console.ForegroundColor = colours.Foreground;
-            Console.BackgroundColor = colours.Background;
         }
 
         private ConsoleCellColour GetCellColour(int x, int y)

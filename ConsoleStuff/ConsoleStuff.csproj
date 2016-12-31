@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,8 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeConsoleColour.cs" />
+    <Compile Include="Panels\BorderedPanel.cs" />
     <Compile Include="Panels\ConsoleCellColour.cs" />
     <Compile Include="Panels\ConsolePanel.cs" />
+    <Compile Include="Panels\FilledConsolePanel.cs" />
     <Compile Include="Panels\StringListConsolePanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextConsolePanel.cs" />

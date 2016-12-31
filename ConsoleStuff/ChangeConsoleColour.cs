@@ -26,12 +26,18 @@ namespace ConsoleStuff
 
         private void ChangeColour(ConsoleColor background, ConsoleColor foreground)
         {
-            _colourChanged = true;
-            _back = Console.BackgroundColor;
-            _fore = Console.ForegroundColor;
-
-            Console.BackgroundColor = background;
-            Console.ForegroundColor = foreground;
+            if (background != Console.BackgroundColor)
+            {
+                _colourChanged = true;
+                _back = Console.BackgroundColor;
+                Console.BackgroundColor = background;
+            }
+            if (foreground != Console.ForegroundColor)
+            {
+                _colourChanged = true;
+                _fore = Console.ForegroundColor;
+                Console.ForegroundColor = foreground;
+            }
         }
 
         public void Dispose()
@@ -40,6 +46,7 @@ namespace ConsoleStuff
             {
                 Console.ForegroundColor = _fore;
                 Console.BackgroundColor = _back;
+                _colourChanged = false;
             }
         }
     }

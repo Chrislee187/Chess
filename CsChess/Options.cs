@@ -12,8 +12,8 @@ namespace CsChess
 
         // Board Rendering options
         public BoardSize Size = BoardSize.medium;
-        public ConsoleCellColour BlackSquareColour = new ConsoleCellColour(ConsoleColor.White, ConsoleColor.Black);
-        public ConsoleCellColour WhiteSquareColour = new ConsoleCellColour(ConsoleColor.Black, ConsoleColor.White);
+        public readonly ConsoleCellColour BlackSquareColour = new ConsoleCellColour(ConsoleColor.White, ConsoleColor.Black);
+        public readonly ConsoleCellColour WhiteSquareColour = new ConsoleCellColour(ConsoleColor.Black, ConsoleColor.White);
 
         public int PiecePanelSize => ((int)Size);
         public int BorderedCellSize => PiecePanelSize + 2;

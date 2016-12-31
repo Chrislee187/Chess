@@ -14,6 +14,7 @@ namespace CsChess
         private const int ScreenWidth = 100;
         private static bool _debug;
         private static bool _exiting;
+        private static bool _performWindowResize;
 
         public Program()
         {
@@ -24,23 +25,23 @@ namespace CsChess
             var board = new ChessBoard();
 
             MoveResult moveResult = null;
-            bool first = true;
+            _performWindowResize = true;
 
-            Action<ConsolePanel> initialiseConsoleWindow = (screen) =>
+            Action<ConsolePanel> resizeConsoleWindow = (screen) =>
             {
-                if (Console.WindowWidth < screen.Width) Console.WindowWidth = screen.Width;
-                if (Console.WindowHeight < screen.Height) Console.WindowHeight = screen.Height + 1;
+                if (Console.WindowWidth != screen.Width) Console.WindowWidth = screen.Width;
+                if (Console.WindowHeight != screen.Height + 1) Console.WindowHeight = screen.Height + 1;
                 Console.CursorTop = 0;
-                first = false;
+                _performWindowResize = false;
             };
 
             var options = new Options();
 
-            var commandMenu = BuildMenu(options);
             while (!_exiting)
             {
+                var commandMenu = BuildMenu(options);
                 var screen = DrawScreen(board, commandMenu, options, moveResult);
-                if (first) initialiseConsoleWindow(screen);
+                if (_performWindowResize) resizeConsoleWindow(screen);
 
                 Console.CursorTop = screen.Height - 1;
 
@@ -78,12 +79,16 @@ namespace CsChess
         private static CommandMenu BuildMenu(Options options)
         {
             CommandMenu menu = new CommandMenuBuilder()
-                .WithItem("debug", (cargs) => _debug = !_debug, $"Set debug = {!_debug}", visible:false)
-                .WithItem("quit", (s) => _exiting = true) // TODO: Move to an alias approach
-                .WithItem("exit", (s) => _exiting = true) // TODO: Move to an alias approach5
+                .WithItem("debug", (cargs) => _debug = !_debug, $"{_debug}")
+                .WithItem("quit", (s) => _exiting = true, "quit | exit") // TODO: Move to an alias approach
+                .WithItem("exit", (s) => _exiting = true, visible: false) // TODO: Move to an alias approach5
                 .WithItem("colour", (s) => options.ColouredSquares = !options.ColouredSquares, "Toggle coloured board")
                 .WithItem("coords", (s) => options.ShowRanksAndFiles = !options.ShowRanksAndFiles, "Toggle show ranks and files")
-                .WithItem("size", (s) => options.Size = (BoardSize)Enum.Parse(typeof(BoardSize), s.ToLower()), "small | medium | large")
+                .WithItem("size", (s) =>
+                {
+                    _performWindowResize = true;
+                    options.Size = (BoardSize) Enum.Parse(typeof(BoardSize), s.ToLower());
+                }, "small | medium | large")
                 .Build();
             return menu;
         }
@@ -111,7 +116,7 @@ namespace CsChess
         private static ConsolePanel DrawScreen(ChessBoard board, CommandMenu commandMenu, Options options, MoveResult moveResult)
         {
             Console.Clear();
-            var boardPanel = new MediumConsoleBoard(board).Build(options);
+            var boardPanel = new ConsoleBoardBuilder(board).Build(options);
             var screen = new ConsolePanel(ScreenWidth, boardPanel.Height);
 
             var y = AddTitlePanel(screen, boardPanel.Width);
