@@ -17,7 +17,6 @@ namespace CSharpChess.Pgn
 
             Action resetTurnState = () =>
             {
-                Console.WriteLine($"Reseting after turn {turnNumber}");
                 moveIsFor = Chess.Colours.None;
                 currentText = string.Empty;
                 white = black = null;
@@ -74,6 +73,7 @@ namespace CSharpChess.Pgn
             return true;
         }
 
+        // ReSharper disable once UnusedParameter.Local
         private static void ExpectToKnowColour(Chess.Colours currentColour, string token)
         {
             if (currentColour == Chess.Colours.None)
@@ -83,7 +83,7 @@ namespace CSharpChess.Pgn
         private static int ParseTurnNumber(string token)
         {
             int turnNumber;
-            var substring = token.Substring(0, token.IndexOf("."));
+            var substring = token.Substring(0, token.IndexOf(".", StringComparison.Ordinal));
             if(!int.TryParse(substring, out turnNumber))
             {
                 throw new ArgumentException($"Couldn't parse '{substring}' as a turn number.");
@@ -109,12 +109,8 @@ namespace CSharpChess.Pgn
             return token.EndsWith(".");
         }
 
-        private static bool ContainsStartOfComment(string token, char commentStartChar)
-        {
-            var idx = token.IndexOf(commentStartChar);
-
-            return token.Contains(commentStartChar.ToString());
-        }
+        private static bool ContainsStartOfComment(string token, char commentStartChar) 
+            => token.Contains(commentStartChar.ToString());
 
         private static void IgnoreTillEndComment(string token, Stack<string> tokens, char commentStart, char commentEnd)
         {
