@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace CSharpChess.Pgn
 {
-    public static class PgnTurnsParser
+    public static class PgnTurnParser
     {
         public static bool TryParse(string text, out IEnumerable<PgnTurnQuery> pgnTurns)
         {
             var turns = new List<PgnTurnQuery>();
 
             var moveIsFor = Chess.Colours.None;
-            PgnMoveQuery white = null, black = null;
+            MoveQuery white = null, black = null;
             string currentText = "";
             int turnNumber = 0;
 
@@ -22,7 +22,7 @@ namespace CSharpChess.Pgn
                 white = black = null;
             };
 
-            var tokens = new Stack<string>(text.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ").Split(' ').Reverse());
+            var tokens = new Stack<string>(text.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ").Split(' ').Where(s => s.Trim().Any()).Reverse());
             while (tokens.Any())
             {
                 var token = tokens.Pop();
@@ -96,9 +96,9 @@ namespace CSharpChess.Pgn
                     ? Chess.Colours.White 
                     : Chess.Colours.Black;
 
-        private static PgnMoveQuery ParseMove(Chess.Colours currentColour, string token)
+        private static MoveQuery ParseMove(Chess.Colours currentColour, string token)
         {
-            PgnMoveQuery moveQuery;
+            MoveQuery moveQuery;
             if (!PgnMoveQuery.TryParse(currentColour, token, out moveQuery))
                 throw new ArgumentException($"'{token}' could be parsed as a Pgn move.");
             return moveQuery;

@@ -4,7 +4,7 @@ using System.Linq;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
-namespace CSharpChess.UnitTests.Helpers
+namespace CSharpChess.Helpers
 {
     public class SmallConsoleBoard
     {

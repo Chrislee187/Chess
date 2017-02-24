@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using CSharpChess.System.Extensions;
 using CSharpChess.System.Metrics;
 
@@ -332,6 +333,38 @@ namespace CSharpChess.TheBoard
         }
         private static void BoardCreatedCounter() => Counters.Increment(CounterIds.Board.Created);
 
+        private static readonly IDictionary<Chess.PieceNames, char> AsciiPieceNames = new Dictionary<Chess.PieceNames, char>
+        {
+            {Chess.PieceNames.Pawn   ,'P' },
+            {Chess.PieceNames.Knight ,'N' },
+            {Chess.PieceNames.Bishop ,'B' },
+            {Chess.PieceNames.Rook   ,'R' },
+            {Chess.PieceNames.Queen  ,'Q' },
+            {Chess.PieceNames.King   ,'K' }
+        };
+
+        public string ToAsciiBoard()
+        {
+            var sb = new StringBuilder();
+            foreach (var rank in Chess.Board.Ranks.Reverse())
+            {
+                foreach (var file in Chess.Board.Files)
+                {
+                    var piece = this[file, rank];
+                    char ascii = AsciiPieceNames.ContainsKey(piece.Piece.Name) ? AsciiPieceNames[piece.Piece.Name] : ' ';
+
+                    if (piece.Piece.Colour == Chess.Colours.Black)
+                    {
+                        ascii = char.ToLower(ascii);
+                    }
+
+                    sb.Append(ascii);
+                }
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }
     }
 
     public enum EngineState

@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using CSharpChess.Helpers;
 using CSharpChess.UnitTests.Helpers;
 
 namespace ConsoleSpikes

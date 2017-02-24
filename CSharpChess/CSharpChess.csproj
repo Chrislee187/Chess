@@ -44,9 +44,10 @@
     <Compile Include="Chess.Board.Validations.cs" />
     <Compile Include="Chess.Pieces.cs" />
     <Compile Include="Chess.Rules.cs" />
+    <Compile Include="Helpers\SmallConsoleBoard.cs" />
     <Compile Include="Pgn\PgnMoveQuery.cs" />
     <Compile Include="Pgn\PgnTurnQuery.cs" />
-    <Compile Include="Pgn\PgnTurnsParser.cs" />
+    <Compile Include="Pgn\PgnTurnParser.cs" />
     <Compile Include="RuleSet.cs" />
     <Compile Include="System\Extensions\BoardLocation.cs" />
     <Compile Include="System\Extensions\BoardLocationExtensions.cs" />

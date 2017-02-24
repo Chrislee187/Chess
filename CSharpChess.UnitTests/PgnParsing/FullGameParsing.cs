@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using CSharpChess.Helpers;
 using CSharpChess.Pgn;
+using CSharpChess.TheBoard;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.PgnParsing
@@ -17,7 +21,7 @@ namespace CSharpChess.UnitTests.PgnParsing
         //[Black ""Spassky, Boris V.""]
         //[Result ""1/2-1/2""]
         //
-        private const string WikiGame = @"1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 {This opening is called the Ruy Lopez.}
+        private const string WikiGame = @"1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 
 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Nb8 10. d4 Nbd7
 11. c4 c6 12. cxb5 axb5 13. Nc3 Bb7 14. Bg5 b4 15. Nb1 h6 16. Bh4 c5 17. dxe5
 Nxe4 18. Bxe7 Qxe7 19. exd6 Qf6 20. Nbd2 Nxd6 21. Nc4 Nxc4 22. Bxc4 Nb6
@@ -29,9 +33,40 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2";
         [Test]
         public void can_parse_wiki_sample_game()
         {
-            IEnumerable<PgnTurnQuery> pgnTurns = new List<PgnTurnQuery>();
-            var parser = PgnTurnsParser.TryParse(WikiGame, out pgnTurns);
+            IEnumerable<PgnTurnQuery> pgnTurnQueries = new List<PgnTurnQuery>();
+            var parsed = PgnTurnParser.TryParse(WikiGame, out pgnTurnQueries);
+            Assert.True(parsed);
+            Assert.That(pgnTurnQueries.Count(), Is.EqualTo(43));
+            var board = new ChessBoard();
+            try
+            {
+                foreach (var pgnTurnQuery in pgnTurnQueries)
+                {
+                    if (!pgnTurnQuery.White.QueryResolved)
+                        pgnTurnQuery.White.ResolveWithBoard(board);
 
+                    Console.Write($"{pgnTurnQuery.Number}. {pgnTurnQuery.White} ");
+
+                    if(!pgnTurnQuery.White.GameOver)
+                        board.Move(pgnTurnQuery.White.ToString());
+
+
+                    if (!pgnTurnQuery.Black.QueryResolved)
+                        pgnTurnQuery.Black.ResolveWithBoard(board);
+
+                    Console.WriteLine($"{pgnTurnQuery.Black}");
+
+                    if (!pgnTurnQuery.Black.GameOver)
+                        board.Move(pgnTurnQuery.Black.ToString());
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine(board.ToAsciiBoard());
+                throw;
+            }
 
 
         }
