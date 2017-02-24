@@ -11,7 +11,7 @@ namespace CSharpChess.Pgn
             var turns = new List<PgnTurnQuery>();
 
             var moveIsFor = Chess.Colours.None;
-            MoveQuery white = null, black = null;
+            PgnQuery white = null, black = null;
             string currentText = "";
             int turnNumber = 0;
 
@@ -22,7 +22,8 @@ namespace CSharpChess.Pgn
                 white = black = null;
             };
 
-            var tokens = new Stack<string>(text.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ").Split(' ').Where(s => s.Trim().Any()).Reverse());
+            var noLineEndings = text.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ");
+            var tokens = new Stack<string>(noLineEndings.Split(' ').Where(s => s.Trim().Any()).Reverse());
             while (tokens.Any())
             {
                 var token = tokens.Pop();
@@ -34,6 +35,12 @@ namespace CSharpChess.Pgn
                 {
                     if (moveIsFor == Chess.Colours.None)
                     {
+                        if (token.Last() != '.')
+                        {
+                            var idx = token.Split('.');
+                            tokens.Push(idx[1]);
+                            token = $"{idx[0]}.";
+                        }
                         turnNumber = ParseTurnNumber(token);
                         moveIsFor = ParseMoveColour(token);
                     }
@@ -47,20 +54,23 @@ namespace CSharpChess.Pgn
                 }
                 else
                 {
-                    ExpectToKnowColour(moveIsFor, token);
-
-                    var moveQuery = ParseMove(moveIsFor, token);
-
-                    if (moveIsFor == Chess.Colours.White)
+                    if (!IsEndGameToken(token))
                     {
-                        white = moveQuery;
-                        moveIsFor = Chess.Colours.Black;
-                    }
-                    else
-                    {
-                        black = moveQuery;
-                        turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
-                        resetTurnState();
+                        ExpectToKnowColour(moveIsFor, token);
+
+                        var moveQuery = ParseMove(moveIsFor, token);
+
+                        if (moveIsFor == Chess.Colours.White)
+                        {
+                            white = moveQuery;
+                            moveIsFor = Chess.Colours.Black;
+                        }
+                        else
+                        {
+                            black = moveQuery;
+                            turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
+                            resetTurnState();
+                        }
                     }
                 }
             }
@@ -71,6 +81,13 @@ namespace CSharpChess.Pgn
             }
             pgnTurns = turns;
             return true;
+        }
+
+        private static bool IsEndGameToken(string token)
+        {
+            return token == "1/2-1/2"
+                || token == "1-0"
+                || token == "0-1";
         }
 
         // ReSharper disable once UnusedParameter.Local
@@ -96,17 +113,23 @@ namespace CSharpChess.Pgn
                     ? Chess.Colours.White 
                     : Chess.Colours.Black;
 
-        private static MoveQuery ParseMove(Chess.Colours currentColour, string token)
+        private static PgnQuery ParseMove(Chess.Colours currentColour, string token)
         {
-            MoveQuery moveQuery;
-            if (!PgnMoveQuery.TryParse(currentColour, token, out moveQuery))
+            var pgnQuery = new PgnQuery();
+            if (!PgnMoveParser.TryParse(currentColour, token, ref pgnQuery))
                 throw new ArgumentException($"'{token}' could be parsed as a Pgn move.");
-            return moveQuery;
+            return pgnQuery;
         }
 
         private static bool IsNewTurn(string token)
         {
-            return token.EndsWith(".");
+            var idx = token.IndexOf(".");
+
+            if (idx == -1) return false;
+            int num;
+            var enumerable = token.Take(idx).ToArray();
+            var s = new string(enumerable);
+            return (int.TryParse(s, out num));
         }
 
         private static bool ContainsStartOfComment(string token, char commentStartChar) 

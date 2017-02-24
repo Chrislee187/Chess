@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CSharpChess.Pgn;
-using CSharpChess.TheBoard;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.PgnParsing
@@ -13,12 +13,15 @@ namespace CSharpChess.UnitTests.PgnParsing
         {
             var text = "3. e4 e5 ; An end of line comment";
 
-            var pgnTurns = AssertPgnTurnQueryParsed(text).ToList();
+            IEnumerable<PgnTurnQuery> pgnTurns1;
+            var parsed = PgnTurnParser.TryParse(text, out pgnTurns1);
+            Assert.True(parsed, $"'{text}' did not parse as a Pgn turn");
+            var pgnTurns = pgnTurns1.ToList();
 
             Assert.That(pgnTurns.Count(), Is.EqualTo(1));
 
-            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
-            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "E5");
+            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, "E4");
+            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, "E5");
         }
 
         [Test]
@@ -30,7 +33,7 @@ namespace CSharpChess.UnitTests.PgnParsing
 
             Assert.That(pgnTurns.Count(), Is.EqualTo(1));
 
-            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
+            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, "E4");
         }
 
         [Test]
@@ -42,7 +45,7 @@ namespace CSharpChess.UnitTests.PgnParsing
 
             Assert.That(pgnTurns.Count(), Is.EqualTo(1));
 
-            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "E5");
+            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, "E5");
         }
 
         [Test]
@@ -54,11 +57,11 @@ namespace CSharpChess.UnitTests.PgnParsing
 
             Assert.That(pgnTurns.Count(), Is.EqualTo(2));
 
-            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
-            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "E5");
+            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, "E4");
+            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, "E5");
 
-            AssertPgnMoveQueryIs(pgnTurns[1].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "D4");
-            AssertPgnMoveQueryIs(pgnTurns[1].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "D5");
+            AssertPgnMoveQueryIs(pgnTurns[1].White, Chess.Colours.White, Chess.PieceNames.Pawn, "D4");
+            AssertPgnMoveQueryIs(pgnTurns[1].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, "D5");
         }
 
         [Test]
@@ -70,11 +73,11 @@ namespace CSharpChess.UnitTests.PgnParsing
 
             Assert.That(pgnTurns.Count(), Is.EqualTo(2));
 
-            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "E4");
-            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "E5");
+            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Pawn, "E4");
+            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, "E5");
 
-            AssertPgnMoveQueryIs(pgnTurns[1].White, Chess.Colours.White, Chess.PieceNames.Pawn, MoveType.Move, "D4");
-            AssertPgnMoveQueryIs(pgnTurns[1].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, MoveType.Move, "D5");
+            AssertPgnMoveQueryIs(pgnTurns[1].White, Chess.Colours.White, Chess.PieceNames.Pawn, "D4");
+            AssertPgnMoveQueryIs(pgnTurns[1].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, "D5");
         }
 
 

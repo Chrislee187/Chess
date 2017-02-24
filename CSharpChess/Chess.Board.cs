@@ -70,9 +70,9 @@ namespace CSharpChess
                 {
                     var file = (int)from.File + _transformX;
                     var rank = from.Rank + _transformY;
-                    return !Board.Validations.IsValidLocation(file, rank)
+                    return !Validations.IsValidLocation(file, rank)
                         ? null
-                        : new BoardLocation((Board.ChessFile)file, rank);
+                        : new BoardLocation((ChessFile)file, rank);
                 }
 
                 private readonly int _transformX;

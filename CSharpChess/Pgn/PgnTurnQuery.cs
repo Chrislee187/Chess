@@ -5,11 +5,11 @@ namespace CSharpChess.Pgn
     public class PgnTurnQuery
     {
         public int Number { get; }
-        public MoveQuery White { get; private set; }
-        public MoveQuery Black { get; private set; }
+        public PgnQuery White { get; }
+        public PgnQuery Black { get; }
         public string PgnSource { get; }
 
-        public PgnTurnQuery(int turnNumber, MoveQuery white, MoveQuery black, string pgnSource = "")
+        public PgnTurnQuery(int turnNumber, PgnQuery white, PgnQuery black, string pgnSource = "")
         {
             Number = turnNumber;
             White = white;
@@ -22,8 +22,8 @@ namespace CSharpChess.Pgn
             var w = White?.ToString() ?? "";
             var b = Black?.ToString() ?? "";
 
-            if (White.GameOver) w = "end";
-            if (Black.GameOver) b = "end";
+            if (White?.GameOver ?? false) w = "end";
+            if (Black?.GameOver ?? false) b = "end";
 
             return $"{Number}. {w} {b}";
         }

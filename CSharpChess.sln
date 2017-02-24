@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{FF4031A4-D
 	ProjectSection(SolutionItems) = preProject
 		Docs\samplescreen.txt = Docs\samplescreen.txt
 		Docs\specs.txt = Docs\specs.txt
+		todos.txt = todos.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}"
@@ -27,6 +28,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsChess", "CsChess\CsChess.csproj", "{848919A1-F3FE-4924-B572-710249EADED6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleStuff", "ConsoleStuff\ConsoleStuff.csproj", "{277CDC54-3C8E-4044-8930-692E05689F97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PGNFiles", "PGNFiles", "{DCD434C3-01FD-4F62-8A46-61CBB0B4A157}"
+	ProjectSection(SolutionItems) = preProject
+		PGNFiles\Short.pgn = PGNFiles\Short.pgn
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,5 +71,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B3E8239B-EDFE-46F3-AACB-1F3434C26E64} = {81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}
 		{FF4031A4-D959-4F95-9162-1F482C7ACE92} = {81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}
+		{DCD434C3-01FD-4F62-8A46-61CBB0B4A157} = {81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}
 	EndGlobalSection
 EndGlobal

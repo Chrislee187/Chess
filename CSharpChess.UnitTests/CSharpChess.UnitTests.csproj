@@ -63,7 +63,6 @@
     <Compile Include="Helpers\ChessBoardHelper.cs" />
     <Compile Include="BoardMovement\pawns.cs" />
     <Compile Include="Helpers\MediumConsoleBoard.cs" />
-    <Compile Include="TheBoard\PsgChessMoveTests.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\covers.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\from_starting_position.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\captures.cs" />
@@ -90,6 +89,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="Short.pgn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ConsoleStuff.Tests\ConsoleStuff.Tests.csproj">
