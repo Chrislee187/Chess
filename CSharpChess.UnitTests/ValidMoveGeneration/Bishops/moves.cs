@@ -48,7 +48,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
             var generator = new BishopMoveGenerator();
             var at = BoardLocation.At("D2");
 
-            var chessMoves = board.MovesFor(at).ToList();
+            var chessMoves = board.RemoveMovesThatLeaveBoardInCheck(at).ToList();
             Assert.True(chessMoves.None(), chessMoves.ToCSV());
         }
     }

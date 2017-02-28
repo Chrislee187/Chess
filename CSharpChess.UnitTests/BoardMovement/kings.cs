@@ -93,7 +93,7 @@ namespace CSharpChess.UnitTests.BoardMovement
             var colour = km.From.Rank == 1 ? Chess.Colours.White : Chess.Colours.Black;
             var board = BoardBuilder.CustomBoard(asOneChar, colour);
 
-            var moves = board.MovesFor(km.From).ToList();
+            var moves = board.RemoveMovesThatLeaveBoardInCheck(km.From).ToList();
             Assert.That(moves.Any());
             var moveResult = board.Move(km);
             Assert.False(moveResult.Succeeded, $"Failed: {km} move through check");
@@ -116,7 +116,7 @@ namespace CSharpChess.UnitTests.BoardMovement
             var at = BoardLocation.At("E1");
             var expected = new[] {"D1", "E2"};
             var notExpected = new[] {"F1", "F2"};
-            var chessMoves = board.MovesFor(at).Moves().ToList();
+            var chessMoves = board.RemoveMovesThatLeaveBoardInCheck(at).Moves().ToList();
 
             AssertMovesContains(chessMoves, expected, MoveType.Move);
             AssertMovesDoesNotContain(chessMoves, notExpected, MoveType.Move);

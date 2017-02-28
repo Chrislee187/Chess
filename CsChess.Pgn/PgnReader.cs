@@ -20,13 +20,13 @@ namespace CsChess.Pgn
 
         public string ReadGame()
         {
-            var nextLine = SkipEmptyLines();
-            if (nextLine == null) return null; // End of stream?
+            var nextLine = ReadUntilNonEmptyLine();
+            if (nextLine == null) return null;
 
             var tagPairText = ReadUntilEmptyLine(nextLine);
-            if(tagPairText == null) throw new InvalidDataException($"Expected Tag Pairs, found EOF!");
+            if(tagPairText == null) throw new InvalidDataException($"Expected Tag Pair text, found EOF!");
 
-            nextLine = SkipEmptyLines();
+            nextLine = ReadUntilNonEmptyLine();
             if (nextLine == null) throw new InvalidDataException($"No move text found.");
 
             var moveText = ReadUntilEmptyLine(nextLine);
@@ -47,12 +47,7 @@ namespace CsChess.Pgn
             return sb.ToString();
         }
 
-        private string ReadLine()
-        {
-            return _reader.ReadLine()?.Trim();
-        }
-
-        private string SkipEmptyLines()
+        private string ReadUntilNonEmptyLine()
         {
             var line = ReadLine();
             if (line == null) return null;
@@ -63,6 +58,11 @@ namespace CsChess.Pgn
             }
 
             return line;
+        }
+
+        private string ReadLine()
+        {
+            return _reader.ReadLine()?.Trim();
         }
 
         public void Dispose()

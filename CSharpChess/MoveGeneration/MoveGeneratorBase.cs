@@ -18,7 +18,7 @@ namespace CSharpChess.MoveGeneration
     ///  generation of each pieces movelist more problematic as to generate to the move list of a piece, you need the move list of all other pieces
     ///  to ensure the move doesn't uncover check.
     /// 
-    ///  Therefore the board will be resposible for managing this behaviour. See <see cref="ChessBoard.MovesFor"/>
+    ///  Therefore the board will be resposible for managing this behaviour. See <see cref="ChessBoard.RemoveMovesThatLeaveBoardInCheck"/>
     ///  </remarks>
     ///  </summary>
     public abstract class MoveGeneratorBase : IMoveGenerator

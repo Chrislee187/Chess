@@ -12,6 +12,7 @@ namespace CSharpChess.TheBoard
     {
         private readonly BoardPiece[,] _boardPieces = new BoardPiece[9, 9];
         public Chess.Colours WhoseTurn { get; set; }
+
         private readonly bool _constructing;
         public ChessBoard(bool newGame = true)
         {
@@ -32,7 +33,6 @@ namespace CSharpChess.TheBoard
 
             _constructing = false;
         }
-
         public ChessBoard(IEnumerable<BoardPiece> pieces, Chess.Colours whoseTurn)
         {
             BoardCreatedCounter();
@@ -60,7 +60,6 @@ namespace CSharpChess.TheBoard
                 MoveHandler = new MoveHandler(this);
             });
         }
-
         private void InitialiseNewGameBoard()
         {
             Timers.Time(TimerIds.Board.New, () =>
@@ -71,7 +70,6 @@ namespace CSharpChess.TheBoard
                 MoveHandler = new MoveHandler(this);
             });
         }
-
         private void InitialiseCustomBoard(IEnumerable<BoardPiece> pieces, Chess.Colours whoseTurn)
         {
             Timers.Time(TimerIds.Board.Custom, () =>
@@ -86,12 +84,12 @@ namespace CSharpChess.TheBoard
                 WhoseTurn = whoseTurn;
                 MoveHandler = new MoveHandler(this);
                 ValidateInitialBoardState();
-                UpdateGameState();
+                CheckForCheck();
             });
         }
 
-        private readonly Stack<EngineState> _engineStates = new Stack<EngineState>();
         public EngineState EngineState => _engineStates.Peek();
+        private readonly Stack<EngineState> _engineStates = new Stack<EngineState>();
         private void SetEngineState(EngineState state, Action action)
         {
             _engineStates.Push(state);
@@ -104,7 +102,7 @@ namespace CSharpChess.TheBoard
                 _engineStates.Pop();
             }
         }
-        private void UpdateGameState()
+        private void CheckForCheck()
         {
             foreach (var attacker in Chess.BothColours)
             {
@@ -116,7 +114,7 @@ namespace CSharpChess.TheBoard
                         ? Chess.GameState.BlackKingInCheck
                         : Chess.GameState.WhiteKingInCheck;
 
-                    UpdateGameStateForCheckMate(defender);
+                    CheckForCheckMate(defender);
                 }
             }
         }
@@ -126,12 +124,12 @@ namespace CSharpChess.TheBoard
         /// to generate the move lists to see if any kings are in check
         /// </summary>
         /// <param name="defender"></param>
-        private void UpdateGameStateForCheckMate(Chess.Colours defender)
+        private void CheckForCheckMate(Chess.Colours defender)
         {
             if (!_constructing)
             {
                 var c = ShallowClone();
-                if (c.Pieces.OfColour(defender).SelectMany(o => MovesFor(o.Location)).None())
+                if (c.Pieces.OfColour(defender).SelectMany(o => RemoveMovesThatLeaveBoardInCheck(o.Location)).None())
                 {
                     GameState = defender == Chess.Colours.Black
                         ? Chess.GameState.CheckMateWhiteWins
@@ -162,7 +160,7 @@ namespace CSharpChess.TheBoard
 
                     if (moveResult.Succeeded)
                     {
-                        UpdateGameState();
+                        CheckForCheck();
                         result = moveResult;
                     }
                 }
@@ -170,7 +168,7 @@ namespace CSharpChess.TheBoard
             return result ?? MoveResult.Failure($"Invalid move {move}", move);
         }
 
-        public IEnumerable<ChessMove> MovesFor(BoardLocation at)
+        public IEnumerable<ChessMove> RemoveMovesThatLeaveBoardInCheck(BoardLocation at)
         {
             IEnumerable<ChessMove> result = null;
             SetEngineState(EngineState.GeneratingPieceMoves, () =>
@@ -185,7 +183,7 @@ namespace CSharpChess.TheBoard
             => this[takenLocation] = BoardPiece.Empty(takenLocation);
 
         private ChessMove CheckMoveIsValid(ChessMove move)
-            => MovesFor(move.From).Where(m => !m.MoveType.IsCover()).FirstOrDefault(vm => vm.Equals(move));
+            => RemoveMovesThatLeaveBoardInCheck(move.From).Where(m => !m.MoveType.IsCover()).FirstOrDefault(vm => vm.Equals(move));
 
         #region this[] and other basic public stuff
         // ReSharper disable once MemberCanBePrivate.Global
@@ -376,12 +374,8 @@ namespace CSharpChess.TheBoard
         Started,
         GeneratingPieceMoves
     }
-
-    [Serializable]
     public class InvalidBoardStateException : Exception
     {
-        // ReSharper disable once UnusedAutoPropertyAccessor.Global
-        // ReSharper disable once MemberCanBePrivate.Global
         public ChessBoard Board { get; }
 
         public InvalidBoardStateException(string message, ChessBoard board) : base(message)
@@ -389,10 +383,5 @@ namespace CSharpChess.TheBoard
             Board = board;
         }
 
-        protected InvalidBoardStateException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context)
-        {
-        }
     }
 }
