@@ -1,6 +1,6 @@
 using CSharpChess.TheBoard;
 
-namespace CSharpChess.Pgn
+namespace CsChess.Pgn
 {
     public class PgnGameResolver
     {

@@ -1,6 +1,6 @@
 using CSharpChess.System;
 
-namespace CSharpChess.Pgn
+namespace CsChess.Pgn
 {
     public class PgnResult
     {

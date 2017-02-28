@@ -30,7 +30,7 @@ namespace CSharpChess.TheBoard
             Piece = piece;
         }
 
-        internal IEnumerable<ChessMove> PossibleMoves => _moves.Where(m => !m.MoveType.IsCover());
+        public IEnumerable<ChessMove> PossibleMoves => _moves.Where(m => !m.MoveType.IsCover());
 
         internal void MoveTo(BoardLocation moveTo, MoveType type)
         {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using CSharpChess.Pgn;
+using CsChess.Pgn;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;

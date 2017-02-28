@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using CSharpChess.Pgn;
+using CsChess.Pgn;
 using CSharpChess.System;
 using NUnit.Framework;
 
@@ -137,5 +137,30 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
             Console.WriteLine($"{pgnGames.Count()} parsed.");
 
         }
+
+
+        [Test]
+        public void can_read_pgn_text()
+        {
+
+            var stream = File.OpenRead(@"C:\Src\Chess\CSharpChess.UnitTests\bin\Debug\short.pgn");
+
+            int count = 0;
+
+            using (var reader = new PgnReader(stream))
+            {
+                var game = reader.ReadGame();
+
+                while (game != null)
+                {
+                    count++;
+                    game = reader.ReadGame();
+                }
+            }
+
+            Console.WriteLine(count);
+
+        }
+
     }
 }

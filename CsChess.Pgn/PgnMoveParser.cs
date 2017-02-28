@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using CSharpChess;
 using CSharpChess.TheBoard;
 
-namespace CSharpChess.Pgn
+namespace CsChess.Pgn
 {
     /*
      * Pgn notation requires current board state to determine the actual moveType

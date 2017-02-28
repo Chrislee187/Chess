@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace CSharpChess.System.Extensions
@@ -16,6 +17,18 @@ namespace CSharpChess.System.Extensions
         public static IEnumerable<string> ToLines(this string s, StringSplitOptions options = StringSplitOptions.None)
         {
             return s.Split(EndOfLineChars, options);
+        }
+
+        public static Stream ToStream(this string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            using (StreamWriter writer = new StreamWriter(stream))
+            {
+                writer.Write(s);
+                writer.Flush();
+                stream.Position = 0;
+            }
+            return stream;
         }
     }
 }

@@ -1,6 +1,6 @@
 // ReSharper disable StringIndexOfIsCultureSpecific.1
 
-namespace CSharpChess.Pgn
+namespace CsChess.Pgn
 {
     public class PgnTurnQuery
     {

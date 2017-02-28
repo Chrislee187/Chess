@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess;
 
-namespace CSharpChess.Pgn
+namespace CsChess.Pgn
 {
     public static class PgnTurnParser
     {

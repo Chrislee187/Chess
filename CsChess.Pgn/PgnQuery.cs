@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
+using CSharpChess;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
-namespace CSharpChess.Pgn
+namespace CsChess.Pgn
 {
     public class PgnQuery
     {
@@ -102,7 +103,7 @@ namespace CSharpChess.Pgn
 
             if (piece == null)
             {
-                Console.WriteLine(board.ToAsciiBoard());
+                Console.WriteLine((string) board.ToAsciiBoard());
                 throw new InvalidOperationException($"No {pieceName} that can {_moveType} to {move} found");
             }
 

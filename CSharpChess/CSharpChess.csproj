@@ -45,15 +45,6 @@
     <Compile Include="Chess.Pieces.cs" />
     <Compile Include="Chess.Rules.cs" />
     <Compile Include="Helpers\SmallConsoleBoard.cs" />
-    <Compile Include="Pgn\PgnDate.cs" />
-    <Compile Include="Pgn\PgnGame.cs" />
-    <Compile Include="Pgn\PgnGameResolver.cs" />
-    <Compile Include="Pgn\PgnMoveParser.cs" />
-    <Compile Include="Pgn\PgnQuery.cs" />
-    <Compile Include="Pgn\PgnResult.cs" />
-    <Compile Include="Pgn\PgnTagPair.cs" />
-    <Compile Include="Pgn\PgnTurnQuery.cs" />
-    <Compile Include="Pgn\PgnTurnParser.cs" />
     <Compile Include="RuleSet.cs" />
     <Compile Include="System\ChessGameResult.cs" />
     <Compile Include="System\Extensions\BoardLocation.cs" />

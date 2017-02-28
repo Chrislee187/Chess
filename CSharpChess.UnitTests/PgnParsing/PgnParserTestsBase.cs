@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using CSharpChess.Pgn;
+using CsChess.Pgn;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 using NUnit.Framework;

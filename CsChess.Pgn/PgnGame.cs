@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml;
 using CSharpChess.System;
 using CSharpChess.System.Extensions;
 
-namespace CSharpChess.Pgn
+namespace CsChess.Pgn
 {
     public class PgnGame
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace CSharpChess.Pgn
+namespace CsChess.Pgn
 {
     public class PgnTagPair
     {
