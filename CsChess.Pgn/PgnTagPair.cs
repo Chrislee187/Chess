@@ -19,6 +19,7 @@ namespace CsChess.Pgn
             var trimmed = pair.Trim();
             if(trimmed.First() != '[') throw new ArgumentException($"Expected '{trimmed}' to start with '['");
 
+            // ReSharper disable once StringIndexOfIsCultureSpecific.1
             var delim = trimmed.IndexOf(" ");
 
             var name = trimmed.Substring(1, delim - 1).Trim();

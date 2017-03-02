@@ -2,7 +2,7 @@ using CSharpChess.System;
 
 namespace CsChess.Pgn
 {
-    public class PgnResult
+    public static class PgnResult
     {
         public static ChessGameResult Parse(string tagPair)
         {

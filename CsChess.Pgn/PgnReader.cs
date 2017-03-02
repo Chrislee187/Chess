@@ -51,7 +51,7 @@ namespace CsChess.Pgn
         private string ReadUntilNonEmptyLine()
         {
             var line = ReadLine();
-            if (line == null) return null;
+            if (_reader.EndOfStream) return null;
 
             while (line == string.Empty)
             {

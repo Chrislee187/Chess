@@ -60,26 +60,22 @@ namespace CsChess.Pgn
                         if (moveIsFor == Chess.Colours.White)
                         {
                             white.WithResult(token);
-                            var b = new PgnQuery();
-                            b.WithResult(token);
-                            turns.Add(new PgnTurnQuery(turnNumber, white, b,currentText));
+                            black = CreateEndGameQuery(token);
                         }
                         else if (moveIsFor == Chess.Colours.Black)
                         {
-                            black = new PgnQuery();
-                            black.WithResult(token);
-                            turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
+                            black = CreateEndGameQuery(token);
                             moveIsFor = Chess.Colours.None;
                         }
                         else
                         {
-                            var w = new PgnQuery();
-                            w.WithResult(token);
-                            var b = new PgnQuery();
-                            b.WithResult(token);
-                            turns.Add(new PgnTurnQuery(turnNumber, w, b, currentText));
-
+                            white = CreateEndGameQuery(token);
+                            black = CreateEndGameQuery(token);
                         }
+
+                        var pgnTurnQuery = new PgnTurnQuery(turnNumber, white, black, currentText);
+
+                        turns.Add(pgnTurnQuery);
                     }
                     else
                     {
@@ -108,6 +104,13 @@ namespace CsChess.Pgn
             }
             pgnTurns = turns;
             return true;
+        }
+
+        private static PgnQuery CreateEndGameQuery(string token)
+        {
+            var b = new PgnQuery();
+            b.WithResult(token);
+            return b;
         }
 
         private static bool IsEndGameToken(string token)

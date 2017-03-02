@@ -12,12 +12,13 @@ namespace CsChess.Pgn
     {
         public MoveType MoveType { get; private set; }
         private Chess.Colours _turn;
+        private char _promotionPiece;
         public ChessPiece Piece { get; private set; }
         public Chess.Board.ChessFile FromFile { get; private set; } = Chess.Board.ChessFile.None;
-        public int FromRank { get; private set; } = 0;
+        public int FromRank { get; private set; }
 
         public Chess.Board.ChessFile ToFile { get; private set; } = Chess.Board.ChessFile.None;
-        public int ToRank { get; private set; } = 0;
+        public int ToRank { get; private set; }
 
         public bool QueryResolved => !Chess.Board.Validations.InvalidRank(FromRank)
                                      && !Chess.Board.Validations.InvalidFile(FromFile)
@@ -27,7 +28,7 @@ namespace CsChess.Pgn
 
         public bool GameOver { get; private set; }
         public ChessGameResult GameResult { get; private set; }
-        public string PgnText { get; private set; }
+        public string PgnText { get; private set; } = string.Empty;
 
         private Chess.Board.ChessFile ParseFile(char file)
         {
@@ -99,12 +100,12 @@ namespace CsChess.Pgn
 
             boardPiecesQuery = boardPiecesQuery.Where(p => p.PossibleMoves.ContainsMoveTo(move));
 
-            if (boardPiecesQuery.None())
+            var boardPieces = boardPiecesQuery.ToList();
+            if (boardPieces.None())
             {
                 throw new Exception($"No {turn} {pieceName} found that can move to {move}");
             }
 
-            var boardPieces = boardPiecesQuery.ToList();
             var piece = boardPieces.First();
 
             if (boardPieces.Count() > 1)
@@ -116,7 +117,7 @@ namespace CsChess.Pgn
 
             if (piece == null)
             {
-                Console.WriteLine((string) board.ToAsciiBoard());
+//                Console.WriteLine(board.ToAsciiBoard());
                 throw new InvalidOperationException($"No {pieceName} that can {MoveType} to {move} found");
             }
 
@@ -133,12 +134,13 @@ namespace CsChess.Pgn
         {
             var from = new BoardLocation(FromFile, FromRank);
             var to = new BoardLocation(ToFile, ToRank);
-            var move = new ChessMove(@from, to, MoveType.Move);
+            var move = new ChessMove(from, to, MoveType.Move);
             return move;
         }
 
         public void WithPromotion(char promotionPiece)
         {
+            _promotionPiece = promotionPiece;
         }
 
         public string ToMove()
