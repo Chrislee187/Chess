@@ -142,7 +142,6 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
         [Test]
         public void can_read_pgn_text()
         {
-
             var stream = File.OpenRead(@"C:\Src\Chess\CSharpChess.UnitTests\bin\Debug\short.pgn");
 
             int count = 0;
@@ -153,7 +152,16 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
 
                 while (game != null)
                 {
-                    count++;
+                    var pgnGame = PgnGame.Parse(game).Single();
+                    var board = new PgnGameResolver().Resolve(pgnGame);
+
+                    var result = ChessGameResultToPgnResult(board.GameState);
+
+                    if (IsInCheckmate(board.GameState))
+                    {
+                        Assert.That(pgnGame.Result, Is.EqualTo(result), pgnGame.ToString());
+                    }
+
                     game = reader.ReadGame();
                 }
             }
@@ -162,5 +170,35 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
 
         }
 
+        private bool IsInCheckmate(Chess.GameState boardGameState)
+        {
+            return new[]
+                {
+                    Chess.GameState.CheckMateBlackWins,
+                    Chess.GameState.CheckMateWhiteWins,
+                }
+                .Any(a => a == boardGameState);
+        }
+
+        private static ChessGameResult ChessGameResultToPgnResult(Chess.GameState pgnGame)
+        {
+            Chess.GameState state;
+            switch (pgnGame)
+            {
+                case Chess.GameState.WhiteKingInCheck:
+                case Chess.GameState.CheckMateBlackWins:
+                    return ChessGameResult.BlackWins;
+                case Chess.GameState.BlackKingInCheck:
+                case Chess.GameState.CheckMateWhiteWins:
+                    return ChessGameResult.WhiteWins;
+                case Chess.GameState.Stalemate:
+                case Chess.GameState.Draw:
+                    return ChessGameResult.Draw;
+                case Chess.GameState.WaitingForMove:
+                    return ChessGameResult.Unknown;
+                default:
+                    throw new ArgumentOutOfRangeException(pgnGame.ToString());
+            }
+        }
     }
 }

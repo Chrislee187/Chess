@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CsChess.Pgn;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
@@ -67,6 +68,20 @@ namespace CSharpChess.UnitTests.PgnParsing
         }
 
         [Test]
+        public void can_parse_basic_queenside_castle()
+        {
+            var move = "O-O-O";
+            var turn = Chess.Colours.Black;
+            var pgnQuery = new PgnQuery();
+            var parsed = PgnMoveParser.TryParse(turn, move, ref pgnQuery);
+
+            Assert.True(parsed);
+            Assert.That(pgnQuery.QueryResolved);
+            Assert.True(pgnQuery.Piece.Is(Chess.Colours.Black, Chess.PieceNames.King));
+            AssertMoveQueryLocations(pgnQuery, Chess.Board.ChessFile.E, 8, Chess.Board.ChessFile.C, 8);
+        }
+
+        [Test]
         public void can_parse_basic_check()
         {
             var move = "Ra6+";
@@ -98,7 +113,7 @@ namespace CSharpChess.UnitTests.PgnParsing
         }
 
         [Test]
-        public void can_parse_disambiguated_move()
+        public void can_parse_disambiguated_file_move()
         {
             var move = "Nfd7";
             var turn = Chess.Colours.White;
@@ -125,6 +140,38 @@ namespace CSharpChess.UnitTests.PgnParsing
             Assert.That(pgnQuery.QueryResolved);
             Assert.That(pgnQuery.FromFile, Is.EqualTo(Chess.Board.ChessFile.F));
             Assert.That(pgnQuery.FromRank, Is.EqualTo(6));
+        }
+
+        [Test]
+        public void can_parse_disambiguated_rank_move()
+        {
+            var move = "N4f3";
+//            var move = "Rhe8";
+            var turn = Chess.Colours.White;
+            var pgnQuery = new PgnQuery();
+            var parsed = PgnMoveParser.TryParse(turn, move, ref pgnQuery);
+
+            Assert.True(parsed);
+            Assert.That(!pgnQuery.QueryResolved);
+            Assert.True(pgnQuery.Piece.Is(Chess.Colours.White, Chess.PieceNames.Knight));
+            AssertMoveQueryLocations(pgnQuery, Chess.Board.ChessFile.None, 4, Chess.Board.ChessFile.F, 3);
+
+            const string asOneChar = 
+                         "r...kb.r" +
+                         "pb...ppp" +
+                         "..p..n.." +
+                         "........" +
+                         "..PN.B.." +
+                         "......P." +
+                         "PP.NP..P" +
+                         "R...K..R";
+
+            var customBoard = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            pgnQuery.ResolveQuery(customBoard);
+
+            Assert.That(pgnQuery.QueryResolved);
+            Assert.That(pgnQuery.FromFile, Is.EqualTo(Chess.Board.ChessFile.D));
+            Assert.That(pgnQuery.FromRank, Is.EqualTo(4));
         }
 
         [Test]
@@ -244,6 +291,23 @@ namespace CSharpChess.UnitTests.PgnParsing
             Assert.That(!pgnQuery.QueryResolved);
             Assert.True(pgnQuery.Piece.Is(Chess.Colours.Black, Chess.PieceNames.Pawn));
             AssertMoveQueryLocations(pgnQuery, Chess.Board.ChessFile.F, 0, Chess.Board.ChessFile.E, 1);
+        }
+
+        //fxe1=Q+
+        [Test]
+        public void can_parse_result()
+        {
+            var move = "1-0";
+            var turn = Chess.Colours.Black;
+            var pgnQuery = new PgnQuery();
+            var parsed = PgnMoveParser.TryParse(turn, move, ref pgnQuery);
+
+            Assert.True(parsed);
+            Assert.That(pgnQuery.QueryResolved);
+            Assert.True(pgnQuery.Piece.Is(Chess.Colours.None, Chess.PieceNames.Blank));
+            AssertMoveQueryLocations(pgnQuery, Chess.Board.ChessFile.None, 0, Chess.Board.ChessFile.None, 0);
+            Assert.That(pgnQuery.GameOver, Is.True);
+            Assert.That(pgnQuery.GameResult, Is.EqualTo(ChessGameResult.WhiteWins));
         }
     }
 }

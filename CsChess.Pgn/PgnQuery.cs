@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using CSharpChess;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
@@ -8,13 +10,13 @@ namespace CsChess.Pgn
 {
     public class PgnQuery
     {
-        private MoveType _moveType;
+        public MoveType MoveType { get; private set; }
         private Chess.Colours _turn;
         public ChessPiece Piece { get; private set; }
-        public Chess.Board.ChessFile FromFile{ get; private set; } = Chess.Board.ChessFile.None;
+        public Chess.Board.ChessFile FromFile { get; private set; } = Chess.Board.ChessFile.None;
         public int FromRank { get; private set; } = 0;
 
-        public Chess.Board.ChessFile ToFile{ get; private set; } = Chess.Board.ChessFile.None;
+        public Chess.Board.ChessFile ToFile { get; private set; } = Chess.Board.ChessFile.None;
         public int ToRank { get; private set; } = 0;
 
         public bool QueryResolved => !Chess.Board.Validations.InvalidRank(FromRank)
@@ -24,6 +26,8 @@ namespace CsChess.Pgn
                                      || GameOver;
 
         public bool GameOver { get; private set; }
+        public ChessGameResult GameResult { get; private set; }
+        public string PgnText { get; private set; }
 
         private Chess.Board.ChessFile ParseFile(char file)
         {
@@ -41,12 +45,12 @@ namespace CsChess.Pgn
             int test;
             if (!int.TryParse(rank.ToString().ToUpper(), out test))
             {
-                throw new ArgumentOutOfRangeException(nameof(rank), "Invalid file");
+                throw new ArgumentOutOfRangeException(nameof(rank), "Invalid rank");
             }
 
             if (Chess.Board.Validations.InvalidRank(test))
             {
-                throw new ArgumentOutOfRangeException(nameof(rank), "Invalid file");
+                throw new ArgumentOutOfRangeException(nameof(rank), "Invalid rank");
             }
 
             return test;
@@ -58,7 +62,7 @@ namespace CsChess.Pgn
         public void WithFromRank(char rank) => FromRank = ParseRank(rank);
         public void WithColour(Chess.Colours turn) => _turn = turn;
         public void WithPiece(ChessPiece chessPiece) => Piece = chessPiece;
-        public void WithMoveType(MoveType moveType) => _moveType = moveType;
+        public void WithMoveType(MoveType moveType) => MoveType = moveType;
 
         public void WithResult(string move)
         {
@@ -66,11 +70,8 @@ namespace CsChess.Pgn
             ToRank = 0;
             FromFile = Chess.Board.ChessFile.None;
             FromRank = 0;
-
-            if (move == "1/2-1/2")
-            {
-
-            }
+            Piece = ChessPiece.NullPiece;
+            GameResult = PgnResult.Parse(move);
             GameOver = true;
         }
 
@@ -91,20 +92,32 @@ namespace CsChess.Pgn
                 boardPiecesQuery = boardPiecesQuery.Where(p => p.Location.File == FromFile);
             }
 
+            if (FromRank != 0)
+            {
+                boardPiecesQuery = boardPiecesQuery.Where(p => p.Location.Rank == FromRank);
+            }
+
             boardPiecesQuery = boardPiecesQuery.Where(p => p.PossibleMoves.ContainsMoveTo(move));
+
+            if (boardPiecesQuery.None())
+            {
+                throw new Exception($"No {turn} {pieceName} found that can move to {move}");
+            }
 
             var boardPieces = boardPiecesQuery.ToList();
             var piece = boardPieces.First();
 
             if (boardPieces.Count() > 1)
             {
-                piece = boardPieces.SingleOrDefault(p => p.PossibleMoves.Any(pm => pm.MoveType == _moveType));
+                // TODO: This doesn't cover the case where two pieces can move to a square but on of these
+                // pieces is actually pinned on discovered check
+                piece = boardPieces.SingleOrDefault(p => p.PossibleMoves.Any(pm => pm.MoveType == MoveType));
             }
 
             if (piece == null)
             {
                 Console.WriteLine((string) board.ToAsciiBoard());
-                throw new InvalidOperationException($"No {pieceName} that can {_moveType} to {move} found");
+                throw new InvalidOperationException($"No {pieceName} that can {MoveType} to {move} found");
             }
 
             return piece.Location;
@@ -112,16 +125,25 @@ namespace CsChess.Pgn
 
         public override string ToString()
         {
-            if (GameOver) return "end"; // TODO: End game handling in the pgn parser
+            if (GameOver) return GameResult.ToString();
+            return $"{_turn} {CreateMove()}";
+        }
 
+        private ChessMove CreateMove()
+        {
             var from = new BoardLocation(FromFile, FromRank);
             var to = new BoardLocation(ToFile, ToRank);
-            var move = new ChessMove(from,to, MoveType.Move);
-            return move.ToString();
+            var move = new ChessMove(@from, to, MoveType.Move);
+            return move;
         }
 
         public void WithPromotion(char promotionPiece)
         {
+        }
+
+        public string ToMove()
+        {
+            return $"{CreateMove()}";
         }
     }
 }

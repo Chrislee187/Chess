@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
 using CSharpChess.System.Extensions;
 using CSharpChess.System.Metrics;
@@ -10,6 +9,7 @@ namespace CSharpChess.TheBoard
 {
     public class ChessBoard
     {
+        public List<ChessMove> Moves { get; } = new List<ChessMove>();
         private readonly BoardPiece[,] _boardPieces = new BoardPiece[9, 9];
         public Chess.Colours WhoseTurn { get; set; }
 
@@ -157,15 +157,21 @@ namespace CSharpChess.TheBoard
                 if (validMove != null)
                 {
                     var moveResult = MoveHandler.Move(move, validMove, boardPiece);
-
+                    RecordMove(move);
                     if (moveResult.Succeeded)
                     {
+                        GameState = Chess.GameState.WaitingForMove;
                         CheckForCheck();
                         result = moveResult;
                     }
                 }
             });
             return result ?? MoveResult.Failure($"Invalid move {move}", move);
+        }
+
+        private void RecordMove(ChessMove move)
+        {
+            Moves.Add(move);
         }
 
         public IEnumerable<ChessMove> RemoveMovesThatLeaveBoardInCheck(BoardLocation at)
@@ -340,6 +346,7 @@ namespace CSharpChess.TheBoard
             {Chess.PieceNames.Queen  ,'Q' },
             {Chess.PieceNames.King   ,'K' }
         };
+
 
         public string ToAsciiBoard()
         {

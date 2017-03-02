@@ -25,10 +25,11 @@ namespace CSharpChess.MoveGeneration
     {
         public virtual IEnumerable<ChessMove> All(ChessBoard board, BoardLocation at)
         {
+
             return ValidMoves(board, at)
                 .Concat(ValidTakes(board, at))
-                .Concat(ValidCovers(board, at)).ToList()
-                ;
+                .Concat(ValidCovers(board, at))
+                .ToList();
         }
         /// <summary>
         /// "Moves" are normal non-taking moves, includes castling, pawn promotions, etc.

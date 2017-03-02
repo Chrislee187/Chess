@@ -130,23 +130,50 @@ namespace CSharpChess
                     return new ChessMove(rook, rookTo, MoveType.Castle);
                 }
 
-                public static IEnumerable<BoardLocation> CastleLocationsBetween(BoardLocation fromLoc, BoardLocation toLoc)
+                public static IEnumerable<BoardLocation> SquaresBetweenCastlingPieces(BoardLocation toLoc)
                 {
-                    int fromFile, toFile;
                     if (toLoc.File == Board.ChessFile.C)
                     {
-                        fromFile = (int)Board.ChessFile.C;
-                        toFile = (int)Board.ChessFile.D;
+                        return new List<BoardLocation>
+                        {
+                            BoardLocation.At(Board.ChessFile.B, toLoc.Rank),
+                            BoardLocation.At(Board.ChessFile.C, toLoc.Rank),
+                            BoardLocation.At(Board.ChessFile.D, toLoc.Rank),
+                        };
                     }
                     else
                     {
-                        fromFile = (int)Board.ChessFile.F;
-                        toFile = (int)Board.ChessFile.G;
+                        return new List<BoardLocation>
+                        {
+                            BoardLocation.At(Board.ChessFile.F, toLoc.Rank),
+                            BoardLocation.At(Board.ChessFile.G, toLoc.Rank),
+                        };
                     }
 
-                    return Enumerable.Range(fromFile, toFile - fromFile + 1).Select(v => BoardLocation.At(v, fromLoc.Rank));
+//                    return Enumerable.Range(fromFile, toFile - fromFile + 1).Select(v => BoardLocation.At(v, fromLoc.Rank));
                 }
 
+                public static IEnumerable<BoardLocation> SquaresKingsPassesThroughWhenCastling(BoardLocation toLoc)
+                {
+                    if (toLoc.File == Board.ChessFile.C)
+                    {
+                        return new List<BoardLocation>
+                        {
+                            BoardLocation.At(Board.ChessFile.D, toLoc.Rank),
+                            BoardLocation.At(Board.ChessFile.C, toLoc.Rank)
+                        };
+                    }
+                    else
+                    {
+                        return new List<BoardLocation>
+                        {
+                            BoardLocation.At(Board.ChessFile.F, toLoc.Rank),
+                            BoardLocation.At(Board.ChessFile.G, toLoc.Rank),
+                        };
+                    }
+
+                    //                    return Enumerable.Range(fromFile, toFile - fromFile + 1).Select(v => BoardLocation.At(v, fromLoc.Rank));
+                }
 
             }
 

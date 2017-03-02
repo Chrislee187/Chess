@@ -3,6 +3,8 @@ namespace CSharpChess.System
     public enum ChessGameResult
     {
         Unknown,
-        Draw
+        Draw,
+        WhiteWins,
+        BlackWins
     }
 }

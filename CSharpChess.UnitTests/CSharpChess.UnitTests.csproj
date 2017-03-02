@@ -49,7 +49,7 @@
     <Compile Include="BoardMovement\rooks.cs" />
     <Compile Include="BoardMovement\knights.cs" />
     <Compile Include="BoardMovement\bishops.cs" />
-    <Compile Include="PgnParsing\comments.cs" />
+    <Compile Include="PgnParsing\PgnTurnParserTests.cs" />
     <Compile Include="PgnParsing\FullGameParsing.cs" />
     <Compile Include="PgnParsing\Moves.cs" />
     <Compile Include="PgnParsing\PgnParserTestsBase.cs" />

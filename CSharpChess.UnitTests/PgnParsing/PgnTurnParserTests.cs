@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CsChess.Pgn;
+using CSharpChess.System;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.PgnParsing
 {
     [TestFixture]
-    public class Comments : PgnParserTestsBase
+    public class PgnTurnParserTests : PgnParserTestsBase
     {
         [Test]
         public void end_of_line_comments_in_pairs_pgn_moves_are_ignored()
@@ -80,6 +81,39 @@ namespace CSharpChess.UnitTests.PgnParsing
             AssertPgnMoveQueryIs(pgnTurns[1].Black, Chess.Colours.Black, Chess.PieceNames.Pawn, "D5");
         }
 
+        [Test]
+        public void game_over_states_after_white_turns_are_detected()
+        {
+            var text = "72.Kb2  1-0";
+
+            IEnumerable<PgnTurnQuery> pgnTurns1;
+            var parsed = PgnTurnParser.TryParse(text, out pgnTurns1);
+            Assert.True(parsed, $"'{text}' did not parse as a Pgn turn");
+            var pgnTurns = pgnTurns1.ToList();
+
+            Assert.That(pgnTurns.Count(), Is.EqualTo(1));
+
+            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.King, "B2");
+            Assert.That(pgnTurns[0].Black.GameOver, Is.True);
+            Assert.That(pgnTurns[0].Black.GameResult, Is.EqualTo(ChessGameResult.WhiteWins));
+        }
+        [Test]
+        public void game_over_states_after_black_turns_are_detected()
+        {
+            var text = "19.Nxf7 Ne4+ 0-1";
+
+            IEnumerable<PgnTurnQuery> pgnTurns1;
+            var parsed = PgnTurnParser.TryParse(text, out pgnTurns1);
+            Assert.True(parsed, $"'{text}' did not parse as a Pgn turn");
+            var pgnTurns = pgnTurns1.ToList();
+
+            Assert.That(pgnTurns.Count(), Is.EqualTo(2));
+
+            AssertPgnMoveQueryIs(pgnTurns[0].White, Chess.Colours.White, Chess.PieceNames.Knight, "F7");
+            AssertPgnMoveQueryIs(pgnTurns[0].Black, Chess.Colours.Black, Chess.PieceNames.Knight, "E4");
+            Assert.That(pgnTurns[1].White.GameOver, Is.True);
+            Assert.That(pgnTurns[1].White.GameResult, Is.EqualTo(ChessGameResult.BlackWins));
+        }
 
     }
 }

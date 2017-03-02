@@ -16,7 +16,8 @@ namespace CSharpChess
             BlackKingInCheck, WhiteKingInCheck, WaitingForMove, Stalemate,
             Unknown,
             CheckMateBlackWins,
-            CheckMateWhiteWins
+            CheckMateWhiteWins,
+            Draw
         }
         // TODO: Unit-Test
         public static Colours ColourOfEnemy(Colours colour) => colour == Colours.Black

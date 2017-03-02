@@ -49,18 +49,10 @@ namespace CSharpChess
                     => !IsEmptyAt(board, (BoardLocation)location);
 
                 // TODO: Unit Tests?
-                public static ChessMove CanCastle(ChessBoard board, BoardLocation kingLocation, BoardLocation rookLoc)
+                public static bool CanCastle(ChessBoard board, BoardLocation kingLocation)
                 {
-                    var rookPiece = board[rookLoc];
-                    if (rookPiece.Piece.IsNot(PieceNames.Rook) || rookPiece.MoveHistory.Any()) return null;
+                    return CastleLocationsAreEmpty(board, kingLocation);
 
-                    var kingPiece = board[kingLocation];
-                    if (kingPiece.Piece.IsNot(PieceNames.King) || kingPiece.MoveHistory.Any()) return null;
-
-                    if (!CastleLocationsAreEmpty(board, kingLocation, rookPiece.Location)) return null;
-
-                    var castleFile = rookPiece.Location.File == ChessFile.A ? ChessFile.C : ChessFile.G;
-                    return new ChessMove(kingLocation, BoardLocation.At(castleFile, kingLocation.Rank), MoveType.Castle);
                 }
 
                 public static bool InCheckAt(ChessBoard board, BoardLocation at, Colours asPlayer)
@@ -75,7 +67,7 @@ namespace CSharpChess
                 {
                     return b[p.Location].PossibleMoves.Any(m => m.To.Equals(l));
                 }
-
+                // TODO: Unit Test this and everything else in here
                 public static bool MovesLeaveOwnSideInCheck(ChessBoard board, ChessMove move)
                 {
                     var moversPiece = board[move.From].Piece;
@@ -83,7 +75,7 @@ namespace CSharpChess
 
                     if (move.MoveType == MoveType.Castle)
                     {
-                        var locs = Rules.King.CastleLocationsBetween(move.From, move.To);
+                        var locs = Rules.King.SquaresKingsPassesThroughWhenCastling(move.To);
                         var boardPieces = clone.Pieces.OfColour(ColourOfEnemy(moversPiece.Colour)).ToList();
                         var movesThruCheck = boardPieces
                             .SelectMany(p => p.PossibleMoves)
@@ -98,8 +90,8 @@ namespace CSharpChess
                     return InCheckAt(clone, moversKing.Location, moversPiece.Colour);
                 }
 
-                public static bool CastleLocationsAreEmpty(ChessBoard board, BoardLocation king, BoardLocation rook)
-                    => Rules.King.CastleLocationsBetween(king, rook).All(board.IsEmptyAt);
+                public static bool CastleLocationsAreEmpty(ChessBoard board, BoardLocation king)
+                    => Rules.King.SquaresBetweenCastlingPieces(king).All(board.IsEmptyAt);
 
             }
         }

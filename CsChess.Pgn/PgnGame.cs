@@ -39,7 +39,8 @@ namespace CsChess.Pgn
 //            var newlinesConverted = new Regex("[\r\n|\n]", RegexOptions.None).Replace(linesTrimmed, Environment.NewLine);
 
             var chunks = linesTrimmed.Split(new [] { $"{Environment.NewLine}{Environment.NewLine}"}, StringSplitOptions.RemoveEmptyEntries);
-            var stk= new Stack<string>(chunks);
+//            var chunks = new Regex("([\r\n]{2,}|[\n]{2,}|[\r\n\r]|[\r\r\n])").Split(linesTrimmed);
+            var stk = new Stack<string>(chunks);
 
             if (stk.Count() % 2 != 0)
             {
@@ -97,6 +98,11 @@ namespace CsChess.Pgn
             }
             tagPairs = tps;
             return pairs.Last();
+        }
+
+        public override string ToString()
+        {
+            return $"{White} vs {Black} @ {Event} #{Round} {Result}";
         }
     }
 }

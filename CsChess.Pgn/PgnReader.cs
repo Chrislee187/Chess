@@ -31,13 +31,14 @@ namespace CsChess.Pgn
 
             var moveText = ReadUntilEmptyLine(nextLine);
 
-            return tagPairText + "\n" + moveText;
+            return tagPairText + Environment.NewLine + moveText;
         }
 
         private string ReadUntilEmptyLine(string nextLine)
         {
             var line = ReadLine();
-            var sb = new StringBuilder(nextLine);
+            var sb = new StringBuilder();
+            sb.AppendLine(nextLine);
             while (!string.IsNullOrEmpty(line))
             {
                 sb.AppendLine(line);

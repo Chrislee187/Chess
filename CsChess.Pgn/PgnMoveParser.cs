@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CSharpChess;
 using CSharpChess.TheBoard;
 
@@ -32,11 +33,23 @@ namespace CsChess.Pgn
         {
             pgnQuery.WithColour(turn);
 
-            // TODO:
+            if (move.ToUpper() == "O-O-O" || move.ToUpper() == "O-O-O")
+            {
+                CreateCastleMoveQuery(turn, move, pgnQuery);
+                return true;
+            }
+
+            if (MoveContainsGameResult(move))
+            {
+                pgnQuery.WithResult(move);
+                return true;
+            }
+
             if (MoveContainsPromotion(move))
             {
-//                var promotedTo = GetPromotionPiece(move);
-//
+                // TODO:
+                //                var promotedTo = GetPromotionPiece(move);
+                //
                 var newMove = StripPromotion(move);
                 pgnQuery.WithMoveType(MoveType.Promotion);
 
@@ -69,24 +82,18 @@ namespace CsChess.Pgn
                 MoveLength4(turn, move, pgnQuery);
                 return true;
             }
-            if (move.ToUpper() == "O-O-O" || move.ToUpper() == "O-O-O")
-            {
-                CreateCastleMoveQuery(turn, move, pgnQuery);
-                return true;
-            }
             if (move.Length == 5)
             {
                 MoveLength5(turn, move, pgnQuery);
                 return true;
             }
 
-            if (move.Contains("-"))
-            {
-                pgnQuery.WithResult(move);
-                return true;
-            }
-
             throw new ArgumentOutOfRangeException($"Unable to parse: {move}");
+        }
+
+        private static bool MoveContainsGameResult(string move)
+        {
+            return move.Contains("-") && move.ToUpper().First() != 'O';
         }
 
         private static string StripPromotion(string move)
@@ -108,6 +115,7 @@ namespace CsChess.Pgn
         {
             var dest = CalcKingDestinationForCastle(turn, move);
             pgnQuery.WithMoveType(MoveType.Castle);
+            pgnQuery.WithPiece(new ChessPiece(turn, Chess.PieceNames.King));
             pgnQuery.WithFromFile('e');
             pgnQuery.WithFromRank(turn == Chess.Colours.White ? '1' : '8');
             pgnQuery.WithToFile(dest[0]);
@@ -175,7 +183,15 @@ namespace CsChess.Pgn
             }
             else
             {
-                pgnQuery.WithFromFile(move[1]);
+                if (char.IsNumber(move[1]))
+                {
+                    pgnQuery.WithFromRank(move[1]);
+                }
+                else
+                {
+                    pgnQuery.WithFromFile(move[1]);
+                }
+
                 pgnQuery.WithToFile(move[2]);
                 pgnQuery.WithToRank(move[3]);
             }

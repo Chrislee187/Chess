@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
@@ -74,7 +75,8 @@ namespace CSharpChess.UnitTests.BoardMovement
             Assert.That(board[rm.To].Piece.Is(colour, Chess.PieceNames.Rook));
             Assert.That(board.IsEmptyAt(km.From));
             Assert.That(board.IsEmptyAt(rm.From));
-
+            Console.WriteLine(kingMove);
+            Console.WriteLine(board.ToAsciiBoard());
         }
 
         [Test]
@@ -158,6 +160,29 @@ namespace CSharpChess.UnitTests.BoardMovement
             Assert.That(result.Succeeded, Is.True);
             Assert.That(board.GameState, Is.EqualTo(Chess.GameState.CheckMateWhiteWins));
         }
+
+        [Test]
+        public void bugfix1()
+        {
+            const string asOneChar = "r...k..r" +
+                                     ".ppb.ppp" +
+                                     "p..b...." +
+                                     "........" +
+                                     "...N.P.." +
+                                     "..P.B..." +
+                                     "PP....PP" +
+                                     "R...KB.R";
+
+            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var result = board.Move("E1-C1");
+            Assert.That(result.Succeeded, Is.True, board.ToAsciiBoard());
+            Assert.That(board["C1"].Piece.Is(Chess.Colours.White, Chess.PieceNames.King), board.ToAsciiBoard());
+            Assert.That(board["D1"].Piece.Is(Chess.Colours.White, Chess.PieceNames.Rook), board.ToAsciiBoard());
+            Assert.That(board.IsEmptyAt("A1"), board.ToAsciiBoard());
+            Console.WriteLine(board.ToAsciiBoard());
+        }
+
+
     }
 
 }

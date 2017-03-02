@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CSharpChess.MoveGeneration;
 using CSharpChess.System.Extensions;
 using CSharpChess.System.Metrics;
@@ -56,6 +57,7 @@ namespace CSharpChess.TheBoard
         private void RebuildMoveListFor(BoardPiece boardPiece)
         {
             var all = MoveFactory.For[boardPiece.Piece.Name]().All(_chessBoard, boardPiece.Location);
+            // TODO: MoveList still contains moves that would uncover check!
             boardPiece.SetAll(all.ToList());
         }
 

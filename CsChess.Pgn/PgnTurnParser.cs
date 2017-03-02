@@ -55,7 +55,33 @@ namespace CsChess.Pgn
                 }
                 else
                 {
-                    if (!IsEndGameToken(token))
+                    if (IsEndGameToken(token))
+                    {
+                        if (moveIsFor == Chess.Colours.White)
+                        {
+                            white.WithResult(token);
+                            var b = new PgnQuery();
+                            b.WithResult(token);
+                            turns.Add(new PgnTurnQuery(turnNumber, white, b,currentText));
+                        }
+                        else if (moveIsFor == Chess.Colours.Black)
+                        {
+                            black = new PgnQuery();
+                            black.WithResult(token);
+                            turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
+                            moveIsFor = Chess.Colours.None;
+                        }
+                        else
+                        {
+                            var w = new PgnQuery();
+                            w.WithResult(token);
+                            var b = new PgnQuery();
+                            b.WithResult(token);
+                            turns.Add(new PgnTurnQuery(turnNumber, w, b, currentText));
+
+                        }
+                    }
+                    else
                     {
                         ExpectToKnowColour(moveIsFor, token);
 

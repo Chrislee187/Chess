@@ -37,8 +37,8 @@ namespace CSharpChess.System.Extensions
             }
         }
 
-        public static ChessMove CanCastle(this ChessBoard board, BoardLocation at, BoardLocation rookLoc) => 
-            Board.Validations.CanCastle(board, at, rookLoc);
+        public static bool CanCastle(this ChessBoard board, BoardLocation destination) => 
+            Board.Validations.CanCastle(board, destination);
 
         public static bool InCheckAt(this ChessBoard board, BoardLocation at, Colours asPlayer)
             => Board.Validations.InCheckAt(board, at, asPlayer);

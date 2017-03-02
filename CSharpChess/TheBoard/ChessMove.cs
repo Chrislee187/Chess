@@ -12,10 +12,10 @@ namespace CSharpChess.TheBoard
         {
             From = To = null;
             MoveType = MoveType.Unknown;
-            PromotedTo = Chess.PieceNames.Blank;;
+            PromotedTo = Chess.PieceNames.Blank;
         }
 
-        public ChessMove(string from, string to, MoveType moveType,
+        private ChessMove(string from, string to, MoveType moveType,
             Chess.PieceNames promotedTo = Chess.PieceNames.Blank) : this((BoardLocation) from, (BoardLocation) to, moveType, promotedTo)
         {
         }
@@ -28,9 +28,9 @@ namespace CSharpChess.TheBoard
             PromotedTo = promotedTo;
         }
 
-        public BoardLocation From { get; protected set; }
-        public BoardLocation To { get; protected set; }
-        public MoveType MoveType { get; protected set; }
+        public BoardLocation From { get; }
+        public BoardLocation To { get; }
+        public MoveType MoveType { get; private set; }
         public Chess.PieceNames PromotedTo { get; }
         public static ChessMove Taken(BoardLocation location) => new ChessMove(location, MoveType.Taken);
 
