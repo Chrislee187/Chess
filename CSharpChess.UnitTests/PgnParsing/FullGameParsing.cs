@@ -139,7 +139,7 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
         }
 
 
-        [Test]
+        [Test, Explicit]
         public void can_read_pgn_text()
         {
             var stream = File.OpenRead(@"C:\Src\Chess\CSharpChess.UnitTests\bin\Debug\short.pgn");

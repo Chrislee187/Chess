@@ -18,22 +18,11 @@ namespace CsChess.Pgn
 
     public static class PgnMoveParser
     {
-        private static readonly IDictionary<char, Chess.PieceNames> PgnNameMap = new Dictionary<char, Chess.PieceNames>
-        {
-            {'P', Chess.PieceNames.Pawn },
-            {'N', Chess.PieceNames.Knight },
-            {'B', Chess.PieceNames.Bishop },
-            {'R', Chess.PieceNames.Rook },
-            {'Q', Chess.PieceNames.Queen },
-            {'K', Chess.PieceNames.King },
-            {'O', Chess.PieceNames.King },
-        };
-
         public static bool TryParse(Chess.Colours turn, string move, ref PgnQuery pgnQuery)
         {
             pgnQuery.WithColour(turn);
 
-            if (move.ToUpper() == "O-O-O" || move.ToUpper() == "O-O-O")
+            if (move.ToUpper() == "O-O" || move.ToUpper() == "O-O-O")
             {
                 CreateCastleMoveQuery(turn, move, pgnQuery);
                 return true;
@@ -91,26 +80,6 @@ namespace CsChess.Pgn
             throw new ArgumentOutOfRangeException($"Unable to parse: {move}");
         }
 
-        private static bool MoveContainsGameResult(string move)
-        {
-            return move.Contains("-") && move.ToUpper().First() != 'O';
-        }
-
-        private static string StripPromotion(string move)
-        {
-            return move.Substring(0, move.IndexOf('='));
-        }
-
-        private static bool MoveContainsPromotion(string move)
-        {
-            return move.Contains("=");
-        }
-
-        private static bool MoveContainsCheck(string move)
-        {
-            return move.EndsWith("+");
-        }
-
         private static void CreateCastleMoveQuery(Chess.Colours turn, string move, PgnQuery pgnQuery)
         {
             var dest = CalcKingDestinationForCastle(turn, move);
@@ -118,14 +87,13 @@ namespace CsChess.Pgn
             pgnQuery.WithPiece(new ChessPiece(turn, Chess.PieceNames.King));
             pgnQuery.WithFromFile('e');
             pgnQuery.WithFromRank(turn == Chess.Colours.White ? '1' : '8');
-            pgnQuery.WithToFile(dest[0]);
-            pgnQuery.WithToRank(dest[1]);
+            SetToFileFromMoveAt(pgnQuery, dest, 0);
         }
         private static void MoveLength5(Chess.Colours turn, string move, PgnQuery pgnQuery)
         {
             /* Nbxd7 */
 
-            if (char.IsUpper(move[0]))
+            if (CharIsNamedPiece(move[0]))
             {
                 pgnQuery.WithPiece(new ChessPiece(turn, GetPieceName(move[0])));
             }
@@ -135,7 +103,7 @@ namespace CsChess.Pgn
             }
             pgnQuery.WithFromFile(move[1]);
 
-            if (move[2].ToString().ToLower() == "x")
+            if (MoveContainsTake(move, 2))
             {
                 pgnQuery.WithMoveType(MoveType.Take);
             }
@@ -143,24 +111,16 @@ namespace CsChess.Pgn
             {
                 throw new ArgumentException($"Not a take move: {move}", nameof(move));
             }
-
-            pgnQuery.WithToFile(move[3]);
-            pgnQuery.WithToRank(move[4]);
+            SetToFileFromMoveAt(pgnQuery, move, 3);
         }
 
         private static void MoveLength4(Chess.Colours turn, string move, PgnQuery pgnQuery)
         {
-/*
-                    Nbd7
-                    Nxe4
-                    Ra6+
-                    cxb5
-                 */
             pgnQuery.WithMoveType(MoveType.Move);
 
-            if (char.IsUpper(move[0]))
+            if (CharIsNamedPiece(move[0]))
             {
-                pgnQuery.WithPiece(new ChessPiece(turn, GetPieceName(move[0])));
+                SetPieceFromMoveAt(pgnQuery, turn, move);
             }
             else
             {
@@ -168,17 +128,15 @@ namespace CsChess.Pgn
                 pgnQuery.WithFromFile(move[0]);
             }
 
-            if (move[1].ToString().ToLower() == "x")
+            if (MoveContainsTake(move, 1))
             {
                 pgnQuery.WithMoveType(MoveType.Take);
-                pgnQuery.WithToFile(move[2]);
-                pgnQuery.WithToRank(move[3]);
+                SetToFileFromMoveAt(pgnQuery, move, 2);
             }
-            else if (move[2] == '=')
+            else if (MoveContainsPromotion(move, 2))
             {
                 pgnQuery.WithMoveType(MoveType.Promotion);
-                pgnQuery.WithToFile(move[0]);
-                pgnQuery.WithToRank(move[1]);
+                SetToFileFromMoveAt(pgnQuery, move, 0);
                 pgnQuery.WithPromotion(move[3]);
             }
             else
@@ -192,24 +150,20 @@ namespace CsChess.Pgn
                     pgnQuery.WithFromFile(move[1]);
                 }
 
-                pgnQuery.WithToFile(move[2]);
-                pgnQuery.WithToRank(move[3]);
+                SetToFileFromMoveAt(pgnQuery, move, 2);
             }
         }
 
         private static void MoveLength3(Chess.Colours turn, string move, PgnQuery pgnQuery)
         {
-            var pieceName = GetPieceName(move[0]);
-            pgnQuery.WithPiece(new ChessPiece(turn, pieceName));
-            if (move[0].ToString().ToUpper() == "O")
+            SetPieceFromMoveAt(pgnQuery, turn, move);
+            if (IsCastleMove(move))
             {
                 CreateCastleMoveQuery(turn, move, pgnQuery);
             }
             else
             {
-                pgnQuery.WithMoveType(MoveType.Move);
-                pgnQuery.WithToFile(move[1]);
-                pgnQuery.WithToRank(move[2]);
+                SetToFileFromMoveAt(pgnQuery, move, 1);
             }
         }
 
@@ -218,8 +172,7 @@ namespace CsChess.Pgn
             pgnQuery.WithPiece(new ChessPiece(turn, Chess.PieceNames.Pawn));
             pgnQuery.WithMoveType(MoveType.Move);
             pgnQuery.WithFromFile(move[0]);
-            pgnQuery.WithToFile(move[0]);
-            pgnQuery.WithToRank(move[1]);
+            SetToFileFromMoveAt(pgnQuery, move, 0);
         }
 
         private static string CalcKingDestinationForCastle(Chess.Colours turn, string move)
@@ -251,5 +204,53 @@ namespace CsChess.Pgn
             }
             return result;
         }
+        private static readonly IDictionary<char, Chess.PieceNames> PgnNameMap = new Dictionary<char, Chess.PieceNames>
+        {
+            {'P', Chess.PieceNames.Pawn },
+            {'N', Chess.PieceNames.Knight },
+            {'B', Chess.PieceNames.Bishop },
+            {'R', Chess.PieceNames.Rook },
+            {'Q', Chess.PieceNames.Queen },
+            {'K', Chess.PieceNames.King },
+            {'O', Chess.PieceNames.King },
+        };
+
+        private static string StripPromotion(string move)
+            => move.Substring(0, move.IndexOf('='));
+
+        private static bool CharIsNamedPiece(char c)
+           => char.IsUpper(c);
+
+
+        private static bool IsCastleMove(string move, int checkIndexedChar = -1)
+            => checkIndexedChar == -1
+                ? move.ToUpper().Contains("O-O")
+                : char.ToUpper(move[checkIndexedChar]) == 'O';
+
+        private static bool MoveContainsGameResult(string move)
+           => move.Contains("-") && move.ToUpper().First() != 'O';
+
+        private static bool MoveContainsPromotion(string move, int checkIndexedChar = -1)
+            => checkIndexedChar == -1
+                ? move.Contains("=")
+                : char.ToLower(move[checkIndexedChar]) == '=';
+
+        private static bool MoveContainsCheck(string move)
+            => move.EndsWith("+");
+
+        private static bool MoveContainsTake(string move, int checkIndexedChar = -1)
+            => checkIndexedChar == -1 
+                ? move.Contains("x") 
+                : char.ToLower(move[checkIndexedChar]) == 'x';
+
+        private static void SetPieceFromMoveAt(PgnQuery pgnQuery, Chess.Colours turn, string move)
+           => pgnQuery.WithPiece(new ChessPiece(turn, GetPieceName(move[0])));
+
+        private static void SetToFileFromMoveAt(PgnQuery pgnQuery, string move, int index)
+        {
+            pgnQuery.WithToFile(move[index]);
+            pgnQuery.WithToRank(move[index + 1]);
+        }
+
     }
 }
