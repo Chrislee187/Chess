@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using CSharpChess.System;
-using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 

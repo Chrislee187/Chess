@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ConsoleStuff.Panels;
-using ConsoleStuff.Tests;
-using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
@@ -69,7 +67,7 @@ namespace CSharpChess.UnitTests.Helpers
             var cell = new ConsolePanel(PieceCellSize, PieceCellSize);
 
             var c = OneCharBoard.ToChar(boardPiece.Piece);
-            c = c == '.' ? c = ' ' : c;
+            c = c == '.' ? ' ' : c;
             cell.PrintAt(PieceCellSize/2 + 1, PieceCellSize/2 + 1, c );
 
             var border = CreateCellBorder();

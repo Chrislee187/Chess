@@ -153,7 +153,7 @@ namespace CsChess.Pgn
 
         private static bool IsNewTurn(string token)
         {
-            var idx = token.IndexOf(".");
+            var idx = token.IndexOf(".", StringComparison.Ordinal);
 
             if (idx == -1) return false;
             int num;
@@ -183,7 +183,6 @@ namespace CsChess.Pgn
                 var split = lastCommentToken.Split(commentEnd).Where(s => !string.IsNullOrEmpty(s)).ToList();
                 if (split.Count > 1)
                 {
-                    comment = $"{comment} {split[0]}";
                     var postToken = split.Skip(1).Aggregate("", (a, i) => $"{a} {i}");
                     tokens.Push(postToken);
 

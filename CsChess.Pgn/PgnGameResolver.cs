@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using CSharpChess;
-using CSharpChess.System;
-using CSharpChess.TheBoard;
 
 namespace CsChess.Pgn
 {

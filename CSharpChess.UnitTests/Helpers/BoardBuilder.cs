@@ -1,6 +1,4 @@
-﻿using CSharpChess.System;
-using CSharpChess.TheBoard;
-using static CSharpChess.Chess;
+﻿using static CSharpChess.Chess;
 
 namespace CSharpChess.UnitTests.Helpers
 {

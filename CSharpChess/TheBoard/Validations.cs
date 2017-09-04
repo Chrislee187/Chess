@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using CSharpChess.Rules;
-using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using static CSharpChess.Chess;
 
@@ -22,18 +21,14 @@ namespace CSharpChess.TheBoard
 
         public static void ThrowInvalidRank(int rank)
         {
-            if (InvalidRank(rank))
-                throw new ArgumentOutOfRangeException(nameof(rank), rank, "Invalid Rank");
+            if (InvalidRank(rank)) throw new ArgumentOutOfRangeException(nameof(rank), rank, "Invalid Rank");
         }
         public static void ThrowInvalidFile(int file)
         {
             if (InvalidFile(file))
                 throw new ArgumentOutOfRangeException(nameof(file), file, "Invalid File");
         }
-        public static void ThrowInvalidFile(ChessFile file)
-        {
-            ThrowInvalidFile((int)file);
-        }
+        public static void ThrowInvalidFile(ChessFile file) => ThrowInvalidFile((int)file);
 
         public static bool IsEmptyAt(ChessBoard board, BoardLocation location)
             => board[location].Piece.Equals(ChessPiece.NullPiece);
@@ -48,25 +43,18 @@ namespace CSharpChess.TheBoard
             => !IsEmptyAt(board, (BoardLocation)location);
 
         // TODO: Unit Tests?
-        public static bool CanCastle(ChessBoard board, BoardLocation kingLocation)
-        {
-            return CastleLocationsAreEmpty(board, kingLocation);
-
-        }
+        public static bool CanCastle(ChessBoard board, BoardLocation kingLocation) => CastleLocationsAreEmpty(board, kingLocation);
 
         public static bool InCheckAt(ChessBoard board, BoardLocation at, Colours asPlayer)
         {
-            var enemyPieces = board.Pieces.OfColour(Chess.ColourOfEnemy(asPlayer));
+            var enemyPieces = board.Pieces.OfColour(ColourOfEnemy(asPlayer));
             var checkPieces = enemyPieces.Where(p => PieceIsAttackingLocation(board, p, at));
 
             return checkPieces.Any();
         }
 
-        public static bool PieceIsAttackingLocation(ChessBoard b, BoardPiece p, BoardLocation l)
-        {
-            return b[p.Location].PossibleMoves.Any(m => m.To.Equals(l));
-        }
-        // TODO: Unit Test this and everything else in here
+        public static bool PieceIsAttackingLocation(ChessBoard b, BoardPiece p, BoardLocation l) => b[p.Location].PossibleMoves.Any(m => m.To.Equals(l));
+        
         public static bool MovesLeaveOwnSideInCheck(ChessBoard board, ChessMove move)
         {
             var moversPiece = board[move.From].Piece;

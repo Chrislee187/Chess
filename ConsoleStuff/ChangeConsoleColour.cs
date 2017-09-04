@@ -8,7 +8,7 @@ namespace ConsoleStuff
         private ConsoleColor _back;
         private ConsoleColor _fore;
 
-        private bool _colourChanged = false;
+        private bool _colourChanged;
 
         public ChangeConsoleColour(ConsoleColor background, ConsoleColor foreground)
         {

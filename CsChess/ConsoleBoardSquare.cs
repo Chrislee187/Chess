@@ -8,14 +8,12 @@ namespace CsChess
     public class ConsoleBoardSquare : BorderedPanel
     {
         private readonly Options _options;
-        private readonly BoardPiece _boardPiece;
 
         public ConsoleBoardSquare(Options options, BoardPiece boardPiece, ConsoleCellColour colour) 
             : base(options.BorderedCellSize, options.BorderedCellSize)
         {
             _options = options;
-            _boardPiece = boardPiece;
-            RenderPiece(_boardPiece, colour);
+            RenderPiece(boardPiece, colour);
         }
 
 
@@ -34,7 +32,7 @@ namespace CsChess
             var cell = new FilledConsolePanel(_options.PiecePanelSize, _options.PiecePanelSize, ' ', colour);
 
             var c = OneCharBoard.ToChar(boardPiece.Piece);
-            c = c == '.' ? c = ' ' : c;
+            c = c == '.' ? ' ' : c;
 
             var x = (_options.PiecePanelSize / 2) + 1;
             cell.PrintAt(x, x, c, colour);

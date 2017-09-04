@@ -45,7 +45,6 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Bishops
 
             var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
 
-            var generator = new BishopMoveGenerator();
             var at = BoardLocation.At("D2");
 
             var chessMoves = board.RemoveMovesThatLeaveBoardInCheck(at).ToList();

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpChess.System;
 using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
 
 namespace CSharpChess.Helpers
 {

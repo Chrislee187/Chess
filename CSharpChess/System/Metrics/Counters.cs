@@ -18,7 +18,7 @@ namespace CSharpChess.System.Metrics
 
         public static long GetCountFor(string counterKey)
         {
-            long result = 0;
+            long result;
             InMemCounter.TryGetValue(counterKey, out result);
             return result;
         }

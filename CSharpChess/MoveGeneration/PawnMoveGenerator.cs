@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 using static CSharpChess.Chess;
@@ -117,7 +116,7 @@ namespace CSharpChess.MoveGeneration
             return positions;
         }
 
-        private static MoveType PromotedTo(BoardLocation location, Chess.Colours colour, MoveType dflt)
+        private static MoveType PromotedTo(BoardLocation location, Colours colour, MoveType dflt)
         {
             return location.Rank == PromotionRankFor(colour)
                 ? MoveType.Promotion

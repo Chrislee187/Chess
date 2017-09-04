@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using CSharpChess;
 using CSharpChess.System;
@@ -14,7 +13,6 @@ namespace CsChess.Pgn
     {
         public MoveType MoveType { get; private set; }
         private Colours _turn;
-        private char _promotionPiece;
         public ChessPiece Piece { get; private set; }
         public ChessFile FromFile { get; private set; } = ChessFile.None;
         public int FromRank { get; private set; }
@@ -142,7 +140,6 @@ namespace CsChess.Pgn
 
         public void WithPromotion(char promotionPiece)
         {
-            _promotionPiece = promotionPiece;
         }
 
         public string ToMove()

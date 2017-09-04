@@ -17,14 +17,14 @@ namespace ConsoleStuff.Panels
 
         private char this[int x, int y] => _cells[x, y];
 
-        private readonly TextWriter Out = Console.Out;
+        private readonly TextWriter _out = Console.Out;
 
         protected ConsolePanel()
         {
         }
         public ConsolePanel(int width, int height)
         {
-            Out = Console.Out;
+            _out = Console.Out;
             Width = width;
             Height = height;
             InitialisePanel();
@@ -142,12 +142,12 @@ namespace ConsoleStuff.Panels
                         var colours = GetCellColour(x1, y1);
                         using (new ChangeConsoleColour(colours))
                         {
-                            Out.Write(c);
+                            _out.Write(c);
                         }
                     };
                     cells.Add(writeAction);
                 }
-                cells.Add(Out.WriteLine);
+                cells.Add(_out.WriteLine);
             }
             return () => cells.ForEach(c => c());
         }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 using NUnit.Framework;

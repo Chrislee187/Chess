@@ -17,39 +17,10 @@
             Message = message;
         }
 
-        public static MoveResult IncorrectPlayer(ChessMove move)
-        {
-            return new MoveResult(false, move, "Incorrect Player");
-        }
-
-        public static MoveResult Success(ChessMove move)
-        {
-            return new MoveResult(true, move);
-        }
-
-        public static MoveResult Enpassant(ChessMove move)
-        {
-            return new MoveResult(true, move);
-        }
-
-        public static MoveResult Promotion(ChessMove move)
-        {
-            return new MoveResult(true, move);
-        }
-
-        public static MoveResult Failure(string message, ChessMove move)
-        {
-            return new MoveResult(false, move, message);
-        }
+        public static MoveResult IncorrectPlayer(ChessMove move) => new MoveResult(false, move, "Incorrect Player");
+        public static MoveResult Success(ChessMove move) => new MoveResult(true, move);
+        public static MoveResult Enpassant(ChessMove move) => new MoveResult(true, move);
+        public static MoveResult Promotion(ChessMove move) => new MoveResult(true, move);
+        public static MoveResult Failure(string message, ChessMove move) => new MoveResult(false, move, message);
     }
-
-    public enum MoveType
-    {
-        Move, Take, TakeEnPassant, Castle, Check, Checkmate,
-        Promotion,
-        Unknown,
-        Taken,
-        Cover, Invalid
-    }
-
 }

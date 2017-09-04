@@ -45,6 +45,8 @@
     <Compile Include="System\Board.cs" />
     <Compile Include="System\EngineState.cs" />
     <Compile Include="System\InvalidBoardStateException.cs" />
+    <Compile Include="System\LocationFactory.cs" />
+    <Compile Include="TheBoard\MoveType.cs" />
     <Compile Include="TheBoard\Validations.cs" />
     <Compile Include="PiecesFactory.cs" />
     <Compile Include="Helpers\SmallConsoleBoard.cs" />

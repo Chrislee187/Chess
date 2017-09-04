@@ -3,6 +3,7 @@ using System.Linq;
 using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
+using static CSharpChess.Chess;
 
 namespace CSharpChess.Rules
 {
@@ -40,15 +41,15 @@ namespace CSharpChess.Rules
         {
             BoardLocation rook;
             BoardLocation rookTo;
-            if (move.To.File == CSharpChess.Chess.ChessFile.C)
+            if (move.To.File == ChessFile.C)
             {
-                rook = BoardLocation.At(Chess.ChessFile.A, move.From.Rank);
-                rookTo = BoardLocation.At((Chess.ChessFile)CSharpChess.Chess.ChessFile.D, move.From.Rank);
+                rook = BoardLocation.At(ChessFile.A, move.From.Rank);
+                rookTo = BoardLocation.At(ChessFile.D, move.From.Rank);
             }
             else
             {
-                rook = BoardLocation.At((Chess.ChessFile)CSharpChess.Chess.ChessFile.H, move.From.Rank);
-                rookTo = BoardLocation.At((Chess.ChessFile)CSharpChess.Chess.ChessFile.F, move.From.Rank);
+                rook = BoardLocation.At(ChessFile.H, move.From.Rank);
+                rookTo = BoardLocation.At(ChessFile.F, move.From.Rank);
             }
 
             return new ChessMove(rook, rookTo, MoveType.Castle);
@@ -56,21 +57,21 @@ namespace CSharpChess.Rules
 
         public static IEnumerable<BoardLocation> SquaresBetweenCastlingPieces(BoardLocation toLoc)
         {
-            if (toLoc.File == CSharpChess.Chess.ChessFile.C)
+            if (toLoc.File == ChessFile.C)
             {
                 return new List<BoardLocation>
                     {
-                        BoardLocation.At((Chess.ChessFile) CSharpChess.Chess.ChessFile.B, toLoc.Rank),
-                        BoardLocation.At((Chess.ChessFile) CSharpChess.Chess.ChessFile.C, toLoc.Rank),
-                        BoardLocation.At((Chess.ChessFile) CSharpChess.Chess.ChessFile.D, toLoc.Rank),
+                        BoardLocation.At(ChessFile.B, toLoc.Rank),
+                        BoardLocation.At(ChessFile.C, toLoc.Rank),
+                        BoardLocation.At(ChessFile.D, toLoc.Rank),
                     };
             }
             else
             {
                 return new List<BoardLocation>
                     {
-                        BoardLocation.At((Chess.ChessFile) CSharpChess.Chess.ChessFile.F, toLoc.Rank),
-                        BoardLocation.At((Chess.ChessFile) CSharpChess.Chess.ChessFile.G, toLoc.Rank),
+                        BoardLocation.At(ChessFile.F, toLoc.Rank),
+                        BoardLocation.At(ChessFile.G, toLoc.Rank),
                     };
             }
 
@@ -79,20 +80,20 @@ namespace CSharpChess.Rules
 
         public static IEnumerable<BoardLocation> SquaresKingsPassesThroughWhenCastling(BoardLocation toLoc)
         {
-            if (toLoc.File == CSharpChess.Chess.ChessFile.C)
+            if (toLoc.File == ChessFile.C)
             {
                 return new List<BoardLocation>
                     {
-                        BoardLocation.At((Chess.ChessFile) CSharpChess.Chess.ChessFile.D, toLoc.Rank),
-                        BoardLocation.At((Chess.ChessFile) CSharpChess.Chess.ChessFile.C, toLoc.Rank)
+                        BoardLocation.At(ChessFile.D, toLoc.Rank),
+                        BoardLocation.At(ChessFile.C, toLoc.Rank)
                     };
             }
             else
             {
                 return new List<BoardLocation>
                     {
-                        BoardLocation.At((Chess.ChessFile) CSharpChess.Chess.ChessFile.F, toLoc.Rank),
-                        BoardLocation.At((Chess.ChessFile) CSharpChess.Chess.ChessFile.G, toLoc.Rank),
+                        BoardLocation.At(ChessFile.F, toLoc.Rank),
+                        BoardLocation.At(ChessFile.G, toLoc.Rank),
                     };
             }
 
@@ -130,44 +131,42 @@ namespace CSharpChess.Rules
         {
             var newFile = move.To.File;
             var takeLocation = new BoardLocation(newFile, move.From.Rank);
-            var piece = board[takeLocation].Piece;
-            var enemyColour = CSharpChess.Chess.ColourOfEnemy(board[move.From].Piece.Colour);
+            var enemyColour = ColourOfEnemy(board[move.From].Piece.Colour);
 
-            return board[takeLocation].Piece.Is(enemyColour, CSharpChess.Chess.PieceNames.Pawn);
+            return board[takeLocation].Piece.Is(enemyColour, PieceNames.Pawn);
         }
         public static bool PawnBeingTakeWithEnpassantHasCorrectMoveHistory(ChessBoard board, ChessMove move)
         {
             var newFile = move.To.File;
             var takeLocation = new BoardLocation(newFile, move.From.Rank);
-            var piece = board[takeLocation].Piece;
             return board[takeLocation].MoveHistory.Count() == 1;
         }
-        public static int EnpassantFromRankFor(CSharpChess.Chess.Colours colour)
+        public static int EnpassantFromRankFor(Colours colour)
         {
             const int whitePawnsEnPassantFromRank = 5;
             const int blackPawnsEnPassantFromRank = 4;
 
-            return colour == CSharpChess.Chess.Colours.White
+            return colour == Colours.White
                 ? whitePawnsEnPassantFromRank
-                : colour == CSharpChess.Chess.Colours.Black
+                : colour == Colours.Black
                     ? blackPawnsEnPassantFromRank : 0;
 
         }
-        public static int StartingPawnRankFor(CSharpChess.Chess.Colours chessPieceColour)
+        public static int StartingPawnRankFor(Colours chessPieceColour)
         {
-            if (chessPieceColour == CSharpChess.Chess.Colours.White)
+            if (chessPieceColour == Colours.White)
                 return 2;
 
-            if (chessPieceColour == CSharpChess.Chess.Colours.Black)
+            if (chessPieceColour == Colours.Black)
                 return 7;
 
             return 0;
         }
-        public static int PromotionRankFor(CSharpChess.Chess.Colours chessPieceColour)
+        public static int PromotionRankFor(Colours chessPieceColour)
         {
-            return chessPieceColour == CSharpChess.Chess.Colours.Black
+            return chessPieceColour == Colours.Black
                 ? 1
-                : chessPieceColour == CSharpChess.Chess.Colours.White
+                : chessPieceColour == Colours.White
                     ? 8
                     : 0;
         }

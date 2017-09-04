@@ -171,10 +171,7 @@ namespace CSharpChess
             return result ?? MoveResult.Failure($"Invalid move {move}", move);
         }
 
-        private void RecordMove(ChessMove move)
-        {
-            Moves.Add(move);
-        }
+        private void RecordMove(ChessMove move) => Moves.Add(move);
 
         public IEnumerable<ChessMove> RemoveMovesThatLeaveBoardInCheck(BoardLocation at)
         {
@@ -333,10 +330,8 @@ namespace CSharpChess
         /// quickly, typically on cloned boards to calculate something post-move
         /// </summary>
         /// <param name="move"></param>
-        internal void MovePiece(ChessMove move)
-        {
-            MoveHandler.MovePiece(move);
-        }
+        internal void MovePiece(ChessMove move) => MoveHandler.MovePiece(move);
+
         private static void BoardCreatedCounter() => Counters.Increment(CounterIds.Board.Created);
 
         private static readonly IDictionary<Chess.PieceNames, char> AsciiPieceNames = new Dictionary<Chess.PieceNames, char>

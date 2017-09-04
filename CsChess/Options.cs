@@ -1,5 +1,6 @@
 using System;
 using ConsoleStuff.Panels;
+// ReSharper disable InconsistentNaming
 
 namespace CsChess
 {
@@ -22,6 +23,7 @@ namespace CsChess
     public enum BoardSize
     {
         // NOTE: Keep these lower case to avoid issues with Enum.Parse
+        // ReSharper disable once UnusedMember.Global
         small = 1, medium = 3, large = 5
     }
 }

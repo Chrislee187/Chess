@@ -2,7 +2,7 @@
 
 namespace CSharpChess
 {
-    public static partial class Chess
+    public static class Chess
     {
         public enum Colours { White, Black, None = -9999 }
 
@@ -20,11 +20,12 @@ namespace CSharpChess
         }
 
         // TODO: Unit-Test
-        public static Colours ColourOfEnemy(Colours colour) => colour == Colours.Black
-            ? Colours.White
-            : colour == Colours.White
-                ? Colours.Black
-                : colour;
+        public static Colours ColourOfEnemy(Colours colour) 
+            => colour == Colours.Black
+                ? Colours.White
+                : colour == Colours.White
+                    ? Colours.Black
+                    : colour;
 
         public enum ChessFile { A = 1, B, C, D, E, F, G, H,
             None = 0

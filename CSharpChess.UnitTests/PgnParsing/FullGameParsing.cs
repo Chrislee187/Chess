@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using CsChess.Pgn;
 using CSharpChess.System;
 using NUnit.Framework;
@@ -131,7 +130,7 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
             
             var pgnText = File.ReadAllText(@"C:\Src\Chess\CSharpChess.UnitTests\bin\Debug\short.pgn");
 
-            var pgnGames = PgnGame.Parse(pgnText);
+            var pgnGames = PgnGame.Parse(pgnText).ToList();
 
             Assert.That(pgnGames.Count(), Is.GreaterThan(0));
             Console.WriteLine($"{pgnGames.Count()} parsed.");
@@ -182,7 +181,6 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
 
         private static ChessGameResult ChessGameResultToPgnResult(Chess.GameState pgnGame)
         {
-            Chess.GameState state;
             switch (pgnGame)
             {
                 case Chess.GameState.WhiteKingInCheck:

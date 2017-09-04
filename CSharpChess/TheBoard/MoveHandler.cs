@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CSharpChess.MoveGeneration;
 using CSharpChess.Rules;
-using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.System.Metrics;
 

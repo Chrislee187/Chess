@@ -39,7 +39,7 @@ namespace CSharpChess.UnitTests.Helpers
 
         private static string AssertValidRepresentation(string asOneChar)
         {
-            var ignoredChars = new char[]  { '\n', '\t', '\r', ' '};
+            var ignoredChars = new[]  { '\n', '\t', '\r', ' '};
             var trimmed = asOneChar.Trim(ignoredChars);
             var invalidChars = trimmed.Where(c => !_validOneChars.Contains(c)).ToArray();
 

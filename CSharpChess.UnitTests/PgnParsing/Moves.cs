@@ -1,9 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
 using CsChess.Pgn;
 using CSharpChess.System;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 

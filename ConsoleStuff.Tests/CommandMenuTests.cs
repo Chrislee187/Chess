@@ -1,6 +1,7 @@
 ﻿using System;
 using ConsoleStuff.Tests.Commands;
 using NUnit.Framework;
+// ReSharper disable ObjectCreationAsStatement
 
 namespace ConsoleStuff.Tests
 {
@@ -30,9 +31,9 @@ namespace ConsoleStuff.Tests
 
             var menu = new CommandMenu(command, command2);
 
-            var result = menu.Execute("real");
+            menu.Execute("real");
             Assert.That(wasCalled, Is.True);
-            result = menu.Execute("simp");
+            menu.Execute("simp");
             Assert.That(wasCalled, Is.False);
         }
 
