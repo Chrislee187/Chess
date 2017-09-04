@@ -1,24 +1,25 @@
 using System;
 using System.Collections.Generic;
+using static CSharpChess.Chess;
 
 namespace CSharpChess.System.Extensions
 {
     public class BoardLocation
     {
         public int Rank { get; }
-        public Chess.Board.ChessFile File { get; }
+        public ChessFile File { get; }
 
-        public BoardLocation(Chess.Board.ChessFile file, int rank)
+        public BoardLocation(ChessFile file, int rank)
         {
             File = file;
             Rank = rank;
         }
 
-        public static BoardLocation At(Chess.Board.ChessFile file, int rank) 
+        public static BoardLocation At(ChessFile file, int rank) 
             => new BoardLocation(file, rank);
 
         public static BoardLocation At(int file, int rank) 
-            => new BoardLocation((Chess.Board.ChessFile)file, rank);
+            => new BoardLocation((ChessFile)file, rank);
 
         public static BoardLocation At(string at) 
             => (BoardLocation) at;
@@ -43,7 +44,7 @@ namespace CSharpChess.System.Extensions
             if (s.Length != 2) throw new ArgumentException($"Invalid BoardLocation {s}");
 
             int rank;
-            Chess.Board.ChessFile file;
+            ChessFile file;
             if (!Enum.TryParse(s[0].ToString().ToUpper(), out file)) throw new ArgumentException($"Invalid BoardLocation {s}");
             if (!int.TryParse(s[1].ToString(), out rank))            throw new ArgumentException($"Invalid BoardLocation {s}");
 

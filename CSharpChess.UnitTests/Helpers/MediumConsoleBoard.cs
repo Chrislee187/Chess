@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ConsoleStuff.Panels;
 using ConsoleStuff.Tests;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
@@ -33,9 +34,9 @@ namespace CSharpChess.UnitTests.Helpers
             var boardSize = ConsoleCellSize * 8;
             var boardSquares = new ConsolePanel(boardSize, boardSize);
 
-            foreach (var rank in Chess.Board.Ranks.Reverse())
+            foreach (var rank in Chess.Ranks.Reverse())
             {
-                foreach (var file in Chess.Board.Files)
+                foreach (var file in Chess.Files)
                 {
                     var loc = BoardLocation.At(file, rank);
                     var panel = panels[loc];
@@ -52,9 +53,9 @@ namespace CSharpChess.UnitTests.Helpers
         {
             IDictionary<BoardLocation, ConsolePanel> panels = new ConcurrentDictionary<BoardLocation, ConsolePanel>();
 
-            foreach (var file in Chess.Board.Files)
+            foreach (var file in Chess.Files)
             {
-                foreach (var rank in Chess.Board.Ranks)
+                foreach (var rank in Chess.Ranks)
                 {
                     var at = BoardLocation.At(file,rank);
                     panels.Add(at, CreateConsoleCell(_board[at]));

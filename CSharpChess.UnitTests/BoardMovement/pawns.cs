@@ -17,7 +17,7 @@ namespace CSharpChess.UnitTests.BoardMovement
 
             var result = board.Move("D2-D4");
 
-            AssertMoveSucceeded(result, board, "D2-D4", Chess.Pieces.White.Pawn);
+            AssertMoveSucceeded(result, board, "D2-D4", PiecesFactory.White.Pawn);
 
             var piece = board[result.Move.To];
             Assert.That(piece.MoveHistory.Count(), Is.EqualTo(1));

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.MoveGeneration;
+using CSharpChess.Rules;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.System.Metrics;
 
@@ -72,7 +74,7 @@ namespace CSharpChess.TheBoard
                     if (_chessBoard.IsNotEmptyAt(move.To)) TakeSquare(move.To);
                     break;
                 case MoveType.Castle:
-                    var rookMove = Chess.Rules.King.CreateRookMoveForCastling(move);
+                    var rookMove = King.CreateRookMoveForCastling(move);
                     MovePiece(rookMove);
                     break;
             }

@@ -3,6 +3,8 @@ using ConsoleStuff;
 using ConsoleStuff.Panels;
 using ConsoleStuff.Tests;
 using ConsoleStuff.Tests.Commands;
+using CSharpChess;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 

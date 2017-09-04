@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.System.Metrics;
+using CSharpChess.TheBoard;
 
-namespace CSharpChess.TheBoard
+namespace CSharpChess
 {
     public class ChessBoard
     {
@@ -108,7 +110,7 @@ namespace CSharpChess.TheBoard
             {
                 var defender = Chess.ColourOfEnemy(attacker);
                 var king = this.GetKingFor(defender);
-                if (Pieces.OfColour(attacker).Any(p => p.PossibleMoves.ContainsMoveTo(king.Location)))
+                if (Pieces.OfColour(attacker).Any(p => ChessMoveListExtensions.ContainsMoveTo(p.PossibleMoves, king.Location)))
                 {
                     GameState = defender == Chess.Colours.Black
                         ? Chess.GameState.BlackKingInCheck
@@ -180,7 +182,7 @@ namespace CSharpChess.TheBoard
             SetEngineState(EngineState.GeneratingPieceMoves, () =>
             {
                 result = this[at].PossibleMoves
-                    .Where(m => !Chess.Board.Validations.MovesLeaveOwnSideInCheck(this, m));
+                    .Where(m => !Validations.MovesLeaveOwnSideInCheck(this, m));
             });
             return result ?? new List<ChessMove>();
         }
@@ -195,10 +197,10 @@ namespace CSharpChess.TheBoard
         // ReSharper disable once MemberCanBePrivate.Global
         public BoardPiece this[int file, int rank]
         {
-            get { return GetPiece((Chess.Board.ChessFile)file, rank); }
+            get { return GetPiece((Chess.ChessFile)file, rank); }
             internal set { _boardPieces[file, rank] = value; }
         }
-        public BoardPiece this[Chess.Board.ChessFile file, int rank]
+        public BoardPiece this[Chess.ChessFile file, int rank]
         {
             get { return this[(int)file, rank]; }
             internal set { this[(int)file, rank] = value; }
@@ -214,10 +216,10 @@ namespace CSharpChess.TheBoard
             // ReSharper disable once UnusedMember.Local
             internal set { this[(BoardLocation)location] = value; }
         }
-        private BoardPiece GetPiece(Chess.Board.ChessFile file, int rank)
+        private BoardPiece GetPiece(Chess.ChessFile file, int rank)
         {
-            Chess.Board.Validations.ThrowInvalidRank(rank);
-            Chess.Board.Validations.ThrowInvalidFile(file);
+            Validations.ThrowInvalidRank(rank);
+            Validations.ThrowInvalidFile(file);
             return _boardPieces[(int)file, rank];
         }
 
@@ -225,9 +227,9 @@ namespace CSharpChess.TheBoard
         {
             get
             {
-                foreach (var rank in Chess.Board.Ranks)
+                foreach (var rank in Chess.Ranks)
                 {
-                    foreach (var file in Chess.Board.Files)
+                    foreach (var file in Chess.Files)
                     {
                         if (this[file, rank].Piece.Name != Chess.PieceNames.Blank)
                             yield return this[file, rank];
@@ -251,62 +253,62 @@ namespace CSharpChess.TheBoard
 
         private void NewBoard()
         {
-            _boardPieces[(int)Chess.Board.ChessFile.A, 8] = new BoardPiece(1, 8, Chess.Pieces.Black.Rook);
-            _boardPieces[(int)Chess.Board.ChessFile.B, 8] = new BoardPiece(2, 8, Chess.Pieces.Black.Knight);
-            _boardPieces[(int)Chess.Board.ChessFile.C, 8] = new BoardPiece(3, 8, Chess.Pieces.Black.Bishop);
-            _boardPieces[(int)Chess.Board.ChessFile.D, 8] = new BoardPiece(4, 8, Chess.Pieces.Black.Queen);
-            _boardPieces[(int)Chess.Board.ChessFile.E, 8] = new BoardPiece(5, 8, Chess.Pieces.Black.King);
-            _boardPieces[(int)Chess.Board.ChessFile.F, 8] = new BoardPiece(6, 8, Chess.Pieces.Black.Bishop);
-            _boardPieces[(int)Chess.Board.ChessFile.G, 8] = new BoardPiece(7, 8, Chess.Pieces.Black.Knight);
-            _boardPieces[(int)Chess.Board.ChessFile.H, 8] = new BoardPiece(8, 8, Chess.Pieces.Black.Rook);
+            _boardPieces[(int)Chess.ChessFile.A, 8] = new BoardPiece(1, 8, PiecesFactory.Black.Rook);
+            _boardPieces[(int)Chess.ChessFile.B, 8] = new BoardPiece(2, 8, PiecesFactory.Black.Knight);
+            _boardPieces[(int)Chess.ChessFile.C, 8] = new BoardPiece(3, 8, PiecesFactory.Black.Bishop);
+            _boardPieces[(int)Chess.ChessFile.D, 8] = new BoardPiece(4, 8, PiecesFactory.Black.Queen);
+            _boardPieces[(int)Chess.ChessFile.E, 8] = new BoardPiece(5, 8, PiecesFactory.Black.King);
+            _boardPieces[(int)Chess.ChessFile.F, 8] = new BoardPiece(6, 8, PiecesFactory.Black.Bishop);
+            _boardPieces[(int)Chess.ChessFile.G, 8] = new BoardPiece(7, 8, PiecesFactory.Black.Knight);
+            _boardPieces[(int)Chess.ChessFile.H, 8] = new BoardPiece(8, 8, PiecesFactory.Black.Rook);
 
-            _boardPieces[(int)Chess.Board.ChessFile.A, 7] = new BoardPiece(1, 7, Chess.Pieces.Black.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.B, 7] = new BoardPiece(2, 7, Chess.Pieces.Black.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.C, 7] = new BoardPiece(3, 7, Chess.Pieces.Black.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.D, 7] = new BoardPiece(4, 7, Chess.Pieces.Black.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.E, 7] = new BoardPiece(5, 7, Chess.Pieces.Black.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.F, 7] = new BoardPiece(6, 7, Chess.Pieces.Black.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.G, 7] = new BoardPiece(7, 7, Chess.Pieces.Black.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.H, 7] = new BoardPiece(8, 7, Chess.Pieces.Black.Pawn);
+            _boardPieces[(int)Chess.ChessFile.A, 7] = new BoardPiece(1, 7, PiecesFactory.Black.Pawn);
+            _boardPieces[(int)Chess.ChessFile.B, 7] = new BoardPiece(2, 7, PiecesFactory.Black.Pawn);
+            _boardPieces[(int)Chess.ChessFile.C, 7] = new BoardPiece(3, 7, PiecesFactory.Black.Pawn);
+            _boardPieces[(int)Chess.ChessFile.D, 7] = new BoardPiece(4, 7, PiecesFactory.Black.Pawn);
+            _boardPieces[(int)Chess.ChessFile.E, 7] = new BoardPiece(5, 7, PiecesFactory.Black.Pawn);
+            _boardPieces[(int)Chess.ChessFile.F, 7] = new BoardPiece(6, 7, PiecesFactory.Black.Pawn);
+            _boardPieces[(int)Chess.ChessFile.G, 7] = new BoardPiece(7, 7, PiecesFactory.Black.Pawn);
+            _boardPieces[(int)Chess.ChessFile.H, 7] = new BoardPiece(8, 7, PiecesFactory.Black.Pawn);
 
             for (int rank = 3; rank < 7; rank++)
             {
-                _boardPieces[(int)Chess.Board.ChessFile.A, rank] = new BoardPiece(1, rank, ChessPiece.NullPiece);
-                _boardPieces[(int)Chess.Board.ChessFile.B, rank] = new BoardPiece(2, rank, ChessPiece.NullPiece);
-                _boardPieces[(int)Chess.Board.ChessFile.C, rank] = new BoardPiece(3, rank, ChessPiece.NullPiece);
-                _boardPieces[(int)Chess.Board.ChessFile.D, rank] = new BoardPiece(4, rank, ChessPiece.NullPiece);
-                _boardPieces[(int)Chess.Board.ChessFile.E, rank] = new BoardPiece(5, rank, ChessPiece.NullPiece);
-                _boardPieces[(int)Chess.Board.ChessFile.F, rank] = new BoardPiece(6, rank, ChessPiece.NullPiece);
-                _boardPieces[(int)Chess.Board.ChessFile.G, rank] = new BoardPiece(7, rank, ChessPiece.NullPiece);
-                _boardPieces[(int)Chess.Board.ChessFile.H, rank] = new BoardPiece(8, rank, ChessPiece.NullPiece);
+                _boardPieces[(int)Chess.ChessFile.A, rank] = new BoardPiece(1, rank, ChessPiece.NullPiece);
+                _boardPieces[(int)Chess.ChessFile.B, rank] = new BoardPiece(2, rank, ChessPiece.NullPiece);
+                _boardPieces[(int)Chess.ChessFile.C, rank] = new BoardPiece(3, rank, ChessPiece.NullPiece);
+                _boardPieces[(int)Chess.ChessFile.D, rank] = new BoardPiece(4, rank, ChessPiece.NullPiece);
+                _boardPieces[(int)Chess.ChessFile.E, rank] = new BoardPiece(5, rank, ChessPiece.NullPiece);
+                _boardPieces[(int)Chess.ChessFile.F, rank] = new BoardPiece(6, rank, ChessPiece.NullPiece);
+                _boardPieces[(int)Chess.ChessFile.G, rank] = new BoardPiece(7, rank, ChessPiece.NullPiece);
+                _boardPieces[(int)Chess.ChessFile.H, rank] = new BoardPiece(8, rank, ChessPiece.NullPiece);
             }
 
-            _boardPieces[(int)Chess.Board.ChessFile.A, 2] = new BoardPiece(1, 2, Chess.Pieces.White.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.B, 2] = new BoardPiece(2, 2, Chess.Pieces.White.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.C, 2] = new BoardPiece(3, 2, Chess.Pieces.White.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.D, 2] = new BoardPiece(4, 2, Chess.Pieces.White.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.E, 2] = new BoardPiece(5, 2, Chess.Pieces.White.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.F, 2] = new BoardPiece(6, 2, Chess.Pieces.White.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.G, 2] = new BoardPiece(7, 2, Chess.Pieces.White.Pawn);
-            _boardPieces[(int)Chess.Board.ChessFile.H, 2] = new BoardPiece(8, 2, Chess.Pieces.White.Pawn);
+            _boardPieces[(int)Chess.ChessFile.A, 2] = new BoardPiece(1, 2, PiecesFactory.White.Pawn);
+            _boardPieces[(int)Chess.ChessFile.B, 2] = new BoardPiece(2, 2, PiecesFactory.White.Pawn);
+            _boardPieces[(int)Chess.ChessFile.C, 2] = new BoardPiece(3, 2, PiecesFactory.White.Pawn);
+            _boardPieces[(int)Chess.ChessFile.D, 2] = new BoardPiece(4, 2, PiecesFactory.White.Pawn);
+            _boardPieces[(int)Chess.ChessFile.E, 2] = new BoardPiece(5, 2, PiecesFactory.White.Pawn);
+            _boardPieces[(int)Chess.ChessFile.F, 2] = new BoardPiece(6, 2, PiecesFactory.White.Pawn);
+            _boardPieces[(int)Chess.ChessFile.G, 2] = new BoardPiece(7, 2, PiecesFactory.White.Pawn);
+            _boardPieces[(int)Chess.ChessFile.H, 2] = new BoardPiece(8, 2, PiecesFactory.White.Pawn);
 
-            _boardPieces[(int)Chess.Board.ChessFile.A, 1] = new BoardPiece(1, 1, Chess.Pieces.White.Rook);
-            _boardPieces[(int)Chess.Board.ChessFile.B, 1] = new BoardPiece(2, 1, Chess.Pieces.White.Knight);
-            _boardPieces[(int)Chess.Board.ChessFile.C, 1] = new BoardPiece(3, 1, Chess.Pieces.White.Bishop);
-            _boardPieces[(int)Chess.Board.ChessFile.D, 1] = new BoardPiece(4, 1, Chess.Pieces.White.Queen);
-            _boardPieces[(int)Chess.Board.ChessFile.E, 1] = new BoardPiece(5, 1, Chess.Pieces.White.King);
-            _boardPieces[(int)Chess.Board.ChessFile.F, 1] = new BoardPiece(6, 1, Chess.Pieces.White.Bishop);
-            _boardPieces[(int)Chess.Board.ChessFile.G, 1] = new BoardPiece(7, 1, Chess.Pieces.White.Knight);
-            _boardPieces[(int)Chess.Board.ChessFile.H, 1] = new BoardPiece(8, 1, Chess.Pieces.White.Rook);
+            _boardPieces[(int)Chess.ChessFile.A, 1] = new BoardPiece(1, 1, PiecesFactory.White.Rook);
+            _boardPieces[(int)Chess.ChessFile.B, 1] = new BoardPiece(2, 1, PiecesFactory.White.Knight);
+            _boardPieces[(int)Chess.ChessFile.C, 1] = new BoardPiece(3, 1, PiecesFactory.White.Bishop);
+            _boardPieces[(int)Chess.ChessFile.D, 1] = new BoardPiece(4, 1, PiecesFactory.White.Queen);
+            _boardPieces[(int)Chess.ChessFile.E, 1] = new BoardPiece(5, 1, PiecesFactory.White.King);
+            _boardPieces[(int)Chess.ChessFile.F, 1] = new BoardPiece(6, 1, PiecesFactory.White.Bishop);
+            _boardPieces[(int)Chess.ChessFile.G, 1] = new BoardPiece(7, 1, PiecesFactory.White.Knight);
+            _boardPieces[(int)Chess.ChessFile.H, 1] = new BoardPiece(8, 1, PiecesFactory.White.Rook);
         }
         private void EmptyBoard()
         {
-            foreach (var rank in Chess.Board.Ranks)
+            foreach (var rank in Chess.Ranks)
             {
-                foreach (var file in Chess.Board.Files)
+                foreach (var file in Chess.Files)
                 {
                     if (file != 0 && rank != 0)
-                        this[file, rank] = new BoardPiece(file, rank, Chess.Pieces.Blank);
+                        this[file, rank] = new BoardPiece(file, rank, PiecesFactory.Blank);
                     else
                     {
                         this[file, rank] = null;
@@ -351,9 +353,9 @@ namespace CSharpChess.TheBoard
         public string ToAsciiBoard()
         {
             var sb = new StringBuilder();
-            foreach (var rank in Chess.Board.Ranks.Reverse())
+            foreach (var rank in Chess.Ranks.Reverse())
             {
-                foreach (var file in Chess.Board.Files)
+                foreach (var file in Chess.Files)
                 {
                     var piece = this[file, rank];
                     char ascii = AsciiPieceNames.ContainsKey(piece.Piece.Name) ? AsciiPieceNames[piece.Piece.Name] : '.';
@@ -370,25 +372,5 @@ namespace CSharpChess.TheBoard
 
             return sb.ToString();
         }
-    }
-
-    public enum EngineState
-    {
-        Initialising,
-        Waiting,
-        GeneratingMoveLists,
-        Moving,
-        Started,
-        GeneratingPieceMoves
-    }
-    public class InvalidBoardStateException : Exception
-    {
-        public ChessBoard Board { get; }
-
-        public InvalidBoardStateException(string message, ChessBoard board) : base(message)
-        {
-            Board = board;
-        }
-
     }
 }

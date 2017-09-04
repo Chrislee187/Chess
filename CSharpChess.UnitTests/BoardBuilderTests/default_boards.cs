@@ -12,7 +12,7 @@ namespace CSharpChess.UnitTests.BoardBuilderTests
         {
             var board = BoardBuilder.EmptyBoard;
 
-            Assert.True(board.Pieces.All(p => p.Piece.Equals(Chess.Pieces.Blank)));
+            Assert.True(board.Pieces.All(p => p.Piece.Equals(PiecesFactory.Blank)));
         }
 
         [Test]

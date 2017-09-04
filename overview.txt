@@ -1,0 +1,35 @@
+ChessReplayer
+	[-gamefile pgnfile | stdin]
+	[-game [0..x]]
+
+Menu Options
+	Next Move		Cursor-Right, Cursor-Down, 'N', '.'
+	Prev Move		Cursor-Left, Cursor-Up, 'P', ','
+	Goto move		1..last-move, Gxxx
+	Beginning		Home, B
+	End				End, E
+
+PGNQuery
+	-pgnfile pgnfile | stdin
+	-game [0..x]
+	-event regex
+	-site regex
+	-date regex
+	-white regex
+	-black regex
+	-result BlackWinCheckMate|WhiteWinCheckmate|Stalemate|Draw|BlackWinWhiteResigns|WhiteWinBlackResigns
+			BWCM|WWCM|S|D|BWWR|WWBR
+	-round regex
+	-whiteelo range x..y|(x..|x)|..y
+	-blackelo range x..y|(x..|x)|..y
+
+[Event "Staffordshire op"]
+[Site "Staffordshire"]
+[Date "1975.??.??"]
+[Round "5"]
+[White "Short, Nigel D"]
+[Black "Evans, JS."]
+[Result "1-0"]
+[WhiteElo ""]
+[BlackElo ""]
+[ECO "B02"]

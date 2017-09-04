@@ -9,11 +9,11 @@ namespace CSharpChess.UnitTests.PgnParsing
     public class PgnParserTestsBase
     {
         protected static void AssertPgnMoveQueryIs(PgnQuery query, Chess.Colours colour, Chess.PieceNames pieceName,
-            string destination, Chess.Board.ChessFile chessFile = Chess.Board.ChessFile.None)
+            string destination, Chess.ChessFile chessFile = Chess.ChessFile.None)
         {
             Assert.That(query.Piece, Is.EqualTo(new ChessPiece(colour, pieceName)));
 
-            if (chessFile != Chess.Board.ChessFile.None)
+            if (chessFile != Chess.ChessFile.None)
             {
                 Assert.That(query.FromFile, Is.EqualTo(chessFile));
             }
@@ -30,19 +30,19 @@ namespace CSharpChess.UnitTests.PgnParsing
             return pgnTurns;
         }
 
-        internal static void AssertMoveQueryLocations(PgnQuery pgnQuery, Chess.Board.ChessFile fromFile, int fromRank, Chess.Board.ChessFile toFile, int toRank)
+        internal static void AssertMoveQueryLocations(PgnQuery pgnQuery, Chess.ChessFile fromFile, int fromRank, Chess.ChessFile toFile, int toRank)
         {
             AssertMoveFromLocation(pgnQuery, fromFile, fromRank);
             AssertMoveToLocation(pgnQuery, toFile, toRank);
         }
 
-        internal static void AssertMoveToLocation(PgnQuery pgnQuery, Chess.Board.ChessFile toFile, int toRank)
+        internal static void AssertMoveToLocation(PgnQuery pgnQuery, Chess.ChessFile toFile, int toRank)
         {
             Assert.That(pgnQuery.ToFile, Is.EqualTo(toFile));
             Assert.That(pgnQuery.ToRank, Is.EqualTo(toRank));
         }
 
-        internal static void AssertMoveFromLocation(PgnQuery pgnQuery, Chess.Board.ChessFile fromFile, int fromRank)
+        internal static void AssertMoveFromLocation(PgnQuery pgnQuery, Chess.ChessFile fromFile, int fromRank)
         {
             Assert.That(pgnQuery.FromFile, Is.EqualTo(fromFile));
             Assert.That(pgnQuery.FromRank, Is.EqualTo(fromRank));

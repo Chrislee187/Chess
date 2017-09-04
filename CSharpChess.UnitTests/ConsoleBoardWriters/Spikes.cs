@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CSharpChess.System;
 using CSharpChess.System.Metrics;
 using CSharpChess.TheBoard;
 using CSharpChess.UnitTests.Helpers;

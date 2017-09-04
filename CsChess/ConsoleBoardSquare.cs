@@ -41,16 +41,16 @@ namespace CsChess
             return cell;
         }
 
-        private void AddRankAndFileToEdges(Chess.Board.ChessFile file, int rank)
+        private void AddRankAndFileToEdges(Chess.ChessFile file, int rank)
         {
             if (_options.ShowRanksAndFiles)
             {
                 var midPoint = (_options.BorderedCellSize / 2) + 1;
-                if (file == Chess.Board.ChessFile.A)
+                if (file == Chess.ChessFile.A)
                 {
                     PrintAt(1, midPoint, rank.ToString().First());
                 }
-                if (file == Chess.Board.ChessFile.H)
+                if (file == Chess.ChessFile.H)
                 {
                     PrintAt(_options.BorderedCellSize, midPoint, rank.ToString().First());
                 }

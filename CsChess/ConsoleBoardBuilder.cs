@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ConsoleStuff.Panels;
 using CSharpChess;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
@@ -26,9 +27,9 @@ namespace CsChess
             var boardSize = ((_options.BorderedCellSize -1) * 8) + 1; // Borders overlap
             var boardSquares = new ConsolePanel(boardSize, boardSize);
 
-            foreach (var rank in Chess.Board.Ranks.Reverse())
+            foreach (var rank in Chess.Ranks.Reverse())
             {
-                foreach (var file in Chess.Board.Files)
+                foreach (var file in Chess.Files)
                 {
                     AddPieceToBoard(file, rank, panels, boardSquares);
                 }
@@ -36,7 +37,7 @@ namespace CsChess
             return boardSquares;
         }
 
-        private void AddPieceToBoard(Chess.Board.ChessFile file, int rank, IDictionary<BoardLocation, ConsolePanel> panels, ConsolePanel boardSquares)
+        private void AddPieceToBoard(Chess.ChessFile file, int rank, IDictionary<BoardLocation, ConsolePanel> panels, ConsolePanel boardSquares)
         {
             var loc = BoardLocation.At(file, rank);
             var panel = panels[loc];
@@ -51,9 +52,9 @@ namespace CsChess
             IDictionary<BoardLocation, ConsolePanel> panels = new ConcurrentDictionary<BoardLocation, ConsolePanel>();
 
             var isBlackSquare = true;
-            foreach (var file in Chess.Board.Files)
+            foreach (var file in Chess.Files)
             {
-                foreach (var rank in Chess.Board.Ranks)
+                foreach (var rank in Chess.Ranks)
                 {
                     var at = BoardLocation.At(file, rank);
                     var colour = _options.ColouredSquares ?

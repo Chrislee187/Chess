@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.Rules;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
@@ -18,6 +20,6 @@ namespace CSharpChess.MoveGeneration
             => CreateMovesIf(board, at, (chessBoard, from, to) => chessBoard.IsCoveringAt(to, chessBoard[from].Piece.Colour), MoveType.Cover);
 
         private IEnumerable<ChessMove> CreateMovesIf(ChessBoard board, BoardLocation from, DestinationCheck destinationCheck, MoveType moveType)
-            =>AddTransformationsIf(board, from, destinationCheck, moveType, Chess.Rules.Knights.MovementTransformations);
+            =>AddTransformationsIf(board, from, destinationCheck, moveType, Knights.MovementTransformations);
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
@@ -7,9 +8,9 @@ namespace CSharpChess.MoveGeneration
 {
     public class StraightLineMoveGenerator : MoveGeneratorBase
     {
-        private readonly IEnumerable<Chess.Board.LocationMover> _directions;
+        private readonly IEnumerable<LocationFactory> _directions;
 
-        protected StraightLineMoveGenerator(IEnumerable<Chess.Board.LocationMover> directions)
+        protected StraightLineMoveGenerator(IEnumerable<LocationFactory> directions)
         {
             _directions = directions;
         }
@@ -30,7 +31,7 @@ namespace CSharpChess.MoveGeneration
             var piece = board[at].Piece;
             foreach (var direction in directions)
             {
-                var locations = Chess.Board.LocationMover.ApplyWhile(at, direction, board.IsEmptyAt).ToList();
+                var locations = LocationFactory.ApplyWhile(at, direction, board.IsEmptyAt).ToList();
 
                 result.AddRange(locations.Select(loc => new ChessMove(at, loc, MoveType.Move)));
 

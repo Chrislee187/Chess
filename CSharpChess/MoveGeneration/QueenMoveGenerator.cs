@@ -1,8 +1,10 @@
+using CSharpChess.Rules;
+
 namespace CSharpChess.MoveGeneration
 {
     public class QueenMoveGenerator : StraightLineMoveGenerator
     {
-        public QueenMoveGenerator() : base(Chess.Rules.Queen.MovementTransformations)
+        public QueenMoveGenerator() : base(Queen.MovementTransformations)
         { }
     }
 }

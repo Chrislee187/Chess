@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
 
@@ -51,8 +52,8 @@ namespace CSharpChess.MoveGeneration
             BoardLocation from,
             DestinationCheck destinationCheck,
             MoveType moveType,
-            IEnumerable<Chess.Board.LocationMover> directions)
-            => Chess.Board.LocationMover.ApplyToMany(from, directions)
+            IEnumerable<LocationFactory> directions)
+            => LocationFactory.ApplyToMany(from, directions)
                 .Where(to => destinationCheck(board, from, to))
                 .Select(m => new ChessMove(from, m, moveType));
     }

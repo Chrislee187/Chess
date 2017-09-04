@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
-using static CSharpChess.Chess.Board.Validations;
-using static CSharpChess.Chess.Rules.Pawns;
+using static CSharpChess.Chess;
+using static CSharpChess.Rules.Pawns;
 
 namespace CSharpChess.MoveGeneration
 {
@@ -35,15 +36,15 @@ namespace CSharpChess.MoveGeneration
             return moves;
         }
 
-        private static IEnumerable<ChessMove> CalcMoves(ChessBoard board, BoardLocation at, Func<ChessBoard, BoardLocation, Chess.Colours, bool> destinationCheck)
+        private static IEnumerable<ChessMove> CalcMoves(ChessBoard board, BoardLocation at, Func<ChessBoard, BoardLocation, Colours, bool> destinationCheck)
         {
             var chessPiece = board[at].Piece;
-            var direction = Chess.Board.ForwardDirectionModifierFor(chessPiece);
+            var direction = System.Board.ForwardDirectionModifierFor(chessPiece);
             var boardLocation = new BoardLocation(at.File, at.Rank + direction);
             var newMove = new ChessMove(at, boardLocation, PromotedTo(boardLocation, chessPiece.Colour, MoveType.Move));
 
             var validMoves = new List<ChessMove>();
-            if (IsValidLocation(boardLocation)
+            if (Validations.IsValidLocation(boardLocation)
                 && destinationCheck(board, newMove.To, chessPiece.Colour))
             {
                 validMoves.Add(newMove);
@@ -74,24 +75,24 @@ namespace CSharpChess.MoveGeneration
         private static IEnumerable<BoardLocation> CreateEnPassantLocations(ChessBoard board, BoardLocation at) 
             => CreateTakeLocations(board, at, CalcEnPassantLocation);
 
-        private static BoardLocation CalcTakeLocation(ChessBoard board, BoardLocation at, Chess.Board.DirectionModifiers direction)
+        private static BoardLocation CalcTakeLocation(ChessBoard board, BoardLocation at, System.Board.DirectionModifiers direction)
         {
-            var vertical = Chess.Board.ForwardDirectionModifierFor(board[at].Piece);
+            var vertical = System.Board.ForwardDirectionModifierFor(board[at].Piece);
 
-            if (Chess.Board.NotOnEdge(at, direction))
+            if (System.Board.NotOnEdge(at, direction))
             {
                 return BoardLocation.At((int)at.File + (int) direction, at.Rank + vertical);
             }
 
             return null;
         }
-        private static BoardLocation CalcEnPassantLocation(ChessBoard board, BoardLocation at, Chess.Board.DirectionModifiers direction)
+        private static BoardLocation CalcEnPassantLocation(ChessBoard board, BoardLocation at, System.Board.DirectionModifiers direction)
         {
-            var vertical = Chess.Board.ForwardDirectionModifierFor(board[at].Piece);
+            var vertical = System.Board.ForwardDirectionModifierFor(board[at].Piece);
 
             var enpassantRank = EnpassantFromRankFor(board[at].Piece.Colour);
 
-            if (at.Rank == enpassantRank && Chess.Board.NotOnEdge(at, direction))
+            if (at.Rank == enpassantRank && System.Board.NotOnEdge(at, direction))
             {
                 return BoardLocation.At((int) at.File + (int) direction, at.Rank + vertical);
             }
@@ -100,15 +101,15 @@ namespace CSharpChess.MoveGeneration
         }
 
         private static IEnumerable<BoardLocation> CreateTakeLocations(ChessBoard board, BoardLocation at, 
-            Func<ChessBoard, BoardLocation, Chess.Board.DirectionModifiers, BoardLocation> positionCalculator)
+            Func<ChessBoard, BoardLocation, System.Board.DirectionModifiers, BoardLocation> positionCalculator)
         {
-            var directions = new[] { Chess.Board.DirectionModifiers.LeftDirectionModifier, Chess.Board.DirectionModifiers.RightDirectionModifier };
+            var directions = new[] { System.Board.DirectionModifiers.LeftDirectionModifier, System.Board.DirectionModifiers.RightDirectionModifier };
 
             var positions = new List<BoardLocation>();
             foreach (var direction in directions)
             {
                 BoardLocation loc;
-                if ((loc = positionCalculator(board, at, direction)) != null && IsValidLocation(loc))
+                if ((loc = positionCalculator(board, at, direction)) != null && Validations.IsValidLocation(loc))
                 {
                     positions.Add(loc);
                 }

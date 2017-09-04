@@ -5,34 +5,36 @@ using CSharpChess;
 using CSharpChess.System;
 using CSharpChess.System.Extensions;
 using CSharpChess.TheBoard;
+using static CSharpChess.Chess;
+
 
 namespace CsChess.Pgn
 {
     public class PgnQuery
     {
         public MoveType MoveType { get; private set; }
-        private Chess.Colours _turn;
+        private Colours _turn;
         private char _promotionPiece;
         public ChessPiece Piece { get; private set; }
-        public Chess.Board.ChessFile FromFile { get; private set; } = Chess.Board.ChessFile.None;
+        public ChessFile FromFile { get; private set; } = ChessFile.None;
         public int FromRank { get; private set; }
 
-        public Chess.Board.ChessFile ToFile { get; private set; } = Chess.Board.ChessFile.None;
+        public ChessFile ToFile { get; private set; } = ChessFile.None;
         public int ToRank { get; private set; }
 
-        public bool QueryResolved => !Chess.Board.Validations.InvalidRank(FromRank)
-                                     && !Chess.Board.Validations.InvalidFile(FromFile)
-                                     && !Chess.Board.Validations.InvalidRank(ToRank)
-                                     && !Chess.Board.Validations.InvalidFile(ToFile)
+        public bool QueryResolved => !Validations.InvalidRank(FromRank)
+                                     && !Validations.InvalidFile(FromFile)
+                                     && !Validations.InvalidRank(ToRank)
+                                     && !Validations.InvalidFile(ToFile)
                                      || GameOver;
 
         public bool GameOver { get; private set; }
         public ChessGameResult GameResult { get; private set; }
         public string PgnText { get; private set; } = string.Empty;
 
-        private Chess.Board.ChessFile ParseFile(char file)
+        private ChessFile ParseFile(char file)
         {
-            Chess.Board.ChessFile test;
+            ChessFile test;
             if (Enum.TryParse(file.ToString().ToUpper(), out test))
             {
                 return test;
@@ -49,7 +51,7 @@ namespace CsChess.Pgn
                 throw new ArgumentOutOfRangeException(nameof(rank), "Invalid rank");
             }
 
-            if (Chess.Board.Validations.InvalidRank(test))
+            if (Validations.InvalidRank(test))
             {
                 throw new ArgumentOutOfRangeException(nameof(rank), "Invalid rank");
             }
@@ -61,15 +63,15 @@ namespace CsChess.Pgn
         public void WithFromFile(char file) => FromFile = ParseFile(file);
         public void WithToRank(char rank) => ToRank = ParseRank(rank);
         public void WithFromRank(char rank) => FromRank = ParseRank(rank);
-        public void WithColour(Chess.Colours turn) => _turn = turn;
+        public void WithColour(Colours turn) => _turn = turn;
         public void WithPiece(ChessPiece chessPiece) => Piece = chessPiece;
         public void WithMoveType(MoveType moveType) => MoveType = moveType;
 
         public void WithResult(string move)
         {
-            ToFile = Chess.Board.ChessFile.None;
+            ToFile = ChessFile.None;
             ToRank = 0;
-            FromFile = Chess.Board.ChessFile.None;
+            FromFile = ChessFile.None;
             FromRank = 0;
             Piece = ChessPiece.NullPiece;
             GameResult = PgnResult.Parse(move);
@@ -84,11 +86,11 @@ namespace CsChess.Pgn
             FromRank = bl.Rank;
         }
 
-        private BoardLocation FindPieceThatCanMoveTo(ChessBoard board, Chess.Colours turn, Chess.PieceNames pieceName, BoardLocation move)
+        private BoardLocation FindPieceThatCanMoveTo(ChessBoard board, Colours turn, PieceNames pieceName, BoardLocation move)
         {
             var boardPiecesQuery = board.Pieces.Where(p => p.Piece.Is(turn, pieceName));
 
-            if (FromFile != Chess.Board.ChessFile.None)
+            if (FromFile != ChessFile.None)
             {
                 boardPiecesQuery = boardPiecesQuery.Where(p => p.Location.File == FromFile);
             }

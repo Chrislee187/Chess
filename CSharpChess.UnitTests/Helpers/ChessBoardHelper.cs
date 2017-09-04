@@ -22,9 +22,9 @@ namespace CSharpChess.UnitTests.Helpers
             var validChars = AssertValidRepresentation(asOneChar);
 
             var pieces = new List<BoardPiece>();
-            foreach (var rank in Chess.Board.Ranks)
+            foreach (var rank in Chess.Ranks)
             {
-                foreach (var file in Chess.Board.Files)
+                foreach (var file in Chess.Files)
                 {
                     var oneCharPiece = validChars[RankAndFileToOneCharIndex(file, rank)];
                     var colour = OneCharBoard.PieceColour(oneCharPiece);
@@ -54,7 +54,7 @@ namespace CSharpChess.UnitTests.Helpers
             return trimmed;
         }
 
-        private static int RankAndFileToOneCharIndex(Chess.Board.ChessFile file, int rank)
+        private static int RankAndFileToOneCharIndex(Chess.ChessFile file, int rank)
         {
             var idx = (8 - rank)*8 + ((int) file - 1);
             return idx;
