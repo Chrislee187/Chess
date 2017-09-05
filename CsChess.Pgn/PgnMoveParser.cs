@@ -37,11 +37,10 @@ namespace CsChess.Pgn
 
             if (MoveContainsPromotion(move))
             {
-                // TODO:
-                //                var promotedTo = GetPromotionPiece(move);
-                //
                 var newMove = StripPromotion(move);
+                var promotionPiece = move.Substring(move.IndexOf("=")+1, 1);
                 pgnQuery.WithMoveType(MoveType.Promotion);
+                pgnQuery.WithPromotion(promotionPiece[0]);
 
                 return TryParse(turn, newMove, ref pgnQuery);
             }

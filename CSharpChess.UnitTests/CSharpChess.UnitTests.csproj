@@ -88,6 +88,12 @@
     <Compile Include="ValidMoveGeneration\Rooks\moves.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="has-black-pawn-to-queen-promotion.pgn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="has-piece-blocking-check.pgn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <Content Include="Short.pgn">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -31,6 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleStuff", "ConsoleStuf
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PGNFiles", "PGNFiles", "{DCD434C3-01FD-4F62-8A46-61CBB0B4A157}"
 	ProjectSection(SolutionItems) = preProject
+		has-piece-blocking-check.pgn = has-piece-blocking-check.pgn
 		PGNFiles\Short.pgn = PGNFiles\Short.pgn
 	EndProjectSection
 EndProject

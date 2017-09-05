@@ -63,8 +63,8 @@ namespace CSharpChess.TheBoard
             if (move.MoveType == MoveType.Castle)
             {
                 var locs = King.SquaresKingsPassesThroughWhenCastling(move.To);
-                var boardPieces = clone.Pieces.OfColour(ColourOfEnemy(moversPiece.Colour)).ToList();
-                var movesThruCheck = boardPieces
+                var enemyPieces = clone.Pieces.OfColour(ColourOfEnemy(moversPiece.Colour)).ToList();
+                var movesThruCheck = enemyPieces
                     .SelectMany(p => p.PossibleMoves)
                     .Any(moves => locs.Any(l => l.Equals(moves.To)));
 

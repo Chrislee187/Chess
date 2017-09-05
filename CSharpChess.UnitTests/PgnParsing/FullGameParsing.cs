@@ -151,6 +151,7 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
 
                 while (game != null)
                 {
+                    Console.WriteLine(count++);
                     var pgnGame = PgnGame.Parse(game).Single();
                     var board = new PgnGameResolver().Resolve(pgnGame);
 
@@ -169,6 +170,61 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
 
         }
 
+
+
+        [Test, Explicit]
+        public void can_read_pgn_with_piece_blocking_check()
+        {
+            var stream = File.OpenRead(@"C:\Src\Chess\CSharpChess.UnitTests\bin\Debug\has-piece-blocking-check.pgn");
+
+
+            using (var reader = new PgnReader(stream))
+            {
+                var game = reader.ReadGame();
+
+                while (game != null)
+                {
+                    var pgnGame = PgnGame.Parse(game).Single();
+                    var board = new PgnGameResolver().Resolve(pgnGame);
+
+                    var result = ChessGameResultToPgnResult(board.GameState);
+
+                    if (IsInCheckmate(board.GameState))
+                    {
+                        Assert.That(pgnGame.Result, Is.EqualTo(result), pgnGame.ToString());
+                    }
+
+                    game = reader.ReadGame();
+                }
+            }
+        }
+
+        [Test, Explicit]
+        public void can_read_pgn_with_pawn_promotion()
+        {
+            var stream = File.OpenRead(@"C:\Src\Chess\CSharpChess.UnitTests\bin\Debug\has-black-pawn-to-queen-promotion.pgn");
+
+
+            using (var reader = new PgnReader(stream))
+            {
+                var game = reader.ReadGame();
+
+                while (game != null)
+                {
+                    var pgnGame = PgnGame.Parse(game).Single();
+                    var board = new PgnGameResolver().Resolve(pgnGame);
+
+                    var result = ChessGameResultToPgnResult(board.GameState);
+
+                    if (IsInCheckmate(board.GameState))
+                    {
+                        Assert.That(pgnGame.Result, Is.EqualTo(result), pgnGame.ToString());
+                    }
+
+                    game = reader.ReadGame();
+                }
+            }
+        }
         private bool IsInCheckmate(Chess.GameState boardGameState)
         {
             return new[]

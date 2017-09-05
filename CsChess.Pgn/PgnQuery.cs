@@ -13,6 +13,7 @@ namespace CsChess.Pgn
     {
         public MoveType MoveType { get; private set; }
         private Colours _turn;
+        public PieceNames PromotionPiece { get; private set; }
         public ChessPiece Piece { get; private set; }
         public ChessFile FromFile { get; private set; } = ChessFile.None;
         public int FromRank { get; private set; }
@@ -110,15 +111,29 @@ namespace CsChess.Pgn
 
             if (boardPieces.Count() > 1)
             {
-                // TODO: This doesn't cover the case where two pieces can move to a square but on of these
-                // pieces is actually pinned on discovered check
-                piece = boardPieces.SingleOrDefault(p => p.PossibleMoves.Any(pm => pm.MoveType == MoveType));
+
+                boardPieces = boardPieces.Where(p => p.PossibleMoves.Any(pm => pm.MoveType == MoveType)).ToList();
+
+                if (boardPieces.Count() != 1)
+                {
+                    // Cover the case where two pieces can move to a square but one of these
+                    // pieces is actually pinned on discovered check
+                    boardPieces =
+                        boardPieces.Where(bp => bp.PossibleMoves.Any(pm => !Validations.MovesLeaveOwnSideInCheck(board, pm))).ToList();
+                }
+
+                if (boardPieces.Count() != 1)
+                {
+                    throw new PgnException($"Ambigous move {move}; possibles pieces; {boardPieces.ToStrings()}");
+                }
+
+                piece = boardPieces.First();
             }
 
             if (piece == null)
             {
 //                Console.WriteLine(board.ToAsciiBoard());
-                throw new InvalidOperationException($"No {pieceName} that can {MoveType} to {move} found");
+                throw new PgnException($"No {pieceName} that can {MoveType} to {move} found");
             }
 
             return piece.Location;
@@ -134,17 +149,38 @@ namespace CsChess.Pgn
         {
             var from = new BoardLocation(FromFile, FromRank);
             var to = new BoardLocation(ToFile, ToRank);
-            var move = new ChessMove(from, to, MoveType.Move);
+            var move = new ChessMove(from, to, MoveType,PromotionPiece);
             return move;
         }
 
         public void WithPromotion(char promotionPiece)
         {
+            PromotionPiece = GetPromotionPiece(promotionPiece.ToString());
         }
+        private static Chess.PieceNames GetPromotionPiece(string piece)
+        {
+            switch (piece.ToUpper())
+            {
+                case "R": return Chess.PieceNames.Rook;
+                case "B": return Chess.PieceNames.Bishop;
+                case "N": return Chess.PieceNames.Knight;
+                case "Q": return Chess.PieceNames.Queen;
+            }
 
+            throw new ArgumentException($"'{piece}' is not a valid promotion", nameof(piece));
+
+        }
         public string ToMove()
         {
             return $"{CreateMove()}";
+        }
+    }
+
+    internal class PgnException : Exception
+    {
+        public PgnException(string s)
+        {
+            
         }
     }
 }

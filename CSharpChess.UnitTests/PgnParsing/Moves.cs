@@ -263,7 +263,7 @@ namespace CSharpChess.UnitTests.PgnParsing
         [Test]
         public void can_handle_promotions()
         {
-            var move = "c1=Q";
+            var move = "h1=Q+";
             var turn = Chess.Colours.Black;
             var pgnQuery = new PgnQuery();
             var parsed = PgnMoveParser.TryParse(turn, move, ref pgnQuery);
@@ -271,7 +271,8 @@ namespace CSharpChess.UnitTests.PgnParsing
             Assert.True(parsed);
             Assert.That(!pgnQuery.QueryResolved);
             Assert.True(pgnQuery.Piece.Is(Chess.Colours.Black, Chess.PieceNames.Pawn));
-            AssertMoveQueryLocations(pgnQuery, Chess.ChessFile.C, 0, Chess.ChessFile.C, 1);
+            Assert.That(pgnQuery.PromotionPiece, Is.EqualTo(Chess.PieceNames.Queen));
+            AssertMoveQueryLocations(pgnQuery, Chess.ChessFile.H, 0, Chess.ChessFile.H, 1);
         }
 
         //fxe1=Q+
