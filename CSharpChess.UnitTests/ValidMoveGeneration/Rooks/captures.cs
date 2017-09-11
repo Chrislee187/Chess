@@ -1,7 +1,6 @@
 ﻿using System.Linq;
-using CSharpChess.MoveGeneration;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+using CSharpChess.Extensions;
+using CSharpChess.Movement;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
@@ -31,7 +30,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Rooks
                                      "........" + // 2
                                      ".......K";  // 1
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
             var expectedTakes = BoardLocation.List("D7", "F5", "D3", "B5");
 
             var chessMoves = _generator.All(board,BoardLocation.At("D5")).Takes().ToList();

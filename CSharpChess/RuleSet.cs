@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using CSharpChess.TheBoard;
 
 namespace CSharpChess
 {
     public class RuleSet 
     {
-        public delegate bool PerformsMoveIf(ChessBoard board, ChessMove move);
+        public delegate bool PerformsMoveIf(Board board, Move move);
         public string RuleSetName { get; }
         private readonly Dictionary<string, PerformsMoveIf> _rules = new Dictionary<string, PerformsMoveIf>();
 
@@ -20,7 +19,7 @@ namespace CSharpChess
             return this;
         }
 
-        public IEnumerable<RuleResult> Check(ChessBoard board, ChessMove move)
+        public IEnumerable<RuleResult> Check(Board board, Move move)
         {
             var list = new List<RuleResult>();
             foreach (var performsMoveIf in _rules)

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
-using CSharpChess.MoveGeneration;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+using CSharpChess.Extensions;
+using CSharpChess.Movement;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
@@ -31,7 +30,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Knights
                     "........" +
                     ".......K";
             var expected = BoardLocation.List("E6", "F5", "F3", "E2", "C2", "B3", "B5", "C6");
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
 
             var moves = _knightMoveGenerator.All(board, BoardLocation.At("D4")).Moves().ToList();
 

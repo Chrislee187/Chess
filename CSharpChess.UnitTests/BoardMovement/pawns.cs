@@ -1,6 +1,5 @@
 ﻿using System.Linq;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+using CSharpChess.Extensions;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
@@ -37,7 +36,7 @@ namespace CSharpChess.UnitTests.BoardMovement
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
 
             board.Move("c2c4");
             var result = board.Move("d4c3");
@@ -46,19 +45,19 @@ namespace CSharpChess.UnitTests.BoardMovement
             Assert.That(result.Move.MoveType, Is.EqualTo(MoveType.TakeEnPassant));
             Assert.That(board.IsEmptyAt("d4"), "Moved piece not removed from starting sqaure");
             Assert.That(board.IsEmptyAt("c4"), "Taken piece not removed");
-            Assert.That(board["c3"].Piece.Is(Chess.Colours.Black, Chess.PieceNames.Pawn), "Moved piece not found on destination sqaure.");
+            Assert.That(board["c3"].Piece.Is(Colours.Black, PieceNames.Pawn), "Moved piece not found on destination sqaure.");
         }
 
 
-        [TestCase("q", Chess.PieceNames.Queen)]
-        [TestCase("Q", Chess.PieceNames.Queen)]
-        [TestCase("b", Chess.PieceNames.Bishop)]
-        [TestCase("B", Chess.PieceNames.Bishop)]
-        [TestCase("n", Chess.PieceNames.Knight)]
-        [TestCase("N", Chess.PieceNames.Knight)]
-        [TestCase("r", Chess.PieceNames.Rook)]
-        [TestCase("R", Chess.PieceNames.Rook)]
-        public void can_promote(string promotionCharacter, Chess.PieceNames name)
+        [TestCase("q", PieceNames.Queen)]
+        [TestCase("Q", PieceNames.Queen)]
+        [TestCase("b", PieceNames.Bishop)]
+        [TestCase("B", PieceNames.Bishop)]
+        [TestCase("n", PieceNames.Knight)]
+        [TestCase("N", PieceNames.Knight)]
+        [TestCase("r", PieceNames.Rook)]
+        [TestCase("R", PieceNames.Rook)]
+        public void can_promote(string promotionCharacter, PieceNames name)
         {
             var asOneChar =
                 "........" +
@@ -70,11 +69,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                 ".PPPPPPP" +
                 "RNBQKBNR";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
 
             var result = board.Move("a7-a8"+promotionCharacter);
 
-            AssertMoveSucceeded(result, board, "a7-a8", new ChessPiece(Chess.Colours.White, name), MoveType.Promotion);
+            AssertMoveSucceeded(result, board, "a7-a8", new ChessPiece(Colours.White, name), MoveType.Promotion);
 
             Assert.That(result.Move.PromotedTo, Is.EqualTo(name), $"{result.Move.PromotedTo}");
         }

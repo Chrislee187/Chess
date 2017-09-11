@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using CSharpChess.System.Extensions;
+using CSharpChess.Extensions;
 
 namespace CsChess.Pgn
 {

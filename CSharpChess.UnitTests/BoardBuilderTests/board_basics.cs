@@ -9,7 +9,7 @@ namespace CSharpChess.UnitTests.BoardBuilderTests
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class board_basics
     {
-        private ChessBoard _board;
+        private Board _board;
 
         [SetUp]
         public void SetUp()
@@ -24,7 +24,7 @@ namespace CSharpChess.UnitTests.BoardBuilderTests
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 // ReSharper disable once UnusedVariable
-                var x = _board[(Chess.ChessFile) file, rank];
+                var x = _board[(ChessFile) file, rank];
             });
         }
     }

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using CSharpChess.Extensions;
 using CSharpChess.System;
-using CSharpChess.System.Extensions;
 
 namespace CsChess.Pgn
 {
@@ -18,7 +18,7 @@ namespace CsChess.Pgn
         public string Event => TagPairs["Event"];
         public string Site => TagPairs["Site"];
         public PgnDate Date =>  PgnDate.Parse(TagPairs["Date"]);
-        public int Round => int.Parse(TagPairs["Round"]);
+        public int Round => TagPairs["Round"].ToInt();
         public string White => TagPairs["White"];
         public string Black => TagPairs["Black"];
         public ChessGameResult Result => PgnResult.Parse(TagPairs["Result"]);

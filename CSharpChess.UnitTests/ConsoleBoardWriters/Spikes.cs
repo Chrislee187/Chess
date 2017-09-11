@@ -10,9 +10,9 @@ namespace CSharpChess.UnitTests.ConsoleBoardWriters
     public class Spikes
     {
         [Test]
-        public void x()
+        public void X()
         {
-            var writer = new MediumConsoleBoard(new ChessBoard());
+            var writer = new MediumConsoleBoard(new Board());
 
             writer.Build()
                 .ToStrings().ToList()
@@ -21,9 +21,10 @@ namespace CSharpChess.UnitTests.ConsoleBoardWriters
         }
 
         [Test]
-        public void y()
+        public void Y()
         {
-            ChessBoard game1, game2;
+            // ReSharper disable once NotAccessedVariable
+            Board game1, game2;
 
             Timers.Time("newboard.test1", () => game1 = BoardBuilder.NewGame);
             Timers.Time("newboard.test2", () => game2 = BoardBuilder.NewGame);

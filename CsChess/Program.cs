@@ -4,8 +4,9 @@ using ConsoleStuff.Panels;
 using ConsoleStuff.Tests;
 using ConsoleStuff.Tests.Commands;
 using CSharpChess;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+using CSharpChess.Extensions;
+using CSharpChess.Movement;
+using Board = CSharpChess.Board;
 
 namespace CsChess
 {
@@ -17,13 +18,9 @@ namespace CsChess
         private static bool _exiting;
         private static bool _performWindowResize;
 
-        public Program()
-        {
-        }
-
         static void Main(string[] args)
         {
-            var board = new ChessBoard();
+            var board = new Board();
 
             MoveResult moveResult = null;
             _performWindowResize = true;
@@ -53,7 +50,7 @@ namespace CsChess
                 {
                     if (string.IsNullOrEmpty(cmd))
                     {
-                        moveResult = MoveResult.Success(ChessMove.Null);
+                        moveResult = MoveResult.Success(Move.Null);
                     }
                     else if (!commandMenu.Execute(cmd))
                     {
@@ -99,10 +96,10 @@ namespace CsChess
             var debugInfo = _debug
                 ? e.StackTrace
                 : "";
-            return MoveResult.Failure($"Invalid Move or Command: {cmd}\n" + e.Message + debugInfo, ChessMove.Null);
+            return MoveResult.Failure($"Invalid Move or Command: {cmd}\n" + e.Message + debugInfo, Move.Null);
         }
 
-        private static string GetCommand(ChessBoard board)
+        private static string GetCommand(Board board)
         {
             if (board.GameOver())
             {
@@ -114,7 +111,7 @@ namespace CsChess
             var cmd = Console.ReadLine();
             return cmd;
         }
-        private static ConsolePanel DrawScreen(ChessBoard board, CommandMenu commandMenu, Options options, MoveResult moveResult)
+        private static ConsolePanel DrawScreen(Board board, CommandMenu commandMenu, Options options, MoveResult moveResult)
         {
             Console.Clear();
             var boardPanel = new ConsoleBoardBuilder(board).Build(options);

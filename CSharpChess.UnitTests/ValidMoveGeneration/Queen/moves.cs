@@ -1,6 +1,5 @@
-﻿using CSharpChess.MoveGeneration;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+﻿using CSharpChess.Extensions;
+using CSharpChess.Movement;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
@@ -22,7 +21,7 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Queen
                                      "........" +
                                      ".......K";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
             var expected = BoardLocation.List("E6", "E4", "C6", "C4", "D6", "E5", "D4", "C5");
 
             var generator = new QueenMoveGenerator();

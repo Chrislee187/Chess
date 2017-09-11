@@ -1,4 +1,4 @@
-﻿using CSharpChess.System.Extensions;
+﻿using CSharpChess.Extensions;
 
 namespace ConsoleStuff.Panels
 {

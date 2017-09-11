@@ -21,7 +21,7 @@ namespace CSharpChess.UnitTests.BoardMovement
         [Test]
         public void white_cannot_move_when_blacks_turn()
         {
-            var board = BoardBuilder.CustomBoard(ChessBoardHelper.NewBoardInOneCharNotation, Chess.Colours.Black);
+            var board = BoardBuilder.CustomBoard(ChessBoardHelper.NewBoardInOneCharNotation, Colours.Black);
 
             var result = board.Move("D2-D4");
 
@@ -47,7 +47,7 @@ namespace CSharpChess.UnitTests.BoardMovement
 
             moves.ToList().ForEach(m => board.Move(m));
 
-            Assert.That(board.GameState, Is.EqualTo(Chess.GameState.CheckMateBlackWins));
+            Assert.That(board.GameState, Is.EqualTo(GameState.CheckMateBlackWins));
         }
     }
 }

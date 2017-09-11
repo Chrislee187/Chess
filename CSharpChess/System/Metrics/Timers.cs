@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using CSharpChess.System.Extensions;
+using CSharpChess.Extensions;
 
 namespace CSharpChess.System.Metrics
 {

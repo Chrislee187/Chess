@@ -100,13 +100,14 @@ namespace ConsoleStuff.Panels
             return string.Join("\n", ToStrings());
         }
 
+        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
         private void CheckXY(int x, int y)
         {
             if (x < 1 || y < 1)
-                throw new ArgumentException($"Panel co-ordinates are one-based.");
+                throw new ArgumentOutOfRangeException($"Panel co-ordinates are one-based.");
 
             if (x > Width || y > Height)
-                throw new ArgumentException($"Panel co-ordinates are out of bounds.");
+                throw new ArgumentOutOfRangeException($"Panel co-ordinates are out of bounds.");
         }
 
         private IEnumerable<Tuple<int, int>> TopLeftToBottomRight()

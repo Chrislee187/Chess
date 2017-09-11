@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+using CSharpChess.Extensions;
+using CSharpChess.Movement;
 
 namespace CSharpChess.System
 {
@@ -34,7 +34,7 @@ namespace CSharpChess.System
             var rank = @from.Rank + _transformY;
             return !Validations.IsValidLocation(file, rank)
                 ? null
-                : new BoardLocation((Chess.ChessFile)file, rank);
+                : new BoardLocation((ChessFile)file, rank);
         }
 
         private readonly int _transformX;

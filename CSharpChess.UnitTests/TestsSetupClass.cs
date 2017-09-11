@@ -23,7 +23,7 @@ namespace CSharpChess.UnitTests
         public void OneTimeSetUp()
         {
             var board = BoardBuilder.NewGame;
-            Assert.That(board.GameState, Is.EqualTo(Chess.GameState.WaitingForMove));
+            Assert.That(board.GameState, Is.EqualTo(GameState.WaitingForMove));
         }
 
         [OneTimeTearDown]

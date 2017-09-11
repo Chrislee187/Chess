@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpChess.TheBoard;
-using static CSharpChess.Chess;
+using CSharpChess;
 
 
 namespace CsChess.Pgn
@@ -38,7 +37,7 @@ namespace CsChess.Pgn
             if (MoveContainsPromotion(move))
             {
                 var newMove = StripPromotion(move);
-                var promotionPiece = move.Substring(move.IndexOf("=")+1, 1);
+                var promotionPiece = move.Substring(move.IndexOf("=", StringComparison.Ordinal)+1, 1);
                 pgnQuery.WithMoveType(MoveType.Promotion);
                 pgnQuery.WithPromotion(promotionPiece[0]);
 
@@ -101,7 +100,14 @@ namespace CsChess.Pgn
             {
                 throw new ArgumentException($"First character not a piece: {move}", nameof(move));
             }
-            pgnQuery.WithFromFile(move[1]);
+            if (char.IsNumber(move[1]))
+            {
+                pgnQuery.WithFromRank(move[1]);
+            }
+            else
+            {
+                pgnQuery.WithFromFile(move[1]);
+            }
 
             if (MoveContainsTake(move, 2))
             {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpChess.System.Extensions;
+using CSharpChess.Extensions;
 
 namespace CSharpChess.Helpers
 {
@@ -10,7 +10,7 @@ namespace CSharpChess.Helpers
         // TODO: Refactor to use same pattern as Medium
         private const bool UseColours = false;
         private const bool ShowThreat = true;
-        public static void Write(ChessBoard board)
+        public static void Write(Board board)
         {
             var consoleBoard = CreateConsoleBoard(board);
 
@@ -25,7 +25,7 @@ namespace CSharpChess.Helpers
 
         }
 
-        private static Dictionary<BoardLocation, Action> CreateConsoleBoard(ChessBoard board)
+        private static Dictionary<BoardLocation, Action> CreateConsoleBoard(Board board)
         {
             var consoleBoard = new Dictionary<BoardLocation, Action>();
 

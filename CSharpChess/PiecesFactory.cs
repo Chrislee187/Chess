@@ -1,6 +1,4 @@
-﻿using CSharpChess.TheBoard;
-
-namespace CSharpChess
+﻿namespace CSharpChess
 {
     public static class PiecesFactory
     {
@@ -8,21 +6,21 @@ namespace CSharpChess
 
         public static class White
         {
-            public static readonly ChessPiece Pawn = new ChessPiece(Chess.Colours.White, Chess.PieceNames.Pawn);
-            public static readonly ChessPiece Bishop = new ChessPiece(Chess.Colours.White, Chess.PieceNames.Bishop);
-            public static readonly ChessPiece Knight = new ChessPiece(Chess.Colours.White, Chess.PieceNames.Knight);
-            public static readonly ChessPiece Rook = new ChessPiece(Chess.Colours.White, Chess.PieceNames.Rook);
-            public static readonly ChessPiece King = new ChessPiece(Chess.Colours.White, Chess.PieceNames.King);
-            public static readonly ChessPiece Queen = new ChessPiece(Chess.Colours.White, Chess.PieceNames.Queen);
+            public static readonly ChessPiece Pawn = new ChessPiece(Colours.White, PieceNames.Pawn);
+            public static readonly ChessPiece Bishop = new ChessPiece(Colours.White, PieceNames.Bishop);
+            public static readonly ChessPiece Knight = new ChessPiece(Colours.White, PieceNames.Knight);
+            public static readonly ChessPiece Rook = new ChessPiece(Colours.White, PieceNames.Rook);
+            public static readonly ChessPiece King = new ChessPiece(Colours.White, PieceNames.King);
+            public static readonly ChessPiece Queen = new ChessPiece(Colours.White, PieceNames.Queen);
         }
         public static class Black
         {
-            public static readonly ChessPiece Pawn = new ChessPiece(Chess.Colours.Black, Chess.PieceNames.Pawn);
-            public static readonly ChessPiece Bishop = new ChessPiece(Chess.Colours.Black, Chess.PieceNames.Bishop);
-            public static readonly ChessPiece Knight = new ChessPiece(Chess.Colours.Black, Chess.PieceNames.Knight);
-            public static readonly ChessPiece Rook = new ChessPiece(Chess.Colours.Black, Chess.PieceNames.Rook);
-            public static readonly ChessPiece King = new ChessPiece(Chess.Colours.Black, Chess.PieceNames.King);
-            public static readonly ChessPiece Queen = new ChessPiece(Chess.Colours.Black, Chess.PieceNames.Queen);
+            public static readonly ChessPiece Pawn = new ChessPiece(Colours.Black, PieceNames.Pawn);
+            public static readonly ChessPiece Bishop = new ChessPiece(Colours.Black, PieceNames.Bishop);
+            public static readonly ChessPiece Knight = new ChessPiece(Colours.Black, PieceNames.Knight);
+            public static readonly ChessPiece Rook = new ChessPiece(Colours.Black, PieceNames.Rook);
+            public static readonly ChessPiece King = new ChessPiece(Colours.Black, PieceNames.King);
+            public static readonly ChessPiece Queen = new ChessPiece(Colours.Black, PieceNames.Queen);
         }
     }
 }

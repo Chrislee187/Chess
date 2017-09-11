@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using ConsoleStuff.Panels;
 using CSharpChess;
-using CSharpChess.System.Extensions;
+using CSharpChess.Extensions;
 
 namespace CsChess
 {
     public class ConsoleBoardBuilder
     {
-        private readonly ChessBoard _board;
+        private readonly Board _board;
 
         private Options _options;
-        public ConsoleBoardBuilder(ChessBoard board)
+        public ConsoleBoardBuilder(Board board)
         {
             _board = board;
         }
@@ -35,7 +35,7 @@ namespace CsChess
             return boardSquares;
         }
 
-        private void AddPieceToBoard(Chess.ChessFile file, int rank, IDictionary<BoardLocation, ConsolePanel> panels, ConsolePanel boardSquares)
+        private void AddPieceToBoard(ChessFile file, int rank, IDictionary<BoardLocation, ConsolePanel> panels, ConsolePanel boardSquares)
         {
             var loc = BoardLocation.At(file, rank);
             var panel = panels[loc];

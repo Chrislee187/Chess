@@ -1,7 +1,6 @@
 using System.Linq;
 using ConsoleStuff.Panels;
 using CSharpChess;
-using CSharpChess.TheBoard;
 
 namespace CsChess
 {
@@ -39,16 +38,16 @@ namespace CsChess
             return cell;
         }
 
-        private void AddRankAndFileToEdges(Chess.ChessFile file, int rank)
+        private void AddRankAndFileToEdges(ChessFile file, int rank)
         {
             if (_options.ShowRanksAndFiles)
             {
                 var midPoint = (_options.BorderedCellSize / 2) + 1;
-                if (file == Chess.ChessFile.A)
+                if (file == ChessFile.A)
                 {
                     PrintAt(1, midPoint, rank.ToString().First());
                 }
-                if (file == Chess.ChessFile.H)
+                if (file == ChessFile.H)
                 {
                     PrintAt(_options.BorderedCellSize, midPoint, rank.ToString().First());
                 }

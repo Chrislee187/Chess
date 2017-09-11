@@ -1,6 +1,5 @@
-﻿using CSharpChess.MoveGeneration;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+﻿using CSharpChess.Extensions;
+using CSharpChess.Movement;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 

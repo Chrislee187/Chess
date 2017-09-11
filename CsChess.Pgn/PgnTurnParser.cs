@@ -11,14 +11,14 @@ namespace CsChess.Pgn
         {
             var turns = new List<PgnTurnQuery>();
 
-            var moveIsFor = Chess.Colours.None;
+            var moveIsFor = Colours.None;
             PgnQuery white = null, black = null;
             string currentText = "";
             int turnNumber = 0;
 
             Action resetTurnState = () =>
             {
-                moveIsFor = Chess.Colours.None;
+                moveIsFor = Colours.None;
                 currentText = string.Empty;
                 white = black = null;
             };
@@ -34,7 +34,7 @@ namespace CsChess.Pgn
                 else if (ContainsStartOfComment(token, '{')) IgnoreTillEndComment(token, tokens,'{', '}');
                 else if (IsNewTurn(token))
                 {
-                    if (moveIsFor == Chess.Colours.None)
+                    if (moveIsFor == Colours.None)
                     {
                         if (token.Last() != '.')
                         {
@@ -57,15 +57,15 @@ namespace CsChess.Pgn
                 {
                     if (IsEndGameToken(token))
                     {
-                        if (moveIsFor == Chess.Colours.White)
+                        if (moveIsFor == Colours.White)
                         {
                             white.WithResult(token);
                             black = CreateEndGameQuery(token);
                         }
-                        else if (moveIsFor == Chess.Colours.Black)
+                        else if (moveIsFor == Colours.Black)
                         {
                             black = CreateEndGameQuery(token);
-                            moveIsFor = Chess.Colours.None;
+                            moveIsFor = Colours.None;
                         }
                         else
                         {
@@ -83,10 +83,10 @@ namespace CsChess.Pgn
 
                         var moveQuery = ParseMove(moveIsFor, token);
 
-                        if (moveIsFor == Chess.Colours.White)
+                        if (moveIsFor == Colours.White)
                         {
                             white = moveQuery;
-                            moveIsFor = Chess.Colours.Black;
+                            moveIsFor = Colours.Black;
                         }
                         else
                         {
@@ -98,7 +98,7 @@ namespace CsChess.Pgn
                 }
             }
 
-            if (moveIsFor != Chess.Colours.None)
+            if (moveIsFor != Colours.None)
             {
                 turns.Add(new PgnTurnQuery(turnNumber, white, black, currentText));
             }
@@ -121,9 +121,10 @@ namespace CsChess.Pgn
         }
 
         // ReSharper disable once UnusedParameter.Local
-        private static void ExpectToKnowColour(Chess.Colours currentColour, string token)
+        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
+        private static void ExpectToKnowColour(Colours currentColour, string token)
         {
-            if (currentColour == Chess.Colours.None)
+            if (currentColour == Colours.None)
                 throw new ArgumentException($"Parse error: {token}, expected move but don't know for which colour");
         }
 
@@ -138,12 +139,12 @@ namespace CsChess.Pgn
             return turnNumber;
         }
 
-        private static Chess.Colours ParseMoveColour(string token) 
+        private static Colours ParseMoveColour(string token) 
             => token.Count(c => c == '.') == 1 
-                    ? Chess.Colours.White 
-                    : Chess.Colours.Black;
+                    ? Colours.White 
+                    : Colours.Black;
 
-        private static PgnQuery ParseMove(Chess.Colours currentColour, string token)
+        private static PgnQuery ParseMove(Colours currentColour, string token)
         {
             var pgnQuery = new PgnQuery();
             if (!PgnMoveParser.TryParse(currentColour, token, ref pgnQuery))

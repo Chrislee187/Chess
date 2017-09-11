@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using ConsoleStuff.Panels;
-using CSharpChess.System.Extensions;
+using CSharpChess.Extensions;
 
 namespace ConsoleStuff
 {

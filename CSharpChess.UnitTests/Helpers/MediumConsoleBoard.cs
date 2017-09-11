@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ConsoleStuff.Panels;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+using CSharpChess.Extensions;
 
 namespace CSharpChess.UnitTests.Helpers
 {
@@ -13,14 +12,14 @@ namespace CSharpChess.UnitTests.Helpers
         private const int PieceCellSize = 3;
         private const int CellBorderWidth = 2;
         private const int ConsoleCellSize = CellBorderWidth + PieceCellSize;
-        private readonly ChessBoard _board;
+        private readonly Board _board;
 
-        public static string ToString(ChessBoard board)
+        public static string ToString(Board board)
         {
             return new MediumConsoleBoard(board).Build().ToString();
         }
 
-    public MediumConsoleBoard(ChessBoard board)
+    public MediumConsoleBoard(Board board)
         {
             _board = board;
         }

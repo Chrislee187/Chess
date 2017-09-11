@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+using CSharpChess.Extensions;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
@@ -22,11 +21,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "........" +
                                      "K.......";
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
 
             var result = board.Move("a1a2");
 
-            AssertMoveSucceeded(result, board, "a1a2", new ChessPiece(Chess.Colours.White, Chess.PieceNames.King));
+            AssertMoveSucceeded(result, board, "a1a2", new ChessPiece(Colours.White, PieceNames.King));
         }
 
         [Test]
@@ -40,11 +39,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "p......." +
                                      "K.......";
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
 
             var result = board.Move("a1a2");
 
-            AssertTakeSucceeded(result, board, "a1a2", new ChessPiece(Chess.Colours.White, Chess.PieceNames.King));
+            AssertTakeSucceeded(result, board, "a1a2", new ChessPiece(Colours.White, PieceNames.King));
         }
 
 
@@ -63,16 +62,16 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "R...K..R";
 
-            var km = (ChessMove)kingMove;
-            var colour = km.From.Rank == 1 ? Chess.Colours.White : Chess.Colours.Black;
+            var km = (Move)kingMove;
+            var colour = km.From.Rank == 1 ? Colours.White : Colours.Black;
             var board = BoardBuilder.CustomBoard(asOneChar, colour);
 
-            var rm = (ChessMove)expectedRookMove;
+            var rm = (Move)expectedRookMove;
             var moveResult = board.Move(km);
 
             Assert.That(moveResult.Succeeded, $"Failed: {kingMove}.");
-            Assert.That(board[km.To].Piece.Is(colour, Chess.PieceNames.King));
-            Assert.That(board[rm.To].Piece.Is(colour, Chess.PieceNames.Rook));
+            Assert.That(board[km.To].Piece.Is(colour, PieceNames.King));
+            Assert.That(board[rm.To].Piece.Is(colour, PieceNames.Rook));
             Assert.That(board.IsEmptyAt(km.From));
             Assert.That(board.IsEmptyAt(rm.From));
             Console.WriteLine(kingMove);
@@ -91,8 +90,8 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "R...K..R";
 
-            var km = (ChessMove)"E1G1";
-            var colour = km.From.Rank == 1 ? Chess.Colours.White : Chess.Colours.Black;
+            var km = (Move)"E1G1";
+            var colour = km.From.Rank == 1 ? Colours.White : Colours.Black;
             var board = BoardBuilder.CustomBoard(asOneChar, colour);
 
             var moves = board.RemoveMovesThatLeaveBoardInCheck(km.From).ToList();
@@ -113,7 +112,7 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "...n...." +
                                      ".R..K.R.";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
 
             var at = BoardLocation.At("E1");
             var expected = new[] {"D1", "E2"};
@@ -136,8 +135,8 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "....R..." +
                                      "....K...";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.Black);
-            Assert.That(board.GameState, Is.EqualTo(Chess.GameState.BlackKingInCheck));
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.Black);
+            Assert.That(board.GameState, Is.EqualTo(GameState.BlackKingInCheck));
             var result = board.Move("H8H7");
             Assert.That(result.Succeeded, Is.False);
             Assert.That(result.Message, Is.Not.Empty);
@@ -155,14 +154,14 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "........" +
                                      "....K...";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
             var result = board.Move("B7B8");
             Assert.That(result.Succeeded, Is.True);
-            Assert.That(board.GameState, Is.EqualTo(Chess.GameState.CheckMateWhiteWins));
+            Assert.That(board.GameState, Is.EqualTo(GameState.CheckMateWhiteWins));
         }
 
         [Test]
-        public void bugfix1()
+        public void Bugfix1()
         {
             const string asOneChar = "r...k..r" +
                                      ".ppb.ppp" +
@@ -173,11 +172,11 @@ namespace CSharpChess.UnitTests.BoardMovement
                                      "PP....PP" +
                                      "R...KB.R";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
             var result = board.Move("E1-C1");
             Assert.That(result.Succeeded, Is.True, board.ToAsciiBoard());
-            Assert.That(board["C1"].Piece.Is(Chess.Colours.White, Chess.PieceNames.King), board.ToAsciiBoard());
-            Assert.That(board["D1"].Piece.Is(Chess.Colours.White, Chess.PieceNames.Rook), board.ToAsciiBoard());
+            Assert.That(board["C1"].Piece.Is(Colours.White, PieceNames.King), board.ToAsciiBoard());
+            Assert.That(board["D1"].Piece.Is(Colours.White, PieceNames.Rook), board.ToAsciiBoard());
             Assert.That(board.IsEmptyAt("A1"), board.ToAsciiBoard());
             Console.WriteLine(board.ToAsciiBoard());
         }

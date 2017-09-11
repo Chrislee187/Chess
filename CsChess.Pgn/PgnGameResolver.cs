@@ -8,10 +8,10 @@ namespace CsChess.Pgn
     {
         private PgnGame _pgnGame;
 
-        public ChessBoard Resolve(PgnGame pgnGame)
+        public Board Resolve(PgnGame pgnGame)
         {
             _pgnGame = pgnGame;
-            var board = new ChessBoard();
+            var board = new Board();
 
             foreach (var pgnTurnQuery in pgnGame.TurnQueries)
             {
@@ -22,7 +22,7 @@ namespace CsChess.Pgn
             return board;
         }
 
-        private void ResolveMove(ChessBoard board, PgnQuery pgnQuery)
+        private void ResolveMove(Board board, PgnQuery pgnQuery)
         {
             try
             {

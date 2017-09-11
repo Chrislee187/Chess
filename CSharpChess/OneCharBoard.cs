@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+using CSharpChess.Extensions;
 
 namespace CSharpChess
 {
@@ -10,18 +9,18 @@ namespace CSharpChess
     {
         public IEnumerable<string> Ranks { get; }
 
-        public static Chess.Colours PieceColour(char p)
+        public static Colours PieceColour(char p)
         {
-            if(p =='.' || p ==' ') return Chess.Colours.None;
+            if(p =='.' || p ==' ') return Colours.None;
 
             return char.IsLower(p)
-                ? Chess.Colours.Black
-                : Chess.Colours.White;
+                ? Colours.Black
+                : Colours.White;
         }
 
-        public static Chess.PieceNames PieceName(char p)
+        public static PieceNames PieceName(char p)
         {
-            if(p =='.' || p ==' ') return Chess.PieceNames.Blank;
+            if(p =='.' || p ==' ') return PieceNames.Blank;
 
             var valid = OneCharPieceNames.Where(c => char.ToUpper(p) == c.Value).ToList();
             if (valid.None())
@@ -35,13 +34,13 @@ namespace CSharpChess
         public static char ToChar(ChessPiece chessPiece)
         {
             var c = OneCharPieceNames[chessPiece.Name].ToString();
-            if (chessPiece.Colour == Chess.Colours.Black) c = c.ToLower();
+            if (chessPiece.Colour == Colours.Black) c = c.ToLower();
             return c[0];
         }
 
         public static ChessPiece ToChessPiece(char c) => new ChessPiece(PieceColour(c), PieceName(c));
 
-        public OneCharBoard(ChessBoard board)
+        public OneCharBoard(Board board)
         {
             var ranks = new string[8];
             var id = 1;
@@ -53,15 +52,15 @@ namespace CSharpChess
             Ranks = ranks;
         }
 
-        private static readonly Dictionary<Chess.PieceNames, char> OneCharPieceNames = new Dictionary<Chess.PieceNames, char>
+        private static readonly Dictionary<PieceNames, char> OneCharPieceNames = new Dictionary<PieceNames, char>
         {
-            {Chess.PieceNames.Blank, '.' },
-            {Chess.PieceNames.Rook, 'R' },
-            {Chess.PieceNames.Knight, 'N' },
-            {Chess.PieceNames.Bishop, 'B' },
-            {Chess.PieceNames.Queen, 'Q' },
-            {Chess.PieceNames.King, 'K' },
-            {Chess.PieceNames.Pawn, 'P' }
+            {PieceNames.Blank, '.' },
+            {PieceNames.Rook, 'R' },
+            {PieceNames.Knight, 'N' },
+            {PieceNames.Bishop, 'B' },
+            {PieceNames.Queen, 'Q' },
+            {PieceNames.King, 'K' },
+            {PieceNames.Pawn, 'P' }
         };
     }
 }

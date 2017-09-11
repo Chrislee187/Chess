@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using CSharpChess;
+using CSharpChess.Extensions;
+using CSharpChess.Movement;
 using CSharpChess.System;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
-using static CSharpChess.Chess;
+using Board = CSharpChess.Board;
 
 
 namespace CsChess.Pgn
@@ -77,15 +77,15 @@ namespace CsChess.Pgn
             GameOver = true;
         }
 
-        public void ResolveQuery(ChessBoard chessBoard)
+        public void ResolveQuery(Board board)
         {
-            var bl = FindPieceThatCanMoveTo(chessBoard, _turn, Piece.Name, BoardLocation.At(ToFile, ToRank));
+            var bl = FindPieceThatCanMoveTo(board, _turn, Piece.Name, BoardLocation.At(ToFile, ToRank));
 
             FromFile = bl.File;
             FromRank = bl.Rank;
         }
 
-        private BoardLocation FindPieceThatCanMoveTo(ChessBoard board, Colours turn, PieceNames pieceName, BoardLocation move)
+        private BoardLocation FindPieceThatCanMoveTo(Board board, Colours turn, PieceNames pieceName, BoardLocation move)
         {
             var boardPiecesQuery = board.Pieces.Where(p => p.Piece.Is(turn, pieceName));
 
@@ -107,7 +107,7 @@ namespace CsChess.Pgn
                 throw new Exception($"No {turn} {pieceName} found that can move to {move}");
             }
 
-            var piece = boardPieces.First();
+            BoardPiece piece;
 
             if (boardPieces.Count() > 1)
             {
@@ -124,16 +124,16 @@ namespace CsChess.Pgn
 
                 if (boardPieces.Count() != 1)
                 {
-                    throw new PgnException($"Ambigous move {move}; possibles pieces; {boardPieces.ToStrings()}");
+                    throw new PgnException();
                 }
-
-                piece = boardPieces.First();
             }
+
+            piece = boardPieces.First();
 
             if (piece == null)
             {
 //                Console.WriteLine(board.ToAsciiBoard());
-                throw new PgnException($"No {pieceName} that can {MoveType} to {move} found");
+                throw new PgnException();
             }
 
             return piece.Location;
@@ -145,11 +145,11 @@ namespace CsChess.Pgn
             return $"{_turn} {CreateMove()}";
         }
 
-        private ChessMove CreateMove()
+        private Move CreateMove()
         {
             var from = new BoardLocation(FromFile, FromRank);
             var to = new BoardLocation(ToFile, ToRank);
-            var move = new ChessMove(from, to, MoveType,PromotionPiece);
+            var move = new Move(from, to, MoveType,PromotionPiece);
             return move;
         }
 
@@ -157,14 +157,14 @@ namespace CsChess.Pgn
         {
             PromotionPiece = GetPromotionPiece(promotionPiece.ToString());
         }
-        private static Chess.PieceNames GetPromotionPiece(string piece)
+        private static PieceNames GetPromotionPiece(string piece)
         {
             switch (piece.ToUpper())
             {
-                case "R": return Chess.PieceNames.Rook;
-                case "B": return Chess.PieceNames.Bishop;
-                case "N": return Chess.PieceNames.Knight;
-                case "Q": return Chess.PieceNames.Queen;
+                case "R": return PieceNames.Rook;
+                case "B": return PieceNames.Bishop;
+                case "N": return PieceNames.Knight;
+                case "Q": return PieceNames.Queen;
             }
 
             throw new ArgumentException($"'{piece}' is not a valid promotion", nameof(piece));
@@ -178,7 +178,7 @@ namespace CsChess.Pgn
 
     internal class PgnException : Exception
     {
-        public PgnException(string s)
+        public PgnException()
         {
             
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpChess.TheBoard;
 
 namespace CSharpChess.UnitTests.Helpers
 {
@@ -54,7 +53,7 @@ namespace CSharpChess.UnitTests.Helpers
             return trimmed;
         }
 
-        private static int RankAndFileToOneCharIndex(Chess.ChessFile file, int rank)
+        private static int RankAndFileToOneCharIndex(ChessFile file, int rank)
         {
             var idx = (8 - rank)*8 + ((int) file - 1);
             return idx;

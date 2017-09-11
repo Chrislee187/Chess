@@ -40,55 +40,60 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChessBoard.cs" />
-    <Compile Include="Rules\Rules.cs" />
-    <Compile Include="System\Board.cs" />
+    <Compile Include="Board.cs" />
+    <Compile Include="ChessFile.cs" />
+    <Compile Include="Colours.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="Move.cs" />
+    <Compile Include="PieceNames.cs" />
+    <Compile Include="Movement\Rules.cs" />
     <Compile Include="System\EngineState.cs" />
     <Compile Include="System\InvalidBoardStateException.cs" />
     <Compile Include="System\LocationFactory.cs" />
-    <Compile Include="TheBoard\MoveType.cs" />
-    <Compile Include="TheBoard\Validations.cs" />
+    <Compile Include="MoveType.cs" />
+    <Compile Include="Movement\Validations.cs" />
     <Compile Include="PiecesFactory.cs" />
     <Compile Include="Helpers\SmallConsoleBoard.cs" />
     <Compile Include="RuleSet.cs" />
     <Compile Include="System\ChessGameResult.cs" />
-    <Compile Include="System\Extensions\BoardLocation.cs" />
-    <Compile Include="System\Extensions\BoardLocationExtensions.cs" />
-    <Compile Include="System\Extensions\BoardPieceExtensions.cs" />
-    <Compile Include="System\Extensions\ChessBoardExtensions.cs" />
-    <Compile Include="System\Extensions\ChessMoveListExtensions.cs" />
-    <Compile Include="System\Extensions\MoveTypeExtensions.cs" />
-    <Compile Include="System\Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\BoardLocation.cs" />
+    <Compile Include="Extensions\BoardLocationExtensions.cs" />
+    <Compile Include="Extensions\BoardPieceExtensions.cs" />
+    <Compile Include="Extensions\ChessBoardExtensions.cs" />
+    <Compile Include="Extensions\ChessMoveListExtensions.cs" />
+    <Compile Include="Extensions\MoveTypeExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="System\Metrics\TimerIds.cs" />
     <Compile Include="System\Metrics\Counters.cs" />
     <Compile Include="System\Metrics\CounterIds.cs" />
     <Compile Include="System\Metrics\Timers.cs" />
     <Compile Include="System\Metrics\Timings.cs" />
     <Compile Include="OneCharBoard.cs" />
-    <Compile Include="TheBoard\BoardPiece.cs" />
+    <Compile Include="BoardPiece.cs" />
     <Compile Include="Chess.cs" />
-    <Compile Include="TheBoard\ChessMove.cs" />
-    <Compile Include="TheBoard\ChessPiece.cs" />
-    <Compile Include="System\Extensions\EnumExtensions.cs" />
-    <Compile Include="System\Extensions\LinqExtensions.cs" />
+    <Compile Include="ChessPiece.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TheBoard\MoveHandler.cs" />
-    <Compile Include="TheBoard\MoveResult.cs" />
-    <Compile Include="MoveGeneration\BishopMoveGenerator.cs" />
-    <Compile Include="MoveGeneration\IMoveGenerator.cs" />
-    <Compile Include="MoveGeneration\KnightMoveGenerator.cs" />
-    <Compile Include="MoveGeneration\MoveFactory.cs" />
-    <Compile Include="MoveGeneration\PawnMoveGenerator.cs" />
-    <Compile Include="MoveGeneration\KingMoveGenerator.cs" />
-    <Compile Include="MoveGeneration\QueenMoveGenerator.cs" />
-    <Compile Include="MoveGeneration\RookMoveGenerator.cs" />
-    <Compile Include="MoveGeneration\StraightLineMoveGenerator.cs" />
-    <Compile Include="MoveGeneration\MoveGeneratorBase.cs" />
+    <Compile Include="Movement\MoveHandler.cs" />
+    <Compile Include="Movement\MoveResult.cs" />
+    <Compile Include="Movement\BishopMoveGenerator.cs" />
+    <Compile Include="Movement\IMoveGenerator.cs" />
+    <Compile Include="Movement\KnightMoveGenerator.cs" />
+    <Compile Include="Movement\MoveFactory.cs" />
+    <Compile Include="Movement\PawnMoveGenerator.cs" />
+    <Compile Include="Movement\KingMoveGenerator.cs" />
+    <Compile Include="Movement\QueenMoveGenerator.cs" />
+    <Compile Include="Movement\RookMoveGenerator.cs" />
+    <Compile Include="Movement\StraightLineMoveGenerator.cs" />
+    <Compile Include="Movement\MoveGeneratorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="System\Extensions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

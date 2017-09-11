@@ -1,3 +1,5 @@
+using CSharpChess.Extensions;
+
 namespace CsChess.Pgn
 {
     public class PgnDate
@@ -20,17 +22,17 @@ namespace CsChess.Pgn
 
             if (bits.Length >= 1)
             {
-                year = int.Parse(bits[0]);
+                year = bits[0].ToInt();
             }
 
             if (bits.Length >= 2)
             {
-                month = int.Parse(bits[1]);
+                month = bits[1].ToInt();
             }
 
             if (bits.Length >= 3)
             {
-                day = int.Parse(bits[2]);
+                day = bits[2].ToInt();
             }
 
             return new PgnDate(year, month, day);

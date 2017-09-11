@@ -1,7 +1,6 @@
 ﻿using System.Linq;
-using CSharpChess.Rules;
-using CSharpChess.System.Extensions;
-using CSharpChess.TheBoard;
+using CSharpChess.Extensions;
+using CSharpChess.Movement;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
@@ -18,7 +17,7 @@ namespace CSharpChess.UnitTests.Rules
             var pieceLoc = BoardLocation.At("D4");
             var enemyPieceLoc = BoardLocation.At("C3");
 
-            var result = Pawns.EnPassantRules.Check(board, ChessMove.Create(pieceLoc, enemyPieceLoc)).All(rr => rr.Passed);
+            var result = Pawns.EnPassantRules.Check(board, Move.Create(pieceLoc, enemyPieceLoc)).All(rr => rr.Passed);
 
             Assert.True(result, "EnPassantRules check failed.");
         }
@@ -31,22 +30,22 @@ namespace CSharpChess.UnitTests.Rules
             var pieceLoc = BoardLocation.At("D4");
             var enemyPieceLoc = BoardLocation.At("C3");
 
-            var result = Pawns.EnPassantRules.Check(board, ChessMove.Create(pieceLoc, enemyPieceLoc)).All(rr => rr.Passed);
+            var result = Pawns.EnPassantRules.Check(board, Move.Create(pieceLoc, enemyPieceLoc)).All(rr => rr.Passed);
 
             Assert.False(result, "EnPassantRules check failed.");
-//            Assert.That(Chess.Rules.Failures[ChessMove.Create(pieceLoc, enemyPieceLoc)]);
+//            Assert.That(Chess.Rules.Failures[Move.Create(pieceLoc, enemyPieceLoc)]);
 
         }
 
 
-        private static ChessBoard BoardWithValidEnPassantAvailableForBlack()
+        private static Board BoardWithValidEnPassantAvailableForBlack()
         {
             var board = BoardOneMoveBeforeEnPassantAvailable();
             board.Move("c2c4");
             return board;
         }
 
-        private static ChessBoard BoardOneMoveBeforeEnPassantAvailable()
+        private static Board BoardOneMoveBeforeEnPassantAvailable()
         {
             var asOneChar =
                 "rnbqkbnr" +
@@ -58,7 +57,7 @@ namespace CSharpChess.UnitTests.Rules
                 "PPPPPPPP" +
                 "RNBQKBNR";
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Chess.Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
             return board;
         }
     }
