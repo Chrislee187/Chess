@@ -42,8 +42,7 @@ namespace CSharpChess
 
         public override string ToString()
         {
-            var promotion = PromotedTo != PieceNames.Blank && PromotedTo != PieceNames.Pawn ? $"={PromotedTo.ToString().First()}" : "";
-            return $"{From}-{To}{promotion}";
+            return $"{From}-{To}{PromotedTo.ToPromotionCharacter()}";
         }
 
         #region object overrides

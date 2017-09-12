@@ -111,16 +111,13 @@ namespace CsChess.Pgn
 
             if (boardPieces.Count() > 1)
             {
-
-                boardPieces = boardPieces.Where(p => p.PossibleMoves.Any(pm => pm.MoveType == MoveType)).ToList();
-
-                if (boardPieces.Count() != 1)
-                {
-                    // Cover the case where two pieces can move to a square but one of these
-                    // pieces is actually pinned on discovered check
-                    boardPieces =
-                        boardPieces.Where(bp => bp.PossibleMoves.Any(pm => !Validations.MovesLeaveOwnSideInCheck(board, pm))).ToList();
-                }
+                // Cover the case where two pieces can move to a square but one of these
+                // pieces is actually pinned on discovered check
+                boardPieces = boardPieces
+                                .Where(bp => bp.PossibleMoves
+                                    .Where(pm => pm.To.Equals(move))
+                                .Any(pm => !Validations.MovesLeaveOwnSideInCheck(board, pm)))
+                                .ToList();
 
                 if (boardPieces.Count() != 1)
                 {
@@ -133,7 +130,7 @@ namespace CsChess.Pgn
             if (piece == null)
             {
 //                Console.WriteLine(board.ToAsciiBoard());
-                throw new PgnException();
+                throw new PgnException(board.ToAsciiBoard());
             }
 
             return piece.Location;
@@ -181,6 +178,10 @@ namespace CsChess.Pgn
         public PgnException()
         {
             
+        }
+
+        public PgnException(string message) : base(message)
+        {
         }
     }
 }

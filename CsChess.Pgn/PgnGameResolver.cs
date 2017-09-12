@@ -12,11 +12,12 @@ namespace CsChess.Pgn
         {
             _pgnGame = pgnGame;
             var board = new Board();
-
             foreach (var pgnTurnQuery in pgnGame.TurnQueries)
             {
+//                Console.WriteLine($"{board.ToAsciiBoard()}");
                 ResolveMove(board, pgnTurnQuery.White);
                 ResolveMove(board, pgnTurnQuery.Black);
+//                Console.WriteLine($"Move: { pgnTurnQuery.White} - { pgnTurnQuery.Black}");
             }
 
             return board;
@@ -38,7 +39,6 @@ namespace CsChess.Pgn
                 Console.WriteLine($"{_pgnGame.White} vs {_pgnGame.Black} - {_pgnGame.Event} Round {_pgnGame.Round}");
                 Console.WriteLine(board.ToAsciiBoard());
                 Console.WriteLine(string.Join(" ", board.Moves.Select(m=> m.ToString())));
-                Console.WriteLine(e);
                 throw;
             }
         }

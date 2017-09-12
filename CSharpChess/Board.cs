@@ -330,7 +330,7 @@ namespace CSharpChess
         /// quickly, typically on cloned boards to calculate something post-move
         /// </summary>
         /// <param name="move"></param>
-        internal void MovePiece(Move move) => MoveHandler.MovePiece(move);
+        internal void MovePiece(Move move) => MoveHandler.QuickMovePiece(move);
 
         private static void BoardCreatedCounter() => Counters.Increment(CounterIds.Board.Created);
 

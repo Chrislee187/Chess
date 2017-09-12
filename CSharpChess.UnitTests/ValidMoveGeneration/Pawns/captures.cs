@@ -24,22 +24,28 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
                 "rnbqkbnr" +
                 "pppppppp" +
                 "........" +
+                "..P....." +
                 "........" +
-                "...p...." +
                 "........" +
-                "PPPPPPPP" +
+                "PP.PPPPP" +
                 "RNBQKBNR";
 
-            var expected = BoardLocation.List("C3");
 
-            var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.Black);
 
-            var result = board.Move("c2c4");
-            Assert.That(result.Succeeded);
+            var result = board.Move("d7-d5");
 
-            var moves = _pawnMoveGenerator.All(board, BoardLocation.At("D4")).Takes();
+            var expected = BoardLocation.List("D6");
+            var moves = _pawnMoveGenerator.All(board, BoardLocation.At("C5"));
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.TakeEnPassant);
+
+            result = board.Move("c5d6");
+            Assert.That(result.Succeeded);
+
+            moves = _pawnMoveGenerator.All(board, BoardLocation.At("C7"));
+
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Take);
         }
         [Test]
         public void cannot_take_piece_one_square_in_front_of_it()
@@ -100,6 +106,27 @@ namespace CSharpChess.UnitTests.ValidMoveGeneration.Pawns
             var board = BoardBuilder.CustomBoard(asOneChar, Colours.White);
 
             var moves = _pawnMoveGenerator.All(board, BoardLocation.At("C2")).Takes();
+
+            AssertMovesContainsExpectedWithType(moves, expected, MoveType.Take);
+        }
+        [Test]
+        public void can_take_pieces_diagonally_opposite_black()
+        {
+            var asOneChar =
+                "rnbqkbnr" +
+                "pppppppp" +
+                ".P.P...." +
+                "........" +
+                "........" +
+                "........" +
+                "PPPPPPPP" +
+                "RNBQKBNR";
+
+            var expected = BoardLocation.List("B6", "D6");
+
+            var board = BoardBuilder.CustomBoard(asOneChar, Colours.Black);
+
+            var moves = _pawnMoveGenerator.All(board, BoardLocation.At("C7")).Takes();
 
             AssertMovesContainsExpectedWithType(moves, expected, MoveType.Take);
         }

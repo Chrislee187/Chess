@@ -21,7 +21,7 @@ namespace CSharpChess.Movement
 
             PreMoveActions(move);
 
-            MovePiece(move);
+            QuickMovePiece(move);
 
             var movePerformed = PostMoveActions(move, boardPiece);
 
@@ -30,12 +30,20 @@ namespace CSharpChess.Movement
             return movePerformed;
         }
 
-        internal void MovePiece(Move move)
+        internal void QuickMovePiece(Move move)
         {
             var piece = _board[move.From];
+
             _board.ClearSquare(move.From);
             piece.MoveTo(move.To, move.MoveType);
             _board[move.To] = piece;
+
+            if (move.MoveType == MoveType.TakeEnPassant)
+            {
+                var clear = new BoardLocation(move.To.File, move.From.Rank);
+                _board.ClearSquare(clear);
+            }
+
 
             RebuildMoveLists();
         }
@@ -64,6 +72,7 @@ namespace CSharpChess.Movement
             switch (move.MoveType)
             {
                 case MoveType.Take:
+                case MoveType.TakeEnPassant:
                     TakeSquare(move.To);
                     break;
                 case MoveType.Promotion:
@@ -71,7 +80,7 @@ namespace CSharpChess.Movement
                     break;
                 case MoveType.Castle:
                     var rookMove = King.CreateRookMoveForCastling(move);
-                    MovePiece(rookMove);
+                    QuickMovePiece(rookMove);
                     break;
             }
         }

@@ -152,7 +152,7 @@ namespace CSharpChess.Movement
                     (board, move) => move.From.Rank == EnpassantFromRankFor(board[move.From].Piece.Colour))
                 .Add("enemy-pawn-exists-for-enpassant", DestinationIsEnemyPawn)
                 .Add("enemy-pawn-has-only-one-move-in-history", PawnBeingTakeWithEnpassantHasCorrectMoveHistory)
-                .Add("friendly-pawn-destination-is-empty", (board, move) => board.IsEmptyAt(move.To))
+//                .Add("friendly-pawn-destination-is-empty", (board, move) => board.IsEmptyAt(move.To))
             ;
 
         public static bool DestinationIsEnemyPawn(CSharpChess.Board board, Move move)

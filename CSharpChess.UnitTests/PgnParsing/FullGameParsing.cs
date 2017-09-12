@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -32,22 +34,31 @@ hxg5 29. b3 Ke6 30. a3 Kd6 31. axb4 cxb4 32. Ra5 Nd5 33. f3 Bc8 34. Kf2 Bf5
 Nf2 42. g4 Bd3 43. Re6 1/2-1/2
 ";
 
-        private const string TestGame = @"        [Event ""Hastings8283""]
-        [Site ""Hastings""]
-        [Date ""1982.??.??""]
-        [Round ""?""]
-        [White ""Plaskett, Jim""]
-        [Black ""Short, Nigel D""]
-        [Result ""1-0""]
-        [WhiteElo ""2430""]
-        [BlackElo ""2485""]
-        [ECO ""E11""]
+        private const string TestGame = @"[Event ""Candidats sf1""]
+[Site ""Linares""]
+[Date ""1992.??.??""]
+[Round ""3""]
+[White ""Karpov, Anatoly""]
+[Black ""Short, Nigel D""]
+[Result ""1/2-1/2""]
+[WhiteElo ""2725""]
+[BlackElo ""2685""]
+[ECO ""D20""]
 
-        1.d4 Nf6 2.c4 e6 3.Nf3 Bb4+ 4.Bd2 a5 5.g3 Nc6 6.Bg2 d5 7.a3 Bxd2+ 8.Nbxd2 O-O
-        9.O-O Qe7 10.Qc2 Rd8 11.Rad1 e5 12.dxe5 Nxe5 13.Nxe5 Qxe5 14.Nf3 Bf5 15.Qb3 Qxe2
-        16.Nd4 Qh5 17.Nxf5 Qxf5 18.Qxb7 Qc2 19.Rc1 Qd2 20.cxd5 Rab8 21.Qxc7 Nxd5
-        22.Qc5 Nf6 23.Rc2 Qd3 24.Rc3 Qa6 25.b3 h6 26.Rfc1 Rd2 27.h3 Rb2 28.Qf5 g6
-        29.Qf4 R8xb3 30.Rc6 Nh5 31.Qxh6  1-0";
+1.d4 d5 2.c4 dxc4 3.e4 Nf6 4.e5 Nd5 5.Bxc4 Nb6 6.Bd3 Nc6 7.Be3 Nb4 8.Be4 f5
+9.exf6 exf6 10.Nc3 f5 11.Bf3 N4d5 12.Bd2 Be6 13.Nge2 Qd7 14.O-O O-O-O 15.Re1 Rg8
+16.Bg5 Re8 17.Nf4 Nxf4 18.Bxf4 g5 19.Be5 Bg7 20.Rc1 Bxe5 21.dxe5 Qxd1 22.Bxd1 a6
+23.g3 Re7 24.b3 Rd7 25.f3 Nd5 26.Na4 b6 27.Be2 Kb7 28.Bc4 c5 29.Kf2 Rgd8
+30.Re2 Nc7 31.Rcc2 Kc6 32.Nb2 b5 33.Bxe6 Nxe6 34.Rc1 Rd4 35.Ke1 R4d5 36.Kf2 Nd4
+37.Re3 f4 38.gxf4 gxf4 39.Re4 Ne6 40.Rc2 Rd2+ 41.Re2 Rxc2 42.Rxc2 Rd4 43.Re2 Kd5
+44.Kg2 h5 45.Kf1 h4 46.Kg2 Ng5 47.Kf2 h3 48.Rc2 Ne6 49.Ke2 Kxe5 50.Nd3+ Kd6
+51.Nf2 Rd5 52.Rc3 Kc6 53.Nxh3 Rh5 54.Nf2 Rxh2 55.Kf1 Kd5 56.Rd3+ Nd4 57.Kg1 Rh6
+58.Ne4 c4 59.bxc4+ bxc4 60.Rd1 Rc6 61.Nc3+ Ke5 62.Kf1 Rh6 63.Re1+ Kf5 64.Re8 Nxf3
+65.Ne2 Nh2+ 66.Kg1 f3 67.Rf8+ Ke5 68.Ng3 Rh7 69.Kf2 c3 70.Rc8 Kd4 71.Rd8+ Kc4
+72.Nf5 Rc7 73.Ne3+ Kb5 74.Rd1 Ka4 75.Rc1 Rd7 76.Rxc3 Rd2+ 77.Kg3 f2 78.Rc4+ Ka3
+79.Rf4 f1=N+ 80.Nxf1 Nxf1+ 81.Rxf1 a5 82.Rf5 a4 83.Rf4 Rxa2 84.Rf3+ Kb4 85.Rf4+ Kc3
+86.Rf3+ Kd4 87.Rf4+ Ke5 88.Rb4 a3 89.Rb3 Ke4 90.Kh3 Kd4 91.Rg3 Ra1 92.Kh2 Ke4
+93.Rb3 a2 94.Ra3  1/2-1/2";
 
 #endregion
 
@@ -98,6 +109,9 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
 
                 while (game != null)
                 {
+
+                    Console.WriteLine($"Game index: {++count}");
+//                    if (count < 1037) continue;
                     PlayGame(game);
 
                     game = reader.ReadGame();
@@ -107,13 +121,32 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
             }
             Assert.That(count, Is.GreaterThan(1));
             Console.WriteLine(count);
-
+            DumpMetrics();
         }
 
-        [Test]
+        [Test, Explicit]
         public void can_play_test_game()
         {
             PlayGame(TestGame);
+            DumpMetrics();
+        }
+
+        private void DumpMetrics()
+        {
+            if (_gameTimes.Any())
+            {
+                var minMs = _gameTimes.Values.Min();
+                var maxMs = _gameTimes.Values.Max();
+
+                var fastest = _gameTimes.First(kvp => kvp.Value == minMs);
+                var slowest = _gameTimes.First(kvp => kvp.Value == maxMs);
+                var averageMs = _gameTimes.Average(kvp => kvp.Value);
+
+                Console.WriteLine($"Slowest: {maxMs:######} : {slowest}");
+                Console.WriteLine($"Fastest: {minMs:######} : {fastest}");
+                Console.WriteLine($"Average: {averageMs:######}");
+                _gameTimes.Clear();
+            }
         }
 
 
@@ -135,6 +168,7 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
             }
         }
 
+        private IDictionary<string, long> _gameTimes = new ConcurrentDictionary<string, long>();
         private void PlayGame(string game)
         {
 
@@ -153,7 +187,9 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
                 Assert.That(pgnGame.Result, Is.EqualTo(result), pgnGame + "\n" + game);
             }
 
-            Console.WriteLine($"  Game took {sw.ElapsedMilliseconds}ms");
+            var key = pgnGame.ToString() + Guid.NewGuid();
+            _gameTimes.Add(key, sw.ElapsedMilliseconds);
+            Console.WriteLine($"  Game took {_gameTimes[key]}ms");
         }
 
         [Test]
