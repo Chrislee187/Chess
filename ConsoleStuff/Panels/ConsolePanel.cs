@@ -19,9 +19,6 @@ namespace ConsoleStuff.Panels
 
         private readonly TextWriter _out = Console.Out;
 
-        protected ConsolePanel()
-        {
-        }
         public ConsolePanel(int width, int height)
         {
             _out = Console.Out;
@@ -32,11 +29,14 @@ namespace ConsoleStuff.Panels
 
         public ConsolePanel PrintAt(int x, int y, char c, ConsoleCellColour colour = null)
         {
-            CheckXY(x, y);
-            _cells[x - 1, y - 1] = c;
-            if (colour != null)
+//            CheckXY(x, y);
+            if (x-1 <= _cells.GetUpperBound(0) && y-1 <= _cells.GetUpperBound(1))
             {
-                _consoleCellColours[x - 1, y - 1] = colour;
+                _cells[x-1, y-1] = c;
+                if (colour != null)
+                {
+                    _consoleCellColours[x-1, y-1] = colour;
+                }
             }
             return this;
         }
@@ -59,7 +59,7 @@ namespace ConsoleStuff.Panels
 
         public ConsolePanel PrintAt(int x, int y, ConsolePanel panel, ConsoleCellColour colour = null)
         {
-            for (var panelY = 0; panelY < panel.Height; panelY++)
+            for (var panelY = 0; panelY < panel.Height ; panelY++)
             {
                 for (var panelX = 0; panelX < panel.Width; panelX++)
                 {

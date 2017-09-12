@@ -54,14 +54,7 @@ namespace CsChess
                     }
                     else if (!commandMenu.Execute(cmd))
                     {
-                        try
-                        {
-                            moveResult = board.Move(cmd);
-                        }
-                        catch (Exception e)
-                        {
-                            moveResult = InvalidMoveOrCommand(cmd, e);
-                        }
+                        moveResult = board.Move(cmd);
                     }
                 }
                 catch (Exception e)
@@ -108,6 +101,9 @@ namespace CsChess
                 return "quit";
             }
             Console.Write($"{board.WhoseTurn} to play: ");
+
+            // TODO: Hook here to supply a player
+
             var cmd = Console.ReadLine();
             return cmd;
         }
@@ -144,7 +140,7 @@ namespace CsChess
         {
             var y = 1;
             var x = (ScreenWidth - boardPanelWidth + 2) / 3;
-            screen.PrintAt(boardPanelWidth +2 + x, y, "---=== CsChess V0.1 ===---");
+            screen.PrintAt(boardPanelWidth +2 + x, y, "---===>>> CsChess V0.1 <<<===---");
             return y;
         }
 

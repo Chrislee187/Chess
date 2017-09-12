@@ -6,9 +6,8 @@ namespace ConsoleStuff.Panels
     {
 
         public BorderedPanel(int width, int height, char vertex = '+', char hedge ='-', char vedge = '|')
+            : base(width, height)
         {
-            Width = width;
-            Height = height;
             var outerRow = $"{vertex}{hedge.ToString().Repeat(width - 2)}{vertex}";
             var innerRow = $"{vedge}{" ".Repeat(width - 2)}{vedge}";
 
