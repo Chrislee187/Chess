@@ -87,21 +87,19 @@ namespace CSharpChess.Movement
         {
             if (toLoc.File == ChessFile.C)
             {
-                return new List<BoardLocation>
+                return new[]
                     {
                         BoardLocation.At(ChessFile.B, toLoc.Rank),
                         BoardLocation.At(ChessFile.C, toLoc.Rank),
                         BoardLocation.At(ChessFile.D, toLoc.Rank),
                     };
             }
-            else
+
+            return new[]
             {
-                return new List<BoardLocation>
-                    {
-                        BoardLocation.At(ChessFile.F, toLoc.Rank),
-                        BoardLocation.At(ChessFile.G, toLoc.Rank),
-                    };
-            }
+                BoardLocation.At(ChessFile.F, toLoc.Rank),
+                BoardLocation.At(ChessFile.G, toLoc.Rank),
+            };
 
             //                    return Enumerable.Range(fromFile, toFile - fromFile + 1).Select(v => BoardLocation.At(v, fromLoc.Rank));
         }
@@ -116,14 +114,12 @@ namespace CSharpChess.Movement
                         BoardLocation.At(ChessFile.C, toLoc.Rank)
                     };
             }
-            else
+
+            return new List<BoardLocation>
             {
-                return new List<BoardLocation>
-                    {
-                        BoardLocation.At(ChessFile.F, toLoc.Rank),
-                        BoardLocation.At(ChessFile.G, toLoc.Rank),
-                    };
-            }
+                BoardLocation.At(ChessFile.F, toLoc.Rank),
+                BoardLocation.At(ChessFile.G, toLoc.Rank),
+            };
 
             //                    return Enumerable.Range(fromFile, toFile - fromFile + 1).Select(v => BoardLocation.At(v, fromLoc.Rank));
         }

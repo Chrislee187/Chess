@@ -103,6 +103,7 @@ namespace CSharpChess.Movement
             var directions = new[] { Board.DirectionModifiers.LeftDirectionModifier, Board.DirectionModifiers.RightDirectionModifier };
 
             var positions = new List<BoardLocation>();
+
             foreach (var direction in directions)
             {
                 BoardLocation loc;

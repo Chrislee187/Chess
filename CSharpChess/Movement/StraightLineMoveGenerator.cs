@@ -1,5 +1,7 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using CSharpChess.Extensions;
 using CSharpChess.System;
 
@@ -23,8 +25,13 @@ namespace CSharpChess.Movement
         protected override IEnumerable<Move> ValidTakes(CSharpChess.Board board, BoardLocation at)
             => GenerateAll(board, at).Takes();
 
+
+        private readonly IDictionary<string, IEnumerable<Move>> _allCache = new ConcurrentDictionary<string, IEnumerable<Move>>();
         private IEnumerable<Move> GenerateAll(CSharpChess.Board board, BoardLocation at)
         {
+            var key = board.ToAsciiBoard() + at;
+            if (_allCache.ContainsKey(key)) return _allCache[key];
+
             var result = new List<Move>();
             var directions = _directions;
             var piece = board[at].Piece;
@@ -47,7 +54,7 @@ namespace CSharpChess.Movement
                     result.Add(new Move(at, next, moveType));
                 }
             }
-
+            _allCache.Add(key, result);
             return result;
         }
     }

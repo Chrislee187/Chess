@@ -195,23 +195,23 @@ namespace CSharpChess
         public BoardPiece this[int file, int rank]
         {
             get { return GetPiece((ChessFile)file, rank); }
-            internal set { _boardPieces[file, rank] = value; }
+            set { _boardPieces[file, rank] = value; }
         }
         public BoardPiece this[ChessFile file, int rank]
         {
             get { return this[(int)file, rank]; }
-            internal set { this[(int)file, rank] = value; }
+            set { this[(int)file, rank] = value; }
         }
         public BoardPiece this[BoardLocation location]
         {
             get { return this[location.File, location.Rank]; }
-            internal set { this[location.File, location.Rank] = value; }
+            set { this[location.File, location.Rank] = value; }
         }
         public BoardPiece this[string location]
         {
             get { return this[(BoardLocation)location]; }
             // ReSharper disable once UnusedMember.Local
-            internal set { this[(BoardLocation)location] = value; }
+            set { this[(BoardLocation)location] = value; }
         }
         private BoardPiece GetPiece(ChessFile file, int rank)
         {

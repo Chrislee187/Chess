@@ -13,19 +13,22 @@ namespace CSharpChess.Movement
         public static bool IsValidLocation(int file, int rank) => !InvalidFile(file) && !InvalidRank(rank);
         public static bool IsValidLocation(BoardLocation boardLocation) => IsValidLocation((int)boardLocation.File, boardLocation.Rank);
 
-        public static bool InvalidRank(int rank) => !Chess.Ranks.Contains(rank);
         public static bool InvalidFile(ChessFile file) => InvalidFile((int)file);
-        public static bool InvalidFile(int file) => Chess.Files.All(f => (int)f != file);
+
+        public static bool InvalidRank(int rank) => rank < 1 || rank > 8;   
+        public static bool InvalidFile(int file) => file < 1 || file > 8;
 
         public static void ThrowInvalidRank(int rank)
         {
             if (InvalidRank(rank)) throw new ArgumentOutOfRangeException(nameof(rank), rank, "Invalid Rank");
         }
+
         public static void ThrowInvalidFile(int file)
         {
             if (InvalidFile(file))
                 throw new ArgumentOutOfRangeException(nameof(file), file, "Invalid File");
         }
+
         public static void ThrowInvalidFile(ChessFile file) => ThrowInvalidFile((int)file);
 
         public static bool IsEmptyAt(CSharpChess.Board board, BoardLocation location)

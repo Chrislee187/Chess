@@ -110,7 +110,7 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
                 while (game != null)
                 {
 
-                    Console.WriteLine($"Game index: {++count}");
+//                    Console.WriteLine($"Game index: {++count}");
 //                    if (count < 1037) continue;
                     PlayGame(game);
 
@@ -131,6 +131,16 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
             DumpMetrics();
         }
 
+        [Test, Explicit]
+        public void perf_test()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                PlayGame(TestGame);
+            }
+            DumpMetrics();
+        }
+
         private void DumpMetrics()
         {
             if (_gameTimes.Any())
@@ -144,6 +154,7 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
 
                 Console.WriteLine($"Slowest: {maxMs:######} : {slowest}");
                 Console.WriteLine($"Fastest: {minMs:######} : {fastest}");
+                Console.WriteLine($"Total  :  {TimeSpan.FromMilliseconds(_gameTimes.Sum(kvp => kvp.Value))}");
                 Console.WriteLine($"Average: {averageMs:######}");
                 _gameTimes.Clear();
             }
