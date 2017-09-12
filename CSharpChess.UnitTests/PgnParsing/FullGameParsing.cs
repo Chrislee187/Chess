@@ -119,7 +119,6 @@ Nf2 42. g4 Bd3 43. Re6 1/2-1/2
                     Console.Out.FlushAsync();
                 }
             }
-            Assert.That(count, Is.GreaterThan(1));
             Console.WriteLine(count);
             DumpMetrics();
         }
