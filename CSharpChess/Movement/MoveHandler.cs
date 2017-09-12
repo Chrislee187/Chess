@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using CSharpChess.Extensions;
 using CSharpChess.System.Metrics;
 
@@ -51,12 +53,17 @@ namespace CSharpChess.Movement
         private void RebuildMoveLists()
         {
             Counters.Increment(CounterIds.Board.MovelistRebuildAll);
+
             Timers.Time(TimerIds.Board.RebuildMoveList, () =>
             {
+                var tasks = new List<Task>();
                 foreach (var boardPiece in _board.Pieces)
                 {
-                    RebuildMoveListFor(boardPiece);
+                    tasks.Add(Task.Run(() => {
+                        RebuildMoveListFor(boardPiece);
+                    }));
                 }
+                Task.WaitAll(tasks.ToArray());
             });
         }
 

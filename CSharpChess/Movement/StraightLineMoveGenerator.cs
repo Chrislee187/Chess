@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using CSharpChess.Extensions;
 using CSharpChess.System;
 
@@ -26,15 +27,16 @@ namespace CSharpChess.Movement
             => GenerateAll(board, at).Takes();
 
 
-        private readonly IDictionary<string, IEnumerable<Move>> _allCache = new ConcurrentDictionary<string, IEnumerable<Move>>();
+        private readonly IDictionary<BoardPiece[,], IEnumerable<Move>> _allCache = new ConcurrentDictionary<BoardPiece[,], IEnumerable<Move>>();
         private IEnumerable<Move> GenerateAll(CSharpChess.Board board, BoardLocation at)
         {
-            var key = board.ToAsciiBoard() + at;
+            var key = board.BoardPieces;
             if (_allCache.ContainsKey(key)) return _allCache[key];
 
             var result = new List<Move>();
             var directions = _directions;
             var piece = board[at].Piece;
+
             foreach (var direction in directions)
             {
                 var locations = LocationFactory.ApplyWhile(at, direction, board.IsEmptyAt).ToList();
@@ -54,6 +56,7 @@ namespace CSharpChess.Movement
                     result.Add(new Move(at, next, moveType));
                 }
             }
+
             _allCache.Add(key, result);
             return result;
         }
