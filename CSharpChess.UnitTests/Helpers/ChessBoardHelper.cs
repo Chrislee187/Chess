@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CsChess;
+using CSharpChess.System;
 
 namespace CSharpChess.UnitTests.Helpers
 {
@@ -21,9 +23,9 @@ namespace CSharpChess.UnitTests.Helpers
             var validChars = AssertValidRepresentation(asOneChar);
 
             var pieces = new List<BoardPiece>();
-            foreach (var rank in Chess.Ranks)
+            foreach (var rank in Info.Ranks)
             {
-                foreach (var file in Chess.Files)
+                foreach (var file in Info.Files)
                 {
                     var oneCharPiece = validChars[RankAndFileToOneCharIndex(file, rank)];
                     var colour = OneCharBoard.PieceColour(oneCharPiece);

@@ -1,4 +1,5 @@
-﻿using CSharpChess.UnitTests.Helpers;
+﻿using CSharpChess.System;
+using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.BoardMovement

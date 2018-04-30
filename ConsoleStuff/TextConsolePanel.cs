@@ -7,11 +7,12 @@ namespace ConsoleStuff
 {
     public class TextConsolePanel : ConsolePanel
     {
-        public TextConsolePanel(string text) : this(text, text.Length, null)
+        private const int LengthOfLongestLine = -1;
+        public TextConsolePanel(string text) : this(text, LengthOfLongestLine, null)
         { }
         public TextConsolePanel(string text, int width) : this(text, width, null)
         { }
-        public TextConsolePanel(string text, ConsoleCellColour errorTextColour) : this(text, -1, errorTextColour)
+        public TextConsolePanel(string text, ConsoleCellColour errorTextColour) : this(text, LengthOfLongestLine, errorTextColour)
         { }
 
         public TextConsolePanel(string text, int width, ConsoleCellColour errorTextColour = null) : base(text.Length, 1)
@@ -19,7 +20,7 @@ namespace ConsoleStuff
             var lines = text.ToLines(StringSplitOptions.RemoveEmptyEntries).ToList();
 
             Height = lines.Count();
-            Width = width == -1 
+            Width = width <= 0
                 ? lines.Max(x => x.Length) 
                 : width;
 

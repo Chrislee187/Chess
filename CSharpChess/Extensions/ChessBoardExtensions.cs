@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Movement;
+using CSharpChess.System;
 
 namespace CSharpChess.Extensions
 {
@@ -13,10 +14,10 @@ namespace CSharpChess.Extensions
         }
         public static IEnumerable<IEnumerable<BoardPiece>> Ranks(this Board board)
         {
-            foreach (var rank in Chess.Ranks)
+            foreach (var rank in Info.Ranks)
             {
                 var list = new List<BoardPiece>();
-                foreach (var chessFile in Chess.Files)
+                foreach (var chessFile in Info.Files)
                 {
                     list.Add(board[BoardLocation.At(chessFile, rank)]);
                 }
@@ -25,10 +26,10 @@ namespace CSharpChess.Extensions
         }
         public static IEnumerable<IEnumerable<BoardPiece>> Files(this Board board)
         {
-            foreach (var chessFile in Chess.Files)
+            foreach (var chessFile in Info.Files)
             {
                 var list = new List<BoardPiece>();
-                foreach (var rank in Chess.Ranks)
+                foreach (var rank in Info.Ranks)
                 {
                     list.Add(board[BoardLocation.At(chessFile, rank)]);
                 }
@@ -59,7 +60,7 @@ namespace CSharpChess.Extensions
 
         public static bool CanTakeAt(this Board board, BoardLocation takeLocation, Colours attackerColour)
             => IsNotEmptyAt(board, takeLocation)
-               && board[takeLocation].Piece.Is(Chess.ColourOfEnemy(attackerColour));
+               && board[takeLocation].Piece.Is(Info.ColourOfEnemy(attackerColour));
 
         public static bool IsCoveringAt(this Board board, BoardLocation coverLocation, Colours attackerColour)
             => IsNotEmptyAt(board, coverLocation)

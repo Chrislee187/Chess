@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Extensions;
+using CSharpChess.System;
 
 namespace CSharpChess.Helpers
 {
@@ -14,9 +15,9 @@ namespace CSharpChess.Helpers
         {
             var consoleBoard = CreateConsoleBoard(board);
 
-            foreach (var rank in Chess.Ranks.Reverse())
+            foreach (var rank in Info.Ranks.Reverse())
             {
-                foreach (var file in Chess.Files)
+                foreach (var file in Info.Files)
                 {
                     consoleBoard[BoardLocation.At((int) file, rank)]();
                 }

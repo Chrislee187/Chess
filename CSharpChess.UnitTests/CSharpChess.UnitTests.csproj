@@ -49,6 +49,9 @@
     <Compile Include="BoardMovement\rooks.cs" />
     <Compile Include="BoardMovement\knights.cs" />
     <Compile Include="BoardMovement\bishops.cs" />
+    <Compile Include="PgnParsing\PgnGamePlayerTests.cs" />
+    <Compile Include="PgnParsing\PerfTests.cs" />
+    <Compile Include="PgnParsing\PgnTestGames.cs" />
     <Compile Include="PgnParsing\PgnTurnParserTests.cs" />
     <Compile Include="PgnParsing\FullGameParsing.cs" />
     <Compile Include="PgnParsing\Moves.cs" />
@@ -62,7 +65,6 @@
     <Compile Include="BoardBuilderTests\default_boards.cs" />
     <Compile Include="Helpers\ChessBoardHelper.cs" />
     <Compile Include="BoardMovement\pawns.cs" />
-    <Compile Include="Helpers\MediumConsoleBoard.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\covers.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\from_starting_position.cs" />
     <Compile Include="ValidMoveGeneration\Bishops\captures.cs" />
@@ -94,10 +96,16 @@
     <None Include="has-piece-blocking-check.pgn">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Modern.pgn">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <Content Include="Short.pgn">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Spassky.pgn">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ConsoleStuff.Tests\ConsoleStuff.Tests.csproj">
@@ -111,6 +119,10 @@
     <ProjectReference Include="..\CsChess.Pgn\CsChess.Pgn.csproj">
       <Project>{ae84e994-4a9c-4cc5-bdba-dad50c911071}</Project>
       <Name>CsChess.Pgn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CsChess\CsChess.csproj">
+      <Project>{848919A1-F3FE-4924-B572-710249EADED6}</Project>
+      <Name>CsChess</Name>
     </ProjectReference>
     <ProjectReference Include="..\CSharpChess\CSharpChess.csproj">
       <Project>{D49A0857-6DD8-4777-A297-56325CE9C7F6}</Project>

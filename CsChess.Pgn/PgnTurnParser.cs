@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess;
+using CSharpChess.System;
 
 namespace CsChess.Pgn
 {
@@ -117,7 +118,8 @@ namespace CsChess.Pgn
         {
             return token == "1/2-1/2"
                 || token == "1-0"
-                || token == "0-1";
+                || token == "0-1"
+                || token == "*";
         }
 
         // ReSharper disable once UnusedParameter.Local

@@ -1,4 +1,6 @@
-﻿namespace CSharpChess.UnitTests.Helpers
+﻿using CSharpChess.System;
+
+namespace CSharpChess.UnitTests.Helpers
 {
     public static class BoardBuilder
     {

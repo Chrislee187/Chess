@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CsChess.Pgn;
 using CSharpChess.Extensions;
+using CSharpChess.System;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.PgnParsing

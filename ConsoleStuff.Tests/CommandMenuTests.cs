@@ -1,5 +1,5 @@
 ﻿using System;
-using ConsoleStuff.Tests.Commands;
+using ConsoleStuff.Commands;
 using NUnit.Framework;
 // ReSharper disable ObjectCreationAsStatement
 

@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using CSharpChess.Movement;
+using CSharpChess.System;
+using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.TheBoard
 {

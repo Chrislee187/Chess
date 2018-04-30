@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using CSharpChess.Extensions;
 using CSharpChess.Movement;
+using CSharpChess.System;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 

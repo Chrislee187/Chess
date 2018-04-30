@@ -1,5 +1,7 @@
 ﻿// ReSharper disable MemberCanBePrivate.Global
 
+using CSharpChess.System;
+
 namespace CSharpChess
 {
     public class ChessPiece

@@ -36,10 +36,9 @@ namespace CsChess.Pgn
             var trimmed = gameText.Trim();
 
             var linesTrimmed = new Regex("^ +", RegexOptions.Multiline).Replace(trimmed, "");
-//            var newlinesConverted = new Regex("[\r\n|\n]", RegexOptions.None).Replace(linesTrimmed, Environment.NewLine);
 
             var chunks = linesTrimmed.Split(new [] { $"{Environment.NewLine}{Environment.NewLine}"}, StringSplitOptions.RemoveEmptyEntries);
-//            var chunks = new Regex("([\r\n]{2,}|[\n]{2,}|[\r\n\r]|[\r\r\n])").Split(linesTrimmed);
+
             var stk = new Stack<string>(chunks);
 
             if (stk.Count() % 2 != 0)

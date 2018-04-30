@@ -1,8 +1,7 @@
 ﻿using System;
 using ConsoleStuff;
+using ConsoleStuff.Commands;
 using ConsoleStuff.Panels;
-using ConsoleStuff.Tests;
-using ConsoleStuff.Tests.Commands;
 using CSharpChess;
 using CSharpChess.Extensions;
 using CSharpChess.Movement;

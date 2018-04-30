@@ -33,6 +33,8 @@ namespace ConsoleStuff.Tests
 
             Assert.That(panel.Width, Is.EqualTo(5));
             Assert.That(panel.ToStrings()[0], Is.EqualTo("A Tex"));
+            Assert.That(panel.ToStrings()[1], Is.EqualTo("With "));
+            Assert.That(panel.ToStrings()[2], Is.EqualTo("than "));
         }
 
     }

@@ -1,6 +1,7 @@
 using System.Linq;
 using ConsoleStuff.Panels;
 using CSharpChess;
+using CSharpChess.System;
 
 namespace CsChess
 {

@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess.Extensions;
-//using static CSharpChess.Chess;
+using CSharpChess.System;
+
+//using static CSharpChess.Info;
 
 namespace CSharpChess.Movement
 {

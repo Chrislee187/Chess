@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CSharpChess.Extensions;
+using CSharpChess.Movement;
 
 namespace CSharpChess
 {

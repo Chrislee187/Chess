@@ -41,20 +41,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board.cs" />
-    <Compile Include="ChessFile.cs" />
-    <Compile Include="Colours.cs" />
-    <Compile Include="GameState.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="PieceNames.cs" />
     <Compile Include="Movement\Rules.cs" />
+    <Compile Include="System\ChessFile.cs" />
+    <Compile Include="System\Colours.cs" />
     <Compile Include="System\EngineState.cs" />
+    <Compile Include="System\GameState.cs" />
     <Compile Include="System\InvalidBoardStateException.cs" />
     <Compile Include="System\LocationFactory.cs" />
-    <Compile Include="MoveType.cs" />
+    <Compile Include="Movement\MoveType.cs" />
     <Compile Include="Movement\Validations.cs" />
     <Compile Include="PiecesFactory.cs" />
     <Compile Include="Helpers\SmallConsoleBoard.cs" />
-    <Compile Include="RuleSet.cs" />
     <Compile Include="System\ChessGameResult.cs" />
     <Compile Include="Extensions\BoardLocation.cs" />
     <Compile Include="Extensions\BoardLocationExtensions.cs" />
@@ -68,9 +67,8 @@
     <Compile Include="System\Metrics\CounterIds.cs" />
     <Compile Include="System\Metrics\Timers.cs" />
     <Compile Include="System\Metrics\Timings.cs" />
-    <Compile Include="OneCharBoard.cs" />
     <Compile Include="BoardPiece.cs" />
-    <Compile Include="Chess.cs" />
+    <Compile Include="System\Info.cs" />
     <Compile Include="ChessPiece.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
@@ -87,6 +85,8 @@
     <Compile Include="Movement\RookMoveGenerator.cs" />
     <Compile Include="Movement\StraightLineMoveGenerator.cs" />
     <Compile Include="Movement\MoveGeneratorBase.cs" />
+    <Compile Include="System\OneCharBoard.cs" />
+    <Compile Include="System\RuleSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

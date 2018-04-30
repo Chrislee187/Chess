@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{B3E8239B-EDFE-46F3-AACB-1F3434C26E64}"
 	ProjectSection(SolutionItems) = preProject
 		build.ps1 = build.ps1
+		build_tasks.ps1 = build_tasks.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{FF4031A4-D959-4F95-9162-1F482C7ACE92}"

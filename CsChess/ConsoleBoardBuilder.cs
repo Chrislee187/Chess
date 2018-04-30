@@ -4,6 +4,7 @@ using System.Linq;
 using ConsoleStuff.Panels;
 using CSharpChess;
 using CSharpChess.Extensions;
+using CSharpChess.System;
 
 namespace CsChess
 {
@@ -25,9 +26,9 @@ namespace CsChess
             var boardSize = ((_options.BorderedCellSize -1) * 8) + 1; // Borders overlap
             var boardSquares = new ConsolePanel(boardSize, boardSize);
 
-            foreach (var rank in Chess.Ranks.Reverse())
+            foreach (var rank in Info.Ranks.Reverse())
             {
-                foreach (var file in Chess.Files)
+                foreach (var file in Info.Files)
                 {
                     AddPieceToBoard(file, rank, panels, boardSquares);
                 }
@@ -50,9 +51,9 @@ namespace CsChess
             IDictionary<BoardLocation, ConsolePanel> panels = new ConcurrentDictionary<BoardLocation, ConsolePanel>();
 
             var isBlackSquare = true;
-            foreach (var file in Chess.Files)
+            foreach (var file in Info.Files)
             {
-                foreach (var rank in Chess.Ranks)
+                foreach (var rank in Info.Ranks)
                 {
                     var at = BoardLocation.At(file, rank);
                     var colour = _options.ColouredSquares ?

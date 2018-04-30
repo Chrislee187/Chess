@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CSharpChess.Extensions;
 using CSharpChess.Movement;
+using CSharpChess.System;
 using CSharpChess.UnitTests.Helpers;
 using NUnit.Framework;
 
@@ -33,7 +34,7 @@ namespace CSharpChess.UnitTests.Rules
             var result = Pawns.EnPassantRules.Check(board, Move.Create(pieceLoc, enemyPieceLoc)).All(rr => rr.Passed);
 
             Assert.False(result, "EnPassantRules check failed.");
-//            Assert.That(Chess.Rules.Failures[Move.Create(pieceLoc, enemyPieceLoc)]);
+//            Assert.That(Info.Rules.Failures[Move.Create(pieceLoc, enemyPieceLoc)]);
 
         }
 

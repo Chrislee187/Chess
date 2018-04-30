@@ -1,4 +1,6 @@
-﻿namespace CSharpChess
+﻿using CSharpChess.System;
+
+namespace CSharpChess
 {
     public static class PiecesFactory
     {

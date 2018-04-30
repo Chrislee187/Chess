@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CSharpChess.Extensions;
+using CSharpChess.System;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
@@ -48,7 +49,7 @@ namespace CSharpChess.Movement
 
         public static bool InCheckAt(CSharpChess.Board board, BoardLocation at, Colours asPlayer)
         {
-            var enemyPieces = board.Pieces.OfColour(Chess.ColourOfEnemy(asPlayer));
+            var enemyPieces = board.Pieces.OfColour(Info.ColourOfEnemy(asPlayer));
             var checkPieces = enemyPieces.Where(p => PieceIsAttackingLocation(board, p, at));
 
             return checkPieces.Any();
@@ -64,7 +65,7 @@ namespace CSharpChess.Movement
             if (move.MoveType == MoveType.Castle)
             {
                 var locs = King.SquaresKingsPassesThroughWhenCastling(move.To);
-                var enemyPieces = clone.Pieces.OfColour(Chess.ColourOfEnemy(moversPiece.Colour)).ToList();
+                var enemyPieces = clone.Pieces.OfColour(Info.ColourOfEnemy(moversPiece.Colour)).ToList();
                 var movesThruCheck = enemyPieces
                     .SelectMany(p => p.PossibleMoves)
                     .Any(moves => locs.Any(l => l.Equals(moves.To)));

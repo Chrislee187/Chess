@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpChess.Extensions;
+using CSharpChess.System;
 using CSharpChess.System.Metrics;
 
 namespace CSharpChess.Movement

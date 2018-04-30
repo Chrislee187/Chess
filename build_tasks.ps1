@@ -7,7 +7,7 @@ properties {
     $solution = "CSharpChess.sln"
     $unit_tests = ".\CSharpChess.UnitTests\bin\debug\CSharpChess.UnitTests.dll"
 
-    $msbuild_options = "/p:Configuration=$build_config"
+    $msbuild_options = "/p:Configuration=$build_config /p:Platform='x64'"
 }
 # FormatTaskName "-------- {0} --------"
 FormatTaskName {
@@ -38,7 +38,7 @@ task test -depends compile, test-only {
 }
 
 task test-only { 
-    Exec { & $nunit_runner $unit_tests }
+    Exec { & $nunit_runner $unit_tests --output test-results.xml }
 }
 task ? -Description "Helper to display task info" {
 	invoke-psake .\build_tasks.ps1 -docs

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpChess;
+using CSharpChess.Movement;
+using CSharpChess.System;
 
 
 namespace CsChess.Pgn
@@ -234,7 +236,7 @@ namespace CsChess.Pgn
                 : char.ToUpper(move[checkIndexedChar]) == 'O';
 
         private static bool MoveContainsGameResult(string move)
-           => move.Contains("-") && move.ToUpper().First() != 'O';
+           => move.Contains("-") && move.ToUpper().First() != 'O' || move.First() == '*';
 
         private static bool MoveContainsPromotion(string move, int checkIndexedChar = -1)
             => checkIndexedChar == -1

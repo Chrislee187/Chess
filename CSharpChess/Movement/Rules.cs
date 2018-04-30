@@ -155,7 +155,7 @@ namespace CSharpChess.Movement
         {
             var newFile = move.To.File;
             var takeLocation = new BoardLocation(newFile, move.From.Rank);
-            var enemyColour = Chess.ColourOfEnemy(board[move.From].Piece.Colour);
+            var enemyColour = Info.ColourOfEnemy(board[move.From].Piece.Colour);
 
             return board[takeLocation].Piece.Is(enemyColour, PieceNames.Pawn);
         }

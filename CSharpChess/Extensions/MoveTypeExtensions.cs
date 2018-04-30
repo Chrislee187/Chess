@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CSharpChess.Movement;
 
 namespace CSharpChess.Extensions
 {

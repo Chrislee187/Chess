@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleBoardSquare.cs" />
+    <Compile Include="MediumConsoleBoard.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="ConsoleBoardBuilder.cs" />
     <Compile Include="Program.cs" />
@@ -53,10 +54,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleStuff.Tests\ConsoleStuff.Tests.csproj">
-      <Project>{56c63a93-0b42-4e3f-bfd9-dc189603b59e}</Project>
-      <Name>ConsoleStuff.Tests</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ConsoleStuff\ConsoleStuff.csproj">
       <Project>{277CDC54-3C8E-4044-8930-692E05689F97}</Project>
       <Name>ConsoleStuff</Name>

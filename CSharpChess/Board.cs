@@ -106,9 +106,9 @@ namespace CSharpChess
         }
         private void CheckForCheck()
         {
-            foreach (var attacker in Chess.BothColours)
+            foreach (var attacker in Info.BothColours)
             {
-                var defender = Chess.ColourOfEnemy(attacker);
+                var defender = Info.ColourOfEnemy(attacker);
                 var king = this.GetKingFor(defender);
                 if (Pieces.OfColour(attacker).Any(p => ChessMoveListExtensions.ContainsMoveTo(p.PossibleMoves, king.Location)))
                 {
@@ -224,9 +224,9 @@ namespace CSharpChess
         {
             get
             {
-                foreach (var rank in Chess.Ranks)
+                foreach (var rank in Info.Ranks)
                 {
-                    foreach (var file in Chess.Files)
+                    foreach (var file in Info.Files)
                     {
                         if (this[file, rank].Piece.Name != PieceNames.Blank)
                             yield return this[file, rank];
@@ -300,9 +300,9 @@ namespace CSharpChess
         }
         private void EmptyBoard()
         {
-            foreach (var rank in Chess.Ranks)
+            foreach (var rank in Info.Ranks)
             {
-                foreach (var file in Chess.Files)
+                foreach (var file in Info.Files)
                 {
                     if (file != 0 && rank != 0)
                         this[file, rank] = new BoardPiece(file, rank, PiecesFactory.Blank);
@@ -348,9 +348,9 @@ namespace CSharpChess
         public string ToAsciiBoard()
         {
             var sb = new StringBuilder();
-            foreach (var rank in Chess.Ranks.Reverse())
+            foreach (var rank in Info.Ranks.Reverse())
             {
-                foreach (var file in Chess.Files)
+                foreach (var file in Info.Files)
                 {
                     var piece = this[file, rank];
                     char ascii = AsciiPieceNames.ContainsKey(piece.Piece.Name) ? AsciiPieceNames[piece.Piece.Name] : '.';

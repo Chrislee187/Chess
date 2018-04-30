@@ -42,6 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeConsoleColour.cs" />
+    <Compile Include="CommandMenuBuilder.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandMenu.cs" />
+    <Compile Include="Commands\MenuItem.cs" />
     <Compile Include="Panels\BorderedPanel.cs" />
     <Compile Include="Panels\ConsoleCellColour.cs" />
     <Compile Include="Panels\ConsolePanel.cs" />
