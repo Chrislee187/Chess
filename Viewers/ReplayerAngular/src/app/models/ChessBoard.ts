@@ -2,7 +2,7 @@ import { Observable, Subject } from 'rxjs';
 import { BoardComponent } from '../components/board/board.component';
 export class ChessBoard {
 
-    private board:string[] = [
+    private static board:string[] = [
         'rnbqkbnr',
         'pppppppp',
         '........',
@@ -32,7 +32,7 @@ export class ChessBoard {
         }
     }
     
-    public physicalPieceAt(rank: string, file: number) : string {
+    public static initialPieceAt(rank: string, file: number) : string {
         let r = this.rankCharToIndex(rank);
         let f = file - 1;
         let piece = this.board[7-f][r];
@@ -41,13 +41,13 @@ export class ChessBoard {
     }
 
     public pieceAt(rank: string, file: number): Observable<string> {
-        let r = this.rankCharToIndex(rank);
+        let r = ChessBoard.rankCharToIndex(rank);
         let f = file - 1;
 
         return this.pieces[r][f];
     }
 
-    public move() : void {
+    public testmove() : void {
         console.log("moving");
         this.pieces[0][1].next(' ');
         this.pieces[0][2].next('p');
@@ -67,7 +67,7 @@ export class ChessBoard {
         return `${colour} ${this.pieceNameText(piece)} at ${location}`;
     }
     
-    private rankCharToIndex(rank: string) : number {
+    private static rankCharToIndex(rank: string) : number {
         return rank.charCodeAt(0) - 65;
     }
 
@@ -98,6 +98,7 @@ export class ChessBoard {
         "Q": "Queen",
         "k": "King",
         "K": "King",
+        ".": ""
     };
     private static pieceNameText(piece: string) : string {
         return this.pieceNames[piece];

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'rank-border-square',
@@ -11,7 +11,10 @@ export class RankBorderSquareComponent implements OnInit {
 
   @Input() rank: string;
 
+  @Output() title: string;
+
   ngOnInit() {
+    this.title = `Rank ${this.rank}`;
   }
 
 }

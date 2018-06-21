@@ -17,19 +17,22 @@ export class BoardSquareComponent implements OnInit {
   @Output() pieceContent: string;
   @Output() titleContent: string;
 
-  private piece: Observable<string>;
+  private chessPiece: Observable<string>;
 
   constructor(private chessBoardService: ChessBoardService) { }
 
   ngOnInit() {
-    this.setupSubscription();
+    // console.log(`Loc: ${this.rank}${this.file}`);
+    let board = this.chessBoardService.get(this.boardKey);
+
+    this.updateContent(ChessBoard.initialPieceAt(this.rank, this.file));
+    this.setupSubscription(board);
   }
 
-  setupSubscription(): void {
-    let board = this.chessBoardService.get(this.boardKey);
-    this.piece = board.pieceAt(this.rank, this.file);
-    this.updateContent(board.physicalPieceAt(this.rank, this.file));
-    this.piece.subscribe(piece => this.updateContent(piece));
+  setupSubscription(board: ChessBoard): void {
+
+    this.chessPiece = board.pieceAt(this.rank, this.file);
+    this.chessPiece.subscribe(piece => this.updateContent(piece));
   }
   updateContent(piece: string): void {
     this.pieceContent = piece;

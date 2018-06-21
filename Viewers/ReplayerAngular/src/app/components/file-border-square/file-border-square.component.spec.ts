@@ -16,10 +16,20 @@ describe('FileBorderSquareComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FileBorderSquareComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should set tooltip for file border square', () => {
+    setFile('D');
+    expect(component.title).toEqual("File D");
+  });
+
+  function setFile(file: string) {
+    component.file = 'D';
+    fixture.detectChanges();
+  }
 });

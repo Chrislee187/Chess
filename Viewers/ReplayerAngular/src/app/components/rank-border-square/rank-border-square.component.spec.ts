@@ -16,10 +16,20 @@ describe('RankBorderSquareComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RankBorderSquareComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  
+  it('should set tooltip for rank border square', () => {
+    setRank(4);
+    expect(component.title).toEqual("Rank 4");
+  });
+
+  function setRank(rank: number) {
+    component.rank = rank.toString();
+    fixture.detectChanges();
+  }
 });

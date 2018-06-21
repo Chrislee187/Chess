@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'file-border-square',
@@ -10,8 +10,11 @@ export class FileBorderSquareComponent implements OnInit {
   constructor() { }
   
   @Input() file: string;
+
+  @Output() title: string;
   
   ngOnInit() {
+    this.title = `File ${this.file}`;
   }
 
 }
