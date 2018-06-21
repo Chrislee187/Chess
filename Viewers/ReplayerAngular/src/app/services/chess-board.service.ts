@@ -29,8 +29,5 @@ export class ChessBoardService {
     throw new Error(`Board with key '${boardKey}' not found`);
   }
 }
-interface IChessMatch {
-  id: string;
-  board: ChessBoard;
-}
+
 
