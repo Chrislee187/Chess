@@ -1,3 +1,18 @@
-<p>
-  movelist works!
-</p>
+<div class='container'>
+  <table>
+    <tr *ngFor="let move of moves; let idx = index; even as isEven" [attr.data-index]="idx">
+      <td *ngIf="moves[idx] !== undefined && isEven">
+        {{idx/2+1}}.
+      </td>
+      <td *ngIf="moves[idx] !== undefined && isEven" (click)='gotoMove(idx)' title="{{moves[idx].from}}-{{moves[idx].to}}">
+        {{moves[idx].pgn}}
+      </td>
+      <td *ngIf="moves[idx+1] !== undefined  && isEven" (click)='gotoMove(idx+1)' title="{{moves[idx+1].from}}-{{moves[idx+1].to}}">
+        {{moves[idx+1].pgn}}
+      </td>
+    </tr>
+
+    <!-- <td *ngIf="!(idx % 2)"> -->
+    <!-- </td> -->
+  </table>
+</div>

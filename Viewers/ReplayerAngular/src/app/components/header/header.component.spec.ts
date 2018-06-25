@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ExamplePgnJson } from '../../models/sample.pgn'
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
@@ -16,6 +16,7 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
+    component.game = new ExamplePgnJson();
     fixture.detectChanges();
   });
 

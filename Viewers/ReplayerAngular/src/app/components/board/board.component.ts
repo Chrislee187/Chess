@@ -1,14 +1,16 @@
 import { ChessBoard } from "../../models/ChessBoard";
 
-import { Component, OnInit  } from '@angular/core';
+import { Component, OnInit, Input  } from '@angular/core';
 import { ChessBoardService } from "../../services/chess-board.service";
+import { PgnJson } from "../../models/PgnJson";
+
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
-
+  @Input() game : PgnJson;
   constructor(private chessBoardService: ChessBoardService) { }
 
   

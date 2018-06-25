@@ -1,48 +1,30 @@
-export class PgnJson {
-    public event : string;
-    public site: string;
-    public date: Date;
-    public round: Number;
-    public white: string;
-    public black: string;
-    public result: string;
+import { PgnJson, PgnJsonMove } from "./pgn";
 
-    public moves: PgnJsonMove[] = [];
-}
-export class PgnJsonMove {
-    public from : PgnJsonLocation;
-    public to: PgnJsonLocation;
-    public pgn: string;
-}
-export class PgnJsonLocation {
-    public rank: string;
-    public file: number;
-    public rankAsNumber: number;
-}
 export class ExamplePgnJson extends PgnJson {
 
     constructor() {
         super();
-        this.event = this.game.Event;
-        this.site = this.game.Site;
-        this.date = new Date(this.game.Date);
-        this.round = new Number(this.round);
-        this.white = this.game.White;
-        this.black = this.game.Black;
-        this.result = this.game.Result;
+        this.event = this.wikiGame.Event;
+        this.site = this.wikiGame.Site;
+        this.date = new Date(this.wikiGame.Date);
+        this.round = new Number(this.wikiGame.Round);
+        this.white = this.wikiGame.White;
+        this.black = this.wikiGame.Black;
+        this.result = this.wikiGame.Result;
 
-        this.game.Moves.forEach(element => {
+        this.wikiGame.Moves.forEach(element => {
             let jsonMove = new PgnJsonMove();
             jsonMove.from = element.From;
             jsonMove.to = element.To;
             jsonMove.pgn = element.PgnText;
+            jsonMove.comment = element.Comment;
 
             this.moves.push(jsonMove);
         });
         
 
     }
-    public game : any = {
+    private wikiGame : any = {
         "Event": "F/S Return Match",
         "Site": "Belgrade, Serbia JUG",
         "Date": "1992.11.04",
@@ -79,7 +61,8 @@ export class ExamplePgnJson extends PgnJson {
             {
             "From": "A7",
             "To": "A6",
-            "PgnText": "a6"
+            "PgnText": "a6",
+            "Comment": "This opening is called the Ruy Lopez."
             },
             {
             "From": "B5",
