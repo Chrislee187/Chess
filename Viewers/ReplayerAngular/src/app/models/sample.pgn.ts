@@ -1,6 +1,6 @@
 import { PgnJson, PgnJsonMove } from "./pgn";
 
-export class ExamplePgnJson extends PgnJson {
+export class WikiPgn extends PgnJson {
 
     constructor() {
         super();

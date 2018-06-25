@@ -1,5 +1,5 @@
 import { Component, Output } from '@angular/core';
-import { ExamplePgnJson } from './models/sample.pgn'
+import { WikiPgn } from './models/sample.pgn'
 import { PgnJson } from "./models/PgnJson";
 import { PgnJsonMove } from './models/pgn';
 import { ChessBoardService } from "./services/chess-board.service";
@@ -13,16 +13,26 @@ import { ChessBoard } from "./models/ChessBoard";
 
 export class AppComponent {
   @Output() game : PgnJson;
-  title = 'Replayer (Angular)';
+  @Output() boardKey: string;
+
+  title = 'PGN Replay (Angular)';
+
+  chessBoard: ChessBoard;
 
   constructor(private chessBoardService: ChessBoardService) {
-    this.game = new ExamplePgnJson();
+    this.game = new WikiPgn();
   }
 
-  onMoveIndexChanged(move: PgnJsonMove) {
-    let key = "1";
-    let board = this.chessBoardService.get(key);
+  ngOnInit() {
+    this.boardKey = this.chessBoardService.generateSubscriberBoard();
+    this.chessBoard = this.chessBoardService.get(this.boardKey);
+  }
 
-    board.move(move.from.toString(), move.to.toString());
+  onMakeMove(move: PgnJsonMove) {
+    this.chessBoard.move(move.from.toString(), move.to.toString());
+  }
+
+  onBoardResetClicked() {
+    this.chessBoard.resetBoard(true);
   }
 }

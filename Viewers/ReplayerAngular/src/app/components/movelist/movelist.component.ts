@@ -10,8 +10,10 @@ export class MovelistComponent implements OnInit {
   constructor() { }
 
   @Input() moves : PgnJsonMove[];
-  @Output() moveIndexChanged: EventEmitter<PgnJsonMove> = new EventEmitter();
+  @Output() makeMove: EventEmitter<PgnJsonMove> = new EventEmitter();
+  @Output() resetBoardEvent: EventEmitter<boolean> = new EventEmitter();
 
+  private currentMoveIndex: number = 0;
 
   ngOnInit() {
     // this.moves = this.game.moves;
@@ -21,6 +23,16 @@ export class MovelistComponent implements OnInit {
     let move = this.moves[index];
 
     // TODO: Highlight currnet move;
-    this.moveIndexChanged.emit(move);
+    this.makeMove.emit(move);
   }
-}
+
+  public nextMove() : void {
+    let move = this.moves[this.currentMoveIndex++];
+
+    // TODO: Highlight currnet move;
+    this.makeMove.emit(move);
+  }
+  public resetBoard() : void {
+    this.resetBoardEvent.emit(true);
+    this.currentMoveIndex = 0;
+  }}

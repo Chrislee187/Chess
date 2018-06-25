@@ -32,9 +32,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   }));
 
-  const expectedTitle :string = 'Replayer (Angular)';
+  const expectedTitle :string = 'PGN Replay (Angular)';
 
-  it(`should have as title 'Replayer (Angular)'`, async(() => {
+  it(`should have correct title`, async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual(expectedTitle);

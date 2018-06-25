@@ -10,16 +10,14 @@ import { PgnJson } from "../../models/PgnJson";
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
+  @Input() boardKey: string;
   @Input() game : PgnJson;
   constructor(private chessBoardService: ChessBoardService) { }
 
   
-  public boardKey: string;
   private chessBoard : ChessBoard;
   
   ngOnInit() {
-    this.boardKey = this.chessBoardService.generateSubscriberBoard();
-    console.log("Key: " + this.boardKey);
     this.chessBoard = this.chessBoardService.get(this.boardKey);
   }
 

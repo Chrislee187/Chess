@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable, of } from 'rxjs';
 import { BoardSquareComponent } from './board-square.component';
 import { EmptyBorderSquareComponent } from '../empty-border-square/empty-border-square.component';
-import { ChessBoardService } from '../../services/chess-board.service';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { ChessBoardService } from '../../services/chess-board.service';
+import { MockChessBoardService } from "../../services/MockChessBoardService";
 
 describe('BoardSquareComponent', () => {
   let component: BoardSquareComponent;
@@ -51,11 +51,3 @@ describe('BoardSquareComponent', () => {
   }
   
 });
-
-class MockChessBoardService extends ChessBoardService {
-
-  constructor() {
-    super();
-    this.generateSubscriberBoard();
-  }
-}

@@ -1,5 +1,11 @@
 <div class='container'>
-  <table>
+    <table>
+        <thead>
+          <th (click)='resetBoard()'>reset</th>
+          <th>prev (tbd)</th>
+          <th (click)='nextMove()'>next</th>
+        </thead>
+    <tbody>
     <tr *ngFor="let move of moves; let idx = index; even as isEven" [attr.data-index]="idx">
       <td *ngIf="moves[idx] !== undefined && isEven">
         {{move.moveNumber}}.
@@ -11,7 +17,7 @@
         {{moves[idx+1].pgn}}
       </td>
     </tr>
-
+  </tbody>
     <!-- <td *ngIf="!(idx % 2)"> -->
     <!-- </td> -->
   </table>

@@ -1,6 +1,7 @@
 import { Observable, Subject } from 'rxjs';
 export class ChessBoard {
 
+    private moveHistory: any[] = [];
 
     private pieces: string[][] =[
         ['r','n','b','q','k','b','n','r'],
@@ -12,7 +13,16 @@ export class ChessBoard {
         ['P','P','P','P','P','P','P','P'],
         ['R','N','B','Q','K','B','N','R']
     ];
-
+    private startingPieces: string[][] =[
+        ['r','n','b','q','k','b','n','r'],
+        ['p','p','p','p','p','p','p','p'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['P','P','P','P','P','P','P','P'],
+        ['R','N','B','Q','K','B','N','R']
+    ];
     public dumpBoard(): void {
         for (let rankIdx = 0; rankIdx < 8; rankIdx++) {
             let row = "";
@@ -20,10 +30,23 @@ export class ChessBoard {
                 let p = this.pieces[rankIdx][fileIdx];
                 row = row + p;
             }
-            console.log(row);
         }
     }
+    public resetBoard(reset: boolean): void {
 
+        if(!reset) return;
+
+        for (let rankIdx = 0; rankIdx < 8; rankIdx++) {
+            let row = "";
+            for (let fileIdx = 0; fileIdx < 8; fileIdx++) {
+                let p = this.startingPieces[rankIdx][fileIdx];
+                let s = this.subjects[rankIdx][fileIdx];
+
+                s.next(p);
+            }
+        }
+
+    }
     private subjects: Subject<string>[][] =[
         [null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null],
@@ -75,25 +98,73 @@ export class ChessBoard {
         return this.subjects[f][r];
     }
 
+
     public move(from: string, to: string) {
         let fr = from.charAt(0);
         let ff = Number(from.charAt(1))
         let tr = to.charAt(0);
         let tf = Number(to.charAt(1));
-        this.innerMove(fr,ff,tr,tf);
+
+        let fromPiece = this.pieceAt(fr, ff);
+
+        if(this.isCastlingMove(fromPiece, fr, tr)) {
+            var f = () => this.performCastle(fr, ff, tr);
+            this.moveHistory.push(f);
+            f();
+        }
+        else {
+            var f = () => this.innerMove(fr,ff,tr,tf);
+            this.moveHistory.push(f);
+            f();
+            
+        }
     }
 
-    public innerMove(fromRankChar: string, fromFile: number, toRankChar: string, toFile: number): void {
+    public undoMove() : void {
+        
+    }
+
+    private isCastlingMove(fromPiece: string, fromRankChar: string, toRankChar: string) : boolean {
+        if(fromPiece === 'k' || fromPiece === 'K') {
+            // check for and handled castling
+            let fromRank = this.rankCharToIndex(fromRankChar);
+            let toRank = this.rankCharToIndex(toRankChar);
+            let diff = Math.abs(fromRank - toRank);
+
+            if(diff > 1) {
+                // out work castling moves
+                return true;
+            }
+        }
+        return false;
+    }
+    private performCastle(fromRankChar: string, file: number, toRankChar: string) : void {
+        let castleFrom : string;
+        let castleTo : string;
+        if(toRankChar === 'G') {
+            castleFrom = `H`;
+            castleTo = `F`;
+        }
+        else {
+            castleFrom = `A`;
+            castleTo = `D`;
+        }
+
+        this.innerMove(fromRankChar, file, toRankChar, file);
+        this.innerMove(castleFrom, file, castleTo, file);
+    }
+    
+    private innerMove(fromRankChar: string, fromFile: number, toRankChar: string, toFile: number): void {
         let fromPiece = this.pieceAt(fromRankChar, fromFile);
         // console.log(`PieceAt(${fromRankChar}${fromFile}) = ${fromPiece}`);
         // let toPiece = this.pieceAt(toRankChar, toFile);
         // console.log(`PieceAt(${toRankChar}${toFile}) = ${toPiece}`);
 
-        let fromSubject = this.subjectAt(fromRankChar, fromFile);
-        let toSubject = this.subjectAt(toRankChar, toFile);
-
-        fromSubject.next('.');
-        toSubject.next(fromPiece);
+            let fromSubject = this.subjectAt(fromRankChar, fromFile);
+            let toSubject = this.subjectAt(toRankChar, toFile);
+    
+            fromSubject.next('.');
+            toSubject.next(fromPiece);
     }
 
     public testmove() : void {

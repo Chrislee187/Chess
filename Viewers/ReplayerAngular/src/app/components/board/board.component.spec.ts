@@ -6,6 +6,10 @@ import { RankBorderSquareComponent } from '../rank-border-square/rank-border-squ
 import { FileBorderSquareComponent } from '../file-border-square/file-border-square.component';
 import { BoardSquareComponent } from '../board-square/board-square.component';
 
+import { ChessBoardService } from '../../services/chess-board.service';
+
+import { MockChessBoardService } from "../../services/MockChessBoardService";
+
 describe('BoardComponent', () => {
   let component: BoardComponent;
   let fixture: ComponentFixture<BoardComponent>;
@@ -18,6 +22,9 @@ describe('BoardComponent', () => {
         RankBorderSquareComponent, 
         FileBorderSquareComponent, 
         BoardSquareComponent 
+      ],
+      providers: [
+        { provide: ChessBoardService, useClass: MockChessBoardService}
       ]
     })
     .compileComponents();
@@ -26,6 +33,7 @@ describe('BoardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(BoardComponent);
     component = fixture.componentInstance;
+    component.boardKey = "1";
     fixture.detectChanges();
   });
 
