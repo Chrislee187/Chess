@@ -22,14 +22,13 @@ describe('ChessBoardService', () => {
   it('should store board changes', inject([ChessBoardService], (service: ChessBoardService) => {
     let key1 = service.generateSubscriberBoard();
     let board = service.get(key1);
-
     let expectedPiece = '';
-    board.pieceAt("A",3).subscribe( p => expectedPiece = p);
+    board.observableAt("A",4).subscribe( p => expectedPiece = p);
 
     let board2 = service.get(key1);
     board2.testmove();
 
-    expect(expectedPiece).toBe('p')
+    expect(expectedPiece).toBe('P')
   }));
 
 });

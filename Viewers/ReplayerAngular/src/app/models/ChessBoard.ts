@@ -1,19 +1,30 @@
 import { Observable, Subject } from 'rxjs';
-import { BoardComponent } from '../components/board/board.component';
 export class ChessBoard {
 
-    private static board:string[] = [
-        'rnbqkbnr',
-        'pppppppp',
-        '........',
-        '........',
-        '........',
-        '........',
-        'PPPPPPPP',
-        'RNBQKBNR',
+
+    private pieces: string[][] =[
+        ['r','n','b','q','k','b','n','r'],
+        ['p','p','p','p','p','p','p','p'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['P','P','P','P','P','P','P','P'],
+        ['R','N','B','Q','K','B','N','R']
     ];
 
-    private pieces: Subject<string>[][] =[
+    public dumpBoard(): void {
+        for (let rankIdx = 0; rankIdx < 8; rankIdx++) {
+            let row = "";
+            for (let fileIdx = 0; fileIdx < 8; fileIdx++) {
+                let p = this.pieces[rankIdx][fileIdx];
+                row = row + p;
+            }
+            console.log(row);
+        }
+    }
+
+    private subjects: Subject<string>[][] =[
         [null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null],
@@ -27,65 +38,95 @@ export class ChessBoard {
     constructor() {
         for (let rankIdx = 0; rankIdx < 8; rankIdx++) {
             for (let fileIdx = 0; fileIdx < 8; fileIdx++) {
-                this.pieces[rankIdx][fileIdx] = new Subject<string>();
+                var subject = this.createObservable(rankIdx, fileIdx);
+
+                this.subjects[fileIdx][rankIdx] = subject;
             }
         }
     }
     
-    public static initialPieceAt(rank: string, file: number) : string {
-        let r = this.rankCharToIndex(rank);
-        let f = file - 1;
-        let piece = this.board[7-f][r];
+    private createObservable(rank: number, file: number) : Subject<string> {
+        var subject = new Subject<string>();
+        subject.subscribe(piece => {
+            this.pieces[file][rank] = piece;
+            // console.log(`square at ${rank}${file} updated to '${piece}'`);
+        });
 
-        return piece;
+        return subject;
     }
 
-    public pieceAt(rank: string, file: number): Observable<string> {
-        let r = ChessBoard.rankCharToIndex(rank);
-        let f = file - 1;
+    public pieceAt(rank: string, file: number) : string {
+        let r = this.rankCharToIndex(rank);
+        let f = 8-file;
+        return this.pieces[f][r];
+    }
 
-        return this.pieces[r][f];
+    public observableAt(rank: string, file: number): Observable<string> {
+        let r = this.rankCharToIndex(rank);
+        let f = 8-file;
+
+        return this.subjects[f][r];
+    }
+
+    private subjectAt(rank: string, file: number): Subject<string> {
+        let r = this.rankCharToIndex(rank);
+        let f = 8-file;
+
+        return this.subjects[f][r];
+    }
+
+    public move(fromRankChar: string, fromFile: number, toRankChar: string, toFile: number): void {
+        let fromPiece = this.pieceAt(fromRankChar, fromFile);
+        // console.log(`PieceAt(${fromRankChar}${fromFile}) = ${fromPiece}`);
+        // let toPiece = this.pieceAt(toRankChar, toFile);
+        // console.log(`PieceAt(${toRankChar}${toFile}) = ${toPiece}`);
+
+        let fromSubject = this.subjectAt(fromRankChar, fromFile);
+        let toSubject = this.subjectAt(toRankChar, toFile);
+
+        fromSubject.next('.');
+        toSubject.next(fromPiece);
     }
 
     public testmove() : void {
-        console.log("moving");
-        this.pieces[0][1].next(' ');
-        this.pieces[0][2].next('p');
-        this.pieces[5][5].next('p');
+        // NOTE: This method only exists for test purposes until proper moving is implemented;
+        this.move("A",2, "A", 4);
+        this.move("D",7, "D", 5);
+        this.dumpBoard();
     }
 
-    public static squareTooltip(rank: string, file: number, piece: string): string {
+    public squareTooltip(rank: string, file: number, piece: string): string {
 
         const location = `${rank}${file}`;
 
-        if(ChessBoard.pieceNameText(piece) === '') {
+        if(this.pieceNameText(piece) === '') {
             return location;
         }
 
-        let colour = ChessBoard.pieceColourText(piece);
+        let colour = this.pieceColourText(piece);
 
         return `${colour} ${this.pieceNameText(piece)} at ${location}`;
     }
     
-    private static rankCharToIndex(rank: string) : number {
+    private rankCharToIndex(rank: string) : number {
         return rank.charCodeAt(0) - 65;
     }
 
-    private static pieceColourText(piece: string) {
+    private pieceColourText(piece: string) {
         let colour = "Black";
-        if (ChessBoard.isWhitePiece(piece)) {
+        if (this.isWhitePiece(piece)) {
             colour = "White";
         }
         return colour;
     }
 
-    private static isWhitePiece(piece: string) : boolean {
+    private isWhitePiece(piece: string) : boolean {
         let p = piece.charAt(0);
 
         return p.toLocaleUpperCase() === p;
     }
 
-    private static pieceNames: { [key:string]: string} = {
+    private pieceNames: { [key:string]: string} = {
         "p": "Pawn",
         "P": "Pawn",
         "r": "Rook",
@@ -100,7 +141,7 @@ export class ChessBoard {
         "K": "King",
         ".": ""
     };
-    private static pieceNameText(piece: string) : string {
+    private pieceNameText(piece: string) : string {
         return this.pieceNames[piece];
     }
 }

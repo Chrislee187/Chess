@@ -146,7 +146,7 @@ namespace CsChess.Pgn
         {
             var from = new BoardLocation(FromFile, FromRank);
             var to = new BoardLocation(ToFile, ToRank);
-            var move = new Move(from, to, MoveType,PromotionPiece);
+            var move = new Move(from, to, MoveType,PromotionPiece, PgnText);
             return move;
         }
 
@@ -170,6 +170,11 @@ namespace CsChess.Pgn
         public string ToMove()
         {
             return $"{CreateMove()}";
+        }
+
+        public void WithPgn(string pgnmovetext)
+        {
+            PgnText = pgnmovetext;
         }
     }
 

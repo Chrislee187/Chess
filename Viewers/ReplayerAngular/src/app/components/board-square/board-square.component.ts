@@ -25,17 +25,18 @@ export class BoardSquareComponent implements OnInit {
     // console.log(`Loc: ${this.rank}${this.file}`);
     let board = this.chessBoardService.get(this.boardKey);
 
-    this.updateContent(ChessBoard.initialPieceAt(this.rank, this.file));
+    this.updateContent(board.pieceAt(this.rank, this.file));
     this.setupSubscription(board);
   }
 
   setupSubscription(board: ChessBoard): void {
 
-    this.chessPiece = board.pieceAt(this.rank, this.file);
+    this.chessPiece = board.observableAt(this.rank, this.file);
     this.chessPiece.subscribe(piece => this.updateContent(piece));
   }
   updateContent(piece: string): void {
+    let board = this.chessBoardService.get(this.boardKey);
     this.pieceContent = piece;
-    this.titleContent = ChessBoard.squareTooltip(this.rank, this.file, piece);
+    this.titleContent = board.squareTooltip(this.rank, this.file, piece);
   }
 }

@@ -23,7 +23,7 @@ describe('RankBorderSquareComponent', () => {
   });
 
   
-  it('should set tooltip for rank border square', () => {
+  it('should set title for rank border square', () => {
     setRank(4);
     expect(component.title).toEqual("Rank 4");
   });

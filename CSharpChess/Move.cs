@@ -17,22 +17,25 @@ namespace CSharpChess
         }
 
         private Move(string from, string to, MoveType moveType,
-            PieceNames promotedTo = PieceNames.Blank) : this((BoardLocation) from, (BoardLocation) to, moveType, promotedTo)
+            PieceNames promotedTo = PieceNames.Blank) : this((BoardLocation) @from, (BoardLocation) to, moveType, promotedTo)
         {
         }
 
-        public Move(BoardLocation from, BoardLocation to, MoveType moveType, PieceNames promotedTo = PieceNames.Blank)
+        public Move(BoardLocation @from, BoardLocation to, MoveType moveType, PieceNames promotedTo = PieceNames.Blank,
+            string pgnText = "")
         {
             From = from;
             To = to;
             MoveType = moveType;
             PromotedTo = promotedTo;
+            PgnText = pgnText;
         }
 
         public BoardLocation From { get; }
         public BoardLocation To { get; }
         public MoveType MoveType { get; private set; }
         public PieceNames PromotedTo { get; }
+        public string PgnText { get; }
         public static Move Taken(BoardLocation location) => new Move(location, MoveType.Taken);
 
         private Move(BoardLocation location, MoveType taken)

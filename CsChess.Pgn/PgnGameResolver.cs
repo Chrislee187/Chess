@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using CSharpChess;
+using CSharpChess.Extensions;
 
 namespace CsChess.Pgn
 {
@@ -31,7 +32,12 @@ namespace CsChess.Pgn
                     pgnQuery.ResolveQuery(board);
 
                 if (!pgnQuery.GameOver)
-                    board.Move(pgnQuery.ToMove());
+                {
+                    var from = BoardLocation.At(pgnQuery.FromFile, pgnQuery.FromRank);
+                    var to = BoardLocation.At(pgnQuery.ToFile, pgnQuery.ToRank);
+                    var move = new Move(from, to, pgnQuery.MoveType, pgnQuery.PromotionPiece, pgnQuery.PgnText);
+                    board.Move(move);
+                }
             }
             catch (Exception e)
             {

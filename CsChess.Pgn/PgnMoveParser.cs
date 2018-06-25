@@ -23,7 +23,7 @@ namespace CsChess.Pgn
         public static bool TryParse(Colours turn, string move, ref PgnQuery pgnQuery)
         {
             pgnQuery.WithColour(turn);
-
+            pgnQuery.WithPgn(move);
             if (move.ToUpper() == "O-O" || move.ToUpper() == "O-O-O")
             {
                 CreateCastleMoveQuery(turn, move, pgnQuery);

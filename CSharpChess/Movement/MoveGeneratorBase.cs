@@ -54,6 +54,6 @@ namespace CSharpChess.Movement
             IEnumerable<LocationFactory> directions)
             => LocationFactory.ApplyToMany(from, directions)
                 .Where(to => destinationCheck(board, from, to))
-                .Select(m => new Move(from, m, moveType));
+                .Select(m => new Move(@from, m, moveType));
     }
 }

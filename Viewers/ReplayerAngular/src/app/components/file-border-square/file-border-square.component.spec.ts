@@ -23,7 +23,7 @@ describe('FileBorderSquareComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set tooltip for file border square', () => {
+  it('should set title for file border square', () => {
     setFile('D');
     expect(component.title).toEqual("File D");
   });
