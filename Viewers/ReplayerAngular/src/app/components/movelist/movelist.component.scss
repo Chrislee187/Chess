@@ -2,22 +2,26 @@
     max-height: 400px;
     width: 200px;
 
-    tbody {
-        display: block;
-        overflow: auto;
-        height: 100%;
-    }
-    thead, tbody tr {
-        display:table;
-        width:100%;
-        table-layout:fixed; /* even columns width , fix width of table too*/
-    }
-
-    thead {
-        width: calc( 100% - 1em )/* scrollbar is average 1em/16px width, remove it from thead width */
-    }
-
     table {
         height: 400px;
+
+        tbody {
+            display: block;
+            overflow: auto;
+            height: 100%;
+        }
+        thead, tbody tr {
+            display:table;
+            width:100%;
+            table-layout:fixed; /* even columns width , fix width of table too*/
+        }
+    
+        thead {
+            width: calc( 100% - 1em )/* scrollbar is average 1em/16px width, remove it from thead width */
+        }
+
+        td.current {
+            background-color: gray;
+        }
     }
 }
