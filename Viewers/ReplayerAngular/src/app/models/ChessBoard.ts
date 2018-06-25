@@ -75,7 +75,15 @@ export class ChessBoard {
         return this.subjects[f][r];
     }
 
-    public move(fromRankChar: string, fromFile: number, toRankChar: string, toFile: number): void {
+    public move(from: string, to: string) {
+        let fr = from.charAt(0);
+        let ff = Number(from.charAt(1))
+        let tr = to.charAt(0);
+        let tf = Number(to.charAt(1));
+        this.innerMove(fr,ff,tr,tf);
+    }
+
+    public innerMove(fromRankChar: string, fromFile: number, toRankChar: string, toFile: number): void {
         let fromPiece = this.pieceAt(fromRankChar, fromFile);
         // console.log(`PieceAt(${fromRankChar}${fromFile}) = ${fromPiece}`);
         // let toPiece = this.pieceAt(toRankChar, toFile);
@@ -90,9 +98,9 @@ export class ChessBoard {
 
     public testmove() : void {
         // NOTE: This method only exists for test purposes until proper moving is implemented;
-        this.move("A",2, "A", 4);
-        this.move("D",7, "D", 5);
-        this.dumpBoard();
+        this.move("A2","A4");
+        this.move("D7","D5");
+        // this.dumpBoard();
     }
 
     public squareTooltip(rank: string, file: number, piece: string): string {

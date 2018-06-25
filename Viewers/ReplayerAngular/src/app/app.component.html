@@ -9,7 +9,7 @@
     </div>
     <div class="board-movelist-container">
       <div class="board-container"><app-board [game]='game'></app-board></div>
-      <div class="movelist-container"><app-movelist [game]='game'></app-movelist></div>
+      <div class="movelist-container"><app-movelist [moves]='game.moves' (moveIndexChanged)="onMoveIndexChanged($event)"></app-movelist></div>
     </div>
     <div class="notes-container"><app-notes></app-notes></div>
   </div>

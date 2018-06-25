@@ -16,7 +16,7 @@ describe('MovelistComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MovelistComponent);
     component = fixture.componentInstance;
-    component.game = new ExamplePgnJson();
+    component.moves = new ExamplePgnJson().moves;
     fixture.detectChanges();
   });
 

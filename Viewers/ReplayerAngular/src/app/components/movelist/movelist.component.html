@@ -2,12 +2,12 @@
   <table>
     <tr *ngFor="let move of moves; let idx = index; even as isEven" [attr.data-index]="idx">
       <td *ngIf="moves[idx] !== undefined && isEven">
-        {{idx/2+1}}.
+        {{move.moveNumber}}.
       </td>
-      <td *ngIf="moves[idx] !== undefined && isEven" (click)='gotoMove(idx)' title="{{moves[idx].from}}-{{moves[idx].to}}">
+      <td *ngIf="moves[idx] !== undefined && isEven" (click)='gotoMove(idx)' title="{{moves[idx].colour}} piece moves {{moves[idx]}}">
         {{moves[idx].pgn}}
       </td>
-      <td *ngIf="moves[idx+1] !== undefined  && isEven" (click)='gotoMove(idx+1)' title="{{moves[idx+1].from}}-{{moves[idx+1].to}}">
+      <td *ngIf="moves[idx+1] !== undefined  && isEven" (click)='gotoMove(idx+1)' title="{{moves[idx+1].colour}} piece moves {{moves[idx+1]}}">
         {{moves[idx+1].pgn}}
       </td>
     </tr>

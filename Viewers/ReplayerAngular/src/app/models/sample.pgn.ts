@@ -12,13 +12,14 @@ export class ExamplePgnJson extends PgnJson {
         this.black = this.wikiGame.Black;
         this.result = this.wikiGame.Result;
 
+        let moveIndex = 0;
         this.wikiGame.Moves.forEach(element => {
             let jsonMove = new PgnJsonMove();
             jsonMove.from = element.From;
             jsonMove.to = element.To;
             jsonMove.pgn = element.PgnText;
             jsonMove.comment = element.Comment;
-
+            jsonMove.moveIndex = moveIndex++;
             this.moves.push(jsonMove);
         });
         

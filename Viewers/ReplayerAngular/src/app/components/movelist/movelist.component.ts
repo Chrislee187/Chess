@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { PgnJson, PgnJsonMove } from "../../models/pgn";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { PgnJsonMove } from "../../models/pgn";
 
 @Component({
   selector: 'app-movelist',
@@ -7,20 +7,20 @@ import { PgnJson, PgnJsonMove } from "../../models/pgn";
   styleUrls: ['./movelist.component.scss']
 })
 export class MovelistComponent implements OnInit {
-  @Input() game : PgnJson;
-
   constructor() { }
 
-  public moves : PgnJsonMove[];
+  @Input() moves : PgnJsonMove[];
+  @Output() moveIndexChanged: EventEmitter<PgnJsonMove> = new EventEmitter();
 
 
   ngOnInit() {
-    this.moves = this.game.moves;
+    // this.moves = this.game.moves;
   }
 
   public gotoMove(index: number) : void {
     let move = this.moves[index];
 
-    alert(`goto move ${move}`);
+    // TODO: Highlight currnet move;
+    this.moveIndexChanged.emit(move);
   }
 }

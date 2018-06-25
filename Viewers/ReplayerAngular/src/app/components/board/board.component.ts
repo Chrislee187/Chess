@@ -19,6 +19,7 @@ export class BoardComponent implements OnInit {
   
   ngOnInit() {
     this.boardKey = this.chessBoardService.generateSubscriberBoard();
+    console.log("Key: " + this.boardKey);
     this.chessBoard = this.chessBoardService.get(this.boardKey);
   }
 
