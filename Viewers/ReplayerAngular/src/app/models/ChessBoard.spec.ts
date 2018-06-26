@@ -65,7 +65,15 @@ describe('ChessBoard', () => {
         expect(ChessBoard.isWhiteBackground('A', 2)).toBeFalsy();
     });
 
-    it('resetBoard - updates current board state and sends next value to subjects', () => {
+    it('resetBoard - updates current board state and sends new value to subjects', () => {
+        board.move('A2', 'A4');
+        board.resetBoard();
+
+        expect(board.pieceAt('A', 2)).toEqual('P');
+        expect(board.pieceAt('A', 4)).toEqual(' ');
+    });
+
+    it('resetBoard - sends new value to subjects', () => {
         let sourceReset: boolean;
         let destReset: boolean;
 
