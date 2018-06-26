@@ -44,4 +44,8 @@ export class BoardSquareComponent implements OnInit {
   public get isWhiteBackground(): boolean {
     return ChessBoard.isWhiteBackground(this.rank, this.file);
   }
+
+  public get isWhitePiece(): boolean  {
+    return ChessBoard.isWhitePiece(this.pieceContent);
+  }
 }
