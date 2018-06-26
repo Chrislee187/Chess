@@ -2,6 +2,17 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
+A basic skeleton for a Chess game Replayer, developed purely as an exercise in Angular.
+
+I already had some C# code to parse [PGN](https://en.wikipedia.org/wiki/Portable_Game_Notation) files in to long algebraic notation which I used to pregenerate the parsed sample game used by this example, 
+
+NB. PGN format is a standard format used for years to record chess moves. Unfortunately this format doesn't typically use full algebraic notations (where both the source and destination square are noted) and instead uses an approach that describes the destination and the minium amount of information needed to work out the source square.
+
+This is a problem I had already solved in C#, and for the purposes of this exercise I didn't want to spend time producing a PgnParser in typescript, I wanted to focus on the Angular aspects.
+
+and the current state of the chessboard and knowledge of chess-rules is required to parse PGN to something that can be used to directly move a piece from one square to another.
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

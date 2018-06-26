@@ -109,7 +109,7 @@ describe('ChessBoard', () => {
     });
 
     it('move - correctly updates for white castling moves', () => {
-        // NOTE: This only works because the board does NO actual checking for valid moves, but detects a castling movee
+        // NOTE: This test only works because the board does NO actual checking for valid moves, but detects a castling movee
         // on the king and moves the rook accordingly
         board.move('E1', 'G1');
         expect(board.pieceAt('G', 1)).toEqual('K');
@@ -122,7 +122,7 @@ describe('ChessBoard', () => {
     });
 
     it('move - correctly updates for black castling moves', () => {
-        // NOTE: This only works because the board does NO actual checking for valid moves, but detects a castling movee
+        // NOTE: This test only works because the board does NO actual checking for valid moves, but detects a castling movee
         // on the king and moves the rook accordingly
         board.move('E8', 'G8');
         expect(board.pieceAt('G', 8)).toEqual('k');
