@@ -1,4 +1,5 @@
 import { ChessBoard } from './ChessBoard';
+import { Subject } from 'rxjs';
 
 describe('ChessBoard', () => {
 
@@ -91,30 +92,44 @@ describe('ChessBoard', () => {
         expect(board.pieceAt('D', 8)).toEqual('q');
     });
 
-    it('observableAt - returns correctly for Queen positions', () => {
-        expect(board.observableAt('D', 1)).toBeTruthy();
-        expect(board.observableAt('D', 8)).toBeTruthy();
+    it('observableAt - returns correct object', () => {
+        const d8 = board.observableAt('D', 8);
+        const d8sub = <Subject<string>>d8;
+
+        d8sub.next('x');
+
+        expect(board.pieceAt('D', 8)).toEqual('x');
     });
 
     it('move - correctly updates from and to locations', () => {
-        let pieceAtA2: string;
-        let pieceAtA4: string;
-
-        board.observableAt('A', 2).subscribe(piece => pieceAtA2 = piece);
-        board.observableAt('A', 4).subscribe(piece => pieceAtA4 = piece);
         board.move('A2', 'A4');
 
-        expect(pieceAtA2).toEqual(' ');
-        expect(pieceAtA4).toBeTruthy('P');
+        expect(board.pieceAt('A', 2)).toEqual(' ');
+        expect(board.pieceAt('A', 4)).toEqual('P');
     });
 
     it('move - correctly updates for white castling moves', () => {
-        // TODO: Need to set up a custom board to test this;
-        expect(true).toBeFalsy();
+        // NOTE: This only works because the board does NO actual checking for valid moves, but detects a castling movee
+        // on the king and moves the rook accordingly
+        board.move('E1', 'G1');
+        expect(board.pieceAt('G', 1)).toEqual('K');
+        expect(board.pieceAt('F', 1)).toEqual('R');
+
+        board.resetBoard();
+        board.move('E1', 'C1');
+        expect(board.pieceAt('C', 1)).toEqual('K');
+        expect(board.pieceAt('D', 1)).toEqual('R');
     });
 
     it('move - correctly updates for black castling moves', () => {
-        // TODO: Need to set up a custom board to test this;
-        expect(true).toBeFalsy();
-    });
+        // NOTE: This only works because the board does NO actual checking for valid moves, but detects a castling movee
+        // on the king and moves the rook accordingly
+        board.move('E8', 'G8');
+        expect(board.pieceAt('G', 8)).toEqual('k');
+        expect(board.pieceAt('F', 8)).toEqual('r');
+
+        board.resetBoard();
+        board.move('E8', 'C8');
+        expect(board.pieceAt('C', 8)).toEqual('k');
+        expect(board.pieceAt('D', 8)).toEqual('r');    });
 });
