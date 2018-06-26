@@ -1,4 +1,4 @@
-import { PgnJsonMove } from "./PgnJsonMove";
+import { PgnJsonMove } from './PgnJsonMove';
 export class PgnJson {
     public event: string;
     public site: string;
@@ -10,5 +10,5 @@ export class PgnJson {
     public moves: PgnJsonMove[] = [];
     public toString = (): string => {
         return `${this.white} vs ${this.black} @ ${this.event} round ${this.round}`;
-    };
+    }
 }
