@@ -12,6 +12,8 @@ This is a problem I had already solved in C#, and for the purposes of this exerc
 
 and the current state of the chessboard and knowledge of chess-rules is required to parse PGN to something that can be used to directly move a piece from one square to another.
 
+[Run example](https://htmlpreview.github.io/?https://github.com/Chrislee187/Chess/blob/master/Viewers/ReplayerAngular/dist/ReplayerAngular/index.html)
+
 
 ## Development server
 
