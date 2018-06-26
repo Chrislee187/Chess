@@ -14,21 +14,21 @@ describe('ChessBoardService', () => {
   }));
 
   it('should generate unique key for each new board', inject([ChessBoardService], (service: ChessBoardService) => {
-    let key1 = service.generateSubscriberBoard();
-    let key2 = service.generateSubscriberBoard();
+    const key1 = service.generateSubscriberBoard();
+    const key2 = service.generateSubscriberBoard();
     expect(key1).not.toEqual(key2);
   }));
 
   it('should store board changes', inject([ChessBoardService], (service: ChessBoardService) => {
-    let key1 = service.generateSubscriberBoard();
-    let board = service.get(key1);
+    const key1 = service.generateSubscriberBoard();
+    const board = service.get(key1);
     let expectedPiece = '';
-    board.observableAt("A",4).subscribe( p => expectedPiece = p);
+    board.observableAt('A', 4).subscribe( p => expectedPiece = p);
 
-    let board2 = service.get(key1);
+    const board2 = service.get(key1);
     board2.testmove();
 
-    expect(expectedPiece).toBe('P')
+    expect(expectedPiece).toBe('P');
   }));
 
 });

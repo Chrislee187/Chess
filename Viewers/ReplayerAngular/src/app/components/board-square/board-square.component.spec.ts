@@ -32,6 +32,12 @@ describe('BoardSquareComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should render a white pawn at square A2', () => {
+    setLocation("A",2, fixture);
+
+    expect(component.pieceContent).toEqual("P");
+  });
+
   it('should set tooltip for square with piece on', () => {
     setLocation("A",2, fixture);
 

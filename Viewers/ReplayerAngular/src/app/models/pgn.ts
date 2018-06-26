@@ -1,3 +1,3 @@
-export * from './PgnJson'
-export * from './PgnJsonLocation'
-export * from './PgnJsonMove'
+export * from './PgnJson';
+export * from './PgnJsonLocation';
+export * from './PgnJsonMove';

@@ -1,9 +1,9 @@
 import { Component, Output } from '@angular/core';
-import { WikiPgn } from './models/sample.pgn'
-import { PgnJson } from "./models/PgnJson";
+import { WikiPgn } from './models/sample.pgn';
+import { PgnJson } from './models/PgnJson';
 import { PgnJsonMove } from './models/pgn';
-import { ChessBoardService } from "./services/chess-board.service";
-import { ChessBoard } from "./models/ChessBoard";
+import { ChessBoardService } from './services/chess-board.service';
+import { ChessBoard } from './models/ChessBoard';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,7 @@ import { ChessBoard } from "./models/ChessBoard";
 })
 
 export class AppComponent {
-  @Output() game : PgnJson;
+  @Output() game: PgnJson;
   @Output() boardKey: string;
 
   title = 'PGN Replay (Angular)';
@@ -23,6 +23,7 @@ export class AppComponent {
     this.game = new WikiPgn();
   }
 
+  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.boardKey = this.chessBoardService.generateSubscriberBoard();
     this.chessBoard = this.chessBoardService.get(this.boardKey);

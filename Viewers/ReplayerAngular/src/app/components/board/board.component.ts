@@ -1,7 +1,6 @@
-import { ChessBoard } from "../../models/ChessBoard";
+import { Component, OnInit, Input, Output  } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
-import { Component, OnInit, Input  } from '@angular/core';
-import { ChessBoardService } from "../../services/chess-board.service";
 import { PgnJson } from "../../models/PgnJson";
 
 @Component({
@@ -12,13 +11,29 @@ import { PgnJson } from "../../models/PgnJson";
 export class BoardComponent implements OnInit {
   @Input() boardKey: string;
   @Input() game : PgnJson;
-  constructor(private chessBoardService: ChessBoardService) { }
 
-  
-  private chessBoard : ChessBoard;
-  
+  @Output() boardState : Subject<string>[][] =[
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null]
+];
+
+
+  constructor() { 
+    for (let rankIdx = 0; rankIdx < 8; rankIdx++) {
+      for (let fileIdx = 0; fileIdx < 8; fileIdx++) {
+          var subject = new Subject<string>();
+          this.boardState[fileIdx][rankIdx] = subject;
+      }
+    }    
+  }
+
   ngOnInit() {
-    this.chessBoard = this.chessBoardService.get(this.boardKey);
   }
 }
 

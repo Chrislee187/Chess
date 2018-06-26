@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ChessBoard } from "../models/ChessBoard";
+import { ChessBoard } from '../models/ChessBoard';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChessBoardService {
 
-  constructor() { 
-  }
+  constructor() {  }
 
-
-  private matches : Map<string, ChessBoard> = new Map<string, ChessBoard>();
-  private id : number = 0;
+  private matches: Map<string, ChessBoard> = new Map<string, ChessBoard>();
+  private id = 0;
 
   public generateSubscriberBoard(): string {
     this.id++;
@@ -21,8 +19,8 @@ export class ChessBoardService {
     return this.id.toString();
   }
 
-  public get(boardKey: string) : ChessBoard{
-    if(this.matches.has(boardKey)){
+  public get(boardKey: string): ChessBoard {
+    if (this.matches.has(boardKey)) {
       return this.matches.get(boardKey);
     }
 

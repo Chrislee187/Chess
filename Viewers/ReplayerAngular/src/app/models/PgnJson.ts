@@ -1,4 +1,3 @@
-
 import { PgnJsonMove } from "./PgnJsonMove";
 export class PgnJson {
     public event: string;

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
-import { PgnJsonMove } from "../../models/pgn";
+import { PgnJsonMove } from '../../models/pgn';
 
 @Component({
   selector: 'app-movelist',
@@ -8,18 +8,20 @@ import { PgnJsonMove } from "../../models/pgn";
 })
 export class MovelistComponent implements OnInit {
   constructor() { }
+  // Would have prefered not to use dom elements directly here, probably missing some NG trick.
+  @ViewChild('movelistTable') tableElement: ElementRef;
 
-  @Input() moves : PgnJsonMove[];
-  @Output() onNextMove: EventEmitter<PgnJsonMove> = new EventEmitter();
-  @Output() onResetBoard: EventEmitter<boolean> = new EventEmitter();
+  @Input() moves: PgnJsonMove[];
+  @Output() nextMoveEvent: EventEmitter<PgnJsonMove> = new EventEmitter();
+  @Output() resetBoardEvent: EventEmitter<boolean> = new EventEmitter();
 
-  @Output() currentMoveIndex: number = 0;
+  @Output() currentMoveIndex = 0;
 
   ngOnInit() {
     // this.moves = this.game.moves;
   }
 
-  public gotoMove(index: number) : void {
+  public gotoMove(index: number): void {
     // this.currentMoveIndex = index;
     // let move = this.moves[index];
 
@@ -27,22 +29,21 @@ export class MovelistComponent implements OnInit {
     // this.makeMove.emit(move);
   }
 
-  public nextMove() : void {
-    let move = this.moves[this.currentMoveIndex++];
+  public nextMove(): void {
+    const move = this.moves[this.currentMoveIndex++];
 
-    this.scrollMoveIntoView(this.currentMoveIndex-1)
+    this.scrollMoveIntoView(this.currentMoveIndex - 1);
 
-    this.onNextMove.emit(move);
+    this.nextMoveEvent.emit(move);
   }
-  public resetBoard() : void {
-    this.onResetBoard.emit(true);
+  public resetBoard(): void {
+    this.resetBoardEvent.emit(true);
     this.currentMoveIndex = 0;
     this.scrollMoveIntoView(0);
   }
 
-  // Would have prefered not to use dom elements directly here, probably missing some NG trick.
-  @ViewChild('movelistTable') tableElement:ElementRef;
-  private scrollMoveIntoView(rowIndex: number) : void {
+  private scrollMoveIntoView(rowIndex: number): void {
+    // TODO: Move this raw dom functionality in to a service so we can mock and check it happens.
     this.tableElement.nativeElement
       .querySelector(`tr[data-index='${rowIndex}']`)
       .scrollIntoView(false);
