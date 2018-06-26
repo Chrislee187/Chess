@@ -10,8 +10,6 @@ NB. PGN format is a standard format used for years to record chess moves. Unfort
 
 This is a problem I had already solved in C#, and for the purposes of this exercise I didn't want to spend time producing a PgnParser in typescript, I wanted to focus on the Angular aspects.
 
-and the current state of the chessboard and knowledge of chess-rules is required to parse PGN to something that can be used to directly move a piece from one square to another.
-
 [Run example](https://htmlpreview.github.io/?https://github.com/Chrislee187/Chess/blob/master/Viewers/ReplayerAngular/dist/ReplayerAngular/index.html)
 
 
