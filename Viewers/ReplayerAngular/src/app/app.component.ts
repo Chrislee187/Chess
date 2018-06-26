@@ -34,6 +34,6 @@ export class AppComponent {
   }
 
   resetBoard() {
-    this.chessBoard.resetBoard(true);
+    this.chessBoard.resetBoard();
   }
 }

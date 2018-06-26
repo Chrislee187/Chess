@@ -2,9 +2,12 @@ import { Observable, Subject } from 'rxjs';
 /*
     NOTES/TODO
 
+    Unit tests
+
     This class is effectively coupled to the components by 'rxjs'.
      -  Abstract this away using some form of Provider pattern to supply our own
         Subject/Observable interfaces, that we can implement concrete versions of using 'rxjs'.
+        Not sure if it's worth it, might make testing easier
      -  The components themselves can carry on using rxjs directly as that is correct approach for Angular
      -  Will make testing of the ChessBoard easier
 */
@@ -112,9 +115,7 @@ export class ChessBoard {
         }
     }
 
-    public resetBoard(reset: boolean): void {
-        if (!reset) { return; }
-
+    public resetBoard(): void {
         for (let rankIdx = 0; rankIdx < 8; rankIdx++) {
             const row = '';
             for (let fileIdx = 0; fileIdx < 8; fileIdx++) {
