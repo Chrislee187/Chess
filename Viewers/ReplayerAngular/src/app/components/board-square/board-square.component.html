@@ -1,1 +1,5 @@
-<div title="{{titleContent}}">{{pieceContent}}</div>
+<div title="{{titleContent}}"
+[class.white-square]="isWhiteBackground"
+[class.black-square]="!isWhiteBackground"
+
+>{{pieceContent}}</div>

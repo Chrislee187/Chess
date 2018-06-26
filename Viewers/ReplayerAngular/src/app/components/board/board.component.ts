@@ -20,10 +20,6 @@ export class BoardComponent implements OnInit {
   ngOnInit() {
     this.chessBoard = this.chessBoardService.get(this.boardKey);
   }
-
-  public testmove() : void {
-    this.chessBoard.testmove();
-  }
 }
 
 

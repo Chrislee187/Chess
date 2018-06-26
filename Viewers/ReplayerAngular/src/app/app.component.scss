@@ -12,7 +12,7 @@ $min-screen-width: 400px;
     }
 
     .content-container {
-        border-collapse: collapse;
+        height: 700px;
         .nav-container {
             height: 10%;
         }
@@ -20,14 +20,13 @@ $min-screen-width: 400px;
             display: flex;
             flex-wrap: wrap;
             flex-direction: row;
+            height: 70%;
             .board-container {
                 width: 60%;
-                height: 70%;
                 min-width: $min-screen-width;
             }
             .movelist-container {
                 width: 40%;
-                height: 70%;
             }
         }
         .notes-container {

@@ -1,9 +1,27 @@
 TABLE {
+    margin: 0;
+    padding: 0;
+    border-spacing: 0px;
+    font-size: x-large;
     TD {
-        width: 10%;
-
+        width: 50px;
+        margin: 0;
+        padding: 0;
+        
+        background-color: brown;
     }
-    .square {
-        background-color: gray;
+    TR {
+        margin: 0;
+        padding: 0;
+        border-spacing: 0px;
     }
+}
+DIV {
+    height: 50px;
+}
+.board-border {
+    background-color: brown;
+}
+.square {
+    text-align: center;
 }

@@ -12,8 +12,8 @@
       <div class="movelist-container">
         <app-movelist 
           [moves]='game.moves' 
-          (makeMove)="onMakeMove($event)"
-          (resetBoardEvent)="onBoardResetClicked()"
+          (onNextMove)="makeMove($event)"
+          (onResetBoard)="resetBoard()"
         ></app-movelist></div>
     </div>
     <div class="notes-container"><app-notes></app-notes></div>

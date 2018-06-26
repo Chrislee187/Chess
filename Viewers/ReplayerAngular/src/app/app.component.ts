@@ -28,11 +28,11 @@ export class AppComponent {
     this.chessBoard = this.chessBoardService.get(this.boardKey);
   }
 
-  onMakeMove(move: PgnJsonMove) {
+  makeMove(move: PgnJsonMove) {
     this.chessBoard.move(move.from.toString(), move.to.toString());
   }
 
-  onBoardResetClicked() {
+  resetBoard() {
     this.chessBoard.resetBoard(true);
   }
 }

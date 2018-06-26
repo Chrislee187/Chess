@@ -10,8 +10,8 @@ export class MovelistComponent implements OnInit {
   constructor() { }
 
   @Input() moves : PgnJsonMove[];
-  @Output() makeMove: EventEmitter<PgnJsonMove> = new EventEmitter();
-  @Output() resetBoardEvent: EventEmitter<boolean> = new EventEmitter();
+  @Output() onNextMove: EventEmitter<PgnJsonMove> = new EventEmitter();
+  @Output() onResetBoard: EventEmitter<boolean> = new EventEmitter();
 
   @Output() currentMoveIndex: number = 0;
 
@@ -32,10 +32,10 @@ export class MovelistComponent implements OnInit {
 
     this.scrollMoveIntoView(this.currentMoveIndex-1)
 
-    this.makeMove.emit(move);
+    this.onNextMove.emit(move);
   }
   public resetBoard() : void {
-    this.resetBoardEvent.emit(true);
+    this.onResetBoard.emit(true);
     this.currentMoveIndex = 0;
     this.scrollMoveIntoView(0);
   }

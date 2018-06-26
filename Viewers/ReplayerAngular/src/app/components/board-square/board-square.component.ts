@@ -39,4 +39,8 @@ export class BoardSquareComponent implements OnInit {
     this.pieceContent = piece;
     this.titleContent = board.squareTooltip(this.rank, this.file, piece);
   }
+
+  public get isWhiteBackground() : boolean {
+    return ChessBoard.isWhiteBackground(this.rank, this.file);
+  }
 }

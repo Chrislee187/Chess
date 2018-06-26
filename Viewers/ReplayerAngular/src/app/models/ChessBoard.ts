@@ -6,20 +6,20 @@ export class ChessBoard {
     private pieces: string[][] =[
         ['r','n','b','q','k','b','n','r'],
         ['p','p','p','p','p','p','p','p'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
+        [' ',' ',' ',' ',' ',' ',' ',' '],
+        [' ',' ',' ',' ',' ',' ',' ',' '],
+        [' ',' ',' ',' ',' ',' ',' ',' '],
+        [' ',' ',' ',' ',' ',' ',' ',' '],
         ['P','P','P','P','P','P','P','P'],
         ['R','N','B','Q','K','B','N','R']
     ];
     private startingPieces: string[][] =[
         ['r','n','b','q','k','b','n','r'],
         ['p','p','p','p','p','p','p','p'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
+        [' ',' ',' ',' ',' ',' ',' ',' '],
+        [' ',' ',' ',' ',' ',' ',' ',' '],
+        [' ',' ',' ',' ',' ',' ',' ',' '],
+        [' ',' ',' ',' ',' ',' ',' ',' '],
         ['P','P','P','P','P','P','P','P'],
         ['R','N','B','Q','K','B','N','R']
     ];
@@ -78,21 +78,29 @@ export class ChessBoard {
         return subject;
     }
 
+    public static isWhiteBackground(rank: string, file:number) : boolean {
+        let r = this.rankCharToIndex(rank) + 1;
+        let sum = r + file;
+        let isWhite = (sum % 2) === 0;
+        return isWhite;
+    }
+
+
     public pieceAt(rank: string, file: number) : string {
-        let r = this.rankCharToIndex(rank);
+        let r = ChessBoard.rankCharToIndex(rank);
         let f = 8-file;
         return this.pieces[f][r];
     }
 
     public observableAt(rank: string, file: number): Observable<string> {
-        let r = this.rankCharToIndex(rank);
+        let r = ChessBoard.rankCharToIndex(rank);
         let f = 8-file;
 
         return this.subjects[f][r];
     }
 
     private subjectAt(rank: string, file: number): Subject<string> {
-        let r = this.rankCharToIndex(rank);
+        let r = ChessBoard.rankCharToIndex(rank);
         let f = 8-file;
 
         return this.subjects[f][r];
@@ -116,7 +124,6 @@ export class ChessBoard {
             var f = () => this.innerMove(fr,ff,tr,tf);
             this.moveHistory.push(f);
             f();
-            
         }
     }
 
@@ -127,8 +134,8 @@ export class ChessBoard {
     private isCastlingMove(fromPiece: string, fromRankChar: string, toRankChar: string) : boolean {
         if(fromPiece === 'k' || fromPiece === 'K') {
             // check for and handled castling
-            let fromRank = this.rankCharToIndex(fromRankChar);
-            let toRank = this.rankCharToIndex(toRankChar);
+            let fromRank = ChessBoard.rankCharToIndex(fromRankChar);
+            let toRank = ChessBoard.rankCharToIndex(toRankChar);
             let diff = Math.abs(fromRank - toRank);
 
             if(diff > 1) {
@@ -163,7 +170,7 @@ export class ChessBoard {
             let fromSubject = this.subjectAt(fromRankChar, fromFile);
             let toSubject = this.subjectAt(toRankChar, toFile);
     
-            fromSubject.next('.');
+            fromSubject.next(' ');
             toSubject.next(fromPiece);
     }
 
@@ -187,7 +194,7 @@ export class ChessBoard {
         return `${colour} ${this.pieceNameText(piece)} at ${location}`;
     }
     
-    private rankCharToIndex(rank: string) : number {
+    private static rankCharToIndex(rank: string) : number {
         return rank.charCodeAt(0) - 65;
     }
 
@@ -218,7 +225,8 @@ export class ChessBoard {
         "Q": "Queen",
         "k": "King",
         "K": "King",
-        ".": ""
+        ".": "",
+        " ": "",
     };
     private pieceNameText(piece: string) : string {
         return this.pieceNames[piece];

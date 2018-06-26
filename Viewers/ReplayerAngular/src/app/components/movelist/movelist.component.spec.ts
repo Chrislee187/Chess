@@ -19,7 +19,7 @@ describe('MovelistComponent', () => {
     fixture = TestBed.createComponent(MovelistComponent);
     component = fixture.componentInstance;
     component.moves = new WikiPgn().moves;
-    component.makeMove.subscribe(m => {
+    component.onNextMove.subscribe(m => {
       moveList.push(m);
     });
     fixture.detectChanges();
