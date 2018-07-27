@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using CsChess.Pgn;
 using CSharpChess.System;
 using NUnit.Framework;
@@ -13,6 +14,7 @@ namespace CSharpChess.UnitTests.PgnParsing
     [TestFixture]
     public class FullGameParsing
     {
+        public static string Root = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
         [Test]
         public void can_parse_wiki_sample_game()
         {
@@ -37,7 +39,7 @@ namespace CSharpChess.UnitTests.PgnParsing
         public void can_parse_lots_of_games()
         {
             
-            var pgnText = File.ReadAllText(@"C:\Src\Info\CSharpChess.UnitTests\bin\Debug\spassky.pgn");
+            var pgnText = File.ReadAllText($"{Root}\\spassky.pgn");
 
             var pgnGames = PgnGame.Parse(pgnText).ToList();
 
@@ -84,7 +86,7 @@ namespace CSharpChess.UnitTests.PgnParsing
         [Test]
         public void can_play_pgn_with_piece_blocking_check()
         {
-            var stream = File.OpenRead(@"C:\Src\Info\CSharpChess.UnitTests\bin\Debug\has-piece-blocking-check.pgn");
+            var stream = File.OpenRead($"{Root}\\has-piece-blocking-check.pgn");
             
             using (var reader = new PgnReader(stream))
             {
@@ -102,7 +104,7 @@ namespace CSharpChess.UnitTests.PgnParsing
         [Test]
         public void can_play_pgn_with_pawn_promotion()
         {
-            var stream = File.OpenRead(@"C:\Src\Info\CSharpChess.UnitTests\bin\Debug\has-black-pawn-to-queen-promotion.pgn");
+            var stream = File.OpenRead($"{Root}\\has-black-pawn-to-queen-promotion.pgn");
 
 
             using (var reader = new PgnReader(stream))

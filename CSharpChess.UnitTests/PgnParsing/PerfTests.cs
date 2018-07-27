@@ -16,7 +16,8 @@ namespace CSharpChess.UnitTests.PgnParsing
 
         private static readonly Stopwatch Stopwatch = new Stopwatch();
         private readonly IDictionary<string, TimeSpan> _gameTimes = new ConcurrentDictionary<string, TimeSpan>();
-        
+
+        private static readonly string Root = FullGameParsing.Root;
         [Test]
         public void PARSE_wiki_game_100_times()
         {
@@ -34,7 +35,7 @@ namespace CSharpChess.UnitTests.PgnParsing
         [Test]
         public void PLAY_short_pgn_file()
         {
-            PlayAllGamesFromFile(@"C:\Src\Info\CSharpChess.UnitTests\bin\Debug\short.pgn");
+            PlayAllGamesFromFile($"{Root}\\short.pgn");
             DumpMetrics();
         }
 
