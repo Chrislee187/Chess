@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27428.2043
+VisualStudioVersion = 15.0.26228.64
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpChess", "CSharpChess\CSharpChess.csproj", "{D49A0857-6DD8-4777-A297-56325CE9C7F6}"
 EndProject
@@ -41,6 +41,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsChess.Pgn", "CsChess.Pgn\CsChess.Pgn.csproj", "{AE84E994-4A9C-4CC5-BDBA-DAD50C911071}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pgn2json", "pgn2json\pgn2json.csproj", "{8EB90242-4ADC-4B14-A4B0-C4A9E022FA24}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CoreCvt", "CoreCvt", "{D8A346EC-96EC-43B8-89D2-8C37C48255D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
