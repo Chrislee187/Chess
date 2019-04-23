@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26228.64
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpChess", "CSharpChess\CSharpChess.csproj", "{D49A0857-6DD8-4777-A297-56325CE9C7F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpChess.UnitTests", "CSharpChess.UnitTests\CSharpChess.UnitTests.csproj", "{8E227185-6CBF-40B6-9F77-861A6A85F978}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpChess.UnitTests", "CSharpChess.UnitTests\CSharpChess.UnitTests.csproj", "{8E227185-6CBF-40B6-9F77-861A6A85F978}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSpikes", "ConsoleSpikes\ConsoleSpikes.csproj", "{B9E85F0A-BD37-4847-9CD7-A272E6CF41B8}"
 EndProject
@@ -42,7 +42,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsChess.Pgn", "CsChess.Pgn\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pgn2json", "pgn2json\pgn2json.csproj", "{8EB90242-4ADC-4B14-A4B0-C4A9E022FA24}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CoreCvt", "CoreCvt", "{D8A346EC-96EC-43B8-89D2-8C37C48255D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Common.Tests", "corecvt\Chess.Common.Tests\Chess.Common.Tests.csproj", "{6EE1E2A0-F31B-407A-9DA4-3085C44CC07B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7C2E880D-8A2B-438C-9CFF-3AAA28BE5C7A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine", "src\chess.engine\chess.engine.csproj", "{4C2773CF-3DAE-4149-9D87-7194D73E2624}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine.tests", "src\chess.engine.tests\chess.engine.tests.csproj", "{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +88,18 @@ Global
 		{8EB90242-4ADC-4B14-A4B0-C4A9E022FA24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EB90242-4ADC-4B14-A4B0-C4A9E022FA24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EB90242-4ADC-4B14-A4B0-C4A9E022FA24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EE1E2A0-F31B-407A-9DA4-3085C44CC07B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EE1E2A0-F31B-407A-9DA4-3085C44CC07B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EE1E2A0-F31B-407A-9DA4-3085C44CC07B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EE1E2A0-F31B-407A-9DA4-3085C44CC07B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C2773CF-3DAE-4149-9D87-7194D73E2624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C2773CF-3DAE-4149-9D87-7194D73E2624}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C2773CF-3DAE-4149-9D87-7194D73E2624}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C2773CF-3DAE-4149-9D87-7194D73E2624}.Release|Any CPU.Build.0 = Release|Any CPU
+		{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +108,8 @@ Global
 		{B3E8239B-EDFE-46F3-AACB-1F3434C26E64} = {81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}
 		{FF4031A4-D959-4F95-9162-1F482C7ACE92} = {81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}
 		{DCD434C3-01FD-4F62-8A46-61CBB0B4A157} = {81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}
+		{4C2773CF-3DAE-4149-9D87-7194D73E2624} = {7C2E880D-8A2B-438C-9CFF-3AAA28BE5C7A}
+		{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2} = {7C2E880D-8A2B-438C-9CFF-3AAA28BE5C7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1AE6E825-F2A2-49DE-9A01-9F8AC6391F59}

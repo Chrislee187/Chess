@@ -107,8 +107,6 @@ namespace CsChess.Pgn
                 throw new Exception($"No {turn} {pieceName} found that can move to {move}");
             }
 
-            BoardPiece piece;
-
             if (boardPieces.Count() > 1)
             {
                 // Cover the case where two pieces can move to a square but one of these
@@ -125,7 +123,7 @@ namespace CsChess.Pgn
                 }
             }
 
-            piece = boardPieces.First();
+            var piece = boardPieces.First();
 
             if (piece == null)
             {

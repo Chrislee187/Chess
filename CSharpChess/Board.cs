@@ -110,7 +110,7 @@ namespace CSharpChess
             {
                 var defender = Info.ColourOfEnemy(attacker);
                 var king = this.GetKingFor(defender);
-                if (Pieces.OfColour(attacker).Any(p => ChessMoveListExtensions.ContainsMoveTo(p.PossibleMoves, king.Location)))
+                if (Pieces.OfColour(attacker).Any(p => p.PossibleMoves.ContainsMoveTo(king.Location)))
                 {
                     GameState = defender == Colours.Black
                         ? GameState.BlackKingInCheck
