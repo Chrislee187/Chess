@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Resources;
 
 namespace chess.engine
 {
@@ -9,6 +10,10 @@ namespace chess.engine
 
         public BoardLocation(ChessFile file, int rank)
         {
+            Guard.ArgumentException(() => rank < 1, $"Invalid rank: {rank}" );
+            Guard.ArgumentException(() => rank > 8, $"Invalid rank: {rank}" );
+            Guard.ArgumentException(() => (int)file < 1, $"Invalid file: {file}");
+            Guard.ArgumentException(() => (int)file > 8, $"Invalid file: {file}");
             File = file;
             Rank = rank;
         }
@@ -17,10 +22,31 @@ namespace chess.engine
             => new BoardLocation(file, rank);
 
         public static BoardLocation At(int file, int rank)
-            => new BoardLocation((ChessFile)file, rank);
+            => At((ChessFile)file, rank);
 
         public static BoardLocation At(string at)
             => (BoardLocation)at;
+
+        private bool OutOfBounds(int value) => value < 1 || value > 8;
+
+        private BoardLocation SafeCreate(int file, int rank)
+        {
+            if (OutOfBounds(rank)) return null;
+            if (OutOfBounds(file)) return null;
+
+            return At(file, rank);
+        }
+        public BoardLocation MoveForward(Colours colour, int squares = 1) 
+            => SafeCreate((int)File, Rank + Move.DirectionModifierFor(colour) * squares);
+
+        public BoardLocation MoveBack(Colours colour, int squares = 1) 
+            => SafeCreate((int)File, Rank - Move.DirectionModifierFor(colour) * squares);
+
+        public BoardLocation MoveLeft(Colours colour, int squares = 1) 
+            => SafeCreate((int) File - (Move.DirectionModifierFor(colour) * squares), Rank);
+
+        public BoardLocation MoveRight(Colours colour, int squares = 1) 
+            => SafeCreate((int) File + (Move.DirectionModifierFor(colour) * squares), Rank);
 
         #region Object overrides
         public override string ToString() => File.ToString().Substring(0, 1) + Rank;

@@ -5,41 +5,52 @@ namespace chess.engine.Pieces
     public class PawnMoveGenerator : IMoveGenerator
     {
 
-        public IEnumerable<Move> MovesFrom(string location, Colours playerToMove)
+        public IEnumerable<Path> MovesFrom(string location, Colours playerToMove)
             => MovesFrom(BoardLocation.At(location), playerToMove);
 
-        public IEnumerable<Move> MovesFrom(BoardLocation location, Colours playerToMove)
+        public IEnumerable<Path> MovesFrom(BoardLocation location, Colours playerToMove)
         {
-            var mod = Move.DirectionModifierFor(playerToMove);
-            var endRank = Move.EndRankFor(playerToMove);
-            var startRank = Pawn.StartRankFor(playerToMove);
+            Guard.ArgumentException(
+                () => location.Rank == Move.EndRankFor(playerToMove), 
+                $"{PieceName.Pawn} is invalid at {location}.");
 
-            Guard.ArgumentException(() => location.Rank == endRank, $"{PieceName.Pawn} is invalid at {location}.");
+            var paths = new List<Path>();
 
-            var moves = new List<Move>
+            var path = new Path
             {
-                Move.CreateMoveOnly(location, BoardLocation.At(location.File, location.Rank + mod))
+                Move.CreateMoveOnly(location, location.MoveForward(playerToMove))
             };
 
-            if (location.Rank == startRank)
+            if (location.Rank == Pawn.StartRankFor(playerToMove))
             {
-                moves.Add(Move.CreateMoveOnly(location,
-                    BoardLocation.At(location.File, location.Rank + (mod * 2))));
+                path.Add(Move.CreateMoveOnly(location, location.MoveForward(playerToMove, 2)));
             }
 
-            if (location.File != ChessFile.A)
+            paths.Add(path);
+
+            var takeType = location.Rank == Pawn.EnPassantRankFor(playerToMove)
+                ? MoveType.TakeEnPassant
+                : MoveType.TakeOnly;
+
+            var takeLeft = location.MoveForward(playerToMove).MoveLeft(playerToMove);
+            if (takeLeft != null)
             {
-                moves.Add(Move.CreateTakeOnly(location,
-                    BoardLocation.At(location.File - 1, location.Rank + mod)));
+                paths.Add(new Path
+                {
+                    Move.Create(location, takeLeft, takeType)
+                });
             }
 
-            if (location.File != ChessFile.H)
+            var takeRight = location.MoveForward(playerToMove).MoveRight(playerToMove);
+            if (takeRight != null)
             {
-                moves.Add(Move.CreateTakeOnly(location,
-                    BoardLocation.At(location.File + 1, location.Rank + mod)));
+                paths.Add(new Path
+                {
+                    Move.Create(location, takeRight, takeType)
+                });
             }
 
-            return moves;
+            return paths;
         }
 
     }

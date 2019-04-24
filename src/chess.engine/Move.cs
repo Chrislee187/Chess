@@ -13,7 +13,9 @@ namespace chess.engine
             => player == Colours.White ? 8 : 1;
 
         public static Move Create(string from, string to, MoveType moveType = MoveType.MoveOrTake) 
-            => new Move(BoardLocation.At(from), BoardLocation.At(to), moveType);
+            => Create(BoardLocation.At(from), BoardLocation.At(to), moveType);
+        public static Move Create(BoardLocation from, BoardLocation to, MoveType moveType = MoveType.MoveOrTake)
+            => new Move(from, to, moveType);
 
         public BoardLocation From { get; }
         public BoardLocation To { get; }
@@ -30,7 +32,9 @@ namespace chess.engine
 
         protected bool Equals(Move other)
         {
-            return Equals(From, other.From) && Equals(To, other.To);
+            return Equals(From, other.From) 
+                   && Equals(To, other.To)
+                && MoveType.Equals(other.MoveType);
         }
 
         public override bool Equals(object obj)
@@ -49,16 +53,10 @@ namespace chess.engine
             }
         }
 
-        private readonly Dictionary<MoveType, string> _moveTypeDelimiters = new Dictionary<MoveType, string>
-        {
-            {MoveType.MoveOnly, "-" },
-            {MoveType.TakeOnly, "x" },
-            {MoveType.MoveOrTake, "" },
-        };
 
         public override string ToString()
         {
-            return $"{From}{_moveTypeDelimiters[MoveType]}{To}";
+            return $"{From}{To}{MoveType}";
         }
 
         #endregion

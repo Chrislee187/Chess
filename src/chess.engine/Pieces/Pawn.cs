@@ -6,5 +6,8 @@ namespace chess.engine.Pieces
     {
         public static int StartRankFor(Colours player)
             => player == Colours.White ? 2 : 7;
+
+        public static int EnPassantRankFor(Colours player)
+            => player == Colours.White ? 5 : 4;
     }
 }
