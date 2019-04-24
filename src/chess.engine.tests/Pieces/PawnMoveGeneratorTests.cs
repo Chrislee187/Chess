@@ -6,11 +6,14 @@ using NUnit.Framework;
 
 namespace chess.engine.tests.Pieces
 {
-    public class PawnTests
+    public class PawnMoveGeneratorTests
     {
+        private IMoveGenerator _moveGenerator;
+
         [SetUp]
         public void Setup()
         {
+            _moveGenerator = new PawnMoveGenerator();
         }
 
         [TestCase(ChessFile.B)]
@@ -25,7 +28,7 @@ namespace chess.engine.tests.Pieces
             {
                 var startRank = Pawn.StartRankFor(colour);
                 var directionModifer = Move.DirectionModifierFor(colour);
-                var allMoves = Pawn.MovesFrom($"{file}{startRank}", colour);
+                var allMoves = _moveGenerator.MovesFrom((BoardLocation) $"{file}{startRank}", colour);
 
                 Assert.That(allMoves.Count, Is.EqualTo(4));
 
@@ -52,7 +55,7 @@ namespace chess.engine.tests.Pieces
             {
                 var startRank = Pawn.StartRankFor(colour);
                 var directionModifer = Move.DirectionModifierFor(colour);
-                var allMoves = Pawn.MovesFrom($"{file}{startRank}", colour);
+                var allMoves = _moveGenerator.MovesFrom($"{file}{startRank}", colour);
 
                 Assert.That(allMoves.Count, Is.EqualTo(3));
 
@@ -78,7 +81,7 @@ namespace chess.engine.tests.Pieces
                 var startRank = Pawn.StartRankFor(colour);
                 var directionModifer = Move.DirectionModifierFor(colour);
 
-                var allMoves = Pawn.MovesFrom($"D4", colour).ToList();
+                var allMoves = _moveGenerator.MovesFrom($"D4", colour).ToList();
 
                 Assert.That(allMoves.Count, Is.EqualTo(3));
 

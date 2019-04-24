@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using chess.engine.Pieces;
 
 namespace chess.engine
 {
@@ -13,7 +12,8 @@ namespace chess.engine
         public static int EndRankFor(Colours player)
             => player == Colours.White ? 8 : 1;
 
-        public static Move Create(string from, string to, MoveType moveType = MoveType.MoveOrTake) => new Move(BoardLocation.At(from), BoardLocation.At(to), moveType);
+        public static Move Create(string from, string to, MoveType moveType = MoveType.MoveOrTake) 
+            => new Move(BoardLocation.At(from), BoardLocation.At(to), moveType);
 
         public BoardLocation From { get; }
         public BoardLocation To { get; }
@@ -25,6 +25,8 @@ namespace chess.engine
             To = to;
             MoveType = moveType;
         }
+
+        #region Equality & ToString()
 
         protected bool Equals(Move other)
         {
@@ -59,6 +61,6 @@ namespace chess.engine
             return $"{From}{_moveTypeDelimiters[MoveType]}{To}";
         }
 
-        
+        #endregion
     }
 }
