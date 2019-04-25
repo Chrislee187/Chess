@@ -14,12 +14,13 @@ namespace chess.engine.tests.Pieces
         [SetUp]
         public void Setup()
         {
-            _moveGenerator = new PawnMoveGenerator();
+            _moveGenerator = new TestPawnMoveAggrator();
         }
 
         [Test]
         public void MovesFrom_returns_possible_moves_from_starting_position()
         {
+            // TODO: ? Split this in to more discrete tests?
             _colours = new []{Colours.Black, Colours.White};
             foreach (ChessFile file in Enum.GetValues(typeof(ChessFile)))
             {
@@ -65,22 +66,22 @@ namespace chess.engine.tests.Pieces
         {
             foreach (var colour in _colours)
             {
-                var location = $"D3";
+                var location = BoardLocation.At($"D3");
                 var allPaths = _moveGenerator.MovesFrom(location, colour).ToList();
 
                 var expectedMovePath = new Path
                 {
-                    Move.Create(location, colour.ConvertTo("D4", "D2"), MoveType.MoveOnly)
+                    Move.Create(location, location.MoveForward(colour), MoveType.MoveOnly)
                 };
 
                 var expectedTakePathLeft = new Path
                 {
-                    Move.Create(location, colour.ConvertTo("C4" , "C2"), MoveType.TakeOnly)
+                    Move.Create(location, location.MoveForward(colour).MoveLeft(colour), MoveType.TakeOnly)
                 };
 
                 var expectedTakePathRight = new Path
                 {
-                    Move.Create(location, colour.ConvertTo("E4" , "E2"), MoveType.TakeOnly)
+                    Move.Create(location, location.MoveForward(colour).MoveRight(colour), MoveType.TakeOnly)
                 };
 
                 AssertPathContains(allPaths, expectedMovePath, colour);
@@ -96,8 +97,8 @@ namespace chess.engine.tests.Pieces
             {
                 var directionModifer = Move.DirectionModifierFor(colour);
                 var enpassantRank = Pawn.EnPassantRankFor(colour);
-
-                var allPaths = _moveGenerator.MovesFrom($"D{enpassantRank}", colour).ToList();
+                var location = BoardLocation.At($"D{enpassantRank}");
+                var allPaths = _moveGenerator.MovesFrom(location, colour).ToList();
 
                 var expectedEnPassantTakePathLeft = new Path
                 {
@@ -130,6 +131,21 @@ namespace chess.engine.tests.Pieces
                 Move.Create($"{file}{startRank}", oneSquareForward, MoveType.MoveOnly),
                 Move.Create($"{file}{startRank}", twoSquaresForward, MoveType.MoveOnly)
             };
+        }
+
+        class TestPawnMoveAggrator : IMoveGenerator
+        {
+            // TODO: Don't use this aggregator, split the tests up
+            public IEnumerable<Path> MovesFrom(BoardLocation location, Colours forPlayer)
+            {
+                return new PawnNormalAndStartingMoveGenerator().MovesFrom(location, forPlayer)
+                    .Concat(new PawnLeftTakeMoveGenerator().MovesFrom(location, forPlayer))
+                    .Concat(new PawnRightTakeMoveGenerator().MovesFrom(location, forPlayer));
+
+            }
+
+            public IEnumerable<Path> MovesFrom(string location, Colours forPlayer) =>
+                MovesFrom((BoardLocation) location, forPlayer);
         }
     }
 }

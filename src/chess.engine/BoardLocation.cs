@@ -10,10 +10,8 @@ namespace chess.engine
 
         public BoardLocation(ChessFile file, int rank)
         {
-            Guard.ArgumentException(() => rank < 1, $"Invalid rank: {rank}" );
-            Guard.ArgumentException(() => rank > 8, $"Invalid rank: {rank}" );
-            Guard.ArgumentException(() => (int)file < 1, $"Invalid file: {file}");
-            Guard.ArgumentException(() => (int)file > 8, $"Invalid file: {file}");
+            Guard.ArgumentException(() => OutOfBounds(rank), $"Invalid rank: {rank}" );
+            Guard.ArgumentException(() => OutOfBounds((int) file), $"Invalid file: {file}");
             File = file;
             Rank = rank;
         }

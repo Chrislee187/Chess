@@ -9,5 +9,6 @@ namespace chess.engine.Pieces
 
         public static int EnPassantRankFor(Colours player)
             => player == Colours.White ? 5 : 4;
+
     }
 }
