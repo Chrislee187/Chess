@@ -8,7 +8,6 @@ namespace chess.engine.Pieces.Pawn
     {
         public IEnumerable<Path> PathsFrom(BoardLocation location, Colours forPlayer)
         {
-
             var paths = new List<Path>();
 
             var takeType = location.Rank == Pawn.EnPassantRankFor(forPlayer)
