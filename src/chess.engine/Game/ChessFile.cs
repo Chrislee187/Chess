@@ -1,4 +1,4 @@
-﻿namespace chess.engine
+﻿namespace chess.engine.Game
 {
     public enum ChessFile
     {

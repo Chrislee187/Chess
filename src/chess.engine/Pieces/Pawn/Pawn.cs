@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using chess.engine.Game;
 
-namespace chess.engine.Pieces
+namespace chess.engine.Pieces.Pawn
 {
     public class Pawn
     {

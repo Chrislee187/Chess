@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using chess.engine.Pieces;
+using chess.engine.Game;
 
-namespace chess.engine
+namespace chess.engine.Movement
 {
     public interface IPathGenerator
     {

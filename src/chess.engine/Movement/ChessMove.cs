@@ -1,4 +1,6 @@
-﻿namespace chess.engine
+﻿using chess.engine.Game;
+
+namespace chess.engine.Movement
 {
     public class ChessMove 
     {

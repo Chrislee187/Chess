@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using chess.engine.Game;
+using chess.engine.Movement;
 
-namespace chess.engine.Pieces
+namespace chess.engine.Pieces.Pawn
 {
     public class PawnNormalAndStartingPathGenerator : IPathGenerator
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Resources;
+using chess.engine.Movement;
 
-namespace chess.engine
+namespace chess.engine.Game
 {
     public class BoardLocation
     {

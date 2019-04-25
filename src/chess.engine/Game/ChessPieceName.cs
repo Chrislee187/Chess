@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace chess.engine
+﻿namespace chess.engine.Game
 {
     public enum ChessPieceName { Pawn, Rook, Bishop, Knight, King, Queen }
 }

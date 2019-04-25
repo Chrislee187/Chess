@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace chess.engine
+﻿namespace chess.engine.Game
 {
     public enum Colours { White, Black }
 

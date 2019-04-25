@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace chess.engine
+namespace chess.engine.Movement
 {
     /// <summary>
     /// Path is a sequence of Move's that require the previous move to be valid before the next move can be considered

@@ -1,4 +1,4 @@
-﻿namespace chess.engine
+﻿namespace chess.engine.Movement
 {
     public enum ChessMoveType
     {

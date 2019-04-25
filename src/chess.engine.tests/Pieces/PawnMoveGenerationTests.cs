@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using chess.engine.Pieces;
+using chess.engine.Game;
+using chess.engine.Movement;
+using chess.engine.Pieces.Pawn;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Pieces
 {
-    public class PawnMoveGeneratorTests
+    public class PawnMoveGenerationTests
     {
         private IPathGenerator _pathGenerator;
         private Colours[] _colours = { Colours.Black, Colours.White };
