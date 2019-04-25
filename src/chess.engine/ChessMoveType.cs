@@ -1,6 +1,6 @@
 ﻿namespace chess.engine
 {
-    public enum MoveType
+    public enum ChessMoveType
     {
         MoveOrTake, MoveOnly, TakeOnly, TakeEnPassant, Castle, Check, Checkmate,
         Promotion,

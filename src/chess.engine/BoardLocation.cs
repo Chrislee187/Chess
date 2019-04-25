@@ -35,16 +35,16 @@ namespace chess.engine
             return At(file, rank);
         }
         public BoardLocation MoveForward(Colours colour, int squares = 1) 
-            => SafeCreate((int)File, Rank + Move.DirectionModifierFor(colour) * squares);
+            => SafeCreate((int)File, Rank + ChessMove.DirectionModifierFor(colour) * squares);
 
         public BoardLocation MoveBack(Colours colour, int squares = 1) 
-            => SafeCreate((int)File, Rank - Move.DirectionModifierFor(colour) * squares);
+            => SafeCreate((int)File, Rank - ChessMove.DirectionModifierFor(colour) * squares);
 
         public BoardLocation MoveLeft(Colours colour, int squares = 1) 
-            => SafeCreate((int) File - (Move.DirectionModifierFor(colour) * squares), Rank);
+            => SafeCreate((int) File - (ChessMove.DirectionModifierFor(colour) * squares), Rank);
 
         public BoardLocation MoveRight(Colours colour, int squares = 1) 
-            => SafeCreate((int) File + (Move.DirectionModifierFor(colour) * squares), Rank);
+            => SafeCreate((int) File + (ChessMove.DirectionModifierFor(colour) * squares), Rank);
 
         #region Object overrides
         public override string ToString() => File.ToString().Substring(0, 1) + Rank;

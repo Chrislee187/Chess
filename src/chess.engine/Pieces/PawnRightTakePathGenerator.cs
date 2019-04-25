@@ -2,23 +2,21 @@
 
 namespace chess.engine.Pieces
 {
-    public class PawnRightTakeMoveGenerator : IMoveGenerator
+    public class PawnRightTakePathGenerator : IPathGenerator
     {
 
-        public IEnumerable<Path> MovesFrom(string location, Colours forPlayer)
-            => MovesFrom(BoardLocation.At(location), forPlayer);
 
-        public IEnumerable<Path> MovesFrom(BoardLocation location, Colours forPlayer)
+        public IEnumerable<Path> PathsFrom(BoardLocation location, Colours forPlayer)
         {
             Guard.ArgumentException(
-                () => location.Rank == Move.EndRankFor(forPlayer), 
+                () => location.Rank == ChessMove.EndRankFor(forPlayer),
                 $"{ChessPieceName.Pawn} is invalid at {location}.");
 
             var paths = new List<Path>();
 
             var takeType = location.Rank == Pawn.EnPassantRankFor(forPlayer)
-                ? MoveType.TakeEnPassant
-                : MoveType.TakeOnly;
+                ? ChessMoveType.TakeEnPassant
+                : ChessMoveType.TakeOnly;
 
             var oneSquareForward = location.MoveForward(forPlayer);
 
@@ -26,14 +24,17 @@ namespace chess.engine.Pieces
             var takeRight = oneSquareForward.MoveRight(forPlayer);
             if (takeRight != null)
             {
+                var move = ChessMove.Create(location, takeRight, takeType);
                 paths.Add(new Path
                 {
-                    Move.Create(location, takeRight, takeType)
+                    move
                 });
             }
 
             return paths;
         }
 
+        public IEnumerable<Path> PathsFrom(string location, Colours forPlayer) =>
+            PathsFrom(BoardLocation.At(location), forPlayer);
     }
 }

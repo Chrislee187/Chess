@@ -2,16 +2,16 @@
 
 namespace chess.engine.Pieces
 {
-    public class PawnLeftTakeMoveGenerator : IMoveGenerator
+    public class PawnLeftTakePathGenerator : IPathGenerator
     {
-        public IEnumerable<Path> MovesFrom(BoardLocation location, Colours forPlayer)
+        public IEnumerable<Path> PathsFrom(BoardLocation location, Colours forPlayer)
         {
 
             var paths = new List<Path>();
 
             var takeType = location.Rank == Pawn.EnPassantRankFor(forPlayer)
-                ? MoveType.TakeEnPassant
-                : MoveType.TakeOnly;
+                ? ChessMoveType.TakeEnPassant
+                : ChessMoveType.TakeOnly;
 
             var oneSquareForward = location.MoveForward(forPlayer);
             var takeLeft = oneSquareForward.MoveLeft(forPlayer);
@@ -19,13 +19,13 @@ namespace chess.engine.Pieces
             {
                 paths.Add(new Path
                 {
-                    Move.Create(location, takeLeft, takeType)
+                    ChessMove.Create(location, takeLeft, takeType)
                 });
             }
 
             return paths;
         }
 
-        public IEnumerable<Path> MovesFrom(string location, Colours forPlayer) => MovesFrom((BoardLocation)location, forPlayer);
+        public IEnumerable<Path> PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
     }
 }

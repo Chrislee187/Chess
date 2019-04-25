@@ -9,5 +9,10 @@ namespace chess.engine
             if(check())
                 throw new ArgumentException(message);
         }
+
+        public static void NotNull(object obj)
+        {
+            if(obj == null) throw new NullReferenceException();
+        }
     }
 }

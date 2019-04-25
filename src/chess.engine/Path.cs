@@ -7,16 +7,15 @@ namespace chess.engine
     /// <summary>
     /// Path is a sequence of Move's that require the previous move to be valid before the next move can be considered
     /// </summary>
-    public class Path : IEnumerable<Move>
+    public class Path : IEnumerable<ChessMove>
     {
-        private readonly List<Move> _moves = new List<Move>();
+        private readonly List<ChessMove> _moves = new List<ChessMove>();
 
-        public IEnumerator<Move> GetEnumerator() => _moves.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public void Add(Move move) => _moves.Add(move);
+        public void Add(ChessMove move) => _moves.Add(move);
 
         protected bool Equals(Path other) => _moves.All(other.Contains);
+
 
         public override bool Equals(object obj)
         {
@@ -30,5 +29,8 @@ namespace chess.engine
 
         public override string ToString() 
             => $"{string.Join(", ", _moves.Select(m=> m.ToString()))}";
+
+        public IEnumerator<ChessMove> GetEnumerator() => _moves.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
