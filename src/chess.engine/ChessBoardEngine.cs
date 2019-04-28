@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using chess.engine.Board;
 using chess.engine.Entities;
@@ -11,33 +10,22 @@ namespace chess.engine
 {
     public class ChessBoardEngine : IBoardActions
     {
-        public delegate ChessPieceEntity ChessPieceEntityProvider(BoardLocation location);
-        public delegate IEnumerable<ActiveBoardPiece> ActivePiecesProvider();
-
-        internal static readonly Dictionary<BoardLocation, ChessPieceEntity> _entities = new Dictionary<BoardLocation, ChessPieceEntity>();
-        internal static readonly Dictionary<BoardLocation, IEnumerable<Path>> _paths = new Dictionary<BoardLocation, IEnumerable<Path>>();
-
-        private readonly ChessMoveValidator _moveValidator;
-
-        public ChessBoardEngine()
-        {
-            _moveValidator = new ChessMoveValidator();
-        }
-
+        private readonly BoardState _boardState = new BoardState(new Dictionary<BoardLocation, ChessPieceEntity>(),new Dictionary<BoardLocation, IEnumerable<Path>>());
+        
         public ChessBoardEngine InitBoard()
         {
             foreach (var rank in new []{1,8})
             {
                 var colour = rank == 1 ? Colours.White : Colours.Black;
             
-//                AddEntity(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"A{rank}"));
-//                AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"B{rank}"));
-//                AddEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"C{rank}"));
-//                AddEntity(ChessPieceEntityFactory.CreateQueen(colour),  BoardLocation.At($"D{rank}"));
+//                PlaceEntity(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"A{rank}"));
+//                PlaceEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"B{rank}"));
+//                PlaceEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"C{rank}"));
+//                PlaceEntity(ChessPieceEntityFactory.CreateQueen(colour),  BoardLocation.At($"D{rank}"));
                 AddEntity(ChessPieceEntityFactory.CreateKing(colour),   BoardLocation.At($"E{rank}"));
-//                AddEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
-//                AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"G{rank}"));
-//                AddEntity(ChessPieceEntityFactory.CreateRook(colour),   BoardLocation.At($"H{rank}"));
+//                PlaceEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
+//                PlaceEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"G{rank}"));
+//                PlaceEntity(ChessPieceEntityFactory.CreateRook(colour),   BoardLocation.At($"H{rank}"));
             
             }
 
@@ -50,7 +38,9 @@ namespace chess.engine
                 }
             }
 
-            foreach (var kvp in _entities)
+            // Calculate the valid moves for each piece
+            // Do kings last and seperate to avoid recursion when they check whether possible moves are underattack from enemy pieces
+            foreach (var kvp in _boardState.Entities)
             {
                 var piece = kvp.Value;
 
@@ -60,7 +50,7 @@ namespace chess.engine
                 }
             }
 
-            var kings = _entities.Where(kvp => kvp.Value.EntityType == ChessPieceName.King).ToList();
+            var kings = _boardState.Entities.Where(kvp => kvp.Value.EntityType == ChessPieceName.King).ToList();
 
             ValidMovesForEntityAt(kings[0].Value, kings[0].Key);
             ValidMovesForEntityAt(kings[1].Value, kings[1].Key);
@@ -72,8 +62,8 @@ namespace chess.engine
             AddEntity(create, BoardLocation.At(startingLocation));
         public ChessBoardEngine AddEntity(ChessPieceEntity create, BoardLocation startingLocation)
         {
-            _entities.Add(startingLocation, create);
-            _paths.Add(startingLocation, null);
+            _boardState.SetEntity(startingLocation, create);
+            _boardState.SetPaths(startingLocation, null);
             return this;
         }
         
@@ -87,8 +77,6 @@ namespace chess.engine
 
             return new ActiveBoardPiece(piece, validPaths);
         }
-
-        public IEnumerable<ActiveBoardPiece> AllActivePieces => _entities.Keys.Select(PieceAt);
 
         public void Move(ChessMove validMove)
         {
@@ -134,7 +122,7 @@ namespace chess.engine
 
             foreach (var possiblePath in possiblePaths)
             {
-                var validPath = _moveValidator.ValidPath(possiblePath, _entities, _paths);
+                var validPath = _boardState.ValidPath(possiblePath, _boardState);
 
                 if (validPath.Any())
                 {
@@ -160,25 +148,22 @@ namespace chess.engine
 
         private IEnumerable<Path> ValidMovesForEntityAt(ChessPieceEntity entityAt, BoardLocation boardLocation)
         {
-            if (_paths.TryGetValue(boardLocation, out IEnumerable<Path> paths))
+            var paths = _boardState.GetPathsOrNull(boardLocation);
+
+            if (paths == null)
             {
-                if (paths == null)
-                {
-                    paths = GeneratePossibleMoves(boardLocation, entityAt).ToList();
+                paths = GeneratePossibleMoves(boardLocation, entityAt).ToList();
 
-                    paths = RemoveInvalidMoves(paths).ToList();
-                    _paths[boardLocation] = paths;
-                }
-
-                return paths;
+                paths = RemoveInvalidMoves(paths).ToList();
+                _boardState.SetPaths(boardLocation, paths);
             }
 
-            return new List<Path>();
+            return paths;
         }
 
         private ChessPieceEntity SafeGetEntity(BoardLocation location)
         {
-            _entities.TryGetValue(location, out var entityAt);
+            _boardState.Entities.TryGetValue(location, out var entityAt);
 
             return entityAt;
         }
@@ -188,25 +173,22 @@ namespace chess.engine
         {
             var piece = actions.GetEntity(move.From);
             actions.ClearSquare(move.From);
-            actions.ClearSquare(move.To);
-            actions.SetEntity(move.To, piece);
+            actions.PlaceEntity(move.To, piece);
         }
 
         ChessPieceEntity IBoardActions.GetEntity(BoardLocation loc) => SafeGetEntity(loc);
 
-        void IBoardActions.SetEntity(BoardLocation loc, ChessPieceEntity entity)
+        void IBoardActions.PlaceEntity(BoardLocation loc, ChessPieceEntity entity)
         {
-            _entities[loc] = entity;
-            _paths[loc] = GeneratePossibleMoves(loc, entity);
+            _boardState.SetEntity(loc, entity);
+            _boardState.SetPaths(loc, GeneratePossibleMoves(loc, entity));
         }
 
         void IBoardActions.ClearSquare(BoardLocation loc)
         {
-            _entities[loc] = null;
-            _paths[loc] = null;
-
+            _boardState.SetEntity(loc, null);
+            _boardState.SetPaths(loc, null);
         }
-
         #endregion
 
     }

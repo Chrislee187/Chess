@@ -2,11 +2,18 @@
 {
     public enum ChessMoveType
     {
-        MoveOrTake, MoveOnly, TakeOnly, TakeEnPassant, Castle, Check, Checkmate,
+        MoveOrTake,
+        MoveOnly,
+        TakeOnly,
+        TakeEnPassant,
+        KingMove,
+        Check,
+        Castle,
+        Checkmate,
         Promotion,
         Unknown,
         Taken,
-        Cover, Invalid,
-        KingMove
+        Cover,
+        Invalid
     }
 }

@@ -1,49 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using chess.engine.Entities;
+using chess.engine.Board;
 using chess.engine.Game;
 
 namespace chess.engine.Movement
 {
     public class ChessMoveValidator
     {
-
         private delegate bool ChessBoardMovePredicate(ChessMove move
-        , IDictionary<BoardLocation, ChessPieceEntity> entities
-        , IDictionary<BoardLocation, IEnumerable<Path>> paths);
+        , BoardState boardState);
 
-        public Path ValidPath(Path possiblePath, 
-            IDictionary<BoardLocation, ChessPieceEntity> entities,
-            IDictionary<BoardLocation, IEnumerable<Path>> paths)
+        private readonly IDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>> _moveValidationFactory =
+            new Dictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>>()
+            {
+                {ChessMoveType.KingMove, new ChessBoardMovePredicate[] {DestinationIsEmpty, DestinationNotUnderAttack}},
+                {ChessMoveType.MoveOnly, new ChessBoardMovePredicate[] {DestinationIsEmpty}},
+                {ChessMoveType.TakeOnly, new ChessBoardMovePredicate[] {DestinationContainsEnemy}},
+                {ChessMoveType.TakeEnPassant, new ChessBoardMovePredicate[] {EnPassantIsPossible}}
+            };
+
+
+        public Path ValidPath(Path possiblePath, BoardState boardState)
         {
             var validPath = new Path();
             foreach (var move in possiblePath)
             {
-                var tests = new List<ChessBoardMovePredicate>();
-
-                switch (move.ChessMoveType)
+                if (!_moveValidationFactory.TryGetValue(move.ChessMoveType, out var moveTests))
                 {
-                    case ChessMoveType.KingMove:
-                        // TODO: Needs additional code to check for being in check or not
-                        tests.Add(DestinationIsEmpty);
-                        tests.Add(DestinationNotUnderAttack);
-                        break;
-                    case ChessMoveType.MoveOnly:
-                        tests.Add(DestinationIsEmpty);
-                        break;
-                    case ChessMoveType.TakeOnly:
-                        tests.Add(DestinationContainsEnemy);
-                        break;
-                    case ChessMoveType.TakeEnPassant:
-                        tests.Add(EnPassantIsPossible);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(move.ChessMoveType), move.ChessMoveType, $"NotImplemented ChessMoveType");
+                    throw new ArgumentOutOfRangeException(nameof(move.ChessMoveType), move.ChessMoveType, $"No Move Validator implemented for {move.ChessMoveType}");
                 }
 
-                if (!tests.All(t => t(move, entities, paths)))
+                if (!moveTests.All(t => t(move, boardState)))
                 {
                     break;
                 }
@@ -53,19 +41,17 @@ namespace chess.engine.Movement
 
             return validPath;
         }
-
-        private bool EnPassantIsPossible(ChessMove move,
-            IDictionary<BoardLocation, ChessPieceEntity> entities,
-            IDictionary<BoardLocation, IEnumerable<Path>> paths)
+        // TODO: Move these into the board state class, lose the statics, add tests
+        // Path Validations should hang off board state?
+        private static bool EnPassantIsPossible(ChessMove move, BoardState boardState)
         {
-            var normalTakeOk = DestinationContainsEnemy(move, entities, paths);
+            var normalTakeOk = DestinationContainsEnemy(move, boardState);
 
-            var piece = entities[move.From];
+            var piece = boardState.Entities[move.From];
 
             var passingPieceLocation = move.To.MoveBack(piece.Player);
-            var passingPiece = entities[passingPieceLocation];
 
-            if (passingPiece == null) return false;
+            if (!boardState.Entities.TryGetValue(passingPieceLocation, out var passingPiece)) return false;
             if (passingPiece.Player == piece.Player) return false;
             if (passingPiece.EntityType != ChessPieceName.Pawn) return false;
 
@@ -74,7 +60,7 @@ namespace chess.engine.Movement
             return normalTakeOk || enpassantOk;
         }
 
-        private bool CheckPawnUsedDoubleMove(BoardLocation moveTo)
+        private static bool CheckPawnUsedDoubleMove(BoardLocation moveTo)
         {
             // ************************
             // TODO: Need to check move count/history to confirm that the pawn we passed did it's double move last turn
@@ -82,37 +68,29 @@ namespace chess.engine.Movement
             return true;
         }
 
-        // Valid Path Tests
-
-        private bool DestinationContainsEnemy(ChessMove move,
-            IDictionary<BoardLocation, ChessPieceEntity> entities,
-            IDictionary<BoardLocation, IEnumerable<Path>> paths)
+        private static bool DestinationContainsEnemy(ChessMove move, BoardState boardState)
         {
-            var sourcePiece = entities[move.From];
+            var sourcePiece = boardState.Entities[move.From];
             Guard.NotNull(sourcePiece);
 
-            if (!entities.TryGetValue(move.To, out var destinationPiece))
+            if (!boardState.Entities.TryGetValue(move.To, out var destinationPiece))
             {
                 return false;
             }
 
             return sourcePiece.Player != destinationPiece.Player;
         }
-        private bool DestinationIsEmpty(ChessMove move,
-            IDictionary<BoardLocation, ChessPieceEntity> entities,
-            IDictionary<BoardLocation, IEnumerable<Path>> paths) => LocationIsEmpty(move.To, entities);
-        private bool LocationIsEmpty(BoardLocation location,
-            IDictionary<BoardLocation, ChessPieceEntity> entities) 
-            => !entities.ContainsKey(location) || entities[location] == null;
-        private bool DestinationNotUnderAttack(ChessMove move,
-            IDictionary<BoardLocation, ChessPieceEntity> entities,
-            IDictionary<BoardLocation, IEnumerable<Path>> paths)
-        {
-            var pieceEntity = entities[move.From];
-            var enemyColour = pieceEntity.Player.Enemy();
-            var enemyLocationKeys = entities.Where(kvp => kvp.Value?.Player == enemyColour).Select(kvp => kvp.Key);
 
-            var enemyPaths = paths.Where(kvp => enemyLocationKeys.Contains(kvp.Key) && kvp.Value != null).ToList();
+        private static bool DestinationIsEmpty(ChessMove move, BoardState boardState) 
+            => !boardState.Entities.ContainsKey(move.To) || boardState.Entities[move.To] == null;
+
+        private static bool DestinationNotUnderAttack(ChessMove move, BoardState boardState)
+        {
+            var pieceEntity = boardState.Entities[move.From];
+            var enemyColour = pieceEntity.Player.Enemy();
+            var enemyLocationKeys = boardState.Entities.Where(kvp => kvp.Value?.Player == enemyColour).Select(kvp => kvp.Key);
+
+            var enemyPaths = boardState.Paths.Where(kvp => enemyLocationKeys.Contains(kvp.Key) && kvp.Value != null).ToList();
             var enemyPaths2 = enemyPaths.SelectMany(kvp => kvp.Value).SelectMany(p => p).ToList();
 
             return !enemyPaths2.Any(enemyMove 

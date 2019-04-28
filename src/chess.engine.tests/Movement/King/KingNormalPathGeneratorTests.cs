@@ -2,11 +2,10 @@ using System.Linq;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Pieces.King;
-using chess.engine.Pieces.Pawn;
 using chess.engine.tests.Builders;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Movement.Pawns
+namespace chess.engine.tests.Movement.King
 {
     public class KingNormalPathGeneratorTests : PathGeneratorTestsBase
     {

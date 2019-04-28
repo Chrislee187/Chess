@@ -7,7 +7,7 @@ namespace chess.engine
     {
         ChessPieceEntity GetEntity(BoardLocation loc);
         void ClearSquare(BoardLocation loc);
-        void SetEntity(BoardLocation loc, ChessPieceEntity entity);
+        void PlaceEntity(BoardLocation loc, ChessPieceEntity entity);
 
     }
 }

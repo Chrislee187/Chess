@@ -13,7 +13,9 @@ namespace chess.engine.Entities
         public override IEnumerable<IPathGenerator> PathGenerators =>
             new List<IPathGenerator>
             {
-                new PawnRightTakePathGenerator(), new PawnNormalAndStartingPathGenerator(), new PawnLeftTakePathGenerator()
+                new PawnNormalAndStartingPathGenerator(),
+                new PawnRightTakePathGenerator(),
+                new PawnLeftTakePathGenerator()
             };
 
     }

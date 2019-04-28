@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-
-namespace chess.engine.Game
+﻿namespace chess.engine.Game
 {
     public enum Colours { White, Black }
 

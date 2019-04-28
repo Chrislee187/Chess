@@ -14,6 +14,8 @@ namespace chess.engine.Movement
 
         public void Add(ChessMove move) => _moves.Add(move);
 
+        #region Equality, Enumerator and Overrides
+
         protected bool Equals(Path other) => _moves.All(other.Contains);
 
 
@@ -32,5 +34,8 @@ namespace chess.engine.Movement
 
         public IEnumerator<ChessMove> GetEnumerator() => _moves.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        #endregion
+
     }
 }
