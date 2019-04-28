@@ -4,7 +4,7 @@ using chess.engine.Game;
 using chess.engine.Movement;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Pieces
+namespace chess.engine.tests.Movement
 {
     public abstract class PathGeneratorTestsBase
     {

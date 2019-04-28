@@ -1,5 +1,4 @@
 using chess.engine.Game;
-using chess.engine.tests.Pieces;
 
 namespace chess.engine.tests.Builders
 {

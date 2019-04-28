@@ -50,6 +50,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine", "src\chess.e
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine.tests", "src\chess.engine.tests\chess.engine.tests.csproj", "{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spiker", "src\spiker\spiker.csproj", "{391A7A0F-A6EE-43C3-90AB-72AAE904C4DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{391A7A0F-A6EE-43C3-90AB-72AAE904C4DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{391A7A0F-A6EE-43C3-90AB-72AAE904C4DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{391A7A0F-A6EE-43C3-90AB-72AAE904C4DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{391A7A0F-A6EE-43C3-90AB-72AAE904C4DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,6 +108,7 @@ Global
 		{DCD434C3-01FD-4F62-8A46-61CBB0B4A157} = {81DB7D80-5AAC-443C-8DCB-BCF58DAC0468}
 		{4C2773CF-3DAE-4149-9D87-7194D73E2624} = {7C2E880D-8A2B-438C-9CFF-3AAA28BE5C7A}
 		{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2} = {7C2E880D-8A2B-438C-9CFF-3AAA28BE5C7A}
+		{391A7A0F-A6EE-43C3-90AB-72AAE904C4DB} = {7C2E880D-8A2B-438C-9CFF-3AAA28BE5C7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1AE6E825-F2A2-49DE-9A01-9F8AC6391F59}

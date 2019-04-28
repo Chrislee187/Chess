@@ -7,10 +7,10 @@ namespace chess.engine.Movement
 {
     public class ChessMoveValidator
     {
-        private readonly ChessGameEngine.ChessPieceEntityProvider _pieceEntityProvider;
+        private readonly ChessBoardEngine.ChessPieceEntityProvider _pieceEntityProvider;
 
         private delegate bool ChessBoardMovePredicate(ChessMove move);
-        public ChessMoveValidator(ChessGameEngine.ChessPieceEntityProvider pieceEntityProvider)
+        public ChessMoveValidator(ChessBoardEngine.ChessPieceEntityProvider pieceEntityProvider)
         {
             _pieceEntityProvider = pieceEntityProvider;
         }
