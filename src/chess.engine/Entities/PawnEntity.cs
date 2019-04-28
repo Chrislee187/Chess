@@ -7,7 +7,7 @@ namespace chess.engine.Entities
 {
     public class PawnEntity : ChessPieceEntity
     {
-        public PawnEntity(Colours owner) : base((ChessPieceName) ChessPieceName.Pawn, owner)
+        public PawnEntity(Colours owner) : base(ChessPieceName.Pawn, owner)
         {
         }
         public override IEnumerable<IPathGenerator> PathGenerators =>

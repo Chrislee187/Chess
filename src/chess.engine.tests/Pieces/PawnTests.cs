@@ -18,7 +18,7 @@ namespace chess.engine.tests.Pieces
         [TestCase(Colours.Black, 4)]
         public void Should_have_correct_enpassant_ranks(Colours player, int rank)
         {
-            Assert.That(Pawn.StartRankFor(player), Is.EqualTo(rank));
+            Assert.That(Pawn.EnPassantRankFor(player), Is.EqualTo(rank));
         }
     }
 }

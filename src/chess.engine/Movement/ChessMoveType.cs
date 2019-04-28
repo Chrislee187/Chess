@@ -6,6 +6,7 @@
         Promotion,
         Unknown,
         Taken,
-        Cover, Invalid
+        Cover, Invalid,
+        KingMove
     }
 }

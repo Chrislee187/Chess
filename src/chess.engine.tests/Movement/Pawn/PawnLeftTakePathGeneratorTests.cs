@@ -5,7 +5,7 @@ using chess.engine.Pieces.Pawn;
 using chess.engine.tests.Builders;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Movement.Pawns
+namespace chess.engine.tests.Movement.Pawn
 {
     public class PawnLeftTakePathGeneratorTests : PathGeneratorTestsBase
     {

@@ -18,5 +18,7 @@ namespace chess.engine.Board
         public ChessPieceName Name{ get; set; }
         public Colours Colour{ get; set; }
         public static BoardPiece Empty => new BoardPiece();
+
+        public override string ToString() => $"{Colour} {Name.ToString()}";
     }
 }
