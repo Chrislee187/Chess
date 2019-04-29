@@ -1,21 +1,20 @@
 ﻿using System.Collections.Generic;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Pieces.Knight;
+using chess.engine.Pieces.King;
 
 namespace chess.engine.Entities
 {
-    public class KnightEntity : ChessPieceEntity
+    public class BishopEntity : ChessPieceEntity
     {
-        public KnightEntity(Colours owner) : base(ChessPieceName.Knight, owner)
+        public BishopEntity(Colours owner) : base(ChessPieceName.Bishop, owner)
         {
         }
         public override IEnumerable<IPathGenerator> PathGenerators =>
             new List<IPathGenerator>
             {
-                new KnightPathGenerator()
+                new BishopPathGenerator()
             };
-
 
     }
 }

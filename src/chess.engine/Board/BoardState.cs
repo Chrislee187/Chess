@@ -33,8 +33,17 @@ namespace chess.engine.Board
         public void SetPaths(BoardLocation loc, IEnumerable<Path> paths) 
             => _paths[loc] = paths;
 
-        public void SetEntity(BoardLocation loc, ChessPieceEntity entity) 
-            => _entities[loc] = entity;
+        public void SetEntity(BoardLocation loc, ChessPieceEntity entity)
+        {
+            if (entity == null)
+            {
+                _entities.Remove(loc);
+            }
+            else
+            {
+                _entities[loc] = entity;
+            }
+        }
 
         public IEnumerable<Path> GetPathsOrNull(BoardLocation loc) 
             => Paths.TryGetValue(loc, out var paths) 

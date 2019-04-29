@@ -17,13 +17,13 @@ namespace chess.engine
             foreach (var rank in new []{1,8})
             {
                 var colour = rank == 1 ? Colours.White : Colours.Black;
-            
-//                PlaceEntity(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"A{rank}"));
-//                PlaceEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"B{rank}"));
-//                PlaceEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"C{rank}"));
+
+                //                PlaceEntity(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"A{rank}"));
+                AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"B{rank}"));
+                AddEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"C{rank}"));
 //                PlaceEntity(ChessPieceEntityFactory.CreateQueen(colour),  BoardLocation.At($"D{rank}"));
                 AddEntity(ChessPieceEntityFactory.CreateKing(colour),   BoardLocation.At($"E{rank}"));
-                //                PlaceEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
+                AddEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
                 AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"G{rank}"));
 //                PlaceEntity(ChessPieceEntityFactory.CreateRook(colour),   BoardLocation.At($"H{rank}"));
             
@@ -40,10 +40,17 @@ namespace chess.engine
 
             // Calculate the valid moves for each piece
             // Do kings last and seperate to avoid recursion when they check whether possible moves are underattack from enemy pieces
+            RecalculatePaths();
+
+            return this;
+        }
+
+        private void RecalculatePaths()
+        {
             foreach (var kvp in _boardState.Entities)
             {
                 var piece = kvp.Value;
-
+                _boardState.SetPaths(kvp.Key, null);
                 if (piece.EntityType != ChessPieceName.King)
                 {
                     ValidMovesForEntityAt(kvp.Value, kvp.Key);
@@ -54,8 +61,6 @@ namespace chess.engine
 
             ValidMovesForEntityAt(kings[0].Value, kings[0].Key);
             ValidMovesForEntityAt(kings[1].Value, kings[1].Key);
-
-            return this;
         }
 
         public ChessBoardEngine AddEntity(ChessPieceEntity create, string startingLocation) =>
@@ -86,6 +91,9 @@ namespace chess.engine
                 case ChessMoveType.MoveOnly:
                     action = MoveOnlyAction;
                     break;
+                case ChessMoveType.TakeOnly:
+                    action = TakeOnlyAction;
+                    break;
                 case ChessMoveType.KingMove:
                     action = MoveOnlyAction;
                     break;
@@ -97,6 +105,7 @@ namespace chess.engine
             }
 
             action(validMove, this);
+            RecalculatePaths();
         }
 
         public BoardPiece[,] Board
@@ -178,18 +187,32 @@ namespace chess.engine
             actions.ClearSquare(move.From);
             actions.PlaceEntity(move.To, piece);
         }
+        void TakeOnlyAction(ChessMove move, IBoardActions actions)
+        {
+            var piece = actions.GetEntity(move.From);
+
+            TakePiece(move.To, actions);
+
+            MoveOnlyAction(move, actions);
+        }
 
         void MoveOrTakeAction(ChessMove move, IBoardActions actions)
         {
             var dest = actions.GetEntity(move.To);
-
+            
             if (dest != null)
             {
-                var taken = dest;
-                // TODO: Record lost piece etc.
+                TakePiece(move.To, actions);
             }
 
             MoveOnlyAction(move, actions);
+        }
+
+        void TakePiece(BoardLocation loc, IBoardActions actions)
+        {
+
+            // TODO: Record lost piece etc.
+            actions.ClearSquare(loc);
         }
 
         ChessPieceEntity IBoardActions.GetEntity(BoardLocation loc) => SafeGetEntity(loc);
