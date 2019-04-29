@@ -56,7 +56,7 @@ namespace spiker
                     }
                     else
                     {
-                        var piece = boardPiece.Name.ToString().First().ToString();
+                        var piece = boardPiece.Name == ChessPieceName.Knight ? "N" : boardPiece.Name.ToString().First().ToString();
                         sb.Append(boardPiece.Colour == Colours.White ? piece.ToUpper() : piece.ToLower());
                     }
 

@@ -23,8 +23,8 @@ namespace chess.engine
 //                PlaceEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"C{rank}"));
 //                PlaceEntity(ChessPieceEntityFactory.CreateQueen(colour),  BoardLocation.At($"D{rank}"));
                 AddEntity(ChessPieceEntityFactory.CreateKing(colour),   BoardLocation.At($"E{rank}"));
-//                PlaceEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
-//                PlaceEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"G{rank}"));
+                //                PlaceEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
+                AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"G{rank}"));
 //                PlaceEntity(ChessPieceEntityFactory.CreateRook(colour),   BoardLocation.At($"H{rank}"));
             
             }
@@ -88,6 +88,9 @@ namespace chess.engine
                     break;
                 case ChessMoveType.KingMove:
                     action = MoveOnlyAction;
+                    break;
+                case ChessMoveType.MoveOrTake:
+                    action = MoveOrTakeAction;
                     break;
                 default:
                     throw new NotImplementedException($"MoveType: {validMove.ChessMoveType} not implemented");
@@ -174,6 +177,19 @@ namespace chess.engine
             var piece = actions.GetEntity(move.From);
             actions.ClearSquare(move.From);
             actions.PlaceEntity(move.To, piece);
+        }
+
+        void MoveOrTakeAction(ChessMove move, IBoardActions actions)
+        {
+            var dest = actions.GetEntity(move.To);
+
+            if (dest != null)
+            {
+                var taken = dest;
+                // TODO: Record lost piece etc.
+            }
+
+            MoveOnlyAction(move, actions);
         }
 
         ChessPieceEntity IBoardActions.GetEntity(BoardLocation loc) => SafeGetEntity(loc);

@@ -34,6 +34,10 @@ namespace chess.engine.Game
 
             return At(file, rank);
         }
+
+        public BoardLocation KnightVerticalMove(Colours colour, bool forward, bool right) => MoveForward(colour, forward ? 2 : -2)?.MoveRight(colour, right ? 1 : -1);
+        public BoardLocation KnightHorizontalMove(Colours colour, bool forward, bool right) => MoveRight(colour, forward ? 2 : -2)?.MoveForward(colour, right ? 1 : -1);
+
         public BoardLocation MoveForward(Colours colour, int squares = 1) 
             => SafeCreate((int)File, Rank + ChessMove.DirectionModifierFor(colour) * squares);
 

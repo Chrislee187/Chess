@@ -16,6 +16,7 @@ namespace chess.engine.Movement
             {
                 {ChessMoveType.KingMove, new ChessBoardMovePredicate[] {DestinationIsEmpty, DestinationNotUnderAttack}},
                 {ChessMoveType.MoveOnly, new ChessBoardMovePredicate[] {DestinationIsEmpty}},
+                {ChessMoveType.MoveOrTake, new ChessBoardMovePredicate[] {DestinationIsEmptyOrContainsEnemy}},
                 {ChessMoveType.TakeOnly, new ChessBoardMovePredicate[] {DestinationContainsEnemy}},
                 {ChessMoveType.TakeEnPassant, new ChessBoardMovePredicate[] {EnPassantIsPossible}}
             };
@@ -80,6 +81,9 @@ namespace chess.engine.Movement
 
             return sourcePiece.Player != destinationPiece.Player;
         }
+
+        private static bool DestinationIsEmptyOrContainsEnemy(ChessMove move, BoardState boardState) 
+            => DestinationIsEmpty(move, boardState) || DestinationContainsEnemy(move, boardState);
 
         private static bool DestinationIsEmpty(ChessMove move, BoardState boardState) 
             => !boardState.Entities.ContainsKey(move.To) || boardState.Entities[move.To] == null;
