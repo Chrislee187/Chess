@@ -18,14 +18,14 @@ namespace chess.engine
             {
                 var colour = rank == 1 ? Colours.White : Colours.Black;
 
-                //                PlaceEntity(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"A{rank}"));
+                AddEntity(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"A{rank}"));
                 AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"B{rank}"));
                 AddEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"C{rank}"));
 //                PlaceEntity(ChessPieceEntityFactory.CreateQueen(colour),  BoardLocation.At($"D{rank}"));
                 AddEntity(ChessPieceEntityFactory.CreateKing(colour),   BoardLocation.At($"E{rank}"));
                 AddEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
                 AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"G{rank}"));
-//                PlaceEntity(ChessPieceEntityFactory.CreateRook(colour),   BoardLocation.At($"H{rank}"));
+                AddEntity(ChessPieceEntityFactory.CreateRook(colour),   BoardLocation.At($"H{rank}"));
             
             }
 

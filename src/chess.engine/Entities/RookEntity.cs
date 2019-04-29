@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Pieces.Bishop;
-using chess.engine.Pieces.King;
+using chess.engine.Pieces.Rook;
 
 namespace chess.engine.Entities
 {
-    public class BishopEntity : ChessPieceEntity
+    public class RookEntity : ChessPieceEntity
     {
-        public BishopEntity(Colours owner) : base(ChessPieceName.Bishop, owner)
+        public RookEntity(Colours owner) : base(ChessPieceName.Rook, owner)
         {
         }
         public override IEnumerable<IPathGenerator> PathGenerators =>
             new List<IPathGenerator>
             {
-                new BishopPathGenerator()
+                new RookPathGenerator()
             };
 
     }
