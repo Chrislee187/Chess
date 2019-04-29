@@ -6,7 +6,7 @@ namespace chess.engine.Entities
 {
     public static class ChessPieceEntityFactory
     {
-        private static IDictionary<ChessPieceName, Func<Colours, ChessPieceEntity>> _factory = new Dictionary<ChessPieceName, Func<Colours, ChessPieceEntity>>
+        private static readonly IDictionary<ChessPieceName, Func<Colours, ChessPieceEntity>> Factory = new Dictionary<ChessPieceName, Func<Colours, ChessPieceEntity>>
         {
             { ChessPieceName.Pawn, (c) => new PawnEntity(c) },
             { ChessPieceName.Knight, (c) => new KnightEntity(c) },
@@ -15,15 +15,14 @@ namespace chess.engine.Entities
             { ChessPieceName.King, (c) => new KingEntity(c) },
             { ChessPieceName.Queen , (c) => new QueenEntity(c) }
         };
-        public static ChessPieceEntity Create(ChessPieceName chessPiece, Colours player)
-        {
-            return _factory[chessPiece](player);
-        }
-        public static ChessPieceEntity CreatePawn(Colours player)   => _factory[ChessPieceName.Pawn](player);
-        public static ChessPieceEntity CreateBishop(Colours player)  => _factory[ChessPieceName.Bishop](player);
-        public static ChessPieceEntity CreateKing(Colours player)   => _factory[ChessPieceName.King](player);
-        public static ChessPieceEntity CreateKnight(Colours player) => _factory[ChessPieceName.Knight](player);
-        public static ChessPieceEntity CreateQueen(Colours player) => _factory[ChessPieceName.Queen](player);
-        public static ChessPieceEntity CreateRook(Colours player) => _factory[ChessPieceName.Rook](player);
+
+        private static ChessPieceEntity Create(ChessPieceName chessPiece, Colours player) => Factory[chessPiece](player);
+
+        public static ChessPieceEntity CreatePawn(Colours player)   => Create(ChessPieceName.Pawn,player);
+        public static ChessPieceEntity CreateBishop(Colours player)  => Create(ChessPieceName.Bishop, player);
+        public static ChessPieceEntity CreateKing(Colours player)   => Create(ChessPieceName.King, player);
+        public static ChessPieceEntity CreateKnight(Colours player) => Create(ChessPieceName.Knight, player);
+        public static ChessPieceEntity CreateQueen(Colours player) => Create(ChessPieceName.Queen, player);
+        public static ChessPieceEntity CreateRook(Colours player) => Create(ChessPieceName.Rook, player);
     }
 }
