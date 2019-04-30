@@ -19,7 +19,7 @@ namespace chess.engine.tests.Builders
             _destinations.Add((at, moveType));
             return this;
         }
-        public PathDestinationsBuilder To(string at, ChessMoveType moveType) => To(BoardLocation.At(at), moveType);
+        public PathDestinationsBuilder To(string at, ChessMoveType moveType = ChessMoveType.MoveOnly) => To(BoardLocation.At(at), moveType);
 
         public Path Build()
         {

@@ -15,7 +15,7 @@ namespace chess.engine.tests
         [Test]
         public void Should()
         {
-            var engine = new ChessBoardEngine(new ChessBoardSetup(), new ChessMoveValidator(), new ChessRefreshAllPaths());
+            var engine = new ChessBoardEngine(new ChessBoardSetup(), new ChessMoveValidator(new MoveValidationFactory()), new ChessRefreshAllPaths());
 
             var startLocation = BoardLocation.At("B2");
 

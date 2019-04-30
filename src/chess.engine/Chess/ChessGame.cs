@@ -13,14 +13,12 @@ namespace chess.engine.Chess
 
         public BoardPiece[,] Board => _engine.Board;
 
-        public ChessGame()
-        {
-            _engine = new ChessBoardEngine(new ChessBoardSetup(), new ChessMoveValidator(), new ChessRefreshAllPaths());
-        }
+        public ChessGame() : this(new ChessBoardSetup())
+        { }
 
         public ChessGame(IGameSetup setup)
         {
-            _engine = new ChessBoardEngine(setup, new ChessMoveValidator(), new ChessRefreshAllPaths());
+            _engine = new ChessBoardEngine(setup, new ChessMoveValidator(new MoveValidationFactory()), new ChessRefreshAllPaths());
         }
         
         public string Move(string input)
@@ -32,12 +30,16 @@ namespace chess.engine.Chess
                 return validated.errorMessage;
             }
 
-            // execute board action for move type
             _engine.Move(validated.move);
 
-            CurrentPlayer = CurrentPlayer == Colours.White ? Colours.Black : Colours.White;
+            CurrentPlayer = NextPlayer();
 
             return "";
+        }
+
+        private Colours NextPlayer()
+        {
+            return CurrentPlayer == Colours.White ? Colours.Black : Colours.White;
         }
 
         private (ChessMove move, string errorMessage) ValidateInput(string input)

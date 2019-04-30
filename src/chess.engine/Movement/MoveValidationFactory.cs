@@ -75,14 +75,14 @@ namespace chess.engine.Movement
 
         private static bool DestinationNotUnderAttack(ChessMove move, BoardState boardState)
         {
-            var pieceEntity = boardState.Entities[move.From];
-            var enemyColour = pieceEntity.Player.Enemy();
-            var enemyLocationKeys = boardState.Entities.Where(kvp => kvp.Value?.Player == enemyColour).Select(kvp => kvp.Key);
+            var movingPiece = boardState.Entities[move.From];
+            var enemyColour = movingPiece.Player.Enemy();
+            var enemyLocation = boardState.Entities.Where(kvp => kvp.Value?.Player == enemyColour).Select(kvp => kvp.Key);
 
-            var enemyPaths = boardState.Paths.Where(kvp => enemyLocationKeys.Contains(kvp.Key) && kvp.Value != null).ToList();
-            var enemyPaths2 = enemyPaths.SelectMany(kvp => kvp.Value).SelectMany(p => p).ToList();
+            var enemyPaths = boardState.Paths.Where(kvp => kvp.Value != null && enemyLocation.Contains(kvp.Key)).ToList();
+            var flattenPaths = enemyPaths.SelectMany(kvp => kvp.Value).SelectMany(p => p).ToList();
 
-            return !enemyPaths2.Any(enemyMove 
+            return !flattenPaths.Any(enemyMove 
                 => Equals(enemyMove.To, move.To));
 
         }
