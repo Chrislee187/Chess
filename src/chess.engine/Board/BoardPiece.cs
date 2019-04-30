@@ -1,4 +1,5 @@
-﻿using chess.engine.Game;
+﻿using chess.engine.Chess;
+using chess.engine.Game;
 
 namespace chess.engine.Board
 {
@@ -13,6 +14,6 @@ namespace chess.engine.Board
         public ChessPieceName Name{ get; }
         public Colours Colour{ get; }
 
-        public override string ToString() => $"{Colour} {Name.ToString()}";
+        public override string ToString() => $"{Colour} {Name}";
     }
 }

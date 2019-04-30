@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Board;
+using chess.engine.Chess;
 using chess.engine.Game;
 
 namespace chess.engine.Movement
 {
-    public class ChessMoveValidator
+    public interface IMoveValidator
+    {
+        Path ValidPath(Path possiblePath, BoardState boardState);
+    }
+
+    public class ChessMoveValidator : IMoveValidator
     {
         private delegate bool ChessBoardMovePredicate(ChessMove move
         , BoardState boardState);

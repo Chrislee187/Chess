@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Pieces.Bishop;
-using chess.engine.Pieces.King;
 
 namespace chess.engine.Entities
 {

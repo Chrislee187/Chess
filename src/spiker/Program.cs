@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Text;
 using chess.engine.Board;
+using chess.engine.Chess;
 using chess.engine.Game;
-using chess.engine.Movement;
 
 namespace spiker
 {
@@ -18,8 +18,7 @@ namespace spiker
             var lastResult = "";
             while (game.InProgress)
             {
-                var board = new StringBoardBuilder().BuildSimpleTestBoard(game.Board);
-                Console.WriteLine(board);
+                Console.WriteLine(new StringBoardBuilder().BuildSimpleTestBoard(game.Board));
 
                 if (!string.IsNullOrEmpty(lastResult))
                 {

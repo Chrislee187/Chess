@@ -1,24 +1,27 @@
 ﻿using System.Linq;
 using chess.engine.Board;
+using chess.engine.Game;
 using chess.engine.Movement;
 
-namespace chess.engine.Game
+namespace chess.engine.Chess
 {
     public class ChessGame
     {
-        private readonly ChessBoardEngine _engine = new ChessBoardEngine().InitBoard();
+        private readonly ChessBoardEngine _engine;
         public Colours CurrentPlayer { get; private set; } = Colours.White;
         public bool InProgress = true;
 
-
         public BoardPiece[,] Board => _engine.Board;
+
+        public ChessGame()
+        {
+            _engine = new ChessBoardEngine(new ChessBoardSetup(), new ChessMoveValidator(), new ChessRefreshAllPaths());
+        }
+
 
         public string Move(string input)
         {
-            var from = BoardLocation.At(input.Substring(0, 2));
-            var to = BoardLocation.At(input.Substring(2, 2));
-
-            var validated = ValidateInput(input, from, to);
+            var validated = ValidateInput(input);
 
             if (!string.IsNullOrEmpty(validated.errorMessage))
             {
@@ -33,15 +36,19 @@ namespace chess.engine.Game
             return "";
         }
 
-        private (ChessMove move, string errorMessage) ValidateInput(string input, BoardLocation @from, BoardLocation to)
+        private (ChessMove move, string errorMessage) ValidateInput(string input)
         {
-            var pieceColour = _engine.PieceAt(@from)?.Entity.Player;
+            var from = BoardLocation.At(input.Substring(0, 2));
+            var to = BoardLocation.At(input.Substring(2, 2));
+
+            var piece = _engine.PieceAt(from);
+            var pieceColour = piece?.Entity.Player;
             if (pieceColour.HasValue && pieceColour.Value != CurrentPlayer)
             {
                 return (null, $"It is not {pieceColour.Value}'s turn.");
             }
 
-            var validMove = _engine.PieceAt(@from)?
+            var validMove = piece?
                 .Paths.SelectMany(path => path)
                 .SingleOrDefault(move => move.To.Equals(to));
 
@@ -52,5 +59,7 @@ namespace chess.engine.Game
 
             return (validMove, string.Empty);
         }
+
+
     }
 }

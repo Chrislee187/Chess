@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CsChess;
 using CSharpChess.System;
 
 namespace CSharpChess.UnitTests.Helpers

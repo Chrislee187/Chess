@@ -45,12 +45,15 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Common.Tests", "corecvt\Chess.Common.Tests\Chess.Common.Tests.csproj", "{6EE1E2A0-F31B-407A-9DA4-3085C44CC07B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7C2E880D-8A2B-438C-9CFF-3AAA28BE5C7A}"
+	ProjectSection(SolutionItems) = preProject
+		readme.MD = readme.MD
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine", "src\chess.engine\chess.engine.csproj", "{4C2773CF-3DAE-4149-9D87-7194D73E2624}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine.tests", "src\chess.engine.tests\chess.engine.tests.csproj", "{993CBE03-FA67-4F04-B8ED-6FC2217EFFF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spiker", "src\spiker\spiker.csproj", "{391A7A0F-A6EE-43C3-90AB-72AAE904C4DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spiker", "src\spiker\spiker.csproj", "{391A7A0F-A6EE-43C3-90AB-72AAE904C4DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

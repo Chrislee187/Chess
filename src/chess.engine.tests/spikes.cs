@@ -1,7 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
+using chess.engine.Movement;
 using NUnit.Framework;
 
 namespace chess.engine.tests
@@ -12,7 +13,7 @@ namespace chess.engine.tests
         [Test]
         public void Should()
         {
-            var engine = new ChessBoardEngine();
+            var engine = new ChessBoardEngine(new ChessBoardSetup(), new ChessMoveValidator(), new ChessRefreshAllPaths());
 
             var startLocation = BoardLocation.At("B2");
 

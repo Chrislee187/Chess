@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
 

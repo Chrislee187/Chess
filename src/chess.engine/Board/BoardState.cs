@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
@@ -8,30 +9,25 @@ namespace chess.engine.Board
 {
     public class BoardState
     {
-
-        private readonly ChessMoveValidator _moveValidator;
+        private readonly IMoveValidator _moveValidator;
         private readonly IDictionary<BoardLocation, ChessPieceEntity> _entities;
         private readonly IDictionary<BoardLocation, IEnumerable<Path>> _paths;
 
         public IReadOnlyDictionary<BoardLocation, ChessPieceEntity> Entities => new ReadOnlyDictionary<BoardLocation, ChessPieceEntity>(_entities);
         public IReadOnlyDictionary<BoardLocation, IEnumerable<Path>> Paths => new ReadOnlyDictionary<BoardLocation, IEnumerable<Path>>(_paths);
 
-        public BoardState(
-            IDictionary<BoardLocation, ChessPieceEntity> entities,
-            IDictionary<BoardLocation, IEnumerable<Path>> paths
-            )
+        public BoardState(IMoveValidator moveValidator)
         {
-            _moveValidator = new ChessMoveValidator();
-            _entities = entities;
-            _paths = paths;
+            _moveValidator = moveValidator;
+            _entities = new Dictionary<BoardLocation, ChessPieceEntity>();
+            _paths = new Dictionary<BoardLocation, IEnumerable<Path>>();
         }
 
+        public Path ValidPath(Path possiblePath) => _moveValidator.ValidPath(possiblePath, this);
 
-        public Path ValidPath(Path possiblePath, BoardState boardState) 
-            => _moveValidator.ValidPath(possiblePath, boardState);
+        public void SetPaths(BoardLocation loc, IEnumerable<Path> paths) => _paths[loc] = paths;
 
-        public void SetPaths(BoardLocation loc, IEnumerable<Path> paths) 
-            => _paths[loc] = paths;
+        public void ClearPaths(BoardLocation loc) => _paths.Remove(loc);
 
         public void SetEntity(BoardLocation loc, ChessPieceEntity entity)
         {
@@ -54,5 +50,56 @@ namespace chess.engine.Board
             => Entities.TryGetValue(loc, out var entity)
                 ? entity
                 : null;
+
+        public IEnumerable<Path> GetOrCreatePaths(ChessPieceEntity entityAt, BoardLocation boardLocation)
+        {
+            var paths = GetPathsOrNull(boardLocation);
+
+            if (paths == null)
+            {
+                paths = GeneratePossiblePaths(entityAt, boardLocation).ToList();
+
+                paths = RemoveInvalidMoves(paths).ToList();
+                SetPaths(boardLocation, paths);
+            }
+
+            return paths;
+        }
+
+        public IEnumerable<Path> GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation)
+        {
+            var paths = new List<Path>();
+
+            foreach (var pathGen in entity.PathGenerators)
+            {
+                var movesFrom = pathGen.PathsFrom(boardLocation, entity.Player);
+                paths.AddRange(movesFrom);
+            }
+
+            return paths;
+        }
+
+        private IEnumerable<Path> RemoveInvalidMoves(IEnumerable<Path> possiblePaths)
+        {
+            var validPaths = new List<Path>();
+
+            foreach (var possiblePath in possiblePaths)
+            {
+                var validPath = ValidPath(possiblePath);
+
+                if (validPath.Any())
+                {
+                    validPaths.Add(validPath);
+                }
+            }
+
+            return validPaths;
+        }
+
+        public void Clear()
+        {
+            _entities.Clear();
+            _paths.Clear();
+        }
     }
 }

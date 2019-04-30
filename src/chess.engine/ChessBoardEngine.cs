@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using chess.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Game;
@@ -8,91 +6,83 @@ using chess.engine.Movement;
 
 namespace chess.engine
 {
-    public class ChessBoardEngine : IBoardActions
+
+    public class ChessBoardEngine : ILiveBoardActions
     {
-        private readonly BoardState _boardState = new BoardState(new Dictionary<BoardLocation, ChessPieceEntity>(),new Dictionary<BoardLocation, IEnumerable<Path>>());
-        
-        public ChessBoardEngine InitBoard()
+        public readonly BoardState BoardState;
+
+        private readonly IGameSetup _gameSetup;
+        private readonly IMoveValidator _moveValidator;
+        private readonly IRefreshAllPaths _allPathCalculator;
+
+        public ChessBoardEngine(IGameSetup gameSetup, IMoveValidator moveValidator) : this(gameSetup, moveValidator, new DefaultRefreshAllPaths())
         {
-            AddMajorPieces();
-
-            AddPawns();
-
-            RecalculatePaths();
-
-            return this;
         }
 
-        private void AddPawns()
+        public ChessBoardEngine(IGameSetup gameSetup, IMoveValidator moveValidator, IRefreshAllPaths allPathCalculator)
         {
-            foreach (var colour in new[] {Colours.White, Colours.Black})
-            {
-                foreach (var file in Enum.GetValues(typeof(ChessFile)))
-                {
-                    AddEntity(ChessPieceEntityFactory.CreatePawn(colour),
-                        BoardLocation.At((ChessFile) file, colour == Colours.White ? 2 : 7));
-                }
-            }
+            _moveValidator = moveValidator;
+            BoardState = new BoardState(_moveValidator);
+            _gameSetup = gameSetup;
+            _allPathCalculator = allPathCalculator;
+            _gameSetup.SetupPieces(this);
         }
 
-        private void AddMajorPieces()
+        public void ResetBoard()
         {
-            foreach (var rank in new[] {1, 8})
-            {
-                var colour = rank == 1 ? Colours.White : Colours.Black;
-
-                AddEntity(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"A{rank}"));
-                AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"B{rank}"));
-                AddEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"C{rank}"));
-                AddEntity(ChessPieceEntityFactory.CreateQueen(colour), BoardLocation.At($"D{rank}"));
-                AddEntity(ChessPieceEntityFactory.CreateKing(colour), BoardLocation.At($"E{rank}"));
-                AddEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
-                AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"G{rank}"));
-                AddEntity(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"H{rank}"));
-            }
+            ClearBoard();
+            _gameSetup.SetupPieces(this);
         }
-
-        private void RecalculatePaths()
+        public void ClearBoard()
         {
-            foreach (var kvp in _boardState.Entities)
-            {
-                var piece = kvp.Value;
-                _boardState.SetPaths(kvp.Key, null);
-                if (piece.EntityType != ChessPieceName.King)
-                {
-                    ValidMovesForEntityAt(kvp.Value, kvp.Key);
-                }
-            }
-
-            var kings = _boardState.Entities.Where(kvp => kvp.Value.EntityType == ChessPieceName.King).ToList();
-
-            ValidMovesForEntityAt(kings[0].Value, kings[0].Key);
-            ValidMovesForEntityAt(kings[1].Value, kings[1].Key);
+            BoardState.Clear();
         }
 
         public ChessBoardEngine AddEntity(ChessPieceEntity create, string startingLocation) =>
             AddEntity(create, BoardLocation.At(startingLocation));
         public ChessBoardEngine AddEntity(ChessPieceEntity create, BoardLocation startingLocation)
         {
-            _boardState.SetEntity(startingLocation, create);
-            _boardState.SetPaths(startingLocation, null);
+            BoardState.SetEntity(startingLocation, create);
+            BoardState.ClearPaths(startingLocation);
             return this;
         }
         
         public ActiveBoardPiece PieceAt(string location) => PieceAt((BoardLocation)location);
         public ActiveBoardPiece PieceAt(BoardLocation location)
         {
-            var piece = _boardState.GetEntityOrNull(location);
+            var piece = BoardState.GetEntityOrNull(location);
             if (piece == null) return null;
 
-            var validPaths = ValidMovesForEntityAt(piece, location);
+            var validPaths = BoardState.GetOrCreatePaths(piece, location);
 
             return new ActiveBoardPiece(piece, validPaths);
         }
 
+        public BoardPiece[,] Board
+        {
+            get
+            {
+                var pieces = new BoardPiece[8, 8];
+                foreach (ChessFile file in Enum.GetValues(typeof(ChessFile)))
+                {
+                    for (int rank = 8; rank > 0; rank--)
+                    {
+                        var entity = BoardState.GetEntityOrNull(BoardLocation.At(file, rank));
+                        pieces[(int)file - 1, rank - 1] = entity == null
+                            ? null
+                            : new BoardPiece(entity.Player, entity.EntityType);
+                    }
+                }
+
+                return pieces;
+            }
+        }
+
+        //TODO: Need an abstraction around Move, to not be Chess specific
+        // so will need some default actions (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
         public void Move(ChessMove validMove)
         {
-            Action<ChessMove, IBoardActions> action;
+            Action<ChessMove, ILiveBoardActions> action;
             switch (validMove.ChessMoveType)
             {
                 case ChessMoveType.MoveOnly:
@@ -112,87 +102,23 @@ namespace chess.engine
             }
 
             action(validMove, this);
-            RecalculatePaths();
+
+            _allPathCalculator.RefreshAllPaths(BoardState);
         }
 
-        public BoardPiece[,] Board
-        {
-            get
-            {
-                var pieces = new BoardPiece[8, 8];
-                foreach (ChessFile file in Enum.GetValues(typeof(ChessFile)))
-                {
-                    for (int rank = 8; rank > 0; rank--)
-                    {
-                        var entity = _boardState.GetEntityOrNull(BoardLocation.At(file, rank));
-                        pieces[(int)file - 1, rank - 1] = entity == null
-                            ? null
-                            : new BoardPiece(entity.Player, entity.EntityType);
-                    }
-                }
-
-                return pieces;
-            }
-        }
-
-        private IEnumerable<Path> RemoveInvalidMoves(IEnumerable<Path> possiblePaths)
-        {
-            var validPaths = new List<Path>();
-
-            foreach (var possiblePath in possiblePaths)
-            {
-                var validPath = _boardState.ValidPath(possiblePath, _boardState);
-
-                if (validPath.Any())
-                {
-                    validPaths.Add(validPath);
-                }
-            }
-
-            return validPaths;
-        }
-
-        private IEnumerable<Path> GeneratePossibleMoves(BoardLocation boardLocation, ChessPieceEntity entity)
-        {
-            var paths = new List<Path>();
-
-            foreach (var pathGen in entity.PathGenerators)
-            {
-                var movesFrom = pathGen.PathsFrom(boardLocation, entity.Player);
-                paths.AddRange(movesFrom);
-            }
-
-            return paths;
-        }
-
-        private IEnumerable<Path> ValidMovesForEntityAt(ChessPieceEntity entityAt, BoardLocation boardLocation)
-        {
-            var paths = _boardState.GetPathsOrNull(boardLocation);
-
-            if (paths == null)
-            {
-                paths = GeneratePossibleMoves(boardLocation, entityAt).ToList();
-
-                paths = RemoveInvalidMoves(paths).ToList();
-                _boardState.SetPaths(boardLocation, paths);
-            }
-
-            return paths;
-        }
-
-        void MoveOnlyAction(ChessMove move, IBoardActions actions)
+        void MoveOnlyAction(ChessMove move, ILiveBoardActions actions)
         {
             var piece = actions.GetEntity(move.From);
             actions.ClearSquare(move.From);
             actions.PlaceEntity(move.To, piece);
         }
-        void TakeOnlyAction(ChessMove move, IBoardActions actions)
+        void TakeOnlyAction(ChessMove move, ILiveBoardActions actions)
         {
             TakePieceAction(move.To, actions);
 
             MoveOnlyAction(move, actions);
         }
-        void MoveOrTakeAction(ChessMove move, IBoardActions actions)
+        void MoveOrTakeAction(ChessMove move, ILiveBoardActions actions)
         {
             var dest = actions.GetEntity(move.To);
             
@@ -203,7 +129,7 @@ namespace chess.engine
 
             MoveOnlyAction(move, actions);
         }
-        void TakePieceAction(BoardLocation loc, IBoardActions actions)
+        void TakePieceAction(BoardLocation loc, ILiveBoardActions actions)
         {
 
             // TODO: Record lost piece etc.
@@ -211,20 +137,33 @@ namespace chess.engine
         }
 
         #region Board Actions
-        ChessPieceEntity IBoardActions.GetEntity(BoardLocation loc) => _boardState.GetEntityOrNull(loc);
+        ChessPieceEntity ILiveBoardActions.GetEntity(BoardLocation loc) => BoardState.GetEntityOrNull(loc);
 
-        void IBoardActions.PlaceEntity(BoardLocation loc, ChessPieceEntity entity)
+        void ILiveBoardActions.PlaceEntity(BoardLocation loc, ChessPieceEntity entity)
         {
-            _boardState.SetEntity(loc, entity);
-            _boardState.SetPaths(loc, GeneratePossibleMoves(loc, entity));
+            BoardState.SetEntity(loc, entity);
+            BoardState.SetPaths(loc, BoardState.GeneratePossiblePaths(entity, loc));
         }
 
-        void IBoardActions.ClearSquare(BoardLocation loc)
+        void ILiveBoardActions.ClearSquare(BoardLocation loc)
         {
-            _boardState.SetEntity(loc, null);
-            _boardState.SetPaths(loc, null);
+            BoardState.SetEntity(loc, null);
+            BoardState.SetPaths(loc, null);
         }
         #endregion
 
     }
+    public class DefaultRefreshAllPaths : IRefreshAllPaths
+    {
+        public void RefreshAllPaths(BoardState boardState)
+        {
+            foreach (var kvp in boardState.Entities)
+            {
+                boardState.SetPaths(kvp.Key, null);
+                boardState.GetOrCreatePaths(kvp.Value, kvp.Key);
+            }
+
+        }
+    }
+
 }

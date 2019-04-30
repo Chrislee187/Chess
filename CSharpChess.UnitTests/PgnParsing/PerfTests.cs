@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CsChess.Pgn;
-using CSharpChess.System;
 using NUnit.Framework;
 
 namespace CSharpChess.UnitTests.PgnParsing

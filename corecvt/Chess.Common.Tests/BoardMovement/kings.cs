@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Chess.Common.Tests.Helpers;
 using CSharpChess;
 using CSharpChess.Extensions;
