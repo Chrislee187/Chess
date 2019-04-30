@@ -7,6 +7,7 @@ namespace chess.engine.Entities
 {
     public static class ChessPieceEntityFactory
     {
+        public const string ValidPieces = "PRNBKQ";
         private static readonly IDictionary<ChessPieceName, Func<Colours, ChessPieceEntity>> Factory = new Dictionary<ChessPieceName, Func<Colours, ChessPieceEntity>>
         {
             { ChessPieceName.Pawn, (c) => new PawnEntity(c) },
@@ -17,7 +18,7 @@ namespace chess.engine.Entities
             { ChessPieceName.Queen , (c) => new QueenEntity(c) }
         };
 
-        private static ChessPieceEntity Create(ChessPieceName chessPiece, Colours player) => Factory[chessPiece](player);
+        public static ChessPieceEntity Create(ChessPieceName chessPiece, Colours player) => Factory[chessPiece](player);
 
         public static ChessPieceEntity CreatePawn(Colours player)   => Create(ChessPieceName.Pawn,player);
         public static ChessPieceEntity CreateBishop(Colours player)  => Create(ChessPieceName.Bishop, player);

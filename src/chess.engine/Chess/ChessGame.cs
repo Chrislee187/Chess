@@ -18,7 +18,11 @@ namespace chess.engine.Chess
             _engine = new ChessBoardEngine(new ChessBoardSetup(), new ChessMoveValidator(), new ChessRefreshAllPaths());
         }
 
-
+        public ChessGame(IGameSetup setup)
+        {
+            _engine = new ChessBoardEngine(setup, new ChessMoveValidator(), new ChessRefreshAllPaths());
+        }
+        
         public string Move(string input)
         {
             var validated = ValidateInput(input);

@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
+using chess.engine.tests.Builders;
 using NUnit.Framework;
 
 namespace chess.engine.tests
@@ -44,6 +46,52 @@ namespace chess.engine.tests
              *      execute a move
              */
         }
-    }
 
+        [Test]
+        public void Spike_easy_board_builder_to_from_ChessGame()
+        {
+            var setup = new EasyBoardBuilder()
+                    //                .Rank(8, "rnbqkbnr")
+                    //                .File(ChessFile.A, "RP    pr")
+                    //                .At(ChessFile.D, 2, 'P')
+                    //                .FromChessGame(new ChessGame())
+                    .Board("rnbqkbnr" +
+                           "pppppppp" +
+                           "        " +
+                           "        " +
+                           "        " +
+                           "        " +
+                           "PPPPPPPP" +
+                           "RNBQKBNR")
+                    .ToGameSetup()
+                ;
+
+            var game = new ChessGame(setup);
+
+            var board = new EasyBoardBuilder().FromChessGame(game).ToString();
+            Console.WriteLine(board);
+        }
+        [Test]
+        public void Spike_easy_board_builder2()
+        {
+            var board = new EasyBoardBuilder()
+                    //                .Rank(8, "rnbqkbnr")
+                    //                .File(ChessFile.A, "RP    pr")
+                    //                .At(ChessFile.D, 2, 'P')
+                    //                .FromChessGame(new ChessGame())
+                    .Board("rnbqkbnr" +
+                           "pppppppp" +
+                           "        " +
+                           "        " +
+                           "        " +
+                           "        " +
+                           "PPPPPPPP" +
+                           "RNBQKBNR")
+                    .ToString()
+                ;
+
+
+            Console.WriteLine(board);
+        }
+    }
 }

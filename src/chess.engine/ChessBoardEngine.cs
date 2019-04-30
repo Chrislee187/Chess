@@ -78,7 +78,7 @@ namespace chess.engine
             }
         }
 
-        //TODO: Need an abstraction around Move, to not be Chess specific
+        //TODO: Need an abstraction around MoveType's and Actions, to not be Chess specific
         // so will need some default actions (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
         public void Move(ChessMove validMove)
         {
@@ -152,17 +152,17 @@ namespace chess.engine
         }
         #endregion
 
-    }
-    public class DefaultRefreshAllPaths : IRefreshAllPaths
-    {
-        public void RefreshAllPaths(BoardState boardState)
+        private class DefaultRefreshAllPaths : IRefreshAllPaths
         {
-            foreach (var kvp in boardState.Entities)
+            public void RefreshAllPaths(BoardState boardState)
             {
-                boardState.SetPaths(kvp.Key, null);
-                boardState.GetOrCreatePaths(kvp.Value, kvp.Key);
-            }
+                foreach (var kvp in boardState.Entities)
+                {
+                    boardState.SetPaths(kvp.Key, null);
+                    boardState.GetOrCreatePaths(kvp.Value, kvp.Key);
+                }
 
+            }
         }
     }
 
