@@ -37,14 +37,6 @@ namespace chess.engine.tests
             paths = piece.Paths;
             Assert.That(paths.Count(), Is.EqualTo(2));
             Assert.That(paths.SelectMany(m => m).Count(), Is.EqualTo(2));
-
-          
-            /*
-             * We should have enough now to
-             *      render a board
-             *      show valid moves for pieces
-             *      execute a move
-             */
         }
 
         [Test]

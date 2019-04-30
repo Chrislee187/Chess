@@ -4,8 +4,8 @@ namespace chess.engine.tests.Builders
 {
     public class PathBuilder
     {
-        public PathBuilderDestination From(BoardLocation at) => new PathBuilderDestination(at);
+        public PathDestinationsBuilder From(BoardLocation at) => new PathDestinationsBuilder(at);
 
-        public PathBuilderDestination From(string at) => From(BoardLocation.At(at));
+        public PathDestinationsBuilder From(string at) => From(BoardLocation.At(at));
     }
 }

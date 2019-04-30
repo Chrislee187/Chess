@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using chess.engine.Chess;
@@ -21,7 +19,7 @@ namespace chess.engine.tests.Builders
 
             CheckValidRank(rank);
 
-            int file = 0;
+            var file = 0;
 
             foreach (var piece in pieces)
             {
@@ -38,7 +36,7 @@ namespace chess.engine.tests.Builders
         {
             CheckValidPieces(pieces);
 
-            int rank = 0;
+            var rank = 0;
 
             foreach (var piece in pieces)
             {
@@ -89,9 +87,9 @@ namespace chess.engine.tests.Builders
         public override string ToString()
         {
             var sb = new StringBuilder();
-            for (int rank = 7; rank >=0; rank--)
+            for (var rank = 7; rank >=0; rank--)
             {
-                for (int file = 0; file < 8; file++)
+                for (var file = 0; file < 8; file++)
                 {
                     var chr = _board[file, rank];
                     sb.Append(chr == '\0' ? '.' : chr);
@@ -105,9 +103,9 @@ namespace chess.engine.tests.Builders
 
         public EasyBoardBuilder FromChessGame(ChessGame chessGame)
         {
-            for (int rank = 7; rank >= 0; rank--)
+            for (var rank = 7; rank >= 0; rank--)
             {
-                for (int file = 0; file < 8; file++)
+                for (var file = 0; file < 8; file++)
                 {
                     var piece = chessGame.Board[file, rank];
 
@@ -132,51 +130,52 @@ namespace chess.engine.tests.Builders
         {
             return new EasyBoardBuilderCustomGameSetup(_board);
         }
-    }
 
-    public class EasyBoardBuilderCustomGameSetup : IGameSetup
-    {
-        private char[,] _board;
+        private class EasyBoardBuilderCustomGameSetup : IGameSetup
+        {
+            private char[,] _board;
 
-        private IDictionary<char, ChessPieceName> _pieceNameMapper = new Dictionary<char, ChessPieceName>
-        {
-            {'p', ChessPieceName.Pawn },
-            {'P', ChessPieceName.Pawn },
-            {'r', ChessPieceName.Rook },
-            {'R', ChessPieceName.Rook },
-            {'n', ChessPieceName.Knight },
-            {'N', ChessPieceName.Knight },
-            {'b', ChessPieceName.Bishop },
-            {'B', ChessPieceName.Bishop },
-            {'k', ChessPieceName.King },
-            {'K', ChessPieceName.King },
-            {'q', ChessPieceName.Queen },
-            {'Q', ChessPieceName.Queen },
-        };
-
-        public EasyBoardBuilderCustomGameSetup(char[,] board)
-        {
-            _board = board;
-        }
-        public void SetupPieces(ChessBoardEngine engine)
-        {
-            for (int rank = 7; rank >= 0; rank--)
+            private IDictionary<char, ChessPieceName> _pieceNameMapper = new Dictionary<char, ChessPieceName>
             {
-                for (int file = 0; file < 8; file++)
-                {
-                    var chr = _board[file, rank];
+                {'p', ChessPieceName.Pawn },
+                {'P', ChessPieceName.Pawn },
+                {'r', ChessPieceName.Rook },
+                {'R', ChessPieceName.Rook },
+                {'n', ChessPieceName.Knight },
+                {'N', ChessPieceName.Knight },
+                {'b', ChessPieceName.Bishop },
+                {'B', ChessPieceName.Bishop },
+                {'k', ChessPieceName.King },
+                {'K', ChessPieceName.King },
+                {'q', ChessPieceName.Queen },
+                {'Q', ChessPieceName.Queen },
+            };
 
-                    if (ChessPieceEntityFactory.ValidPieces.Contains(chr.ToString().ToUpper()))
+            public EasyBoardBuilderCustomGameSetup(char[,] board)
+            {
+                _board = board;
+            }
+            public void SetupPieces(ChessBoardEngine engine)
+            {
+                for (var rank = 7; rank >= 0; rank--)
+                {
+                    for (var file = 0; file < 8; file++)
                     {
-                        var entity = ChessPieceEntityFactory.Create(
-                            _pieceNameMapper[chr],
-                            char.IsUpper(chr) ? Colours.White : Colours.Black
+                        var chr = _board[file, rank];
+
+                        if (ChessPieceEntityFactory.ValidPieces.Contains(chr.ToString().ToUpper()))
+                        {
+                            var entity = ChessPieceEntityFactory.Create(
+                                _pieceNameMapper[chr],
+                                char.IsUpper(chr) ? Colours.White : Colours.Black
                             );
 
-                        engine.AddEntity(entity, BoardLocation.At(file+1, rank+1));
+                            engine.AddEntity(entity, BoardLocation.At(file + 1, rank + 1));
+                        }
                     }
                 }
             }
         }
     }
+
 }
