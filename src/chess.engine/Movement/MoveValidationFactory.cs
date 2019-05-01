@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using chess.engine.Board;
 
@@ -36,6 +37,14 @@ namespace chess.engine.Movement
         })
         {}
 
+        public IEnumerable<ChessBoardMovePredicate> Create(ChessMoveType moveType, IBoardState boardState)
+        {
+            if (ContainsKey(moveType))
+            {
+                return this[moveType];
+            }
 
+            throw new NotImplementedException($"MoveType: {moveType} not implemented");
+        }
     }
 }

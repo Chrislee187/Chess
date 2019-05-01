@@ -11,9 +11,9 @@ namespace chess.engine
     public class ChessBoardEngine : IBoardState
     {
         public readonly BoardState BoardState;
+        private readonly BoardActionFactory _boardActionFactory;
 
         private readonly IGameSetup _gameSetup;
-        private readonly IPathValidator _pathValidator;
         private readonly IRefreshAllPaths _allPathCalculator;
 
         public ChessBoardEngine(IGameSetup gameSetup, IPathValidator pathValidator) : this(gameSetup, pathValidator, new DefaultRefreshAllPaths())
@@ -22,11 +22,14 @@ namespace chess.engine
 
         public ChessBoardEngine(IGameSetup gameSetup, IPathValidator pathValidator, IRefreshAllPaths allPathCalculator)
         {
-            _pathValidator = pathValidator;
-            BoardState = new BoardState(_pathValidator);
+            _boardActionFactory = new BoardActionFactory();
+
+            BoardState = new BoardState(pathValidator);
+
             _gameSetup = gameSetup;
-            _allPathCalculator = allPathCalculator;
             _gameSetup.SetupPieces(this);
+
+            _allPathCalculator = allPathCalculator;
             _allPathCalculator.RefreshAllPaths(BoardState);
         }
 
@@ -84,38 +87,13 @@ namespace chess.engine
         // so will need some default state (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
         public void Move(ChessMove validMove)
         {
-            Action<ChessMove> action;
-            switch (validMove.ChessMoveType)
-            {
-                case ChessMoveType.MoveOnly:
-                    action = (move) => new MoveOnlyAction(this).Execute(move);
-                    break;
-                case ChessMoveType.TakeOnly:
-                    action = (move) => new TakeOnlyAction(this).Execute(move);
-                    break;
-                case ChessMoveType.KingMove:
-                    action = (move) => new MoveOrTakeAction(this).Execute(move);
-                    break;
-                case ChessMoveType.MoveOrTake:
-                    action = (move) => new MoveOrTakeAction(this).Execute(move);
-                    break;
-                case ChessMoveType.CastleQueenSide:
-                case ChessMoveType.CastleKingSide:
-                    action = CastleAction;
-                    break;
-                default:
-                    throw new NotImplementedException($"MoveType: {validMove.ChessMoveType} not implemented");
-            }
+            var action = _boardActionFactory.Create(validMove.ChessMoveType, this);
 
-            action(validMove);
+            action.Execute(validMove);
 
             _allPathCalculator.RefreshAllPaths(BoardState);
         }
 
-        void CastleAction(ChessMove move)
-        {
-            throw new NotImplementedException();
-        }
 
         #region Board Actions
         ChessPieceEntity IBoardState.GetEntity(BoardLocation loc) => BoardState.GetEntityOrNull(loc);
