@@ -97,6 +97,10 @@ namespace chess.engine
                 case ChessMoveType.MoveOrTake:
                     action = MoveOrTakeAction;
                     break;
+                case ChessMoveType.CastleQueenSide:
+                case ChessMoveType.CastleKingSide:
+                    action = CastleAction;
+                    break;
                 default:
                     throw new NotImplementedException($"MoveType: {validMove.ChessMoveType} not implemented");
             }
@@ -106,11 +110,16 @@ namespace chess.engine
             _allPathCalculator.RefreshAllPaths(BoardState);
         }
 
+        void CastleAction(ChessMove move, ILiveBoardActions actions)
+        {
+            throw new NotImplementedException();
+        }
+
         void MoveOnlyAction(ChessMove move, ILiveBoardActions actions)
         {
             var piece = actions.GetEntity(move.From);
-            actions.ClearSquare(move.From);
-            actions.PlaceEntity(move.To, piece);
+            actions.ClearLocation(move.From);
+            actions.SetEntity(move.To, piece);
         }
         void TakeOnlyAction(ChessMove move, ILiveBoardActions actions)
         {
@@ -133,19 +142,19 @@ namespace chess.engine
         {
 
             // TODO: Record lost piece etc.
-            actions.ClearSquare(loc);
+            actions.ClearLocation(loc);
         }
 
         #region Board Actions
         ChessPieceEntity ILiveBoardActions.GetEntity(BoardLocation loc) => BoardState.GetEntityOrNull(loc);
 
-        void ILiveBoardActions.PlaceEntity(BoardLocation loc, ChessPieceEntity entity)
+        void ILiveBoardActions.SetEntity(BoardLocation loc, ChessPieceEntity entity)
         {
             BoardState.SetEntity(loc, entity);
             BoardState.SetPaths(loc, BoardState.GeneratePossiblePaths(entity, loc));
         }
 
-        void ILiveBoardActions.ClearSquare(BoardLocation loc)
+        void ILiveBoardActions.ClearLocation(BoardLocation loc)
         {
             BoardState.SetEntity(loc, null);
             BoardState.SetPaths(loc, null);

@@ -1,6 +1,5 @@
 ﻿# TODOS
 
-* ChessBoardEngine tests
 * Castling move generators and board actions
 * Pawn promotion move generators and board actions
 * Check/CheckMate/Stalemate detection
@@ -11,6 +10,7 @@
 		* Advanced Feature: Branched Undo/Redo
 * PGN Move support
 * Performance Metrics
+* ChessBoardEngine tests
 * pgn2json to use new engine
 
 # CONSOLE STUFF SUPPORT

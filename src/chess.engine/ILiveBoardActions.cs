@@ -6,8 +6,8 @@ namespace chess.engine
     public interface ILiveBoardActions
     {
         ChessPieceEntity GetEntity(BoardLocation loc);
-        void ClearSquare(BoardLocation loc);
-        void PlaceEntity(BoardLocation loc, ChessPieceEntity entity);
+        void ClearLocation(BoardLocation loc);
+        void SetEntity(BoardLocation loc, ChessPieceEntity entity);
 
     }
 }

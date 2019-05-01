@@ -19,7 +19,6 @@ namespace chess.engine.Entities
         };
 
         public static ChessPieceEntity Create(ChessPieceName chessPiece, Colours player) => Factory[chessPiece](player);
-
         public static ChessPieceEntity CreatePawn(Colours player)   => Create(ChessPieceName.Pawn,player);
         public static ChessPieceEntity CreateBishop(Colours player)  => Create(ChessPieceName.Bishop, player);
         public static ChessPieceEntity CreateKing(Colours player)   => Create(ChessPieceName.King, player);

@@ -16,24 +16,39 @@ namespace spiker
             var game = new ChessGame();
 
             var lastResult = "";
+
             while (game.InProgress)
             {
+                Console.Clear();
                 Console.WriteLine(new StringBoardBuilder().BuildSimpleTestBoard(game.Board));
 
                 if (!string.IsNullOrEmpty(lastResult))
                 {
-                    Console.WriteLine($"Input Error: {lastResult}");
+                    Console.WriteLine($"!!! ERROR");
+                    Console.WriteLine($"!!! {lastResult}");
+                    Console.WriteLine($"!!!");
                 }
 
                 Console.Write($"Enter move for player {game.CurrentPlayer} : ");
                 var input = Console.ReadLine();
-                if (input == "quit") break;
+
+                if (input == "quit")
+                {
+                    if(Quit())
+                    {
+                        return;
+                    }
+                };
 
                 lastResult = game.Move(input);
 
             }
         }
 
+        private static bool Quit()
+        {
+            return true;
+        }
     }
 
     public class StringBoardBuilder

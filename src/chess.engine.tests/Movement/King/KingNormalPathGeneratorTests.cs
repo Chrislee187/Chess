@@ -43,5 +43,4 @@ namespace chess.engine.tests.Movement.King
                 new PathBuilder().From("E2").To("D3", ChessMoveType.KingMove).Build(), Colours.White);
         }
     }
-
 }

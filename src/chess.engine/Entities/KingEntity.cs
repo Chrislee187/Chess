@@ -15,8 +15,7 @@ namespace chess.engine.Entities
             new List<IPathGenerator>
             {
                 new KingNormalPathGenerator(),
-                // TODO: KingCastleQueenSidePathGenerator()
-                // TODO: KingCastleKingSidePathGenerator()
+                new KingCastlePathGenerator()
             };
 
     }

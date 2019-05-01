@@ -14,6 +14,8 @@
         Unknown,
         Taken,
         Cover,
-        Invalid
+        Invalid,
+        CastleKingSide,
+        CastleQueenSide
     }
 }
