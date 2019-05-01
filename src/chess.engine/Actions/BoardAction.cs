@@ -3,21 +3,21 @@ using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
-    public abstract class BoardAction
+    public interface IBoardAction
+    {
+        void Execute(ChessMove move);
+    }
+
+    public abstract class BoardAction : IBoardAction
     {
         protected readonly IBoardState _state;
-
-        protected BoardAction(IBoardState state)
+        protected readonly IBoardActionFactory _factory;
+        protected BoardAction(IBoardState state, IBoardActionFactory factory)
         {
             _state = state;
+            _factory = factory;
         }
 
         public abstract void Execute(ChessMove move);
-
-        protected void TakePieceAction(BoardLocation loc, IBoardState state)
-        {
-            // TODO: Record lost piece etc.
-            state.ClearLocation(loc);
-        }
     }
 }

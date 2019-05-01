@@ -4,7 +4,7 @@ namespace chess.engine.Actions
 {
     public class MoveOnlyAction : BoardAction
     {
-        public MoveOnlyAction(IBoardState state) : base(state)
+        public MoveOnlyAction(IBoardState state, IBoardActionFactory factory) : base(state, factory)
         {
         }
 

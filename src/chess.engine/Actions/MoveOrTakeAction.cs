@@ -1,12 +1,12 @@
-﻿using chess.engine.Movement;
+﻿using chess.engine.Game;
+using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
     public class MoveOrTakeAction : BoardAction
     {
 
-
-        public MoveOrTakeAction(IBoardState state) : base(state)
+        public MoveOrTakeAction(IBoardState state, IBoardActionFactory factory) : base(state, factory)
         {
         }
         public override void Execute(ChessMove move)
@@ -15,10 +15,10 @@ namespace chess.engine.Actions
 
             if (dest != null)
             {
-                TakePieceAction(move.To, _state);
+                _state.ClearLocation(move.To);
             }
 
-            new MoveOnlyAction(_state).Execute(move);
+            _factory.Create(ChessMoveType.MoveOnly, _state).Execute(move);
         }
     }
 }

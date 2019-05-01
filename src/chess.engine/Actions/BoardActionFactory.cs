@@ -4,22 +4,33 @@ using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
-    public class BoardActionFactory
+    public interface IBoardActionFactory
     {
-        private Dictionary<ChessMoveType, Func<IBoardState, BoardAction>> _actions = new Dictionary<ChessMoveType, Func<IBoardState, BoardAction>>
-        {
-            // Generic
-            {ChessMoveType.MoveOnly, s => new MoveOnlyAction(s) },
-            {ChessMoveType.TakeOnly, s => new TakeOnlyAction(s) },
-            {ChessMoveType.MoveOrTake, s => new MoveOrTakeAction(s) },
+        IBoardAction Create(ChessMoveType moveType, IBoardState boardState);
+    }
 
-            // Chess Specific
-            {ChessMoveType.KingMove, s => new MoveOrTakeAction(s) },
-            {ChessMoveType.CastleQueenSide, s => new FakeAction(s) },
-            {ChessMoveType.CastleKingSide, s => new FakeAction(s) },
-            {ChessMoveType.TakeEnPassant, s => new FakeAction(s) }
-        };
-        public BoardAction Create(ChessMoveType moveType, IBoardState boardState)
+    public class BoardActionFactory : IBoardActionFactory
+    {
+        private Dictionary<ChessMoveType, Func<IBoardState, IBoardAction>> _actions;
+
+        public BoardActionFactory()
+        {
+            _actions = new Dictionary<ChessMoveType, Func<IBoardState, IBoardAction>>
+            {
+                // Generic
+                {ChessMoveType.MoveOnly, s => new MoveOnlyAction(s, this) },
+                {ChessMoveType.TakeOnly, s => new TakeOnlyAction(s, this) },
+                {ChessMoveType.MoveOrTake, s => new MoveOrTakeAction(s, this) },
+
+                // Chess Specific
+                {ChessMoveType.KingMove, s => new MoveOrTakeAction(s, this) },
+                {ChessMoveType.CastleQueenSide, s => new FakeAction(s, this) },
+                {ChessMoveType.CastleKingSide, s => new FakeAction(s, this) },
+                {ChessMoveType.TakeEnPassant, s => new FakeAction(s, this) }
+            };
+        }
+
+        public IBoardAction Create(ChessMoveType moveType, IBoardState boardState)
         {
             if (_actions.ContainsKey(moveType))
             {
