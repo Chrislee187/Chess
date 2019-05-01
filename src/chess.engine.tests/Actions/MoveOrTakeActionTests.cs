@@ -24,16 +24,14 @@ namespace chess.engine.tests.Actions
         public void Execute_uses_MoveOnlyAction_for_normal_moves()
         {
             var piece = new RookEntity(Colours.White);
-            StateMock.Setup(m => m.GetEntity(AnyMove.From))
-                .Returns(piece);
 
-            FactoryMock.Setup(m => m.Create(ChessMoveType.MoveOnly, It.IsAny<IBoardState>()))
-                .Returns(BoardActionMock.Object);
+            SetupReturnedPiece(AnyMove.From, piece);
+            SetupActionCreateForMockAction(ChessMoveType.MoveOnly);
 
             Action.Execute(AnyMove);
 
-            FactoryMock.Verify(m => m.Create(ChessMoveType.MoveOnly, It.IsAny<IBoardState>()));
-            BoardActionMock.Verify(a => a.Execute(It.Is<ChessMove>(m => m.Equals(AnyMove))));
+            VerifyActionWasCreated(ChessMoveType.MoveOnly);
+            VerifyActionWasExecuted(AnyMove);
         }
 
 
@@ -42,19 +40,16 @@ namespace chess.engine.tests.Actions
         {
             var piece = new RookEntity(Colours.White);
             var takePiece = new RookEntity(Colours.Black);
-            StateMock.Setup(m => m.GetEntity(AnyTake.From))
-                .Returns(piece);
-            StateMock.Setup(m => m.GetEntity(AnyTake.To))
-                .Returns(takePiece);
 
-            FactoryMock.Setup(m => m.Create(ChessMoveType.MoveOnly, It.IsAny<IBoardState>()))
-                .Returns(BoardActionMock.Object);
+            SetupReturnedPiece(AnyTake.From, piece);
+            SetupReturnedPiece(AnyTake.To, takePiece);
+            SetupActionCreateForMockAction(ChessMoveType.MoveOnly);
 
             Action.Execute(AnyTake);
 
-            StateMock.Verify(s => s.ClearLocation(AnyTake.To));
-            FactoryMock.Verify(m => m.Create(ChessMoveType.MoveOnly, It.IsAny<IBoardState>()));
-            BoardActionMock.Verify( m => m.Execute(AnyTake));
+            VerifyLocationCleared(AnyTake.To);
+            VerifyActionWasCreated(ChessMoveType.MoveOnly);
+            VerifyActionWasExecuted(AnyTake);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿# TODOS
 
-* Add tests for board actions
 * Castling board actions
 * Pawn promotion move generators 
 	* move validator
@@ -15,6 +14,7 @@
 * Performance Metrics
 * ChessBoardEngine tests
 * pgn2json to use new engine
+* Invalid board state detection (should be able to be turned off) to allow custom boards without kings
 
 # CONSOLE STUFF SUPPORT
 

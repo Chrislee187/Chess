@@ -10,8 +10,6 @@ namespace chess.engine.tests.Actions
     [TestFixture]
     public class TakeOnlyActionTests : ActionTestsBase<TakeOnlyAction>
     {
-        private readonly ChessMove AnyTake = ChessMove.Create("D2", "D5", ChessMoveType.MoveOrTake);
-
         [SetUp]
         public void Setup()
         {
@@ -26,19 +24,16 @@ namespace chess.engine.tests.Actions
         {
             var piece = new RookEntity(Colours.White);
             var takePiece = new RookEntity(Colours.Black);
-            StateMock.Setup(m => m.GetEntity(AnyTake.From))
-                .Returns(piece);
-            StateMock.Setup(m => m.GetEntity(AnyTake.To))
-                .Returns(takePiece);
 
-            FactoryMock.Setup(m => m.Create(ChessMoveType.MoveOnly, It.IsAny<IBoardState>()))
-                .Returns(BoardActionMock.Object);
+            SetupReturnedPiece(AnyTake.From, piece);
+            SetupReturnedPiece(AnyTake.To, takePiece);
+            SetupActionCreateForMockAction(ChessMoveType.MoveOnly);
 
             Action.Execute(AnyTake);
 
-            StateMock.Verify(s => s.ClearLocation(AnyTake.To));
-            FactoryMock.Verify(m => m.Create(ChessMoveType.MoveOnly, It.IsAny<IBoardState>()));
-            BoardActionMock.Verify(m => m.Execute(AnyTake));
+            VerifyLocationCleared(AnyTake.To);
+            VerifyActionWasCreated(ChessMoveType.MoveOnly);
+            VerifyActionWasExecuted(AnyTake);
         }
     }
 }
