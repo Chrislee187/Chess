@@ -12,20 +12,21 @@ namespace chess.engine
         public readonly BoardState BoardState;
 
         private readonly IGameSetup _gameSetup;
-        private readonly IMoveValidator _moveValidator;
+        private readonly IPathValidator _pathValidator;
         private readonly IRefreshAllPaths _allPathCalculator;
 
-        public ChessBoardEngine(IGameSetup gameSetup, IMoveValidator moveValidator) : this(gameSetup, moveValidator, new DefaultRefreshAllPaths())
+        public ChessBoardEngine(IGameSetup gameSetup, IPathValidator pathValidator) : this(gameSetup, pathValidator, new DefaultRefreshAllPaths())
         {
         }
 
-        public ChessBoardEngine(IGameSetup gameSetup, IMoveValidator moveValidator, IRefreshAllPaths allPathCalculator)
+        public ChessBoardEngine(IGameSetup gameSetup, IPathValidator pathValidator, IRefreshAllPaths allPathCalculator)
         {
-            _moveValidator = moveValidator;
-            BoardState = new BoardState(_moveValidator);
+            _pathValidator = pathValidator;
+            BoardState = new BoardState(_pathValidator);
             _gameSetup = gameSetup;
             _allPathCalculator = allPathCalculator;
             _gameSetup.SetupPieces(this);
+            _allPathCalculator.RefreshAllPaths(BoardState);
         }
 
         public void ResetBoard()

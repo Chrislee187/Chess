@@ -32,9 +32,9 @@ namespace chess.engine.tests.Movement
         [Test]
         public void ValidPath_should_return_validPath()
         {
-            var validator = new ChessMoveValidator(_factoryMock.Object);
+            var validator = new ChessPathValidator(_factoryMock.Object);
             var path = new PathBuilder().Build();
-            validator.ValidPath(path, new BoardState(null));
+            validator.ValidatePath(path, new BoardState(null));
 
             Assert.That(path.Any());
         }
@@ -42,7 +42,7 @@ namespace chess.engine.tests.Movement
         [Test]
         public void ValidPath_should_return_truncated_path_when_move_test_fails()
         {
-            var validator = new ChessMoveValidator(_factoryMock.Object);
+            var validator = new ChessPathValidator(_factoryMock.Object);
             var path = new PathBuilder().From("D2").To("D3").To("D4").To("D5", ChessMoveType.TakeOnly).Build();
 
             IEnumerable<ChessBoardMovePredicate> failOnD5 = new List<ChessBoardMovePredicate>
@@ -55,7 +55,7 @@ namespace chess.engine.tests.Movement
                     out failOnD5))
                 .Returns(true);
 
-            var validPath = validator.ValidPath(path, new BoardState(null));
+            var validPath = validator.ValidatePath(path, new BoardState(null));
             
             AssertPathContains(new List<Path>{validPath}, 
                 new PathBuilder().From("D2")
@@ -70,9 +70,9 @@ namespace chess.engine.tests.Movement
             _factoryMock.Setup(f => f.TryGetValue(It.IsAny<ChessMoveType>(), out _moveTests))
                 .Returns(false);
 
-            var validator = new ChessMoveValidator(_factoryMock.Object);
+            var validator = new ChessPathValidator(_factoryMock.Object);
             var path = new PathBuilder().Build();
-            Assert.That(() => validator.ValidPath(path, new BoardState(null)), 
+            Assert.That(() => validator.ValidatePath(path, new BoardState(null)), 
                 Throws.Exception);
         }
     }

@@ -5,16 +5,16 @@ using chess.engine.Board;
 
 namespace chess.engine.Movement
 {
-    public class ChessMoveValidator : IMoveValidator
+    public class ChessPathValidator : IPathValidator
     {
         private readonly IReadOnlyDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>> _validationFactory;
 
-        public ChessMoveValidator(IReadOnlyDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>> validationFactory)
+        public ChessPathValidator(IReadOnlyDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>> validationFactory)
         {
             _validationFactory = validationFactory;
         }
 
-        public Path ValidPath(Path possiblePath, BoardState boardState)
+        public Path ValidatePath(Path possiblePath, BoardState boardState)
         {
             var validPath = new Path();
             foreach (var move in possiblePath)

@@ -18,13 +18,9 @@ namespace chess.engine.Pieces.King
             {
                 if (dest != null)
                 {
-                    var side = forPlayer == Colours.White
-                        ? dest.File > location.File
+                    var side = dest.File > location.File
                             ? ChessMoveType.CastleKingSide
-                            : ChessMoveType.CastleQueenSide
-                        : dest.File > location.File
-                            ? ChessMoveType.CastleQueenSide
-                            : ChessMoveType.CastleKingSide;
+                            : ChessMoveType.CastleQueenSide;
 
                     paths.Add(new Path { ChessMove.Create(location, dest, side) });
                 }

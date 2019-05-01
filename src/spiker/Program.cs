@@ -38,10 +38,10 @@ namespace spiker
                     {
                         return;
                     }
-                };
-
-                lastResult = game.Move(input);
-
+                } else if (!string.IsNullOrEmpty(input))
+                {
+                    lastResult = game.Move(input);
+                }
             }
         }
 

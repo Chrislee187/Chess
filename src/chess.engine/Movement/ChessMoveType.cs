@@ -7,14 +7,6 @@
         TakeOnly,
         TakeEnPassant,
         KingMove,
-        Check,
-        Castle,
-        Checkmate,
-        Promotion,
-        Unknown,
-        Taken,
-        Cover,
-        Invalid,
         CastleKingSide,
         CastleQueenSide
     }

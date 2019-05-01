@@ -9,21 +9,21 @@ namespace chess.engine.Board
 {
     public class BoardState
     {
-        private readonly IMoveValidator _moveValidator;
+        private readonly IPathValidator _pathValidator;
         private readonly IDictionary<BoardLocation, ChessPieceEntity> _entities;
         private readonly IDictionary<BoardLocation, IEnumerable<Path>> _paths;
 
         public IReadOnlyDictionary<BoardLocation, ChessPieceEntity> Entities => new ReadOnlyDictionary<BoardLocation, ChessPieceEntity>(_entities);
         public IReadOnlyDictionary<BoardLocation, IEnumerable<Path>> Paths => new ReadOnlyDictionary<BoardLocation, IEnumerable<Path>>(_paths);
 
-        public BoardState(IMoveValidator moveValidator)
+        public BoardState(IPathValidator pathValidator)
         {
-            _moveValidator = moveValidator;
+            _pathValidator = pathValidator;
             _entities = new Dictionary<BoardLocation, ChessPieceEntity>();
             _paths = new Dictionary<BoardLocation, IEnumerable<Path>>();
         }
 
-        public Path ValidPath(Path possiblePath) => _moveValidator.ValidPath(possiblePath, this);
+        public Path ValidPath(Path possiblePath) => _pathValidator.ValidatePath(possiblePath, this);
 
         public void SetPaths(BoardLocation loc, IEnumerable<Path> paths) => _paths[loc] = paths;
 

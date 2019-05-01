@@ -12,13 +12,14 @@ namespace chess.engine.Chess
         public bool InProgress = true;
 
         public BoardPiece[,] Board => _engine.Board;
+        public BoardState BoardState => _engine.BoardState;
 
         public ChessGame() : this(new ChessBoardSetup())
         { }
 
         public ChessGame(IGameSetup setup)
         {
-            _engine = new ChessBoardEngine(setup, new ChessMoveValidator(new MoveValidationFactory()), new ChessRefreshAllPaths());
+            _engine = new ChessBoardEngine(setup, new ChessPathValidator(new MoveValidationFactory()), new ChessRefreshAllPaths());
         }
         
         public string Move(string input)
