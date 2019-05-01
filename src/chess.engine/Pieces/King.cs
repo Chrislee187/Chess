@@ -1,6 +1,6 @@
 ﻿using chess.engine.Game;
 
-namespace chess.engine.Pieces.King
+namespace chess.engine.Pieces
 {
     public class King
     {

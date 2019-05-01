@@ -1,5 +1,5 @@
 ﻿using chess.engine.Game;
-using chess.engine.Pieces.Pawn;
+using chess.engine.Pieces;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Pieces

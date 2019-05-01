@@ -2,7 +2,7 @@
 using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Pieces.Bishop;
+using chess.engine.Movement.Bishop;
 
 namespace chess.engine.Entities
 {

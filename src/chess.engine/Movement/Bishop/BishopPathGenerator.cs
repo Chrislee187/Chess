@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using chess.engine.Game;
-using chess.engine.Movement;
+using chess.engine.Pieces;
 
-namespace chess.engine.Pieces.Rook
+namespace chess.engine.Movement.Bishop
 {
-    public class RookPathGenerator : StraightLinePathExtender, IPathGenerator
+    public class BishopPathGenerator : StraightLinePathExtender, IPathGenerator
     {
         public IEnumerable<Path> PathsFrom(BoardLocation location, Colours forPlayer)
         {
@@ -12,10 +12,10 @@ namespace chess.engine.Pieces.Rook
 
             foreach (var path in new[]
             {
-                ExtendedPathFrom(location, loc => loc.MoveForward(forPlayer)),
-                ExtendedPathFrom(location, loc => loc.MoveBack(forPlayer)),
-                ExtendedPathFrom(location, loc => loc.MoveLeft(forPlayer)),
-                ExtendedPathFrom(location, loc => loc.MoveRight(forPlayer)),
+                ExtendedPathFrom(location, start => start.MoveForward(forPlayer)?.MoveRight(forPlayer)),
+                ExtendedPathFrom(location, start => start.MoveForward(forPlayer)?.MoveLeft(forPlayer)),
+                ExtendedPathFrom(location, start => start.MoveBack(forPlayer)?.MoveRight(forPlayer)),
+                ExtendedPathFrom(location, start => start.MoveBack(forPlayer)?.MoveLeft(forPlayer))
             })
             {
                 if (path != null)
@@ -28,5 +28,6 @@ namespace chess.engine.Pieces.Rook
         }
 
         public IEnumerable<Path> PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
+
     }
 }

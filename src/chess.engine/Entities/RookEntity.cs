@@ -2,7 +2,7 @@
 using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Pieces.Rook;
+using chess.engine.Movement.Rook;
 
 namespace chess.engine.Entities
 {

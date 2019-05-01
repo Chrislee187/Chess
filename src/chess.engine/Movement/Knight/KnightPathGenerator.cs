@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using chess.engine.Game;
-using chess.engine.Movement;
 
-namespace chess.engine.Pieces.Knight
+namespace chess.engine.Movement.Knight
 {
     public class KnightPathGenerator : IPathGenerator
     {

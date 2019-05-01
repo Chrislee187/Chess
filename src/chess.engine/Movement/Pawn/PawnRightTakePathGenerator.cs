@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using chess.engine.Chess;
 using chess.engine.Game;
-using chess.engine.Movement;
 
-namespace chess.engine.Pieces.Pawn
+namespace chess.engine.Movement.Pawn
 {
     public class PawnRightTakePathGenerator : IPathGenerator
     {
@@ -17,7 +16,7 @@ namespace chess.engine.Pieces.Pawn
 
             var paths = new List<Path>();
 
-            var takeType = location.Rank == Pawn.EnPassantRankFor(forPlayer)
+            var takeType = location.Rank == Pieces.Pawn.EnPassantRankFor(forPlayer)
                 ? ChessMoveType.TakeEnPassant
                 : ChessMoveType.TakeOnly;
 

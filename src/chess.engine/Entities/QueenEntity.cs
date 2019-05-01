@@ -2,7 +2,7 @@
 using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Pieces.Queen;
+using chess.engine.Movement.Queen;
 
 namespace chess.engine.Entities
 {

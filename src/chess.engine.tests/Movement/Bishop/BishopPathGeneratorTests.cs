@@ -1,7 +1,7 @@
 using System.Linq;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Pieces.Bishop;
+using chess.engine.Movement.Bishop;
 using chess.engine.tests.Builders;
 using NUnit.Framework;
 

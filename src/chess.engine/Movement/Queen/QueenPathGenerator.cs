@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using chess.engine.Game;
-using chess.engine.Movement;
-using chess.engine.Pieces.Bishop;
-using chess.engine.Pieces.Rook;
+using chess.engine.Movement.Bishop;
+using chess.engine.Movement.Rook;
 
-namespace chess.engine.Pieces.Queen
+namespace chess.engine.Movement.Queen
 {
     public class QueenPathGenerator : IPathGenerator
     {

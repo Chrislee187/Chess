@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using chess.engine.Game;
-using chess.engine.Movement;
 
-namespace chess.engine.Pieces.Pawn
+namespace chess.engine.Movement.Pawn
 {
     public class PawnNormalAndStartingPathGenerator : IPathGenerator
     {
@@ -16,7 +15,7 @@ namespace chess.engine.Pieces.Pawn
                 ChessMove.CreateMoveOnly(location, oneSquareForward)
             };
 
-            if (location.Rank == Pawn.StartRankFor(forPlayer))
+            if (location.Rank == Pieces.Pawn.StartRankFor(forPlayer))
             {
                 path.Add(ChessMove.CreateMoveOnly(location, location.MoveForward(forPlayer, 2)));
             }

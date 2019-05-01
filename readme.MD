@@ -1,6 +1,8 @@
 ﻿# TODOS
 
 * Castling board actions
+* Better input error handling
+* Find a test game to play out (one from the angular app?) as a simple integration test.
 * Pawn promotion move generators 
 	* move validator
 	* board actions
