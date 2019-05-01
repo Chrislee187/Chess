@@ -1,4 +1,5 @@
 ﻿using System;
+using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Game;
@@ -7,7 +8,7 @@ using chess.engine.Movement;
 namespace chess.engine
 {
 
-    public class ChessBoardEngine : ILiveBoardActions
+    public class ChessBoardEngine : IBoardState
     {
         public readonly BoardState BoardState;
 
@@ -80,23 +81,23 @@ namespace chess.engine
         }
 
         //TODO: Need an abstraction around MoveType's and Actions, to not be Chess specific
-        // so will need some default actions (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
+        // so will need some default state (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
         public void Move(ChessMove validMove)
         {
-            Action<ChessMove, ILiveBoardActions> action;
+            Action<ChessMove> action;
             switch (validMove.ChessMoveType)
             {
                 case ChessMoveType.MoveOnly:
-                    action = MoveOnlyAction;
+                    action = (move) => new MoveOnlyAction(this).Execute(move);
                     break;
                 case ChessMoveType.TakeOnly:
-                    action = TakeOnlyAction;
+                    action = (move) => new TakeOnlyAction(this).Execute(move);
                     break;
                 case ChessMoveType.KingMove:
-                    action = MoveOnlyAction;
+                    action = (move) => new MoveOrTakeAction(this).Execute(move);
                     break;
                 case ChessMoveType.MoveOrTake:
-                    action = MoveOrTakeAction;
+                    action = (move) => new MoveOrTakeAction(this).Execute(move);
                     break;
                 case ChessMoveType.CastleQueenSide:
                 case ChessMoveType.CastleKingSide:
@@ -106,56 +107,26 @@ namespace chess.engine
                     throw new NotImplementedException($"MoveType: {validMove.ChessMoveType} not implemented");
             }
 
-            action(validMove, this);
+            action(validMove);
 
             _allPathCalculator.RefreshAllPaths(BoardState);
         }
 
-        void CastleAction(ChessMove move, ILiveBoardActions actions)
+        void CastleAction(ChessMove move)
         {
             throw new NotImplementedException();
         }
 
-        void MoveOnlyAction(ChessMove move, ILiveBoardActions actions)
-        {
-            var piece = actions.GetEntity(move.From);
-            actions.ClearLocation(move.From);
-            actions.SetEntity(move.To, piece);
-        }
-        void TakeOnlyAction(ChessMove move, ILiveBoardActions actions)
-        {
-            TakePieceAction(move.To, actions);
-
-            MoveOnlyAction(move, actions);
-        }
-        void MoveOrTakeAction(ChessMove move, ILiveBoardActions actions)
-        {
-            var dest = actions.GetEntity(move.To);
-            
-            if (dest != null)
-            {
-                TakePieceAction(move.To, actions);
-            }
-
-            MoveOnlyAction(move, actions);
-        }
-        void TakePieceAction(BoardLocation loc, ILiveBoardActions actions)
-        {
-
-            // TODO: Record lost piece etc.
-            actions.ClearLocation(loc);
-        }
-
         #region Board Actions
-        ChessPieceEntity ILiveBoardActions.GetEntity(BoardLocation loc) => BoardState.GetEntityOrNull(loc);
+        ChessPieceEntity IBoardState.GetEntity(BoardLocation loc) => BoardState.GetEntityOrNull(loc);
 
-        void ILiveBoardActions.SetEntity(BoardLocation loc, ChessPieceEntity entity)
+        void IBoardState.SetEntity(BoardLocation loc, ChessPieceEntity entity)
         {
             BoardState.SetEntity(loc, entity);
             BoardState.SetPaths(loc, BoardState.GeneratePossiblePaths(entity, loc));
         }
 
-        void ILiveBoardActions.ClearLocation(BoardLocation loc)
+        void IBoardState.ClearLocation(BoardLocation loc)
         {
             BoardState.SetEntity(loc, null);
             BoardState.SetPaths(loc, null);
@@ -175,5 +146,4 @@ namespace chess.engine
             }
         }
     }
-
 }
