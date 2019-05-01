@@ -8,20 +8,16 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class MoveOrTakeActionTests : ActionTestsBase
+    public class MoveOrTakeActionTests : ActionTestsBase<MoveOrTakeAction>
     {
-        private readonly ChessMove AnyMove = ChessMove.Create("D2", "D4", ChessMoveType.MoveOnly);
-        private readonly ChessMove AnyTake = ChessMove.Create("D2", "D5", ChessMoveType.MoveOrTake);
-
-        private MoveOrTakeAction _action;
-
         [SetUp]
         public void Setup()
         {
             StateMock = new Mock<IBoardState>();
             FactoryMock = new Mock<IBoardActionFactory>();
             BoardActionMock = new Mock<IBoardAction>();
-            _action = new MoveOrTakeAction(StateMock.Object, FactoryMock.Object);
+
+            Action = new MoveOrTakeAction(StateMock.Object, FactoryMock.Object);
         }
 
         [Test]
@@ -34,7 +30,7 @@ namespace chess.engine.tests.Actions
             FactoryMock.Setup(m => m.Create(ChessMoveType.MoveOnly, It.IsAny<IBoardState>()))
                 .Returns(BoardActionMock.Object);
 
-            _action.Execute(AnyMove);
+            Action.Execute(AnyMove);
 
             FactoryMock.Verify(m => m.Create(ChessMoveType.MoveOnly, It.IsAny<IBoardState>()));
             BoardActionMock.Verify(a => a.Execute(It.Is<ChessMove>(m => m.Equals(AnyMove))));
@@ -54,7 +50,7 @@ namespace chess.engine.tests.Actions
             FactoryMock.Setup(m => m.Create(ChessMoveType.MoveOnly, It.IsAny<IBoardState>()))
                 .Returns(BoardActionMock.Object);
 
-            _action.Execute(AnyTake);
+            Action.Execute(AnyTake);
 
             StateMock.Verify(s => s.ClearLocation(AnyTake.To));
             FactoryMock.Verify(m => m.Create(ChessMoveType.MoveOnly, It.IsAny<IBoardState>()));

@@ -8,18 +8,15 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class MoveOnlyActionTests : ActionTestsBase
+    public class MoveOnlyActionTests : ActionTestsBase<MoveOnlyAction>
     {
-        private readonly ChessMove AnyMove = ChessMove.Create("D2", "D4", ChessMoveType.MoveOnly);
-        private MoveOnlyAction _action;
-
         [SetUp]
         public void Setup()
         {
             StateMock = new Mock<IBoardState>();
             FactoryMock = new Mock<IBoardActionFactory>();
 
-            _action = new MoveOnlyAction(StateMock.Object, FactoryMock.Object);
+            Action = new MoveOnlyAction(StateMock.Object, FactoryMock.Object);
         }
 
         [Test]
@@ -29,7 +26,7 @@ namespace chess.engine.tests.Actions
             StateMock.Setup(m => m.GetEntity(AnyMove.From))
                 .Returns(piece);
 
-            _action.Execute(AnyMove);
+            Action.Execute(AnyMove);
 
             // Gets source piece
             StateMock.Verify(m => m.GetEntity(

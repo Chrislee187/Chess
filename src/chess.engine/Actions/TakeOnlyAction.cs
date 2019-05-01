@@ -6,7 +6,7 @@ namespace chess.engine.Actions
     public class TakeOnlyAction : BoardAction
     {
 
-        public TakeOnlyAction(IBoardState state, BoardActionFactory factory) : base(state, factory)
+        public TakeOnlyAction(IBoardState state, IBoardActionFactory factory) : base(state, factory)
         {
         }
         public override void Execute(ChessMove move)

@@ -20,7 +20,7 @@ namespace chess.engine.tests.Actions
         {
             foreach (ChessMoveType type in Enum.GetValues(typeof(ChessMoveType)))
             {
-                Assert.DoesNotThrow(() => _factory.Create(type, null) , $"{type} is not support");
+                Assert.DoesNotThrow(() => _factory.Create(type, null), $"{type} is not support");
             }
         }
     }
