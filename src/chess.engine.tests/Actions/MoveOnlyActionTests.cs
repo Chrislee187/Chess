@@ -26,7 +26,7 @@ namespace chess.engine.tests.Actions
 
             VerifyEntityWasRetrieved(AnyMove.From);
             VerifyLocationWasCleared(AnyMove.From);
-            VerifyWasEntityPlaced(AnyMove.To, piece);
+            VerifyEntityWasPlaced(AnyMove.To, piece);
         }
         
     }

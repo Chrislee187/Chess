@@ -27,12 +27,12 @@ namespace chess.engine.tests.Actions
 
             SetupPieceReturn(AnyTake.From, piece);
             SetupPieceReturn(AnyTake.To, takePiece);
-            SetupCreateMockActionForMoveType(ChessMoveType.MoveOnly);
+            SetupCreateMockActionForMoveType(DefaultActions.MoveOnly);
 
             Action.Execute(AnyTake);
 
             VerifyLocationWasCleared(AnyTake.To);
-            VerifyActionWasCreated(ChessMoveType.MoveOnly);
+            VerifyActionWasCreated(DefaultActions.MoveOnly);
             VerifyActionWasExecuted(AnyTake);
         }
     }

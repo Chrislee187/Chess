@@ -49,7 +49,6 @@ namespace chess.engine.Chess
         {
             var from = BoardLocation.At(input.Substring(0, 2));
             var to = BoardLocation.At(input.Substring(2, 2));
-            var hasPromotion = false;
             ChessPieceName? promotionPiece = null;
             if (input.Length == 6)
             {
@@ -57,7 +56,6 @@ namespace chess.engine.Chess
 
                 if (extra[0] == '+')
                 {
-                    hasPromotion = true;
                     promotionPiece = PieceNameMapper.FromChar(extra[1]);
                 }
                 else

@@ -15,10 +15,13 @@ namespace chess.engine.Actions
 
             if (dest != null)
             {
-                _state.ClearLocation(move.To);
+                _factory.Create(DefaultActions.TakeOnly, _state).Execute(move);
+            }
+            else
+            {
+                _factory.Create(DefaultActions.MoveOnly, _state).Execute(move);
             }
 
-            _factory.Create(ChessMoveType.MoveOnly, _state).Execute(move);
         }
     }
 }

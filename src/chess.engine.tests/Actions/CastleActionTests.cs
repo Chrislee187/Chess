@@ -42,10 +42,10 @@ namespace chess.engine.tests.Actions
 
             SetupPieceReturn(kingStartLoc, king);
             SetupPieceReturn(rookStart, rook);
-            SetupCreateMockActionForMoveType(ChessMoveType.MoveOnly);
+            SetupCreateMockActionForMoveType(DefaultActions.MoveOnly);
             Action.Execute(actualKingMove);
 
-            VerifyActionWasCreated(ChessMoveType.MoveOnly);
+            VerifyActionWasCreated(DefaultActions.MoveOnly);
             VerifyActionWasExecuted(actualKingMove);
             VerifyActionWasExecuted(actualRookMove);
         }

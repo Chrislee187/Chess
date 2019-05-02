@@ -9,12 +9,12 @@ namespace chess.engine.Movement
             var sourcePiece = boardState.Entities[move.From];
             Guard.NotNull(sourcePiece);
 
-            if (!boardState.Entities.TryGetValue(move.To, out var destinationPiece))
+            if (boardState.Entities.TryGetValue(move.To, out var destinationPiece))
             {
-                return false;
+                return sourcePiece.Player != destinationPiece.Player;
             }
 
-            return sourcePiece.Player != destinationPiece.Player;
+            return false;
         }
     }
 }

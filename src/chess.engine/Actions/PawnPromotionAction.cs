@@ -13,6 +13,11 @@ namespace chess.engine.Actions
         {
             var forPlayer = _state.GetEntity(move.From).Player;
             _state.ClearLocation(move.From);
+
+            if (_state.GetEntity(move.To) != null)
+            {
+                _state.ClearLocation(move.To);
+            }
             _state.SetEntity(move.To, ChessPieceEntityFactory.Create(move.PromotionPiece, forPlayer));
         }
     }

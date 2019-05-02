@@ -23,7 +23,7 @@ namespace chess.engine.Actions
                 rookMove = new ChessMove(BoardLocation.At($"A{move.From.Rank}"), BoardLocation.At($"D{move.From.Rank}"), ChessMoveType.MoveOnly);
             }
 
-            var moveOnly = _factory.Create(ChessMoveType.MoveOnly, _state);
+            var moveOnly = _factory.Create(DefaultActions.MoveOnly, _state);
             moveOnly.Execute(kingMove);
             moveOnly.Execute(rookMove);
         }
