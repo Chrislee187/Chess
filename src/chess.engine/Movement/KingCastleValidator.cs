@@ -13,7 +13,8 @@ namespace chess.engine.Movement
         public bool ValidateMove(ChessMove move, BoardState boardState)
         {
             var kingLoc = move.From;
-            var king = boardState.GetEntityOrNull(move.From);
+
+            var king = boardState.GetEntityOrNull(kingLoc);
             var kingIsValid = king.EntityType == ChessPieceName.King; // && !king.MoveHistory.Any()
 
             var rookLoc = move.ChessMoveType == ChessMoveType.CastleKingSide

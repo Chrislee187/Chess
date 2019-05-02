@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
 using chess.engine.Game;
-using chess.engine.Movement;
 
-namespace chess.engine.Pieces
+namespace chess.engine.Movement
 {
     public abstract class StraightLinePathExtender 
     {

@@ -17,6 +17,12 @@ namespace chess.engine.tests.Actions
 
         protected T Action;
 
+        protected void SetUp()
+        {
+            StateMock = new Mock<IBoardState>();
+            FactoryMock = new Mock<IBoardActionFactory>();
+            BoardActionMock = new Mock<IBoardAction>();
+        }
 
         protected void SetupReturnedPiece(BoardLocation at, ChessPieceEntity piece) 
             => StateMock.Setup(m => m.GetEntity(at)).Returns(piece);
@@ -27,9 +33,11 @@ namespace chess.engine.tests.Actions
 
         protected void VerifyLocationCleared(BoardLocation loc)
             => StateMock.Verify(s => s.ClearLocation(loc), Times.Once);
-        
+
         protected void VerifyActionWasCreated(ChessMoveType moveType)
-            => FactoryMock.Verify(m => m.Create(moveType, It.IsAny<IBoardState>()), Times.Once);
+            => VerifyActionWasCreated(moveType, Times.Once());
+        protected void VerifyActionWasCreated(ChessMoveType moveType, Times times)
+            => FactoryMock.Verify(m => m.Create(moveType, It.IsAny<IBoardState>()), times);
 
         protected void VerifyActionWasExecuted(ChessMove move)
         => BoardActionMock.Verify(m => m.Execute(move), Times.Once);

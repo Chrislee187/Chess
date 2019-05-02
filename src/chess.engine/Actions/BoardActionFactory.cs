@@ -24,8 +24,8 @@ namespace chess.engine.Actions
 
                 // Chess Specific
                 {ChessMoveType.KingMove, s => new MoveOrTakeAction(s, this) },
-                {ChessMoveType.CastleQueenSide, s => new FakeAction(s, this) },
-                {ChessMoveType.CastleKingSide, s => new FakeAction(s, this) },
+                {ChessMoveType.CastleQueenSide, s => new CastleAction(s, this) },
+                {ChessMoveType.CastleKingSide, s => new CastleAction(s, this) },
                 {ChessMoveType.TakeEnPassant, s => new FakeAction(s, this) }
             };
         }

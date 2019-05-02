@@ -12,9 +12,7 @@ namespace chess.engine.tests.Actions
         [SetUp]
         public void Setup()
         {
-            StateMock = new Mock<IBoardState>();
-            FactoryMock = new Mock<IBoardActionFactory>();
-
+            base.SetUp();
             Action = new MoveOnlyAction(StateMock.Object, FactoryMock.Object);
         }
 
