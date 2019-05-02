@@ -1,9 +1,7 @@
 ﻿# TODOS
 
+* EnPassant action
 * Better input error handling
-* Pawn promotion move generators 
-	* move validator
-	* board actions
 * Find a test game to play out (one from the angular app?) as a simple integration test.
 * Check/CheckMate/Stalemate detection
 * Move history

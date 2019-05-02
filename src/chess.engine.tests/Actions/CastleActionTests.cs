@@ -40,9 +40,9 @@ namespace chess.engine.tests.Actions
             var actualKingMove = new ChessMove(kingStartLoc, kingDestination, ChessMoveType.MoveOnly);
             var actualRookMove = new ChessMove(rookStart, rookDestination, ChessMoveType.MoveOnly);
 
-            SetupReturnedPiece(kingStartLoc, king);
-            SetupReturnedPiece(rookStart, rook);
-            SetupActionCreateForMockAction(ChessMoveType.MoveOnly);
+            SetupPieceReturn(kingStartLoc, king);
+            SetupPieceReturn(rookStart, rook);
+            SetupCreateMockActionForMoveType(ChessMoveType.MoveOnly);
             Action.Execute(actualKingMove);
 
             VerifyActionWasCreated(ChessMoveType.MoveOnly);

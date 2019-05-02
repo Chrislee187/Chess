@@ -25,8 +25,8 @@ namespace chess.engine.tests.Actions
         {
             var piece = new RookEntity(Colours.White);
 
-            SetupReturnedPiece(AnyMove.From, piece);
-            SetupActionCreateForMockAction(ChessMoveType.MoveOnly);
+            SetupPieceReturn(AnyMove.From, piece);
+            SetupCreateMockActionForMoveType(ChessMoveType.MoveOnly);
 
             Action.Execute(AnyMove);
 
@@ -41,13 +41,13 @@ namespace chess.engine.tests.Actions
             var piece = new RookEntity(Colours.White);
             var takePiece = new RookEntity(Colours.Black);
 
-            SetupReturnedPiece(AnyTake.From, piece);
-            SetupReturnedPiece(AnyTake.To, takePiece);
-            SetupActionCreateForMockAction(ChessMoveType.MoveOnly);
+            SetupPieceReturn(AnyTake.From, piece);
+            SetupPieceReturn(AnyTake.To, takePiece);
+            SetupCreateMockActionForMoveType(ChessMoveType.MoveOnly);
 
             Action.Execute(AnyTake);
 
-            VerifyLocationCleared(AnyTake.To);
+            VerifyLocationWasCleared(AnyTake.To);
             VerifyActionWasCreated(ChessMoveType.MoveOnly);
             VerifyActionWasExecuted(AnyTake);
         }

@@ -24,28 +24,28 @@ namespace chess.engine.tests.Actions
             BoardActionMock = new Mock<IBoardAction>();
         }
 
-        protected void SetupReturnedPiece(BoardLocation at, ChessPieceEntity piece) 
+        protected void SetupPieceReturn(BoardLocation at, ChessPieceEntity piece) 
             => StateMock.Setup(m => m.GetEntity(at)).Returns(piece);
 
-        protected void SetupActionCreateForMockAction(ChessMoveType moveType)
+        protected void SetupCreateMockActionForMoveType(ChessMoveType moveType)
             => FactoryMock.Setup(m => m.Create(moveType, It.IsAny<IBoardState>()))
             .Returns(BoardActionMock.Object);
 
-        protected void VerifyLocationCleared(BoardLocation loc)
+        protected void VerifyLocationWasCleared(BoardLocation loc)
             => StateMock.Verify(s => s.ClearLocation(loc), Times.Once);
 
         protected void VerifyActionWasCreated(ChessMoveType moveType)
-            => VerifyActionWasCreated(moveType, Times.Once());
-        protected void VerifyActionWasCreated(ChessMoveType moveType, Times times)
-            => FactoryMock.Verify(m => m.Create(moveType, It.IsAny<IBoardState>()), times);
+            => FactoryMock.Verify(m => m.Create(moveType, It.IsAny<IBoardState>()), Times.Once);
 
         protected void VerifyActionWasExecuted(ChessMove move)
         => BoardActionMock.Verify(m => m.Execute(move), Times.Once);
 
-        protected void VerifyEntityRetrieved(BoardLocation loc)
+        protected void VerifyEntityWasRetrieved(BoardLocation loc)
             => StateMock.Verify(m => m.GetEntity(loc), Times.Once);
 
-        protected void VerifyEntityPlaced(BoardLocation loc, ChessPieceEntity piece)
+        protected void VerifyWasEntityPlaced(BoardLocation loc, ChessPieceEntity piece)
             => StateMock.Verify(m => m.SetEntity(loc, piece), Times.Once);
+        protected void VerifyNewEntityWasPlaced(BoardLocation loc, ChessPieceEntity piece)
+            => StateMock.Verify(m => m.SetEntity(loc, It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Player == piece.Player)), Times.Once);
     }
 }

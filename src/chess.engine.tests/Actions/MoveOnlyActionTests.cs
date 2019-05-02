@@ -20,13 +20,13 @@ namespace chess.engine.tests.Actions
         public void Execute_clears_from_location_and_replaces_to()
         {
             var piece = new PawnEntity(Colours.White);
-            SetupReturnedPiece(AnyMove.From, piece);
+            SetupPieceReturn(AnyMove.From, piece);
 
             Action.Execute(AnyMove);
 
-            VerifyEntityRetrieved(AnyMove.From);
-            VerifyLocationCleared(AnyMove.From);
-            VerifyEntityPlaced(AnyMove.To, piece);
+            VerifyEntityWasRetrieved(AnyMove.From);
+            VerifyLocationWasCleared(AnyMove.From);
+            VerifyWasEntityPlaced(AnyMove.To, piece);
         }
         
     }
