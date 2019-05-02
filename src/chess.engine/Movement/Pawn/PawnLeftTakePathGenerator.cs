@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using chess.engine.Chess;
 using chess.engine.Game;
 
 namespace chess.engine.Movement.Pawn
@@ -13,14 +14,24 @@ namespace chess.engine.Movement.Pawn
                 ? ChessMoveType.TakeEnPassant
                 : ChessMoveType.TakeOnly;
 
-            var oneSquareForward = location.MoveForward(forPlayer);
-            var takeLeft = oneSquareForward.MoveLeft(forPlayer);
-            if (takeLeft != null)
+            var takeLocation = location.MoveForward(forPlayer).MoveLeft(forPlayer);
+
+            if (takeLocation == null) return paths;
+            if (takeLocation.Rank != ChessGame.EndRankFor(forPlayer))
             {
-                paths.Add(new Path
+                var move = ChessMove.Create(location, takeLocation, takeType);
+
+                Path path = new Path();
+                path.Add(move);
+                paths.Add(path);
+            }
+            else
+            {
+                foreach (var promotionPieces in new[] { ChessPieceName.Queen, ChessPieceName.Rook, ChessPieceName.Bishop, ChessPieceName.Knight })
                 {
-                    ChessMove.Create(location, takeLeft, takeType)
-                });
+                    var move = ChessMove.CreatePawnPromotion(location, takeLocation, promotionPieces);
+                    paths.Add(new Path { move });
+                }
             }
 
             return paths;

@@ -33,7 +33,8 @@ namespace chess.engine.Movement
                 new DestinationNotUnderAttackValidator().ValidateMove}},
             { ChessMoveType.TakeEnPassant, new ChessBoardMovePredicate[] {new EnPassantTakeValidator().ValidateMove }},
             { ChessMoveType.CastleKingSide, new ChessBoardMovePredicate[] { new KingCastleValidator().ValidateMove  }},
-            { ChessMoveType.CastleQueenSide, new ChessBoardMovePredicate[] { new KingCastleValidator().ValidateMove }}
+            { ChessMoveType.CastleQueenSide, new ChessBoardMovePredicate[] { new KingCastleValidator().ValidateMove }},
+            { ChessMoveType.PawnPromotion, new ChessBoardMovePredicate[] { new PawnPromotionValidator().ValidateMove }}
         })
         {}
 

@@ -2,11 +2,13 @@
 using chess.engine.Board;
 using chess.engine.Game;
 using chess.engine.Movement;
+using chess.engine.Pieces;
 
 namespace chess.engine.Chess
 {
     public class ChessGame
     {
+        public static int EndRankFor(Colours colour) => colour == Colours.White ? 8 : 1;
         private readonly ChessBoardEngine _engine;
         public Colours CurrentPlayer { get; private set; } = Colours.White;
         public bool InProgress = true;
@@ -47,6 +49,23 @@ namespace chess.engine.Chess
         {
             var from = BoardLocation.At(input.Substring(0, 2));
             var to = BoardLocation.At(input.Substring(2, 2));
+            var hasPromotion = false;
+            ChessPieceName? promotionPiece = null;
+            if (input.Length == 6)
+            {
+                var extra = input.Substring(4, 2).ToList();
+
+                if (extra[0] == '+')
+                {
+                    hasPromotion = true;
+                    promotionPiece = PieceNameMapper.FromChar(extra[1]);
+                }
+                else
+                {
+                    return (null, $"'{extra}' is not a valid promotion");
+                }
+
+            }
 
             var piece = _engine.PieceAt(from);
             var pieceColour = piece?.Entity.Player;
@@ -57,7 +76,10 @@ namespace chess.engine.Chess
 
             var validMove = piece?
                 .Paths.SelectMany(path => path)
-                .SingleOrDefault(move => move.To.Equals(to));
+                .SingleOrDefault(move => move.To.Equals(to) 
+                                         && (!promotionPiece.HasValue || move.PromotionPiece == promotionPiece.Value)
+                
+                );
 
             if (validMove == null)
             {

@@ -6,8 +6,6 @@ namespace chess.engine.Movement.Pawn
 {
     public class PawnRightTakePathGenerator : IPathGenerator
     {
-
-
         public IEnumerable<Path> PathsFrom(BoardLocation location, Colours forPlayer)
         {
             Guard.ArgumentException(
@@ -20,17 +18,22 @@ namespace chess.engine.Movement.Pawn
                 ? ChessMoveType.TakeEnPassant
                 : ChessMoveType.TakeOnly;
 
-            var oneSquareForward = location.MoveForward(forPlayer);
 
+            var takeLocation = location.MoveForward(forPlayer).MoveRight(forPlayer);
+            if (takeLocation == null) return paths;
 
-            var takeRight = oneSquareForward.MoveRight(forPlayer);
-            if (takeRight != null)
+            if (takeLocation.Rank != ChessGame.EndRankFor(forPlayer))
             {
-                var move = ChessMove.Create(location, takeRight, takeType);
-                paths.Add(new Path
+                var move = ChessMove.Create(location, takeLocation, takeType);
+                paths.Add(new Path {move});
+            }
+            else
+            {
+                foreach (var promotionPieces in new[] { ChessPieceName.Queen, ChessPieceName.Rook, ChessPieceName.Bishop, ChessPieceName.Knight })
                 {
-                    move
-                });
+                    var move = ChessMove.CreatePawnPromotion(location, takeLocation, promotionPieces);
+                    paths.Add(new Path { move });
+                }
             }
 
             return paths;

@@ -8,6 +8,7 @@
         TakeEnPassant,
         KingMove,
         CastleKingSide,
-        CastleQueenSide
+        CastleQueenSide,
+        PawnPromotion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using chess.engine.Chess;
 using chess.engine.Game;
 
 namespace chess.engine.Movement.Pawn
@@ -10,17 +11,28 @@ namespace chess.engine.Movement.Pawn
             var paths = new List<Path>();
 
             var oneSquareForward = location.MoveForward(forPlayer);
-            var path = new Path
-            {
-                ChessMove.CreateMoveOnly(location, oneSquareForward)
-            };
 
-            if (location.Rank == Pieces.Pawn.StartRankFor(forPlayer))
+            if (oneSquareForward.Rank != ChessGame.EndRankFor(forPlayer))
             {
-                path.Add(ChessMove.CreateMoveOnly(location, location.MoveForward(forPlayer, 2)));
+                var move = ChessMove.CreateMoveOnly(location, oneSquareForward);
+
+                Path path = new Path();
+                path.Add(move);
+                if (location.Rank == Pieces.Pawn.StartRankFor(forPlayer))
+                {
+                    path.Add(ChessMove.CreateMoveOnly(location, location.MoveForward(forPlayer, 2)));
+                }
+                paths.Add(path);
+            }
+            else
+            {
+                foreach (var promotionPieces in new[] { ChessPieceName.Queen, ChessPieceName.Rook, ChessPieceName.Bishop, ChessPieceName.Knight })
+                {
+                    var move = ChessMove.CreatePawnPromotion(location, oneSquareForward, promotionPieces);
+                    paths.Add(new Path { move });
+                }
             }
 
-            paths.Add(path);
 
             return paths;
         }

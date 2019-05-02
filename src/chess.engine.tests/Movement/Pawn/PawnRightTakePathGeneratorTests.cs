@@ -1,4 +1,5 @@
 using System.Linq;
+using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Movement.Pawn;
@@ -36,6 +37,28 @@ namespace chess.engine.tests.Movement.Pawn
 
             AssertPathContains(paths, ep, Colours.White);
             Assert.That(paths.Count(), Is.EqualTo(1));
+        }
+
+
+        [Test]
+        public void PathsFrom_returns_pawn_promotions()
+        {
+            var startLocation = BoardLocation.At("B7");
+            var whitePaths = _gen.PathsFrom(startLocation, Colours.White).ToList();
+            Assert.That(whitePaths.Count(), Is.EqualTo(4));
+
+            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+                .ToPromotion("C8", ChessPieceName.Queen)
+                .Build(), Colours.White);
+            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+                .ToPromotion("C8", ChessPieceName.Rook)
+                .Build(), Colours.White);
+            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+                .ToPromotion("C8", ChessPieceName.Bishop)
+                .Build(), Colours.White);
+            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+                .ToPromotion("C8", ChessPieceName.Knight)
+                .Build(), Colours.White);
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
+using chess.engine.Pieces;
 
 namespace chess.engine.tests.Builders
 {
@@ -135,21 +135,7 @@ namespace chess.engine.tests.Builders
         {
             private char[,] _board;
 
-            private IDictionary<char, ChessPieceName> _pieceNameMapper = new Dictionary<char, ChessPieceName>
-            {
-                {'p', ChessPieceName.Pawn },
-                {'P', ChessPieceName.Pawn },
-                {'r', ChessPieceName.Rook },
-                {'R', ChessPieceName.Rook },
-                {'n', ChessPieceName.Knight },
-                {'N', ChessPieceName.Knight },
-                {'b', ChessPieceName.Bishop },
-                {'B', ChessPieceName.Bishop },
-                {'k', ChessPieceName.King },
-                {'K', ChessPieceName.King },
-                {'q', ChessPieceName.Queen },
-                {'Q', ChessPieceName.Queen },
-            };
+
 
             public EasyBoardBuilderCustomGameSetup(char[,] board)
             {
@@ -166,7 +152,7 @@ namespace chess.engine.tests.Builders
                         if (ChessPieceEntityFactory.ValidPieces.Contains(chr.ToString().ToUpper()))
                         {
                             var entity = ChessPieceEntityFactory.Create(
-                                _pieceNameMapper[chr],
+                                PieceNameMapper.FromChar(chr),
                                 char.IsUpper(chr) ? Colours.White : Colours.Black
                             );
 
@@ -177,5 +163,4 @@ namespace chess.engine.tests.Builders
             }
         }
     }
-
 }

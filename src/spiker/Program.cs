@@ -49,10 +49,6 @@ namespace spiker
 
                 Console.Write($"Enter move for player {game.CurrentPlayer} : ");
 
-
-
-
-
                 var input = Console.ReadLine();
 
                 if (input == "quit")
