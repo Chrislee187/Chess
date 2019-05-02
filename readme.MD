@@ -1,10 +1,10 @@
 ﻿# TODOS
 
 * Better input error handling
-* Find a test game to play out (one from the angular app?) as a simple integration test.
 * Pawn promotion move generators 
 	* move validator
 	* board actions
+* Find a test game to play out (one from the angular app?) as a simple integration test.
 * Check/CheckMate/Stalemate detection
 * Move history
 	* Enhance enpassant rule to ensure enemy pawn did it's double step the previous turn

@@ -11,7 +11,6 @@ namespace spiker
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Chess console Spikes host");
 
             var game = new ChessGame();
 
@@ -20,16 +19,40 @@ namespace spiker
             while (game.InProgress)
             {
                 Console.Clear();
-                Console.WriteLine(new StringBoardBuilder().BuildSimpleTestBoard(game.Board));
+                Console.WriteLine("Chess console Spikes host");
 
-                if (!string.IsNullOrEmpty(lastResult))
+                var board = new StringBoardBuilder().BuildSimpleTestBoard(game.Board);
+
+
+                //                Console.WriteLine(board);
+                var lines = board.Split('\n');
+                WriteLinesAt(1, 2, lines);
+                Console.CursorTop = 2;
+                Console.CursorLeft = lines.Max(b => b.Length) + 1;
+                Console.WriteLine("MENU GOES HERE");
+
+                Console.CursorTop = lines.Length + 3;
+                Console.CursorLeft = 0;
+                if (string.IsNullOrEmpty(lastResult))
+                {
+                    Console.WriteLine("OTHER INFORMATION OUTPUT GOES HERE");
+                }
+                else
                 {
                     Console.WriteLine($"!!! ERROR");
                     Console.WriteLine($"!!! {lastResult}");
                     Console.WriteLine($"!!!");
                 }
 
+                Console.CursorTop = lines.Length + 1;
+                Console.CursorLeft = 0;
+
                 Console.Write($"Enter move for player {game.CurrentPlayer} : ");
+
+
+
+
+
                 var input = Console.ReadLine();
 
                 if (input == "quit")
@@ -45,6 +68,15 @@ namespace spiker
             }
         }
 
+        static void WriteLinesAt(int left, int top, params string[] output)
+        {
+            foreach (var line in output)
+            {
+                Console.CursorLeft = left;
+                Console.CursorTop = top++;
+                Console.Write(line);
+            }
+        }
         private static bool Quit()
         {
             return true;
