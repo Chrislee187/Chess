@@ -7,20 +7,19 @@ namespace chess.engine.Chess
     {
         public void RefreshAllPaths(BoardState boardState)
         {
-            foreach (var kvp in boardState.Entities)
+            foreach (var loc in boardState.LocationsInUse)
             {
-                var piece = kvp.Value;
-                boardState.SetPaths(kvp.Key, null);
+                var piece = boardState.GetItem(loc).Item;
                 if (piece.EntityType != ChessPieceName.King)
                 {
-                    boardState.GetOrCreatePaths(kvp.Value, kvp.Key);
+                    boardState.UpdatePaths(piece, loc);
                 }
             }
+            
+            var kings = boardState.Get(ChessPieceName.King).ToList();
 
-            var kings = boardState.Entities.Where(kvp => kvp.Value.EntityType == ChessPieceName.King).ToList();
-
-            boardState.GetOrCreatePaths(kings[0].Value, kings[0].Key);
-            boardState.GetOrCreatePaths(kings[1].Value, kings[1].Key);
+            boardState.UpdatePaths(kings[0].Item, kings[0].Location);
+            boardState.UpdatePaths(kings[1].Item, kings[1].Location);
         }
     }
 

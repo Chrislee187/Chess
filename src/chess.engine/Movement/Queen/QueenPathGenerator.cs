@@ -7,15 +7,15 @@ namespace chess.engine.Movement.Queen
 {
     public class QueenPathGenerator : IPathGenerator
     {
-        public IEnumerable<Path> PathsFrom(BoardLocation location, Colours forPlayer)
+        public Paths PathsFrom(BoardLocation location, Colours forPlayer)
         {
-            var paths = new List<Path>();
+            var paths = new Paths();
             paths.AddRange(new RookPathGenerator().PathsFrom(location, forPlayer));
             paths.AddRange(new BishopPathGenerator().PathsFrom(location, forPlayer));
 
             return paths;
         }
 
-        public IEnumerable<Path> PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
+        public Paths PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
     }
 }

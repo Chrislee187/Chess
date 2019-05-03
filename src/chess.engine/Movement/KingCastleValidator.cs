@@ -14,15 +14,15 @@ namespace chess.engine.Movement
         {
             var kingLoc = move.From;
 
-            var king = boardState.GetEntityOrNull(kingLoc);
+            var king = boardState.GetItem(kingLoc).Item;
             var kingIsValid = king.EntityType == ChessPieceName.King; // && !king.MoveHistory.Any()
 
             var rookLoc = move.ChessMoveType == ChessMoveType.CastleKingSide
                 ? BoardLocation.At($"H{move.From.Rank}")
                 : BoardLocation.At($"A{move.From.Rank}");
-            var rook = boardState.GetEntityOrNull(rookLoc);
-            var rookIsValid = rook.EntityType == ChessPieceName.Rook
-                              && rook.Player == king.Player; // && !rook.MoveHistory.Any()
+            var rook = boardState.GetItem(rookLoc);
+            var rookIsValid = rook.Item.EntityType == ChessPieceName.Rook
+                              && rook.Item.Player == king.Player; // && !rook.MoveHistory.Any()
 
             var pathBetween = CalcPathBetweenKingAndCastle(move, king);
 

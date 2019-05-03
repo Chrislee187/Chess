@@ -19,7 +19,7 @@ namespace chess.engine.Chess
             {
                 foreach (var file in Enum.GetValues(typeof(ChessFile)))
                 {
-                    engine.AddEntity(ChessPieceEntityFactory.CreatePawn(colour),
+                    engine.AddPiece(ChessPieceEntityFactory.CreatePawn(colour),
                         BoardLocation.At((ChessFile)file, colour == Colours.White ? 2 : 7));
                 }
             }
@@ -31,14 +31,14 @@ namespace chess.engine.Chess
             {
                 var colour = rank == 1 ? Colours.White : Colours.Black;
 
-                engine.AddEntity(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"A{rank}"));
-                engine.AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"B{rank}"));
-                engine.AddEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"C{rank}"));
-                engine.AddEntity(ChessPieceEntityFactory.CreateQueen(colour), BoardLocation.At($"D{rank}"));
-                engine.AddEntity(ChessPieceEntityFactory.CreateKing(colour), BoardLocation.At($"E{rank}"));
-                engine.AddEntity(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
-                engine.AddEntity(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"G{rank}"));
-                engine.AddEntity(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"H{rank}"));
+                engine.AddPiece(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"A{rank}"));
+                engine.AddPiece(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"B{rank}"));
+                engine.AddPiece(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"C{rank}"));
+                engine.AddPiece(ChessPieceEntityFactory.CreateQueen(colour), BoardLocation.At($"D{rank}"));
+                engine.AddPiece(ChessPieceEntityFactory.CreateKing(colour), BoardLocation.At($"E{rank}"));
+                engine.AddPiece(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
+                engine.AddPiece(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"G{rank}"));
+                engine.AddPiece(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"H{rank}"));
             }
         }
     }

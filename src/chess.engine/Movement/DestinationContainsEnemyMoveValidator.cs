@@ -1,4 +1,5 @@
-﻿using chess.engine.Board;
+﻿using System.Linq;
+using chess.engine.Board;
 
 namespace chess.engine.Movement
 {
@@ -6,12 +7,12 @@ namespace chess.engine.Movement
     {
         public bool ValidateMove(ChessMove move, BoardState boardState)
         {
-            var sourcePiece = boardState.Entities[move.From];
+            var sourcePiece = boardState.Get(move.From).SingleOrDefault();
             Guard.NotNull(sourcePiece);
-
-            if (boardState.Entities.TryGetValue(move.To, out var destinationPiece))
+            if (!boardState.IsEmpty(move.To))
             {
-                return sourcePiece.Player != destinationPiece.Player;
+                var destinationPiece = boardState.Get(move.To).Single();
+                return sourcePiece.Item.Player != destinationPiece.Item.Player;
             }
 
             return false;

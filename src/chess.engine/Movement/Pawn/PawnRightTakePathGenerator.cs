@@ -6,13 +6,13 @@ namespace chess.engine.Movement.Pawn
 {
     public class PawnRightTakePathGenerator : IPathGenerator
     {
-        public IEnumerable<Path> PathsFrom(BoardLocation location, Colours forPlayer)
+        public Paths PathsFrom(BoardLocation location, Colours forPlayer)
         {
             Guard.ArgumentException(
                 () => location.Rank == ChessMove.EndRankFor(forPlayer),
                 $"{ChessPieceName.Pawn} is invalid at {location}.");
 
-            var paths = new List<Path>();
+            var paths = new Paths();
 
             var takeType = location.Rank == Pieces.Pawn.EnPassantRankFor(forPlayer)
                 ? ChessMoveType.TakeEnPassant
@@ -39,7 +39,7 @@ namespace chess.engine.Movement.Pawn
             return paths;
         }
 
-        public IEnumerable<Path> PathsFrom(string location, Colours forPlayer) =>
+        public Paths PathsFrom(string location, Colours forPlayer) =>
             PathsFrom(BoardLocation.At(location), forPlayer);
     }
 }

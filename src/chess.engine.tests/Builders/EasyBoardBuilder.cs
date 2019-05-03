@@ -156,7 +156,7 @@ namespace chess.engine.tests.Builders
                                 char.IsUpper(chr) ? Colours.White : Colours.Black
                             );
 
-                            engine.AddEntity(entity, BoardLocation.At(file + 1, rank + 1));
+                            engine.AddPiece(entity, BoardLocation.At(file + 1, rank + 1));
                         }
                     }
                 }

@@ -6,6 +6,11 @@ using chess.engine.Pieces;
 
 namespace chess.engine.Chess
 {
+    public enum GameState
+    {
+        InProgress, Check, Checkmate
+    }
+
     public class ChessGame
     {
         public static int EndRankFor(Colours colour) => colour == Colours.White ? 8 : 1;
@@ -16,6 +21,7 @@ namespace chess.engine.Chess
         public BoardPiece[,] Board => _engine.Board;
         public BoardState BoardState => _engine.BoardState;
 
+        public GameState GameState { get; private set; }
         public ChessGame() : this(new ChessBoardSetup())
         { }
 
@@ -36,8 +42,11 @@ namespace chess.engine.Chess
             _engine.Move(validated.move);
 
             CurrentPlayer = NextPlayer();
+            GameState = BoardState.CurrentGameState(CurrentPlayer);
 
-            return "";
+            return GameState == GameState.Check || GameState == GameState.Checkmate 
+                ? GameState.ToString() 
+                : "";
         }
 
         private Colours NextPlayer()
@@ -66,16 +75,17 @@ namespace chess.engine.Chess
             }
 
             var piece = _engine.PieceAt(from);
-            var pieceColour = piece?.Entity.Player;
-            if (pieceColour.HasValue && pieceColour.Value != CurrentPlayer)
+            var pieceColour = piece.Item.Player;
+            if (pieceColour != CurrentPlayer)
             {
-                return (null, $"It is not {pieceColour.Value}'s turn.");
+                return (null, $"It is not {pieceColour}'s turn.");
             }
 
             var validMove = piece?
-                .Paths.SelectMany(path => path)
+                .Paths.FlattenMoves()
                 .SingleOrDefault(move => move.To.Equals(to) 
-                                         && (!promotionPiece.HasValue || move.PromotionPiece == promotionPiece.Value)
+                     && (!promotionPiece.HasValue 
+                         || move.PromotionPiece == promotionPiece.Value)
                 
                 );
 

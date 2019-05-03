@@ -9,11 +9,11 @@ namespace chess.engine.Movement
 
         public bool ValidateMove(ChessMove move, BoardState boardState)
         {
-            var piece = boardState.Entities[move.From];
+            var piece = boardState.GetItem(move.From).Item;
             var moveOk = new DestinationIsEmptyValidator().ValidateMove(move, boardState);
 
             var destinationIsEndRank = move.To.Rank == ChessGame.EndRankFor(piece.Player);
-            var destinationIsEmpty = boardState.GetEntityOrNull(move.To) == null;
+            var destinationIsEmpty = boardState.IsEmpty(move.To);
 
             return moveOk && destinationIsEndRank && destinationIsEmpty;
         }

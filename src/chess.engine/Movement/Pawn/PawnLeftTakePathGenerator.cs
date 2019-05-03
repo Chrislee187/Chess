@@ -6,9 +6,9 @@ namespace chess.engine.Movement.Pawn
 {
     public class PawnLeftTakePathGenerator : IPathGenerator
     {
-        public IEnumerable<Path> PathsFrom(BoardLocation location, Colours forPlayer)
+        public Paths PathsFrom(BoardLocation location, Colours forPlayer)
         {
-            var paths = new List<Path>();
+            var paths = new Paths();
 
             var takeType = location.Rank == Pieces.Pawn.EnPassantRankFor(forPlayer)
                 ? ChessMoveType.TakeEnPassant
@@ -37,6 +37,6 @@ namespace chess.engine.Movement.Pawn
             return paths;
         }
 
-        public IEnumerable<Path> PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
+        public Paths PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
     }
 }

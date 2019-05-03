@@ -7,8 +7,8 @@ namespace chess.engine.Game
     public class ActiveBoardPiece
     {
         public ChessPieceEntity Entity { get; }
-        public IEnumerable<Path> Paths { get; }
-        public ActiveBoardPiece(ChessPieceEntity entityAt, IEnumerable<Path> paths)
+        public Paths Paths { get; }
+        public ActiveBoardPiece(ChessPieceEntity entityAt, Paths paths)
         {
             Entity = entityAt;
             Paths = paths;

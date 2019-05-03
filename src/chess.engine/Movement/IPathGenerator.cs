@@ -5,7 +5,7 @@ namespace chess.engine.Movement
 {
     public interface IPathGenerator
     {
-        IEnumerable<Path> PathsFrom(BoardLocation location, Colours forPlayer);
-        IEnumerable<Path> PathsFrom(string location, Colours forPlayer);
+        Paths PathsFrom(BoardLocation location, Colours forPlayer);
+        Paths PathsFrom(string location, Colours forPlayer);
     }
 }

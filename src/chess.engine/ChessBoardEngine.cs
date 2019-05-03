@@ -37,30 +37,26 @@ namespace chess.engine
         {
             ClearBoard();
             _gameSetup.SetupPieces(this);
-        }
-        public void ClearBoard()
-        {
-            BoardState.Clear();
+            _allPathCalculator.RefreshAllPaths(BoardState);
         }
 
-        public ChessBoardEngine AddEntity(ChessPieceEntity create, string startingLocation) =>
-            AddEntity(create, BoardLocation.At(startingLocation));
-        public ChessBoardEngine AddEntity(ChessPieceEntity create, BoardLocation startingLocation)
+        public void ClearBoard() => BoardState.Clear();
+
+        public ChessBoardEngine AddPiece(ChessPieceEntity create, string startingLocation) => AddPiece(create, BoardLocation.At(startingLocation));
+        public ChessBoardEngine AddPiece(ChessPieceEntity create, BoardLocation startingLocation)
         {
-            BoardState.SetEntity(startingLocation, create);
-            BoardState.ClearPaths(startingLocation);
+            BoardState.PlaceEntity(startingLocation, create);
             return this;
         }
         
-        public ActiveBoardPiece PieceAt(string location) => PieceAt((BoardLocation)location);
-        public ActiveBoardPiece PieceAt(BoardLocation location)
+        public LocatedItem<ChessPieceEntity> PieceAt(string location) => PieceAt((BoardLocation)location);
+        public LocatedItem<ChessPieceEntity> PieceAt(BoardLocation location)
         {
-            var piece = BoardState.GetEntityOrNull(location);
-            if (piece == null) return null;
+            if (BoardState.IsEmpty(location)) return null;
+            
+            var piece = BoardState.GetItem(location);
 
-            var validPaths = BoardState.GetOrCreatePaths(piece, location);
-
-            return new ActiveBoardPiece(piece, validPaths);
+            return piece;
         }
 
         public BoardPiece[,] Board
@@ -70,9 +66,14 @@ namespace chess.engine
                 var pieces = new BoardPiece[8, 8];
                 foreach (ChessFile file in Enum.GetValues(typeof(ChessFile)))
                 {
-                    for (int rank = 8; rank > 0; rank--)
+                    for (var rank = 8; rank > 0; rank--)
                     {
-                        var entity = BoardState.GetEntityOrNull(BoardLocation.At(file, rank));
+                        var location = BoardLocation.At(file, rank);
+
+                        var entity = BoardState.IsEmpty(location) 
+                            ? null 
+                            : BoardState.GetItem(location).Item;
+
                         pieces[(int)file - 1, rank - 1] = entity == null
                             ? null
                             : new BoardPiece(entity.Player, entity.EntityType);
@@ -92,22 +93,22 @@ namespace chess.engine
             action.Execute(validMove);
 
             _allPathCalculator.RefreshAllPaths(BoardState);
+
         }
 
 
         #region Board Actions
-        ChessPieceEntity IBoardState.GetEntity(BoardLocation loc) => BoardState.GetEntityOrNull(loc);
+        ChessPieceEntity IBoardState.GetEntity(BoardLocation loc) 
+            => BoardState.IsEmpty(loc) ? null : BoardState.GetItem(loc).Item;
 
         void IBoardState.SetEntity(BoardLocation loc, ChessPieceEntity entity)
         {
-            BoardState.SetEntity(loc, entity);
-            BoardState.SetPaths(loc, BoardState.GeneratePossiblePaths(entity, loc));
+            BoardState.PlaceEntity(loc, entity, BoardState.GeneratePossiblePaths(entity, loc));
         }
 
         void IBoardState.ClearLocation(BoardLocation loc)
         {
-            BoardState.SetEntity(loc, null);
-            BoardState.SetPaths(loc, null);
+            BoardState.Remove(loc);
         }
         #endregion
 
@@ -115,10 +116,9 @@ namespace chess.engine
         {
             public void RefreshAllPaths(BoardState boardState)
             {
-                foreach (var kvp in boardState.Entities)
+                foreach (var loc in boardState.LocationsInUse)
                 {
-                    boardState.SetPaths(kvp.Key, null);
-                    boardState.GetOrCreatePaths(kvp.Value, kvp.Key);
+                    boardState.UpdatePaths(boardState.GetItem(loc).Item, loc);
                 }
 
             }

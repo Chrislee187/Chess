@@ -6,9 +6,9 @@ namespace chess.engine.Movement.Bishop
 {
     public class BishopPathGenerator : StraightLinePathExtender, IPathGenerator
     {
-        public IEnumerable<Path> PathsFrom(BoardLocation location, Colours forPlayer)
+        public Paths PathsFrom(BoardLocation location, Colours forPlayer)
         {
-            var paths = new List<Path>();
+            var paths = new Paths();
 
             foreach (var path in new[]
             {
@@ -27,7 +27,7 @@ namespace chess.engine.Movement.Bishop
             return paths;
         }
 
-        public IEnumerable<Path> PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
+        public Paths PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
 
     }
 }

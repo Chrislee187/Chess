@@ -1,4 +1,5 @@
-﻿using chess.engine.Board;
+﻿using System.Linq;
+using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Game;
 
@@ -11,11 +12,12 @@ namespace chess.engine.Movement
         {
             var normalTakeOk = new DestinationContainsEnemyMoveValidator().ValidateMove(move, boardState);
 
-            var piece = boardState.Entities[move.From];
+            var piece = boardState.Get(move.From).Single().Item;
 
             var passingPieceLocation = move.To.MoveBack(piece.Player);
 
-            if (!boardState.Entities.TryGetValue(passingPieceLocation, out var passingPiece)) return false;
+            if (boardState.IsEmpty(passingPieceLocation)) return false;
+            var passingPiece = boardState.Get(passingPieceLocation).Single().Item;
             if (passingPiece.Player == piece.Player) return false;
             if (passingPiece.EntityType != ChessPieceName.Pawn) return false;
 

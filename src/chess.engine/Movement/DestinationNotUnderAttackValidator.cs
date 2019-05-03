@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using chess.engine.Board;
+using chess.engine.Entities;
 using chess.engine.Game;
 
 namespace chess.engine.Movement
@@ -8,15 +10,16 @@ namespace chess.engine.Movement
     {
         public bool ValidateMove(ChessMove move, BoardState boardState)
         {
-            var movingPiece = boardState.Entities[move.From];
-            var enemyColour = movingPiece.Player.Enemy();
-            var enemyLocations = boardState.Entities.Where(kvp => kvp.Value?.Player == enemyColour).Select(kvp => kvp.Key);
+            var movingPiece = boardState.GetItem(move.From);
+            var enemyColour = movingPiece.Item.Player.Enemy();
+            var enemyLocations = boardState.LocationsOf(enemyColour).ToList();
 
-            var enemyPaths = boardState.Paths.Where(kvp => kvp.Value != null && enemyLocations.Contains(kvp.Key)).ToList();
-            var flattenPaths = enemyPaths.SelectMany(kvp => kvp.Value).SelectMany(p => p).ToList();
+            var enemyPaths = new Paths();
+            var locatedItems = boardState.Get(enemyLocations.ToArray()).ToList();
+            var selectMany = locatedItems.SelectMany(li => li.Paths).ToList();
+            enemyPaths.AddRange(selectMany);
 
-            return !flattenPaths.Any(enemyMove
-                => Equals(enemyMove.To, move.To));
+            return !enemyPaths.FlattenMoves().Any(enemyMove=> enemyMove.To.Equals(move.To));
 
         }
     }

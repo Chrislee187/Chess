@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Board;
+using chess.engine.Entities;
 
 namespace chess.engine.Movement
 {
@@ -29,10 +30,22 @@ namespace chess.engine.Movement
                     break;
                 }
 
-                validPath.Add(move);
+                var moveIsATake = boardState.MoveIsATake(move);
+
+                var moveLeavesKingInCheck = boardState.MoveLeavesKingInCheck(move);
+                // TODO: Does move leave king in check?
+                if (!moveLeavesKingInCheck)
+                {
+                    validPath.Add(move);
+                }
+
+
+                // If move was a take path is blocked so stop here
+                if (moveIsATake) break;
             }
 
             return validPath;
         }
+
     }
 }
