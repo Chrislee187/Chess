@@ -9,32 +9,6 @@ using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
-    public interface IBoardState
-    {
-        void Clear();
-        IEnumerable<BoardLocation> LocationsInUse { get; }
-        void PlaceEntity(BoardLocation loc, ChessPieceEntity entity, bool generateMoves = true);
-        LocatedItem<ChessPieceEntity> GetItem(BoardLocation loc);
-        IEnumerable<BoardLocation> LocationsOf(Colours player, ChessPieceName piece);
-        IEnumerable<BoardLocation> LocationsOf(Colours player);
-        bool IsEmpty(BoardLocation location);
-
-        bool DoesMoveLeaveMovingPlayersKingInCheck(ChessMove move);
-        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(params BoardLocation[] locations);
-        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(ChessPieceName pieceType);
-        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour);
-        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour, ChessPieceName piece);
-
-        void Remove(BoardLocation loc);
-        IEnumerable<BoardLocation> GetAllMoveDestinations(Colours forPlayer);
-        void GeneratePaths(ChessPieceEntity forEntity, BoardLocation at, bool removeMovesThatLeaveKingInCheck = true);
-        Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation);
-        Paths RemoveInvalidMoves(Paths possiblePaths);
-        Paths RemoveMovesThatLeaveKingInCheck(Paths possiblePaths);
-        GameState CheckForCheckMate(Colours forPlayer, List<LocatedItem<ChessPieceEntity>> enemiesAttackingKing);
-        GameState CurrentGameState(Colours forPlayer);
-    }
-
     public class BoardState : IBoardStateActions, ICloneable, IBoardState
 // <ChessPieceEntity>
     {
@@ -51,7 +25,7 @@ namespace chess.engine.Board
 
         public void Clear() => _items.Clear();
 
-        public IEnumerable<BoardLocation> LocationsInUse => _items.Keys;
+        public IEnumerable<BoardLocation> GetAllItemLocations => _items.Keys;
 
         public void PlaceEntity(BoardLocation loc, ChessPieceEntity entity, bool generateMoves = true) 
             => _items[loc] = new LocatedItem<ChessPieceEntity>(loc, entity, generateMoves ? GeneratePossiblePaths(entity, loc) : null);
@@ -61,7 +35,7 @@ namespace chess.engine.Board
 
         public GameState CurrentGameState(Colours forPlayer)
         {
-            var kingLoc = LocationsOf(forPlayer, ChessPieceName.King).First();
+            var kingLoc = GetItems(forPlayer, ChessPieceName.King).First();
             var enemiesAttackingKing = GetItems(forPlayer.Enemy()).Where(itm
                 => itm.Paths.SelectMany(p => p).Any(m => m.To.Equals(kingLoc))).ToList();
 
@@ -91,7 +65,6 @@ namespace chess.engine.Board
         }
 
         public bool IsEmpty(BoardLocation location) => !_items.ContainsKey(location);
-
 
         public void GeneratePaths(ChessPieceEntity forEntity, BoardLocation at, bool removeMovesThatLeaveKingInCheck = true)
         {

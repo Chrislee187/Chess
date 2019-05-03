@@ -16,6 +16,8 @@ namespace chess.engine.Chess
         public static int EndRankFor(Colours colour) => colour == Colours.White ? 8 : 1;
         private readonly ChessBoardEngine _engine;
         public Colours CurrentPlayer { get; private set; } = Colours.White;
+        private Colours NextPlayer() => CurrentPlayer == Colours.White ? Colours.Black : Colours.White;
+
         public bool InProgress = true;
 
         public BoardPiece[,] Board => _engine.Board;
@@ -49,10 +51,6 @@ namespace chess.engine.Chess
                 : "";
         }
 
-        private Colours NextPlayer()
-        {
-            return CurrentPlayer == Colours.White ? Colours.Black : Colours.White;
-        }
 
         private (ChessMove move, string errorMessage) ValidateInput(string input)
         {

@@ -120,7 +120,7 @@ namespace chess.engine
         {
             public void RefreshAllPaths(BoardState boardState, bool removeMovesThatLeaveKingInCheck)
             {
-                foreach (var loc in boardState.LocationsInUse)
+                foreach (var loc in boardState.GetAllItemLocations)
                 {
                     boardState.GeneratePaths(boardState.GetItem(loc).Item, loc);
                 }

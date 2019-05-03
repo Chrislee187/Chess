@@ -10,7 +10,7 @@ namespace chess.engine.Movement.SimpleValidators
         {
             var movingPiece = boardState.GetItem(move.From);
             var enemyColour = movingPiece.Item.Player.Enemy();
-            var enemyLocations = boardState.LocationsOf(enemyColour).ToList();
+            var enemyLocations = boardState.GetItems(enemyColour).Select(i => i.Location).ToList();
 
             var enemyPaths = new Paths();
             var locatedItems = boardState.GetItems(enemyLocations.ToArray()).ToList();

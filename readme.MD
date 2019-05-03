@@ -1,8 +1,7 @@
 ﻿# TODOS
 
+ * Get rid of IBoardStateActions and just use IBoardState
  * Tests for Check/CheckMate/Stalemate detection
- * PawnPromotionValidator Tests
- * EnPassantTakeValidator Tests
  * BoardState tests
  * CHessGame tests
  * ChessBoardEngine tests
@@ -10,7 +9,7 @@
 * Move history
 	* Enhance enpassant rule to ensure enemy pawn did it's double step the previous turn
 	* Enhance castline move validation to ensure king and castle haven't moved and king doesn't move through check
-* Better input error handling
+* Better input error handling, extract out to a proper system with tests
 * Find a test game to play out (one from the angular app?) as a simple integration test.
 * PGN Move support
 * Performance Metrics

@@ -7,7 +7,7 @@ namespace chess.engine.Chess
     {
         public void RefreshAllPaths(BoardState boardState, bool removeMovesThatLeaveKingInCheck = true)
         {
-            foreach (var loc in boardState.LocationsInUse)
+            foreach (var loc in boardState.GetAllItemLocations)
             {
                 var piece = boardState.GetItem(loc).Item;
                 if (piece.EntityType != ChessPieceName.King)
