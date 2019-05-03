@@ -8,7 +8,7 @@ using chess.engine.Movement;
 namespace chess.engine
 {
 
-    public class ChessBoardEngine : IBoardState
+    public class ChessBoardEngine : IBoardStateActions
     {
         public readonly BoardState BoardState;
         private readonly BoardActionFactory _boardActionFactory;
@@ -24,20 +24,20 @@ namespace chess.engine
         {
             _boardActionFactory = new BoardActionFactory();
 
-            BoardState = new BoardState(pathValidator);
+            BoardState = new BoardState(pathValidator, _boardActionFactory);
 
             _gameSetup = gameSetup;
             _gameSetup.SetupPieces(this);
 
             _allPathCalculator = allPathCalculator;
-            _allPathCalculator.RefreshAllPaths(BoardState);
+            RefreshAllPaths();
         }
 
         public void ResetBoard()
         {
             ClearBoard();
             _gameSetup.SetupPieces(this);
-            _allPathCalculator.RefreshAllPaths(BoardState);
+            RefreshAllPaths();
         }
 
         public void ClearBoard() => BoardState.Clear();
@@ -86,27 +86,31 @@ namespace chess.engine
 
         //TODO: Need an abstraction around MoveType's and Actions, to not be Chess specific
         // so will need some default state (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
-        public void Move(ChessMove validMove)
+        public void Move(ChessMove move)
         {
-            var action = _boardActionFactory.Create(validMove.ChessMoveType, this);
+            var action = _boardActionFactory.Create(move.ChessMoveType, this);
 
-            action.Execute(validMove);
+            action.Execute(move);
 
-            _allPathCalculator.RefreshAllPaths(BoardState);
+            _allPathCalculator.RefreshAllPaths(BoardState, true);
 
         }
 
+        private void RefreshAllPaths()
+        {
+            _allPathCalculator.RefreshAllPaths(BoardState, true);
+        }
 
         #region Board Actions
-        ChessPieceEntity IBoardState.GetEntity(BoardLocation loc) 
+        ChessPieceEntity IBoardStateActions.GetEntity(BoardLocation loc) 
             => BoardState.IsEmpty(loc) ? null : BoardState.GetItem(loc).Item;
 
-        void IBoardState.SetEntity(BoardLocation loc, ChessPieceEntity entity)
+        void IBoardStateActions.SetEntity(BoardLocation loc, ChessPieceEntity entity)
         {
-            BoardState.PlaceEntity(loc, entity, BoardState.GeneratePossiblePaths(entity, loc));
+            BoardState.PlaceEntity(loc, entity);
         }
 
-        void IBoardState.ClearLocation(BoardLocation loc)
+        void IBoardStateActions.ClearLocation(BoardLocation loc)
         {
             BoardState.Remove(loc);
         }
@@ -114,11 +118,11 @@ namespace chess.engine
 
         private class DefaultRefreshAllPaths : IRefreshAllPaths
         {
-            public void RefreshAllPaths(BoardState boardState)
+            public void RefreshAllPaths(BoardState boardState, bool removeMovesThatLeaveKingInCheck)
             {
                 foreach (var loc in boardState.LocationsInUse)
                 {
-                    boardState.UpdatePaths(boardState.GetItem(loc).Item, loc);
+                    boardState.GeneratePaths(boardState.GetItem(loc).Item, loc);
                 }
 
             }

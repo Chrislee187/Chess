@@ -19,23 +19,12 @@ namespace chess.engine.tests
 
             var startLocation = BoardLocation.At("B2");
 
-            engine
-                .AddPiece(ChessPieceEntityFactory.CreatePawn(Colours.White), startLocation)
-                .AddPiece(ChessPieceEntityFactory.CreatePawn(Colours.Black), BoardLocation.At("D5"))
-                .AddPiece(ChessPieceEntityFactory.CreatePawn(Colours.White), BoardLocation.At("C5"));
-
-            var piece = engine.PieceAt("B2");
+            var piece = engine.BoardState.GetItem(startLocation);
 
             Assert.That(piece.Item.EntityType, Is.EqualTo(ChessPieceName.Pawn));
 
             var paths = piece.Paths;
             Assert.That(paths.Count(), Is.EqualTo(1));
-            Assert.That(paths.SelectMany(m => m).Count(), Is.EqualTo(2));
-
-            piece = engine.PieceAt("C5");
-            Assert.That(piece.Item.EntityType, Is.EqualTo(ChessPieceName.Pawn));
-            paths = piece.Paths;
-            Assert.That(paths.Count(), Is.EqualTo(2));
             Assert.That(paths.SelectMany(m => m).Count(), Is.EqualTo(2));
         }
 

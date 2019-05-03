@@ -10,9 +10,9 @@ namespace chess.engine.Actions
 
     public abstract class BoardAction : IBoardAction
     {
-        protected readonly IBoardState _state;
+        protected readonly IBoardStateActions _state;
         protected readonly IBoardActionFactory _factory;
-        protected BoardAction(IBoardState state, IBoardActionFactory factory)
+        protected BoardAction(IBoardStateActions state, IBoardActionFactory factory)
         {
             _state = state;
             _factory = factory;

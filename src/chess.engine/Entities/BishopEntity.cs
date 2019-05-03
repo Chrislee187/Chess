@@ -17,5 +17,9 @@ namespace chess.engine.Entities
                 new BishopPathGenerator()
             };
 
+        public override object Clone()
+        {
+            return new BishopEntity(Player);
+        }
     }
 }

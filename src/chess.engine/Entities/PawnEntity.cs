@@ -18,6 +18,10 @@ namespace chess.engine.Entities
                 new PawnRightTakePathGenerator(),
                 new PawnLeftTakePathGenerator()
             };
+        public override object Clone()
+        {
+            return new PawnEntity(Player);
+        }
 
     }
 }

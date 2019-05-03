@@ -3,7 +3,7 @@ using chess.engine.Movement;
 
 namespace chess.engine.Game
 {
-    public class BoardLocation
+    public class BoardLocation : ICloneable
     {
         public int Rank { get; }
         public ChessFile File { get; }
@@ -52,6 +52,7 @@ namespace chess.engine.Game
 
         #region Object overrides
         public override string ToString() => File.ToString().Substring(0, 1) + Rank;
+        public object Clone() => At(File, Rank);
 
         public static explicit operator BoardLocation(string s)
         {

@@ -6,18 +6,18 @@ namespace chess.engine.Actions
 {
     public interface IBoardActionFactory
     {
-        IBoardAction Create(ChessMoveType moveType, IBoardState boardState);
-        IBoardAction Create(DefaultActions action, IBoardState boardState);
+        IBoardAction Create(ChessMoveType moveType, IBoardStateActions boardState);
+        IBoardAction Create(DefaultActions action, IBoardStateActions boardState);
     }
 
     public class BoardActionFactory : IBoardActionFactory
     {
-        private Dictionary<ChessMoveType, Func<IBoardState, IBoardAction>> _actions;
-        private Dictionary<DefaultActions, Func<IBoardState, IBoardAction>> _coreActions;
+        private Dictionary<ChessMoveType, Func<IBoardStateActions, IBoardAction>> _actions;
+        private Dictionary<DefaultActions, Func<IBoardStateActions, IBoardAction>> _coreActions;
 
         public BoardActionFactory()
         {
-            _actions = new Dictionary<ChessMoveType, Func<IBoardState, IBoardAction>>
+            _actions = new Dictionary<ChessMoveType, Func<IBoardStateActions, IBoardAction>>
             {
                 // Generic
                 {ChessMoveType.MoveOnly, s => new MoveOnlyAction(s, this) },
@@ -32,7 +32,7 @@ namespace chess.engine.Actions
                 {ChessMoveType.TakeEnPassant, s => new EnPassantAction(s, this) }
             };
 
-            _coreActions = new Dictionary<DefaultActions, Func<IBoardState, IBoardAction>>
+            _coreActions = new Dictionary<DefaultActions, Func<IBoardStateActions, IBoardAction>>
             {
                 {DefaultActions.MoveOnly, s => new MoveOnlyAction(s, this) },
                 {DefaultActions.TakeOnly, s => new TakeOnlyAction(s, this) },
@@ -40,7 +40,7 @@ namespace chess.engine.Actions
             };
         }
 
-        public IBoardAction Create(ChessMoveType moveType, IBoardState boardState)
+        public IBoardAction Create(ChessMoveType moveType, IBoardStateActions boardState)
         {
             if (_actions.ContainsKey(moveType))
             {
@@ -50,7 +50,7 @@ namespace chess.engine.Actions
             throw new NotImplementedException($"MoveType: {moveType} not implemented");
         }
 
-        public IBoardAction Create(DefaultActions action, IBoardState boardState)
+        public IBoardAction Create(DefaultActions action, IBoardStateActions boardState)
         {
             if (_coreActions.ContainsKey(action))
             {

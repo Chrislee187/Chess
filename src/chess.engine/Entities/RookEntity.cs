@@ -17,5 +17,9 @@ namespace chess.engine.Entities
                 new RookPathGenerator()
             };
 
+        public override object Clone()
+        {
+            return new RookEntity(Player);
+        }
     }
 }

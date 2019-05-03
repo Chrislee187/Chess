@@ -4,7 +4,7 @@ namespace chess.engine.Actions
 {
     public class EnPassantAction : BoardAction
     {
-        public EnPassantAction(IBoardState state, IBoardActionFactory factory) : base(state, factory)
+        public EnPassantAction(IBoardStateActions state, IBoardActionFactory factory) : base(state, factory)
         {
         }
 

@@ -16,6 +16,10 @@ namespace chess.engine.Entities
             {
                 new QueenPathGenerator()
             };
+        public override object Clone()
+        {
+            return new QueenEntity(Player);
+        }
 
     }
 }

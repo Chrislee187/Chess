@@ -18,5 +18,10 @@ namespace chess.engine.Entities
                 new KingCastlePathGenerator()
             };
 
+        public override object Clone()
+        {
+            return new KingEntity(Player);
+        }
+
     }
 }

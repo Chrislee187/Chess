@@ -8,12 +8,13 @@ using NUnit.Framework;
 
 namespace chess.engine.tests.Movement.Pawn
 {
+    [TestFixture]
     public class PawnRightTakePathGeneratorTests : PathGeneratorTestsBase
     {
         private PawnRightTakePathGenerator _gen;
 
         [SetUp]
-        public void SetUp()
+        public new void SetUp()
         {
             _gen = new PawnRightTakePathGenerator();
         }

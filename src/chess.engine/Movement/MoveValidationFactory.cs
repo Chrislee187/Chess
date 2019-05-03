@@ -10,14 +10,14 @@ namespace chess.engine.Movement
 {
     public interface IPathValidator
     {
-        Path ValidatePath(Path possiblePath, BoardState boardState);
+        Path ValidatePath(Path possiblePath, IBoardState boardState);
     }
 
-    public delegate bool ChessBoardMovePredicate(ChessMove move, BoardState boardState);
+    public delegate bool ChessBoardMovePredicate(ChessMove move, IBoardState boardState);
 
     public interface IMoveValidator
     {
-        bool ValidateMove(ChessMove move, BoardState boardState);
+        bool ValidateMove(ChessMove move, IBoardState boardState);
     }
 
     public class MoveValidationFactory : ReadOnlyDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>>
@@ -26,22 +26,22 @@ namespace chess.engine.Movement
         public MoveValidationFactory() : base(new Dictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>>
         {
             // Generic move types
-            { ChessMoveType.MoveOnly, new ChessBoardMovePredicate[] {new DestinationIsEmptyValidator().ValidateMove }},
-            { ChessMoveType.MoveOrTake, new ChessBoardMovePredicate[] {new DestinationIsEmptyOrContainsEnemyValidator().ValidateMove}},
-            { ChessMoveType.TakeOnly, new ChessBoardMovePredicate[] {new DestinationContainsEnemyMoveValidator().ValidateMove }},
+            { ChessMoveType.MoveOnly, new ChessBoardMovePredicate[] {(move, boardState) => new DestinationIsEmptyValidator().ValidateMove(move, boardState) }},
+            { ChessMoveType.MoveOrTake, new ChessBoardMovePredicate[] {(move, boardState) => new DestinationIsEmptyOrContainsEnemyValidator().ValidateMove(move, boardState)}},
+            { ChessMoveType.TakeOnly, new ChessBoardMovePredicate[] {(move, boardState) => new DestinationContainsEnemyMoveValidator().ValidateMove(move, boardState) }},
 
             // TODO: Chess Move types shouldn't be here
             { ChessMoveType.KingMove, new ChessBoardMovePredicate[] {
-                new DestinationIsEmptyValidator().ValidateMove,
-                new DestinationNotUnderAttackValidator().ValidateMove}},
-            { ChessMoveType.TakeEnPassant, new ChessBoardMovePredicate[] {new EnPassantTakeValidator().ValidateMove }},
-            { ChessMoveType.CastleKingSide, new ChessBoardMovePredicate[] { new KingCastleValidator().ValidateMove  }},
-            { ChessMoveType.CastleQueenSide, new ChessBoardMovePredicate[] { new KingCastleValidator().ValidateMove }},
-            { ChessMoveType.PawnPromotion, new ChessBoardMovePredicate[] { new PawnPromotionValidator().ValidateMove }}
+                (move, boardState) => new DestinationIsEmptyValidator().ValidateMove(move, boardState),
+                (move, boardState) => new DestinationNotUnderAttackValidator().ValidateMove(move, boardState)}},
+            { ChessMoveType.TakeEnPassant, new ChessBoardMovePredicate[] {(move, boardState) => new EnPassantTakeValidator().ValidateMove(move, boardState) }},
+            { ChessMoveType.CastleKingSide, new ChessBoardMovePredicate[] { (move, boardState) => new KingCastleValidator().ValidateMove(move, boardState)  }},
+            { ChessMoveType.CastleQueenSide, new ChessBoardMovePredicate[] { (move, boardState) => new KingCastleValidator().ValidateMove(move, boardState) }},
+            { ChessMoveType.PawnPromotion, new ChessBoardMovePredicate[] { (move, boardState) => new PawnPromotionValidator().ValidateMove(move, boardState) }}
         })
         {}
 
-        public IEnumerable<ChessBoardMovePredicate> Create(ChessMoveType moveType, IBoardState boardState)
+        public IEnumerable<ChessBoardMovePredicate> Create(ChessMoveType moveType, IBoardStateActions boardState)
         {
             if (ContainsKey(moveType))
             {

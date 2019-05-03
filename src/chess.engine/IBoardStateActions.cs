@@ -3,7 +3,7 @@ using chess.engine.Game;
 
 namespace chess.engine
 {
-    public interface IBoardState
+    public interface IBoardStateActions
     {
         ChessPieceEntity GetEntity(BoardLocation loc);
         void ClearLocation(BoardLocation loc);

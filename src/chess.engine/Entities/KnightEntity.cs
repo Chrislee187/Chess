@@ -17,6 +17,10 @@ namespace chess.engine.Entities
                 new KnightPathGenerator()
             };
 
+        public override object Clone()
+        {
+            return new KnightEntity(Player);
+        }
 
     }
 }

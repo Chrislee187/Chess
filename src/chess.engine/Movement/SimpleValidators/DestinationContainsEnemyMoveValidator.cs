@@ -5,13 +5,13 @@ namespace chess.engine.Movement.SimpleValidators
 {
     public class DestinationContainsEnemyMoveValidator : IMoveValidator
     {
-        public bool ValidateMove(ChessMove move, BoardState boardState)
+        public bool ValidateMove(ChessMove move, IBoardState boardState)
         {
-            var sourcePiece = boardState.Get(move.From).SingleOrDefault();
+            var sourcePiece = boardState.GetItems(move.From).SingleOrDefault();
             Guard.NotNull(sourcePiece);
             if (!boardState.IsEmpty(move.To))
             {
-                var destinationPiece = boardState.Get(move.To).Single();
+                var destinationPiece = boardState.GetItems(move.To).Single();
                 return sourcePiece.Item.Player != destinationPiece.Item.Player;
             }
 

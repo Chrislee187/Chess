@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Game;
 using chess.engine.Movement;
@@ -14,10 +15,13 @@ namespace chess.engine.tests.Movement
     {
         private Mock<IReadOnlyDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>>> _factoryMock;
         private IEnumerable<ChessBoardMovePredicate> _moveTests;
+        private readonly IBoardActionFactory _boardActionFactory = new BoardActionFactory();
+
 
         [SetUp]
-        public void SetUp()
+        public new void SetUp()
         {
+            base.SetUp();
             _factoryMock = new Mock<IReadOnlyDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>>>();
 
             _moveTests = new List<ChessBoardMovePredicate>
@@ -34,7 +38,8 @@ namespace chess.engine.tests.Movement
         {
             var validator = new ChessPathValidator(_factoryMock.Object);
             var path = new PathBuilder().Build();
-            validator.ValidatePath(path, new BoardState(null));
+
+            validator.ValidatePath(path, BoardStateMock.Object);
 
             Assert.That(path.Any());
         }
@@ -55,7 +60,7 @@ namespace chess.engine.tests.Movement
                     out failOnD5))
                 .Returns(true);
 
-            var validPath = validator.ValidatePath(path, new BoardState(null));
+            var validPath = validator.ValidatePath(path, BoardStateMock.Object);
             
             AssertPathContains(new List<Path>{validPath}, 
                 new PathBuilder().From("D2")
@@ -72,7 +77,7 @@ namespace chess.engine.tests.Movement
 
             var validator = new ChessPathValidator(_factoryMock.Object);
             var path = new PathBuilder().Build();
-            Assert.That(() => validator.ValidatePath(path, new BoardState(null)), 
+            Assert.That(() => validator.ValidatePath(path, BoardStateMock.Object), 
                 Throws.Exception);
         }
     }

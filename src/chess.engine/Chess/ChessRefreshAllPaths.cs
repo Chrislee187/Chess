@@ -5,21 +5,21 @@ namespace chess.engine.Chess
 {
     public class ChessRefreshAllPaths : IRefreshAllPaths
     {
-        public void RefreshAllPaths(BoardState boardState)
+        public void RefreshAllPaths(BoardState boardState, bool removeMovesThatLeaveKingInCheck = true)
         {
             foreach (var loc in boardState.LocationsInUse)
             {
                 var piece = boardState.GetItem(loc).Item;
                 if (piece.EntityType != ChessPieceName.King)
                 {
-                    boardState.UpdatePaths(piece, loc);
+                    boardState.GeneratePaths(piece, loc, removeMovesThatLeaveKingInCheck);
                 }
             }
             
-            var kings = boardState.Get(ChessPieceName.King).ToList();
+            var kings = boardState.GetItems(ChessPieceName.King).ToList();
 
-            boardState.UpdatePaths(kings[0].Item, kings[0].Location);
-            boardState.UpdatePaths(kings[1].Item, kings[1].Location);
+            boardState.GeneratePaths(kings[0].Item, kings[0].Location, removeMovesThatLeaveKingInCheck);
+            boardState.GeneratePaths(kings[1].Item, kings[1].Location, removeMovesThatLeaveKingInCheck);
         }
     }
 

@@ -15,7 +15,7 @@ namespace chess.engine.Movement
             _validationFactory = validationFactory;
         }
 
-        public Path ValidatePath(Path possiblePath, BoardState boardState)
+        public Path ValidatePath(Path possiblePath, IBoardState boardState)
         {
             var validPath = new Path();
             foreach (var move in possiblePath)
@@ -30,9 +30,9 @@ namespace chess.engine.Movement
                     break;
                 }
 
-                var moveIsATake = boardState.MoveIsATake(move);
+                var moveIsATake = MoveIsATake(move, boardState);
 
-                var moveLeavesKingInCheck = boardState.MoveLeavesKingInCheck(move);
+                var moveLeavesKingInCheck = boardState.DoesMoveLeaveMovingPlayersKingInCheck(move);
                 // TODO: Does move leave king in check?
                 if (!moveLeavesKingInCheck)
                 {
@@ -47,5 +47,14 @@ namespace chess.engine.Movement
             return validPath;
         }
 
+        private static bool MoveIsATake(ChessMove move, IBoardState boardState)
+        {
+            if (boardState.IsEmpty(move.To)) return false;
+
+            var movePlayerColour = boardState.GetItem(move.From)?.Item.Player;
+            var takeEntity = boardState.GetItem(move.To)?.Item;
+            var moveIsATake = takeEntity != null && takeEntity.Player != movePlayerColour;
+            return moveIsATake;
+        }
     }
 }

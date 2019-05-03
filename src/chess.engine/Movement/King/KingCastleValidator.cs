@@ -11,11 +11,9 @@ namespace chess.engine.Movement.King
     public class KingCastleValidator : IMoveValidator
     {
 
-        public bool ValidateMove(ChessMove move, BoardState boardState)
+        public bool ValidateMove(ChessMove move, IBoardState boardState)
         {
-            var kingLoc = move.From;
-
-            var king = boardState.GetItem(kingLoc).Item;
+            var king = boardState.GetItem(move.From).Item;
             var kingIsValid = king.EntityType == ChessPieceName.King; // && !king.MoveHistory.Any()
 
             var rookLoc = move.ChessMoveType == ChessMoveType.CastleKingSide
@@ -61,6 +59,7 @@ namespace chess.engine.Movement.King
                 pathBetween.Add(move.From.MoveLeft(king.Player, 3));
             }
 
+            pathBetween.RemoveAll(location => location == null);
             return pathBetween;
         }
 

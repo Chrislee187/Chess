@@ -9,16 +9,16 @@ namespace chess.engine.Movement.Pawn
     public class EnPassantTakeValidator : IMoveValidator
     {
 
-        public bool ValidateMove(ChessMove move, BoardState boardState)
+        public bool ValidateMove(ChessMove move, IBoardState boardState)
         {
             var normalTakeOk = new DestinationContainsEnemyMoveValidator().ValidateMove(move, boardState);
 
-            var piece = boardState.Get(move.From).Single().Item;
+            var piece = boardState.GetItems(move.From).Single().Item;
 
             var passingPieceLocation = move.To.MoveBack(piece.Player);
 
             if (boardState.IsEmpty(passingPieceLocation)) return false;
-            var passingPiece = boardState.Get(passingPieceLocation).Single().Item;
+            var passingPiece = boardState.GetItems(passingPieceLocation).Single().Item;
             if (passingPiece.Player == piece.Player) return false;
             if (passingPiece.EntityType != ChessPieceName.Pawn) return false;
 

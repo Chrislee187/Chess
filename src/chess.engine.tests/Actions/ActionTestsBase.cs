@@ -11,7 +11,7 @@ namespace chess.engine.tests.Actions
         protected readonly ChessMove AnyMove = ChessMove.Create("D2", "D4", ChessMoveType.MoveOnly);
         protected readonly ChessMove AnyTake = ChessMove.Create("D2", "D5", ChessMoveType.MoveOrTake);
 
-        protected Mock<IBoardState> StateMock = new Mock<IBoardState>();
+        protected Mock<IBoardStateActions> StateMock = new Mock<IBoardStateActions>();
         protected Mock<IBoardActionFactory> FactoryMock = new Mock<IBoardActionFactory>();
         protected Mock<IBoardAction> BoardActionMock = new Mock<IBoardAction>();
 
@@ -19,7 +19,7 @@ namespace chess.engine.tests.Actions
 
         protected void SetUp()
         {
-            StateMock = new Mock<IBoardState>();
+            StateMock = new Mock<IBoardStateActions>();
             FactoryMock = new Mock<IBoardActionFactory>();
             BoardActionMock = new Mock<IBoardAction>();
         }
@@ -28,21 +28,21 @@ namespace chess.engine.tests.Actions
             => StateMock.Setup(m => m.GetEntity(at)).Returns(piece);
 
         protected void SetupCreateMockActionForMoveType(ChessMoveType moveType)
-            => FactoryMock.Setup(m => m.Create(moveType, It.IsAny<IBoardState>()))
+            => FactoryMock.Setup(m => m.Create(moveType, It.IsAny<IBoardStateActions>()))
                 .Returns(BoardActionMock.Object);
 
         protected void SetupCreateMockActionForMoveType(DefaultActions action)
-            => FactoryMock.Setup(m => m.Create(action, It.IsAny<IBoardState>()))
+            => FactoryMock.Setup(m => m.Create(action, It.IsAny<IBoardStateActions>()))
                 .Returns(BoardActionMock.Object);
 
         protected void VerifyLocationWasCleared(BoardLocation loc)
             => StateMock.Verify(s => s.ClearLocation(loc), Times.Once);
 
         protected void VerifyActionWasCreated(ChessMoveType moveType)
-            => FactoryMock.Verify(m => m.Create(moveType, It.IsAny<IBoardState>()), Times.Once);
+            => FactoryMock.Verify(m => m.Create(moveType, It.IsAny<IBoardStateActions>()), Times.Once);
 
         protected void VerifyActionWasCreated(DefaultActions action)
-            => FactoryMock.Verify(m => m.Create(action, It.IsAny<IBoardState>()), Times.Once);
+            => FactoryMock.Verify(m => m.Create(action, It.IsAny<IBoardStateActions>()), Times.Once);
 
         protected void VerifyActionWasExecuted(ChessMove move)
         => BoardActionMock.Verify(m => m.Execute(move), Times.Once);

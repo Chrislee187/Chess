@@ -47,7 +47,7 @@ namespace chess.engine.tests.Movement
         }
 
         [Test]
-        public void Should_return_false_for_move_to_own_pieece()
+        public void Should_return_false_for_move_to_own_piece()
         {
             var notEmpty = ChessMove.Create("A1", "E1", ChessMoveType.MoveOnly);
             Assert.False(_validator.ValidateMove(notEmpty, _boardState));

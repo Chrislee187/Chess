@@ -5,7 +5,7 @@ namespace chess.engine.Actions
 {
     public class PawnPromotionAction : BoardAction
     {
-        public PawnPromotionAction(IBoardState state, IBoardActionFactory factory) : base(state, factory)
+        public PawnPromotionAction(IBoardStateActions state, IBoardActionFactory factory) : base(state, factory)
         {
         }
 

@@ -5,7 +5,7 @@ namespace chess.engine.Actions
 {
     public class FakeAction : BoardAction
     {
-        public FakeAction(IBoardState state, BoardActionFactory factory) : base(state, factory)
+        public FakeAction(IBoardStateActions state, BoardActionFactory factory) : base(state, factory)
         {
         }
 

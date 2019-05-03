@@ -35,7 +35,6 @@ namespace chess.engine.tests.Movement
         [Test]
         public void Should_return_false_for_square_under_enemy_attack()
         {
-
             var containsEnemy = ChessMove.Create("E1", "D1", ChessMoveType.MoveOrTake);
             Assert.False(_validator.ValidateMove(containsEnemy, _boardState));
 

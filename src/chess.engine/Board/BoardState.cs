@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using chess.engine.Actions;
 using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
@@ -7,31 +9,91 @@ using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
-    public class BoardState
+    public interface IBoardState
+    {
+        void Clear();
+        IEnumerable<BoardLocation> LocationsInUse { get; }
+        void PlaceEntity(BoardLocation loc, ChessPieceEntity entity, bool generateMoves = true);
+        LocatedItem<ChessPieceEntity> GetItem(BoardLocation loc);
+        IEnumerable<BoardLocation> LocationsOf(Colours player, ChessPieceName piece);
+        IEnumerable<BoardLocation> LocationsOf(Colours player);
+        bool IsEmpty(BoardLocation location);
+
+        bool DoesMoveLeaveMovingPlayersKingInCheck(ChessMove move);
+        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(params BoardLocation[] locations);
+        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(ChessPieceName pieceType);
+        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour);
+        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour, ChessPieceName piece);
+
+        void Remove(BoardLocation loc);
+        IEnumerable<BoardLocation> GetAllMoveDestinations(Colours forPlayer);
+        void GeneratePaths(ChessPieceEntity forEntity, BoardLocation at, bool removeMovesThatLeaveKingInCheck = true);
+        Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation);
+        Paths RemoveInvalidMoves(Paths possiblePaths);
+        Paths RemoveMovesThatLeaveKingInCheck(Paths possiblePaths);
+        GameState CheckForCheckMate(Colours forPlayer, List<LocatedItem<ChessPieceEntity>> enemiesAttackingKing);
+        GameState CurrentGameState(Colours forPlayer);
+    }
+
+    public class BoardState : IBoardStateActions, ICloneable, IBoardState
+// <ChessPieceEntity>
     {
         private readonly IPathValidator _pathValidator;
         private readonly IDictionary<BoardLocation, LocatedItem<ChessPieceEntity>> _items;
+        private readonly IBoardActionFactory _actionFactory;
 
-        public BoardState(IPathValidator pathValidator)
+        public BoardState(IPathValidator pathValidator, IBoardActionFactory actionFactory)
         {
             _pathValidator = pathValidator;
             _items = new Dictionary<BoardLocation, LocatedItem<ChessPieceEntity>>();
+            _actionFactory = actionFactory;
         }
-
-        private Path ValidatePath(Path possiblePath) 
-            => _pathValidator.ValidatePath(possiblePath, this);
-
-        public IEnumerable<BoardLocation> LocationsInUse => _items.Keys;
 
         public void Clear() => _items.Clear();
 
-        public void PlaceEntity(BoardLocation loc, ChessPieceEntity entity, Paths paths = null) 
-            => _items[loc] = new LocatedItem<ChessPieceEntity>(loc, entity, paths);
+        public IEnumerable<BoardLocation> LocationsInUse => _items.Keys;
+
+        public void PlaceEntity(BoardLocation loc, ChessPieceEntity entity, bool generateMoves = true) 
+            => _items[loc] = new LocatedItem<ChessPieceEntity>(loc, entity, generateMoves ? GeneratePossiblePaths(entity, loc) : null);
 
         public LocatedItem<ChessPieceEntity> GetItem(BoardLocation loc)
-            => Get(loc).SingleOrDefault();
+            => GetItems(loc).SingleOrDefault();
 
-        public void UpdatePaths(ChessPieceEntity forEntity, BoardLocation at)
+        public GameState CurrentGameState(Colours forPlayer)
+        {
+            var kingLoc = LocationsOf(forPlayer, ChessPieceName.King).First();
+            var enemiesAttackingKing = GetItems(forPlayer.Enemy()).Where(itm
+                => itm.Paths.SelectMany(p => p).Any(m => m.To.Equals(kingLoc))).ToList();
+
+            var inCheck = enemiesAttackingKing.Any();
+
+            if (inCheck)
+            {
+                return CheckForCheckMate(forPlayer, enemiesAttackingKing);
+            }
+
+            return GameState.InProgress;
+        }
+
+        public IEnumerable<BoardLocation> LocationsOf(Colours player, ChessPieceName piece)
+        {
+            return _items
+                .Where(kvp => kvp.Value.Item.EntityType == piece
+                              && kvp.Value.Item.Player == player)
+                .Select(kvp => kvp.Key);
+        }
+
+        public IEnumerable<BoardLocation> LocationsOf(Colours player)
+        {
+            return _items
+                .Where(kvp => kvp.Value.Item.Player == player)
+                .Select(kvp => kvp.Key);
+        }
+
+        public bool IsEmpty(BoardLocation location) => !_items.ContainsKey(location);
+
+
+        public void GeneratePaths(ChessPieceEntity forEntity, BoardLocation at, bool removeMovesThatLeaveKingInCheck = true)
         {
             var item = GetItem(at);
 
@@ -40,8 +102,15 @@ namespace chess.engine.Board
             var paths = GeneratePossiblePaths(forEntity, at);
 
             paths = RemoveInvalidMoves(paths);
+
+            if (removeMovesThatLeaveKingInCheck)
+            {
+                paths = RemoveMovesThatLeaveKingInCheck(paths);
+            }
+
             item.UpdatePaths(paths);
         }
+
         public Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation)
         {
             var paths = new Paths();
@@ -55,66 +124,107 @@ namespace chess.engine.Board
             return paths;
         }
 
-        private Paths RemoveInvalidMoves(Paths possiblePaths)
+        public Paths RemoveInvalidMoves(Paths possiblePaths)
         {
             var validPaths = new Paths();
 
             foreach (var possiblePath in possiblePaths)
             {
-                var validPath = ValidatePath(possiblePath);
+                var testedPath = _pathValidator.ValidatePath(possiblePath, this);
 
-                if (validPath.Any())
+                if (testedPath.Any())
                 {
-                    validPaths.Add(validPath);
+                    validPaths.Add(testedPath);
                 }
             }
 
             return validPaths;
         }
-        
-        public IEnumerable<BoardLocation> LocationsOf(Colours player, ChessPieceName piece)
+
+        public Paths RemoveMovesThatLeaveKingInCheck(Paths possiblePaths)
         {
-            return _items
-                .Where(kvp => kvp.Value.Item.EntityType == piece
-                              && kvp.Value.Item.Player == player)
-                .Select(kvp => kvp.Key);
-        }
-        public IEnumerable<BoardLocation> LocationsOf(Colours player)
-        {
-            return _items
-                .Where(kvp => kvp.Value.Item.Player == player)
-                .Select(kvp => kvp.Key);
-        }
+            var validPaths = new Paths();
 
-
-        public GameState CurrentGameState(Colours forPlayer)
-        {
-            var kingLoc = LocationsOf(forPlayer, ChessPieceName.King).First();
-            var enemiesAttackingKing = _items.Values.Where(itm
-                    => itm.Paths.SelectMany(p => p).Any(m => m.To.Equals(kingLoc))).ToList();
-
-            var inCheck = enemiesAttackingKing.Any();
-
-            if (inCheck)
+            foreach (var possiblePath in possiblePaths)
             {
-                return CheckForCheckMate(forPlayer, kingLoc, enemiesAttackingKing);
+                var testedPath = new Path();
+                foreach (var move in possiblePath)
+                {
+                    var inCheck = DoesMoveLeaveMovingPlayersKingInCheck(move);
+
+                    if (!inCheck)
+                    {
+                        testedPath.Add(move);
+                    }
+                }
+
+                if (testedPath.Any())
+                {
+                    validPaths.Add(testedPath);
+                }
             }
 
-            return GameState.InProgress;
+            return validPaths;
         }
 
-        private GameState CheckForCheckMate(Colours forPlayer, BoardLocation kingLoc, List<LocatedItem<ChessPieceEntity>> enemiesAttackingKing)
+        public object Clone()
+        {
+            var clonedItems = _items.Values.Select(e =>
+                new LocatedItem<ChessPieceEntity>((BoardLocation)e.Location.Clone(), (ChessPieceEntity)e.Item.Clone(), null));
+
+            var clonedState = new BoardState(_pathValidator, _actionFactory);
+            foreach (var clonedItem in clonedItems)
+            {
+                clonedState.PlaceEntity(clonedItem.Location.Clone() as BoardLocation, clonedItem.Item.Clone() as ChessPieceEntity);
+            }
+            return clonedState;
+        }
+        public bool DoesMoveLeaveMovingPlayersKingInCheck(ChessMove move)
+        {
+            /*
+             * clone BoardState without board paths
+             */
+
+            var clonedState = (BoardState) Clone();
+            /*
+            * use BoardActionFactory create Action for move */
+            var action = _actionFactory.Create(move.ChessMoveType, clonedState);
+
+            var playerColour = clonedState.GetItem(move.From).Item.Player;
+            /*
+            * execute Action without any validation (it's already been done on the master board */
+            action.Execute(move);
+
+            /*
+             * Refresh all paths on clone WITHOUT check for moves that leave king in check */
+//            _chessRefreshAllPaths.RefreshAllPaths(clonedState, false);
+      
+            /*
+             * If king is NOT in check move path to result
+             */
+            var inCheck = clonedState.CurrentGameState(playerColour) != GameState.InProgress;
+            return inCheck;
+        }
+
+        public IEnumerable<BoardLocation> GetAllMoveDestinations(Colours forPlayer)
+        {
+            var friendlyItems = GetItems(forPlayer).Where(i => i.Item.EntityType != ChessPieceName.King);
+            var friendlyDestinations = friendlyItems.SelectMany(fi => fi.Paths.FlattenMoves()).Select(m => m.To);
+            return friendlyDestinations;
+        }
+
+        public GameState CheckForCheckMate(Colours forPlayer, List<LocatedItem<ChessPieceEntity>> enemiesAttackingKing)
         {
             var state = GameState.Check;
-            var kingCannotMove = !_items[kingLoc].Paths.Any(); // Move validator will ensure we can't move into check
+            var king = GetItems(forPlayer, ChessPieceName.King).Single();
+            var kingCannotMove = !king.Paths.Any(); // Move validator will ensure we can't move into check
 
-            // Get possible destinations of all friendly support pieces
-            var friendlyDestinations = FriendlySupportLocations(forPlayer, kingLoc);
+            var friendlyDestinations = GetAllMoveDestinations(forPlayer);
 
             bool canBlock = enemiesAttackingKing.All(enemy =>
             {
-                // Get the path from the item that it is attack along
-                var attackingPath = enemy.Paths.Single(attackPath => attackPath.Any(p => p.To.Equals(kingLoc)));
+                var attackingPath = enemy.Paths
+                    .Single(attackPath => attackPath.Any(p => p.To.Equals(king.Location)));
 
                 // Check if any friendly pieces can move to the path or take the item
                 return friendlyDestinations.Any(fd => fd.Equals(enemy.Location)
@@ -130,47 +240,42 @@ namespace chess.engine.Board
             return state;
         }
 
-        private IEnumerable<BoardLocation> FriendlySupportLocations(Colours forPlayer, BoardLocation kingLoc)
-        {
-            var friendlyItems = _items.Where(i => i.Key != kingLoc).Select(i => i.Value);
-            var friendlyDestinations = friendlyItems.SelectMany(fi => fi.Paths.FlattenMoves()).Select(m => m.To);
-            return friendlyDestinations;
-        }
-
-
-        public bool MoveIsATake(ChessMove move)
-        {
-            if (IsEmpty(move.To)) return false;
-
-            var movePlayerColour = GetItem(move.From).Item.Player;
-            var takeEntity = GetItem(move.To).Item;
-            var moveIsATake = takeEntity != null && takeEntity.Player != movePlayerColour;
-            return moveIsATake;
-        }
-
-
-        public bool MoveLeavesKingInCheck(ChessMove move)
-        {
-            // TODO: Is there anyway to accurately do this without making the move and
-            // recalculating all the paths???
-            return false;
-        }
-
-        public bool IsEmpty(BoardLocation moveTo) => !_items.ContainsKey(moveTo);
-
-        public IEnumerable<LocatedItem<ChessPieceEntity>> Get(params BoardLocation[] locations)
+        public IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(params BoardLocation[] locations)
         {
             return _items.Where(itm => locations.Contains(itm.Key)).Select(kvp => kvp.Value);
         }
-        public IEnumerable<LocatedItem<ChessPieceEntity>> Get(ChessPieceName pieceType)
+        public IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(ChessPieceName pieceType)
         {
             return _items.Values.Where(itm => itm.Item.EntityType == pieceType);
+        }
+        public IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour)
+        {
+            return _items.Where(itm => itm.Value.Item.Player == colour).Select(kvp => kvp.Value);
+        }
+        public IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour, ChessPieceName piece)
+        {
+            return _items.Where(itm => itm.Value.Item.Player == colour && itm.Value.Item.EntityType == piece).Select(kvp => kvp.Value);
         }
 
         public void Remove(BoardLocation loc)
         {
             _items.Remove(loc);
         }
+
+        #region Board Actions
+        ChessPieceEntity IBoardStateActions.GetEntity(BoardLocation loc)
+            => IsEmpty(loc) ? null : GetItem(loc).Item;
+
+        void IBoardStateActions.SetEntity(BoardLocation loc, ChessPieceEntity entity)
+        {
+            PlaceEntity(loc, entity);
+        }
+
+        void IBoardStateActions.ClearLocation(BoardLocation loc)
+        {
+            Remove(loc);
+        }
+        #endregion
     }
 
 }
