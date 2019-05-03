@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using chess.engine.Board;
-using chess.engine.Entities;
 using chess.engine.Game;
 
-namespace chess.engine.Movement
+namespace chess.engine.Movement.SimpleValidators
 {
     public class DestinationNotUnderAttackValidator : IMoveValidator
     {

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using chess.engine.Board;
+using chess.engine.Movement.King;
+using chess.engine.Movement.Pawn;
+using chess.engine.Movement.SimpleValidators;
 
 namespace chess.engine.Movement
 {

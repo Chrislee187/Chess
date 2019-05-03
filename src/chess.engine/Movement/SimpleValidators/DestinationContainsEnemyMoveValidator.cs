@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using chess.engine.Board;
 
-namespace chess.engine.Movement
+namespace chess.engine.Movement.SimpleValidators
 {
     public class DestinationContainsEnemyMoveValidator : IMoveValidator
     {

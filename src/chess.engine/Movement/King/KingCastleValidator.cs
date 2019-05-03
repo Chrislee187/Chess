@@ -4,8 +4,9 @@ using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
+using chess.engine.Movement.SimpleValidators;
 
-namespace chess.engine.Movement
+namespace chess.engine.Movement.King
 {
     public class KingCastleValidator : IMoveValidator
     {
@@ -20,7 +21,11 @@ namespace chess.engine.Movement
             var rookLoc = move.ChessMoveType == ChessMoveType.CastleKingSide
                 ? BoardLocation.At($"H{move.From.Rank}")
                 : BoardLocation.At($"A{move.From.Rank}");
+
             var rook = boardState.GetItem(rookLoc);
+
+            if (rook == null) return false;
+
             var rookIsValid = rook.Item.EntityType == ChessPieceName.Rook
                               && rook.Item.Player == king.Player; // && !rook.MoveHistory.Any()
 

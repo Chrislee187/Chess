@@ -1,6 +1,11 @@
 ﻿# TODOS
 
-* Check/CheckMate/Stalemate detection
+ * Tests for Check/CheckMate/Stalemate detection
+ * PawnPromotionValidator Tests
+ * EnPassantTakeValidator Tests
+ * BoardState tests
+ * CHessGame tests
+ * ChessBoardEngine tests
 * Improve readability of Path and Path's usage, extension methods?
 * Move history
 	* Enhance enpassant rule to ensure enemy pawn did it's double step the previous turn

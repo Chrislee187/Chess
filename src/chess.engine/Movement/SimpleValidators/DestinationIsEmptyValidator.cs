@@ -1,6 +1,6 @@
 ﻿using chess.engine.Board;
 
-namespace chess.engine.Movement
+namespace chess.engine.Movement.SimpleValidators
 {
     public class DestinationIsEmptyValidator : IMoveValidator
     {

@@ -29,7 +29,7 @@ namespace chess.engine.Board
             => _items[loc] = new LocatedItem<ChessPieceEntity>(loc, entity, paths);
 
         public LocatedItem<ChessPieceEntity> GetItem(BoardLocation loc)
-            => Get(loc).Single();
+            => Get(loc).SingleOrDefault();
 
         public void UpdatePaths(ChessPieceEntity forEntity, BoardLocation at)
         {

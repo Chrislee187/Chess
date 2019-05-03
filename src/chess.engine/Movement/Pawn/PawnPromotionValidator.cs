@@ -1,8 +1,9 @@
 ﻿using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Game;
+using chess.engine.Movement.SimpleValidators;
 
-namespace chess.engine.Movement
+namespace chess.engine.Movement.Pawn
 {
     public class PawnPromotionValidator : IMoveValidator
     {
