@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Actions;
 using chess.engine.Chess;
-using chess.engine.Chess.Entities;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
-    public class BoardState : IBoardState //<ChessPieceName, Colours>
-    // IBoardEntity<ChessPieceName, Colours>
-
+    public class BoardState : IBoardState //<ChessPieceEntity, Colours>
     {
-        private readonly IDictionary<BoardLocation, LocatedItem<ChessPieceEntity>> _items;
+        private readonly IDictionary<BoardLocation, LocatedItem<IBoardEntity<ChessPieceName, Colours>>> _items;
         private readonly IBoardActionFactory _actionFactory;
         private readonly IChessPathsValidator _chessPathsValidator;
 
         public BoardState(IChessPathsValidator chessPathsValidator, IBoardActionFactory actionFactory)
         {
-            _items = new Dictionary<BoardLocation, LocatedItem<ChessPieceEntity>>();
+            _items = new Dictionary<BoardLocation, LocatedItem<IBoardEntity<ChessPieceName, Colours>>>();
             _chessPathsValidator = chessPathsValidator;
             _actionFactory = actionFactory;
         }
@@ -29,13 +25,13 @@ namespace chess.engine.Board
 
         public IEnumerable<BoardLocation> GetAllItemLocations => _items.Keys;
 
-        public void PlaceEntity(BoardLocation loc, ChessPieceEntity entity, bool generateMoves = true) 
-            => _items[loc] = new LocatedItem<ChessPieceEntity>(loc, entity, 
+        public void PlaceEntity(BoardLocation loc, IBoardEntity<ChessPieceName, Colours> entity, bool generateMoves = true) 
+            => _items[loc] = new LocatedItem<IBoardEntity<ChessPieceName, Colours>>(loc, entity, 
                 generateMoves 
                 ? _chessPathsValidator.GeneratePossiblePaths(entity, loc) 
                 : null);
 
-        public LocatedItem<ChessPieceEntity> GetItem(BoardLocation loc)
+        public LocatedItem<IBoardEntity<ChessPieceName, Colours>> GetItem(BoardLocation loc)
             => GetItems(loc).SingleOrDefault();
 
         public GameState CurrentGameState(Colours forPlayer)
@@ -72,7 +68,7 @@ namespace chess.engine.Board
 
         public bool IsEmpty(BoardLocation location) => !_items.ContainsKey(location);
 
-        public void GeneratePaths(ChessPieceEntity forEntity, BoardLocation at, bool removeMovesThatLeaveKingInCheck = true)
+        public void GeneratePaths(IBoardEntity<ChessPieceName, Colours> forEntity, BoardLocation at, bool removeMovesThatLeaveKingInCheck = true)
         {
             var item = GetItem(at);
 
@@ -89,8 +85,8 @@ namespace chess.engine.Board
         {
             // Clone the items, ignore paths as they will be regenerated
             var clonedItems = _items.Values.Select(e =>
-                new LocatedItem<ChessPieceEntity>((BoardLocation)e.Location.Clone(),
-                    (ChessPieceEntity)e.Item.Clone(), 
+                new LocatedItem<IBoardEntity<ChessPieceName, Colours>>((BoardLocation)e.Location.Clone(),
+                    (IBoardEntity<ChessPieceName, Colours>)e.Item.Clone(), 
                     null));
 
             // TODO: ? Why do we not clone the paths instead of regening?
@@ -98,7 +94,7 @@ namespace chess.engine.Board
             var clonedState = new BoardState(_chessPathsValidator, _actionFactory);
             foreach (var clonedItem in clonedItems)
             {
-                clonedState.PlaceEntity(clonedItem.Location.Clone() as BoardLocation, clonedItem.Item.Clone() as ChessPieceEntity);
+                clonedState.PlaceEntity(clonedItem.Location.Clone() as BoardLocation, clonedItem.Item.Clone() as IBoardEntity<ChessPieceName, Colours>);
             }
             return clonedState;
         }
@@ -113,7 +109,7 @@ namespace chess.engine.Board
             return friendlyDestinations;
         }
 
-        public GameState CheckForCheckMate(Colours forPlayer, List<LocatedItem<ChessPieceEntity>> enemiesAttackingKing)
+        public GameState CheckForCheckMate(Colours forPlayer, List<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> enemiesAttackingKing)
         {
             var state = GameState.Check;
             var king = GetItems(forPlayer, ChessPieceName.King).Single();
@@ -140,19 +136,19 @@ namespace chess.engine.Board
             return state;
         }
 
-        public IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(params BoardLocation[] locations)
+        public IEnumerable<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> GetItems(params BoardLocation[] locations)
         {
-            return _items.Where(itm => locations.Contains(itm.Key)).Select(kvp => kvp.Value);
+            return _items.Where(itm => locations.Contains(itm.Key)).Select(kvp => kvp.Value).Cast<LocatedItem<IBoardEntity<ChessPieceName, Colours>>>();
         }
-        public IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(ChessPieceName pieceType)
+        public IEnumerable<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> GetItems(ChessPieceName pieceType)
         {
             return _items.Values.Where(itm => itm.Item.EntityType == pieceType);
         }
-        public IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour)
+        public IEnumerable<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> GetItems(Colours colour)
         {
             return _items.Where(itm => itm.Value.Item.Owner == colour).Select(kvp => kvp.Value);
         }
-        public IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour, ChessPieceName piece)
+        public IEnumerable<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> GetItems(Colours colour, ChessPieceName piece)
         {
             return _items.Where(itm => itm.Value.Item.Owner == colour && itm.Value.Item.EntityType == piece).Select(kvp => kvp.Value);
         }

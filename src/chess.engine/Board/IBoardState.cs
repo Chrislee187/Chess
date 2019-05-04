@@ -8,18 +8,19 @@ using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
-    public interface IBoardState/*<out TEntityType, out TOwner>*/ : ICloneable
+    // TODO: Want to make this generic, but so much depends on BoardState
+    public interface IBoardState/*<TEntity, TOwner>*/ : ICloneable
     {
-        void PlaceEntity(BoardLocation loc, ChessPieceEntity entity, bool generateMoves = true);
-        LocatedItem<ChessPieceEntity> GetItem(BoardLocation loc);
+        void PlaceEntity(BoardLocation loc, IBoardEntity<ChessPieceName, Colours> entity, bool generateMoves = true);
+        LocatedItem<IBoardEntity<ChessPieceName, Colours>> GetItem(BoardLocation loc);
 
         bool IsEmpty(BoardLocation location);
         bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move);
 
-        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(params BoardLocation[] locations);
-        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(ChessPieceName pieceType);
-        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour);
-        IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour, ChessPieceName piece);
+        IEnumerable<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> GetItems(params BoardLocation[] locations);
+        IEnumerable<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> GetItems(ChessPieceName pieceType);
+        IEnumerable<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> GetItems(Colours colour);
+        IEnumerable<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> GetItems(Colours colour, ChessPieceName piece);
 
         void Clear();
         void Remove(BoardLocation loc);
@@ -29,9 +30,9 @@ namespace chess.engine.Board
         IEnumerable<BoardLocation> LocationsOf(Colours player);
         IEnumerable<BoardLocation> GetAllItemLocations { get; }
 
-        void GeneratePaths(ChessPieceEntity forEntity, BoardLocation at, bool removeMovesThatLeaveKingInCheck = true);
+        void GeneratePaths(IBoardEntity<ChessPieceName, Colours> forEntity, BoardLocation at, bool removeMovesThatLeaveKingInCheck = true);
 //        Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation);
-        GameState CheckForCheckMate(Colours forPlayer, List<LocatedItem<ChessPieceEntity>> enemiesAttackingKing);
+        GameState CheckForCheckMate(Colours forPlayer, List<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> enemiesAttackingKing);
         GameState CurrentGameState(Colours forPlayer);
     }
 }

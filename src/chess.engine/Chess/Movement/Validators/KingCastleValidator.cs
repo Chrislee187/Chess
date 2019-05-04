@@ -45,7 +45,7 @@ namespace chess.engine.Chess.Movement.Validators
             return kingIsValid && rookIsValid && pathIsEmpty && pathNotUnderAttack;
         }
 
-        private static List<BoardLocation> CalcPathBetweenKingAndCastle(BoardMove move, ChessPieceEntity king)
+        private static List<BoardLocation> CalcPathBetweenKingAndCastle(BoardMove move, IBoardEntity<ChessPieceName, Colours> king)
         {
             var pathBetween = new List<BoardLocation>();
             if (move.From.File < move.To.File)

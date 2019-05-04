@@ -11,7 +11,7 @@ namespace chess.engine.Chess
     public interface IChessPathsValidator
     {
         Paths RemoveInvalidMoves(Paths possiblePaths, IBoardState boardState, bool removeMovesThatLeaveKingInCheck);
-        Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation);
+        Paths GeneratePossiblePaths(IBoardEntity<ChessPieceName, Colours> entity, BoardLocation boardLocation);
         bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move, IBoardState boardState);
     }
     public class ChessPathsValidator : IChessPathsValidator
@@ -46,7 +46,7 @@ namespace chess.engine.Chess
             return validPaths;
         }
 
-        public Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation)
+        public Paths GeneratePossiblePaths(IBoardEntity<ChessPieceName, Colours> entity, BoardLocation boardLocation)
         {
             var paths = new Paths();
             paths.AddRange(

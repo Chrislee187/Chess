@@ -1,5 +1,6 @@
 ﻿using chess.engine.Actions;
 using chess.engine.Board;
+using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Entities;
 using chess.engine.Game;
@@ -27,7 +28,7 @@ namespace chess.engine.tests.Actions
         }
 
         protected void SetupPieceReturn(BoardLocation at, ChessPieceEntity piece) 
-            => StateMock.Setup(m => m.GetItem(at)).Returns(new LocatedItem<ChessPieceEntity>(at, piece, null));
+            => StateMock.Setup(m => m.GetItem(at)).Returns(new LocatedItem<IBoardEntity<ChessPieceName, Colours>>(at, piece, null));
 
         protected void SetupCreateMockActionForMoveType(MoveType moveType)
             => FactoryMock.Setup(m => m.Create(moveType, It.IsAny<IBoardState>()))
@@ -58,16 +59,16 @@ namespace chess.engine.tests.Actions
         protected void VerifyEntityWasNOTRetrieved(BoardLocation loc)
             => StateMock.Verify(m => m.GetItem(loc), Times.Never);
 
-        protected void VerifyEntityWasPlaced(BoardLocation loc, ChessPieceEntity piece)
+        protected void VerifyEntityWasPlaced(BoardLocation loc, IBoardEntity<ChessPieceName, Colours> piece)
             => StateMock.Verify(m => m.PlaceEntity(loc, piece, It.IsAny<bool>()), Times.Once);
-        protected void VerifyNewEntityWasPlaced(BoardLocation loc, ChessPieceEntity piece)
+        protected void VerifyNewEntityWasPlaced(BoardLocation loc, IBoardEntity<ChessPieceName, Colours> piece)
             => StateMock.Verify(m => m.PlaceEntity(loc,
-                It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Owner == piece.Owner)
+                It.Is<IBoardEntity<ChessPieceName, Colours>>(cpe => cpe.EntityType == piece.EntityType && cpe.Owner == piece.Owner)
                 , It.IsAny<bool>()
             ), Times.Once);
-        protected void VerifyNewEntityWasNOTPlaced(BoardLocation loc, ChessPieceEntity piece)
+        protected void VerifyNewEntityWasNOTPlaced(BoardLocation loc, IBoardEntity<ChessPieceName, Colours> piece)
             => StateMock.Verify(m => m.PlaceEntity(loc,
-                It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Owner == piece.Owner)
+                It.Is<IBoardEntity<ChessPieceName, Colours>>(cpe => cpe.EntityType == piece.EntityType && cpe.Owner == piece.Owner)
                 , It.IsAny<bool>()
             ), Times.Never);
     }

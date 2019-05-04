@@ -7,11 +7,7 @@ namespace chess.engine.Entities
 {
     // TODO: Abstract to a generic, PathGens is the the common thing, piece and owner are chess specific
 
-    public interface IChessPieceBoardEntity : IBoardEntity<ChessPieceName>
-    {
-
-    }
-    public abstract class ChessPieceEntity : IChessPieceBoardEntity
+    public abstract class ChessPieceEntity : IBoardEntity<ChessPieceName, Colours>
     {
         protected ChessPieceEntity(ChessPieceName piece, Colours owner)
         {

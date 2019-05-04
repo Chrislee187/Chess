@@ -44,16 +44,16 @@ namespace chess.engine
 
         public void ClearBoard() => BoardState.Clear();
 
-        public ChessBoardEngine AddPiece(ChessPieceEntity create, string startingLocation) 
+        public ChessBoardEngine AddPiece(IBoardEntity<ChessPieceName, Colours> create, string startingLocation) 
             => AddPiece(create, BoardLocation.At(startingLocation));
-        public ChessBoardEngine AddPiece(ChessPieceEntity create, BoardLocation startingLocation)
+        public ChessBoardEngine AddPiece(IBoardEntity<ChessPieceName, Colours> create, BoardLocation startingLocation)
         {
             BoardState.PlaceEntity(startingLocation, create);
             return this;
         }
         
-        public LocatedItem<ChessPieceEntity> PieceAt(string location) => PieceAt((BoardLocation)location);
-        public LocatedItem<ChessPieceEntity> PieceAt(BoardLocation location)
+        public LocatedItem<IBoardEntity<ChessPieceName, Colours>> PieceAt(string location) => PieceAt((BoardLocation)location);
+        public LocatedItem<IBoardEntity<ChessPieceName, Colours>> PieceAt(BoardLocation location)
         {
             if (BoardState.IsEmpty(location)) return null;
             
