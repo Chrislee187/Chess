@@ -16,15 +16,15 @@ namespace chess.engine
         private readonly IGameSetup _gameSetup;
         private readonly IRefreshAllPaths _allPathCalculator;
 
-        public ChessBoardEngine(IGameSetup gameSetup, IPathValidator pathValidator) : this(gameSetup, pathValidator, new DefaultRefreshAllPaths())
+        public ChessBoardEngine(IGameSetup gameSetup, IChessPathsValidator chessPathValidator) : this(gameSetup, chessPathValidator, new DefaultRefreshAllPaths())
         {
         }
 
-        public ChessBoardEngine(IGameSetup gameSetup, IPathValidator pathValidator, IRefreshAllPaths allPathCalculator)
+        public ChessBoardEngine(IGameSetup gameSetup, IChessPathsValidator chessPathsValidator, IRefreshAllPaths allPathCalculator)
         {
             _boardActionFactory = new BoardActionFactory();
 
-            BoardState = new BoardState(pathValidator, _boardActionFactory);
+            BoardState = new BoardState(chessPathsValidator, _boardActionFactory);
 
             _gameSetup = gameSetup;
             _gameSetup.SetupPieces(this);

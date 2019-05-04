@@ -9,9 +9,20 @@ namespace chess.engine.tests
     public class ChessGameTests
     {
         [Test]
-        public void Move_should_change_CurrentPlayer_when_move_is_valid()
+        public void New_game_should_have_white_as_first_played()
         {
-            throw new NotImplementedException();
+            var game = new ChessGame();
+
+            Assert.That(game.CurrentPlayer, Is.EqualTo(Colours.White));
+        }
+
+        [Test]
+        public void Move_should_update_current_player_when_valid()
+        {
+            var game = new ChessGame();
+
+            game.Move("D2D4");
+            Assert.That(game.CurrentPlayer, Is.EqualTo(Colours.Black));
         }
 
         [TestCase(Colours.White, 8)]
@@ -24,7 +35,7 @@ namespace chess.engine.tests
         [Test]
         public void GameState_some_checks_for_this()
         {
-            
+            throw new NotImplementedException();
         }
     }
 }

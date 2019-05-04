@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using chess.engine.Actions;
+using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
@@ -15,7 +17,9 @@ namespace chess.engine.tests
         [Test]
         public void Should()
         {
-            var engine = new ChessBoardEngine(new ChessBoardSetup(), new ChessPathValidator(new MoveValidationFactory()), new ChessRefreshAllPaths());
+            var engine = new ChessBoardEngine(new ChessBoardSetup(), 
+                new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory()), new BoardActionFactory()),
+                    new ChessRefreshAllPaths());
 
             var startLocation = BoardLocation.At("B2");
 

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Game;
 using chess.engine.Movement;
@@ -29,7 +30,9 @@ namespace chess.engine.Chess
 
         public ChessGame(IGameSetup setup)
         {
-            _engine = new ChessBoardEngine(setup, new ChessPathValidator(new MoveValidationFactory()), new ChessRefreshAllPaths());
+            _engine = new ChessBoardEngine(setup, 
+                new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory()), new BoardActionFactory()),
+                new ChessRefreshAllPaths());
         }
         
         public string Move(string input)

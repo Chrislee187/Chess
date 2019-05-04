@@ -1,6 +1,5 @@
 ﻿# TODOS
 
- * Get rid of IBoardStateActions and just use IBoardState
  * Tests for Check/CheckMate/Stalemate detection
  * BoardState tests
  * CHessGame tests

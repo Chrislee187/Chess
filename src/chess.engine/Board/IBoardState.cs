@@ -28,9 +28,7 @@ namespace chess.engine.Board
         IEnumerable<BoardLocation> GetAllItemLocations { get; }
 
         void GeneratePaths(ChessPieceEntity forEntity, BoardLocation at, bool removeMovesThatLeaveKingInCheck = true);
-        Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation);
-        Paths RemoveInvalidMoves(Paths possiblePaths);
-        Paths RemoveMovesThatLeaveKingInCheck(Paths possiblePaths);
+//        Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation);
         GameState CheckForCheckMate(Colours forPlayer, List<LocatedItem<ChessPieceEntity>> enemiesAttackingKing);
         GameState CurrentGameState(Colours forPlayer);
     }

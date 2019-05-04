@@ -1,5 +1,7 @@
-﻿using chess.engine.Board;
+﻿using chess.engine.Actions;
+using chess.engine.Board;
 using chess.engine.Chess;
+using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Movement.SimpleValidators;
 using chess.engine.tests.Builders;
@@ -48,5 +50,33 @@ namespace chess.engine.tests.Movement
             Assert.False(validator.ValidateMove(noEnemy, _boardState));
 
         }
+    }
+    [TestFixture]
+    public class ChessPathsValidatorTests
+    {
+
+        [Test]
+        public void Should_find_move_that_leaves_king_in_check()
+        {
+            var board = new EasyBoardBuilder()
+                .Board("r   k  r" +
+                       "        " +
+                       "        " +
+                       "    p   " +
+                       "   PQ   " +
+                       "        " +
+                       "        " +
+                       "R   K  R"
+                );
+            var game = new ChessGame(board.ToGameSetup());
+
+            var validator = new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory()), new BoardActionFactory());
+
+            var moveOrTake = ChessMove.CreateMoveOrTake(BoardLocation.At("E5"), BoardLocation.At("D4"));
+            var doesMoveLeaveMovingPlayersKingInCheck = validator.DoesMoveLeaveMovingPlayersKingInCheck(moveOrTake, game.BoardState);
+
+            Assert.That(doesMoveLeaveMovingPlayersKingInCheck, Is.True);
+        }
+
     }
 }

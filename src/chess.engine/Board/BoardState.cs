@@ -12,15 +12,16 @@ namespace chess.engine.Board
     public class BoardState : ICloneable, IBoardState
 // <ChessPieceEntity>
     {
-        private readonly IPathValidator _pathValidator;
         private readonly IDictionary<BoardLocation, LocatedItem<ChessPieceEntity>> _items;
         private readonly IBoardActionFactory _actionFactory;
+        private readonly IChessPathsValidator _chessPathsValidator;
 
-        public BoardState(IPathValidator pathValidator, IBoardActionFactory actionFactory)
+        public BoardState(IChessPathsValidator chessPathsValidator, IBoardActionFactory actionFactory)
         {
-            _pathValidator = pathValidator;
             _items = new Dictionary<BoardLocation, LocatedItem<ChessPieceEntity>>();
+            _chessPathsValidator = chessPathsValidator;
             _actionFactory = actionFactory;
+
         }
 
         public void Clear() => _items.Clear();
@@ -28,16 +29,19 @@ namespace chess.engine.Board
         public IEnumerable<BoardLocation> GetAllItemLocations => _items.Keys;
 
         public void PlaceEntity(BoardLocation loc, ChessPieceEntity entity, bool generateMoves = true) 
-            => _items[loc] = new LocatedItem<ChessPieceEntity>(loc, entity, generateMoves ? GeneratePossiblePaths(entity, loc) : null);
+            => _items[loc] = new LocatedItem<ChessPieceEntity>(loc, entity, generateMoves 
+                ? _chessPathsValidator.GeneratePossiblePaths(entity, loc) 
+                : null);
 
         public LocatedItem<ChessPieceEntity> GetItem(BoardLocation loc)
             => GetItems(loc).SingleOrDefault();
 
         public GameState CurrentGameState(Colours forPlayer)
         {
-            var kingLoc = GetItems(forPlayer, ChessPieceName.King).First();
-            var enemiesAttackingKing = GetItems(forPlayer.Enemy()).Where(itm
-                => itm.Paths.SelectMany(p => p).Any(m => m.To.Equals(kingLoc))).ToList();
+            var king = GetItems(forPlayer, ChessPieceName.King).First();
+            var locatedItems = GetItems(forPlayer.Enemy());
+            var enemiesAttackingKing = locatedItems.Where(itm
+                => itm.Paths.ContainsMoveTo(king.Location)).ToList();
 
             var inCheck = enemiesAttackingKing.Any();
 
@@ -72,112 +76,33 @@ namespace chess.engine.Board
 
             Guard.NotNull(item, $"Null item found at {at}!");
 
-            var paths = GeneratePossiblePaths(forEntity, at);
+            var paths = _chessPathsValidator.GeneratePossiblePaths(forEntity, at);
 
-            paths = RemoveInvalidMoves(paths);
-
-            if (removeMovesThatLeaveKingInCheck)
-            {
-                paths = RemoveMovesThatLeaveKingInCheck(paths);
-            }
-
+            paths = _chessPathsValidator.RemoveInvalidMoves(paths, this, true);
+            
             item.UpdatePaths(paths);
-        }
-
-        public Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation)
-        {
-            var paths = new Paths();
-
-            foreach (var pathGen in entity.PathGenerators)
-            {
-                var movesFrom = pathGen.PathsFrom(boardLocation, entity.Player);
-                paths.AddRange(movesFrom);
-            }
-
-            return paths;
-        }
-
-        public Paths RemoveInvalidMoves(Paths possiblePaths)
-        {
-            var validPaths = new Paths();
-
-            foreach (var possiblePath in possiblePaths)
-            {
-                var testedPath = _pathValidator.ValidatePath(possiblePath, this);
-
-                if (testedPath.Any())
-                {
-                    validPaths.Add(testedPath);
-                }
-            }
-
-            return validPaths;
-        }
-
-        public Paths RemoveMovesThatLeaveKingInCheck(Paths possiblePaths)
-        {
-            var validPaths = new Paths();
-
-            foreach (var possiblePath in possiblePaths)
-            {
-                var testedPath = new Path();
-                foreach (var move in possiblePath)
-                {
-                    var inCheck = DoesMoveLeaveMovingPlayersKingInCheck(move);
-
-                    if (!inCheck)
-                    {
-                        testedPath.Add(move);
-                    }
-                }
-
-                if (testedPath.Any())
-                {
-                    validPaths.Add(testedPath);
-                }
-            }
-
-            return validPaths;
         }
 
         public object Clone()
         {
+            // Clone the items, ignore paths as they will be regenerated
             var clonedItems = _items.Values.Select(e =>
-                new LocatedItem<ChessPieceEntity>((BoardLocation)e.Location.Clone(), (ChessPieceEntity)e.Item.Clone(), null));
+                new LocatedItem<ChessPieceEntity>((BoardLocation)e.Location.Clone(),
+                    (ChessPieceEntity)e.Item.Clone(), 
+                    null));
 
-            var clonedState = new BoardState(_pathValidator, _actionFactory);
+            // TODO: ? Why do we not clone the paths instead of regening?
+
+            var clonedState = new BoardState(_chessPathsValidator, _actionFactory);
             foreach (var clonedItem in clonedItems)
             {
                 clonedState.PlaceEntity(clonedItem.Location.Clone() as BoardLocation, clonedItem.Item.Clone() as ChessPieceEntity);
             }
             return clonedState;
         }
-        public bool DoesMoveLeaveMovingPlayersKingInCheck(ChessMove move)
-        {
-            /*
-             * clone BoardState without board paths
-             */
 
-            var clonedState = (BoardState) Clone();
-            /*
-            * use BoardActionFactory create Action for move */
-            var action = _actionFactory.Create(move.ChessMoveType, clonedState);
-
-            var playerColour = clonedState.GetItem(move.From).Item.Player;
-            /*
-            * execute Action without any validation (it's already been done on the master board */
-            action.Execute(move);
-
-            /*
-             * Refresh all paths on clone WITHOUT check for moves that leave king in check */
-//            _chessRefreshAllPaths.RefreshAllPaths(clonedState, false);
-      
-            /*
-             * If king is NOT in check move path to result
-             */
-            var inCheck = clonedState.CurrentGameState(playerColour) != GameState.InProgress;
-            return inCheck;
-        }
+        public bool DoesMoveLeaveMovingPlayersKingInCheck(ChessMove move) 
+            => _chessPathsValidator.DoesMoveLeaveMovingPlayersKingInCheck(move, this);
 
         public IEnumerable<BoardLocation> GetAllMoveDestinations(Colours forPlayer)
         {
