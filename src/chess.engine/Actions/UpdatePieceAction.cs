@@ -16,7 +16,7 @@ namespace chess.engine.Actions
             if (BoardState.IsEmpty(move.From)) return;
 
             var piece = BoardState.GetItem(move.From).Item;
-            var forPlayer = piece.Player;
+            var forPlayer = piece.Owner;
 
             BoardState.Remove(move.From);
 

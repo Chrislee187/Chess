@@ -1,6 +1,7 @@
 ﻿using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using Moq;
@@ -61,12 +62,12 @@ namespace chess.engine.tests.Actions
             => StateMock.Verify(m => m.PlaceEntity(loc, piece, It.IsAny<bool>()), Times.Once);
         protected void VerifyNewEntityWasPlaced(BoardLocation loc, ChessPieceEntity piece)
             => StateMock.Verify(m => m.PlaceEntity(loc,
-                It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Player == piece.Player)
+                It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Owner == piece.Owner)
                 , It.IsAny<bool>()
             ), Times.Once);
         protected void VerifyNewEntityWasNOTPlaced(BoardLocation loc, ChessPieceEntity piece)
             => StateMock.Verify(m => m.PlaceEntity(loc,
-                It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Player == piece.Player)
+                It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Owner == piece.Owner)
                 , It.IsAny<bool>()
             ), Times.Never);
     }

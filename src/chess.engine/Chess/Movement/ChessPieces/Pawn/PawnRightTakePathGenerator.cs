@@ -1,34 +1,36 @@
-﻿using chess.engine.Chess;
-using chess.engine.Game;
+﻿using chess.engine.Game;
+using chess.engine.Movement;
 
-namespace chess.engine.Movement.ChessPieces.Pawn
+namespace chess.engine.Chess.Movement.ChessPieces.Pawn
 {
-    public class PawnLeftTakePathGenerator : IPathGenerator
+    public class PawnRightTakePathGenerator : IPathGenerator
     {
         public Paths PathsFrom(BoardLocation location, Colours forPlayer)
         {
+            Guard.ArgumentException(
+                () => location.Rank == BoardMove.EndRankFor(forPlayer),
+                $"{ChessPieceName.Pawn} is invalid at {location}.");
+
             var paths = new Paths();
 
             var takeType = location.Rank == Pieces.Pawn.EnPassantRankFor(forPlayer)
                 ? MoveType.TakeEnPassant
                 : MoveType.TakeOnly;
 
-            var takeLocation = location.MoveForward(forPlayer).MoveLeft(forPlayer);
 
+            var takeLocation = location.MoveForward(forPlayer).MoveRight(forPlayer);
             if (takeLocation == null) return paths;
+
             if (takeLocation.Rank != ChessGame.EndRankFor(forPlayer))
             {
                 var move = BoardMove.Create(location, takeLocation, takeType);
-
-                Path path = new Path();
-                path.Add(move);
-                paths.Add(path);
+                paths.Add(new Path {move});
             }
             else
             {
                 foreach (var promotionPieces in new[] { ChessPieceName.Queen, ChessPieceName.Rook, ChessPieceName.Bishop, ChessPieceName.Knight })
                 {
-                    var move = BoardMove.CreatePawnPromotion(location, takeLocation, promotionPieces);
+                    var move = BoardMove.CreateUpdatePiece(location, takeLocation, promotionPieces);
                     paths.Add(new Path { move });
                 }
             }
@@ -36,6 +38,7 @@ namespace chess.engine.Movement.ChessPieces.Pawn
             return paths;
         }
 
-        public Paths PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
+        public Paths PathsFrom(string location, Colours forPlayer) =>
+            PathsFrom(BoardLocation.At(location), forPlayer);
     }
 }

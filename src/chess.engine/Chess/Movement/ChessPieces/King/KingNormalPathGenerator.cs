@@ -1,6 +1,7 @@
 ﻿using chess.engine.Game;
+using chess.engine.Movement;
 
-namespace chess.engine.Movement.ChessPieces.King
+namespace chess.engine.Chess.Movement.ChessPieces.King
 {
     public class KingNormalPathGenerator : IPathGenerator
     {

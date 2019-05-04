@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Board;
+using chess.engine.Movement;
 
-namespace chess.engine.Movement
+namespace chess.engine.Chess
 {
     public class ChessPathValidator : IPathValidator
     {
@@ -50,9 +51,9 @@ namespace chess.engine.Movement
         {
             if (boardState.IsEmpty(move.To)) return false;
 
-            var movePlayerColour = boardState.GetItem(move.From)?.Item.Player;
+            var movePlayerColour = boardState.GetItem(move.From)?.Item.Owner;
             var takeEntity = boardState.GetItem(move.To)?.Item;
-            var moveIsATake = takeEntity != null && takeEntity.Player != movePlayerColour;
+            var moveIsATake = takeEntity != null && takeEntity.Owner != movePlayerColour;
             return moveIsATake;
         }
     }

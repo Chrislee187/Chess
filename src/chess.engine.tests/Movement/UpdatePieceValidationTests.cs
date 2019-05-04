@@ -36,7 +36,7 @@ namespace chess.engine.tests.Movement
         {
             var validator = new UpdatePieceValidator();
 
-            var promote = BoardMove.CreatePawnPromotion(BoardLocation.At("A7"),BoardLocation.At("A8"), ChessPieceName.Queen);
+            var promote = BoardMove.CreateUpdatePiece(BoardLocation.At("A7"),BoardLocation.At("A8"), ChessPieceName.Queen);
             Assert.True(validator.ValidateMove(promote, _boardState));
         }
     }

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using chess.engine.Actions;
 using chess.engine.Board;
-using chess.engine.Chess;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
+using chess.engine.Movement;
 
-namespace chess.engine.Movement
+namespace chess.engine.Chess
 {
     public interface IChessPathsValidator
     {
@@ -51,7 +51,7 @@ namespace chess.engine.Movement
             var paths = new Paths();
             paths.AddRange(
                 entity.PathGenerators
-                    .SelectMany(pg => pg.PathsFrom(boardLocation, entity.Player))
+                    .SelectMany(pg => pg.PathsFrom(boardLocation, entity.Owner))
             );
 
             return paths;
@@ -87,7 +87,7 @@ namespace chess.engine.Movement
             var clonedState = (BoardState) boardState.Clone();
 
             // Execute the move directly, we've already validated it on the original board
-            var playerColour = clonedState.GetItem(move.From).Item.Player;
+            var playerColour = clonedState.GetItem(move.From).Item.Owner;
             var action = _actionFactory.Create(move.MoveType, clonedState);
             action.Execute(move);
 

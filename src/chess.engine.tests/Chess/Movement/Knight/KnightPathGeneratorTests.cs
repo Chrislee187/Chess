@@ -1,7 +1,7 @@
 using System.Linq;
+using chess.engine.Chess.Movement.ChessPieces.Knight;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Movement.ChessPieces.Knight;
 using chess.engine.tests.Builders;
 using chess.engine.tests.Movement;
 using NUnit.Framework;

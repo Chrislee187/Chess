@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
-    public interface IBoardState : ICloneable
+    public interface IBoardState/*<out TEntityType, out TOwner>*/ : ICloneable
     {
         void PlaceEntity(BoardLocation loc, ChessPieceEntity entity, bool generateMoves = true);
         LocatedItem<ChessPieceEntity> GetItem(BoardLocation loc);

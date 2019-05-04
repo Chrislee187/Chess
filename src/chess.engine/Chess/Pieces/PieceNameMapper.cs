@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using chess.engine.Chess;
 
-namespace chess.engine.Pieces
+namespace chess.engine.Chess.Pieces
 {
     public static class PieceNameMapper
     {
-        private static IDictionary<char, ChessPieceName> _pieceNameMapper = new Dictionary<char, ChessPieceName>
+        private static readonly IDictionary<char, ChessPieceName> _pieceNameMapper = new Dictionary<char, ChessPieceName>
         {
             {'p', ChessPieceName.Pawn },
             {'P', ChessPieceName.Pawn },

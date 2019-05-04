@@ -1,8 +1,9 @@
-﻿using chess.engine.Game;
-using chess.engine.Movement.ChessPieces.Bishop;
-using chess.engine.Movement.ChessPieces.Rook;
+﻿using chess.engine.Chess.Movement.ChessPieces.Bishop;
+using chess.engine.Chess.Movement.ChessPieces.Rook;
+using chess.engine.Game;
+using chess.engine.Movement;
 
-namespace chess.engine.Movement.ChessPieces.Queen
+namespace chess.engine.Chess.Movement.ChessPieces.Queen
 {
     public class QueenPathGenerator : IPathGenerator
     {

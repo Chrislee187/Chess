@@ -1,7 +1,7 @@
-﻿using chess.engine.Chess;
-using chess.engine.Game;
+﻿using chess.engine.Game;
+using chess.engine.Movement;
 
-namespace chess.engine.Movement.ChessPieces.Pawn
+namespace chess.engine.Chess.Movement.ChessPieces.Pawn
 {
     public class PawnNormalAndStartingPathGenerator : IPathGenerator
     {
@@ -25,7 +25,7 @@ namespace chess.engine.Movement.ChessPieces.Pawn
             {
                 foreach (var promotionPieces in new[] { ChessPieceName.Queen, ChessPieceName.Rook, ChessPieceName.Bishop, ChessPieceName.Knight })
                 {
-                    var move = BoardMove.CreatePawnPromotion(location, oneSquareForward, promotionPieces);
+                    var move = BoardMove.CreateUpdatePiece(location, oneSquareForward, promotionPieces);
                     paths.Add(new Path { move });
                 }
             }

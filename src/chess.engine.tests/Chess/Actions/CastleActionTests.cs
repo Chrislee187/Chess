@@ -1,9 +1,9 @@
 ﻿using chess.engine.Actions;
 using chess.engine.Chess.Actions;
 using chess.engine.Chess.Entities;
+using chess.engine.Chess.Pieces;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Pieces;
 using chess.engine.tests.Actions;
 using NUnit.Framework;
 

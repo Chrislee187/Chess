@@ -1,6 +1,6 @@
 ﻿using chess.engine.Game;
 
-namespace chess.engine.Pieces
+namespace chess.engine.Chess.Pieces
 {
     public static class Pawn
     {

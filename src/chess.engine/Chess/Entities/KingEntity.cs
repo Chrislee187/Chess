@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using chess.engine.Chess.Movement.ChessPieces.King;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Movement.ChessPieces.King;
 
 namespace chess.engine.Chess.Entities
 {
@@ -19,7 +20,7 @@ namespace chess.engine.Chess.Entities
 
         public override object Clone()
         {
-            return new KingEntity(Player);
+            return new KingEntity(Owner);
         }
 
     }

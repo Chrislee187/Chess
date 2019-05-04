@@ -1,6 +1,7 @@
 ﻿using chess.engine.Game;
+using chess.engine.Movement;
 
-namespace chess.engine.Movement.ChessPieces.Bishop
+namespace chess.engine.Chess.Movement.ChessPieces.Bishop
 {
     public class BishopPathGenerator : StraightLinePathExtender, IPathGenerator
     {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Actions;
+using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.tests.Builders;

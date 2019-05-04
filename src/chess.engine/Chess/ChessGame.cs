@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using chess.engine.Actions;
 using chess.engine.Board;
+using chess.engine.Chess.Pieces;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Pieces;
 
 namespace chess.engine.Chess
 {
@@ -75,7 +75,7 @@ namespace chess.engine.Chess
 
             }
             var piece = _engine.PieceAt(from);
-            var pieceColour = piece.Item.Player;
+            var pieceColour = piece.Item.Owner;
             if (pieceColour != CurrentPlayer)
             {
                 return (null, $"It is not {pieceColour}'s turn.");

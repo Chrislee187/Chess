@@ -12,7 +12,7 @@ namespace chess.engine.Movement.Validators
             if (!boardState.IsEmpty(move.To))
             {
                 var destinationPiece = boardState.GetItems(move.To).Single();
-                return sourcePiece.Item.Player != destinationPiece.Item.Player;
+                return sourcePiece.Item.Owner != destinationPiece.Item.Owner;
             }
 
             return false;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using chess.engine.Entities;
 using chess.engine.Game;
 
 namespace chess.engine.Chess.Entities

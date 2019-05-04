@@ -1,7 +1,9 @@
 ﻿using System;
 using chess.engine.Actions;
 using chess.engine.Board;
+using chess.engine.Chess;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 
@@ -77,7 +79,7 @@ namespace chess.engine
 
                         pieces[(int)file - 1, rank - 1] = entity == null
                             ? null
-                            : new BoardPiece(entity.Player, entity.EntityType);
+                            : new BoardPiece(entity.Owner, entity.EntityType);
                     }
                 }
 

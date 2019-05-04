@@ -1,6 +1,4 @@
-﻿using System;
-using chess.engine.Chess;
-using chess.engine.Game;
+﻿using chess.engine.Game;
 
 namespace chess.engine.Movement
 {
@@ -9,7 +7,7 @@ namespace chess.engine.Movement
         public static BoardMove CreateMoveOrTake(BoardLocation from, BoardLocation to) => new BoardMove(@from, to, MoveType.MoveOrTake);
         public static BoardMove CreateMoveOnly(BoardLocation from, BoardLocation to) => new BoardMove(@from, to, MoveType.MoveOnly);
         public static BoardMove CreateTakeOnly(BoardLocation from, BoardLocation to) => new BoardMove(@from, to, MoveType.TakeOnly);
-        public static BoardMove CreatePawnPromotion(BoardLocation from, BoardLocation to, object promotionPiece) => new BoardMove(@from, to, promotionPiece);
+        public static BoardMove CreateUpdatePiece(BoardLocation from, BoardLocation to, object updatedPiece) => new BoardMove(@from, to, updatedPiece);
 
         public static int DirectionModifierFor(Colours player) => player == Colours.White ? +1 : -1;
         public static int EndRankFor(Colours player)

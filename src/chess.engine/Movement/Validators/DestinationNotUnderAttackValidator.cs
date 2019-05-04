@@ -9,7 +9,7 @@ namespace chess.engine.Movement.Validators
         public bool ValidateMove(BoardMove move, IBoardState boardState)
         {
             var piece = boardState.GetItem(move.From);
-            var enemyColour = piece.Item.Player.Enemy();
+            var enemyColour = piece.Item.Owner.Enemy();
             var enemyLocations = boardState.GetItems(enemyColour).Select(i => i.Location);
 
             var enemyPaths = new Paths();

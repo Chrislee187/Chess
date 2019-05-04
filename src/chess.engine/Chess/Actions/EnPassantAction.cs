@@ -15,7 +15,7 @@ namespace chess.engine.Chess.Actions
             if (BoardState.IsEmpty(move.From)) return;
 
             var piece = BoardState.GetItem(move.From).Item;
-            var passedPieceLoc = move.To.MoveBack(piece.Player);
+            var passedPieceLoc = move.To.MoveBack(piece.Owner);
 
             BoardState.Remove(passedPieceLoc);
             Factory.Create(DefaultActions.MoveOnly, BoardState).Execute(move);

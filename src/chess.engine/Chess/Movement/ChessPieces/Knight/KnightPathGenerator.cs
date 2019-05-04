@@ -1,6 +1,7 @@
 ﻿using chess.engine.Game;
+using chess.engine.Movement;
 
-namespace chess.engine.Movement.ChessPieces.Knight
+namespace chess.engine.Chess.Movement.ChessPieces.Knight
 {
     public class KnightPathGenerator : IPathGenerator
     {

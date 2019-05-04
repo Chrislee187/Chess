@@ -4,13 +4,15 @@ using System.Linq;
 using chess.engine.Actions;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
-    public class BoardState : IBoardState
-// <ChessPieceEntity>
+    public class BoardState : IBoardState //<ChessPieceName, Colours>
+    // IBoardEntity<ChessPieceName, Colours>
+
     {
         private readonly IDictionary<BoardLocation, LocatedItem<ChessPieceEntity>> _items;
         private readonly IBoardActionFactory _actionFactory;
@@ -57,14 +59,14 @@ namespace chess.engine.Board
         {
             return _items
                 .Where(kvp => kvp.Value.Item.EntityType == piece
-                              && kvp.Value.Item.Player == player)
+                              && kvp.Value.Item.Owner == player)
                 .Select(kvp => kvp.Key);
         }
 
         public IEnumerable<BoardLocation> LocationsOf(Colours player)
         {
             return _items
-                .Where(kvp => kvp.Value.Item.Player == player)
+                .Where(kvp => kvp.Value.Item.Owner == player)
                 .Select(kvp => kvp.Key);
         }
 
@@ -148,11 +150,11 @@ namespace chess.engine.Board
         }
         public IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour)
         {
-            return _items.Where(itm => itm.Value.Item.Player == colour).Select(kvp => kvp.Value);
+            return _items.Where(itm => itm.Value.Item.Owner == colour).Select(kvp => kvp.Value);
         }
         public IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(Colours colour, ChessPieceName piece)
         {
-            return _items.Where(itm => itm.Value.Item.Player == colour && itm.Value.Item.EntityType == piece).Select(kvp => kvp.Value);
+            return _items.Where(itm => itm.Value.Item.Owner == colour && itm.Value.Item.EntityType == piece).Select(kvp => kvp.Value);
         }
 
         public void Remove(BoardLocation loc)

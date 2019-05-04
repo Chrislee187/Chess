@@ -2,11 +2,12 @@
 using System.Linq;
 using chess.engine.Board;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Movement.Validators;
 
-namespace chess.engine.Chess.Movement
+namespace chess.engine.Chess.Movement.Validators
 {
     public class KingCastleValidator : IMoveValidator
     {
@@ -25,7 +26,7 @@ namespace chess.engine.Chess.Movement
             if (rook == null) return false;
 
             var rookIsValid = rook.Item.EntityType == ChessPieceName.Rook
-                              && rook.Item.Player == king.Player; // && !rook.MoveHistory.Any()
+                              && rook.Item.Owner == king.Owner; // && !rook.MoveHistory.Any()
 
             var pathBetween = CalcPathBetweenKingAndCastle(move, king);
 
@@ -49,14 +50,14 @@ namespace chess.engine.Chess.Movement
             var pathBetween = new List<BoardLocation>();
             if (move.From.File < move.To.File)
             {
-                pathBetween.Add(move.From.MoveRight(king.Player));
-                pathBetween.Add(move.From.MoveRight(king.Player, 2));
+                pathBetween.Add(move.From.MoveRight(king.Owner));
+                pathBetween.Add(move.From.MoveRight(king.Owner, 2));
             }
             else
             {
-                pathBetween.Add(move.From.MoveLeft(king.Player));
-                pathBetween.Add(move.From.MoveLeft(king.Player, 2));
-                pathBetween.Add(move.From.MoveLeft(king.Player, 3));
+                pathBetween.Add(move.From.MoveLeft(king.Owner));
+                pathBetween.Add(move.From.MoveLeft(king.Owner, 2));
+                pathBetween.Add(move.From.MoveLeft(king.Owner, 3));
             }
 
             pathBetween.RemoveAll(location => location == null);
