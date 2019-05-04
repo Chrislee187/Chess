@@ -119,7 +119,7 @@ namespace chess.engine
 
         private class DefaultRefreshAllPaths : IRefreshAllPaths
         {
-            public void RefreshAllPaths(BoardState boardState, bool removeMovesThatLeaveKingInCheck)
+            public void RefreshAllPaths(IBoardState boardState, bool removeMovesThatLeaveKingInCheck)
             {
                 foreach (var loc in boardState.GetAllItemLocations)
                 {

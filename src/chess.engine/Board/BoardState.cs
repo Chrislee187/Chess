@@ -21,7 +21,6 @@ namespace chess.engine.Board
             _items = new Dictionary<BoardLocation, LocatedItem<ChessPieceEntity>>();
             _chessPathsValidator = chessPathsValidator;
             _actionFactory = actionFactory;
-
         }
 
         public void Clear() => _items.Clear();
@@ -29,7 +28,8 @@ namespace chess.engine.Board
         public IEnumerable<BoardLocation> GetAllItemLocations => _items.Keys;
 
         public void PlaceEntity(BoardLocation loc, ChessPieceEntity entity, bool generateMoves = true) 
-            => _items[loc] = new LocatedItem<ChessPieceEntity>(loc, entity, generateMoves 
+            => _items[loc] = new LocatedItem<ChessPieceEntity>(loc, entity, 
+                generateMoves 
                 ? _chessPathsValidator.GeneratePossiblePaths(entity, loc) 
                 : null);
 

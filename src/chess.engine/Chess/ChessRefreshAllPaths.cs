@@ -5,7 +5,7 @@ namespace chess.engine.Chess
 {
     public class ChessRefreshAllPaths : IRefreshAllPaths
     {
-        public void RefreshAllPaths(BoardState boardState, bool removeMovesThatLeaveKingInCheck = true)
+        public void RefreshAllPaths(IBoardState boardState, bool removeMovesThatLeaveKingInCheck = true)
         {
             foreach (var loc in boardState.GetAllItemLocations)
             {
