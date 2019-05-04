@@ -1,4 +1,6 @@
 ﻿using System;
+using chess.engine.Entities;
+using chess.engine.Game;
 using chess.engine.Movement;
 using NUnit.Framework;
 
@@ -7,12 +9,12 @@ namespace chess.engine.tests.Movement
     [TestFixture]
     public class MoveValidationFactoryTests
     {
-        private MoveValidationFactory _factory;
+        private MoveValidationFactory<ChessPieceEntity> _factory;
 
         [SetUp]
         public void SetUp()
         {
-            _factory = new MoveValidationFactory();
+            _factory = new MoveValidationFactory<ChessPieceEntity>();
         }
         [Test]
         public void FactorySupportsAllMoveTypes()

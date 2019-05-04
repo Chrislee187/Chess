@@ -1,13 +1,15 @@
 ﻿using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
+using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
-    public class UpdatePieceAction : BoardAction
+    public class UpdatePieceAction<TEntity> : BoardAction<TEntity>
+        where TEntity : class, IBoardEntity
     {
-        public UpdatePieceAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
+        public UpdatePieceAction(IBoardActionFactory<TEntity> factory, IBoardState<TEntity> boardState) : base(factory, boardState)
         {
         }
 
@@ -15,8 +17,8 @@ namespace chess.engine.Actions
         {
             if (BoardState.IsEmpty(move.From)) return;
 
-            var piece = BoardState.GetItem(move.From).Item;
-            var forPlayer = piece.Owner;
+            TEntity piece = BoardState.GetItem(move.From).Item;
+            object forPlayer = piece.Owner;
 
             BoardState.Remove(move.From);
 
@@ -24,7 +26,10 @@ namespace chess.engine.Actions
             {
                 BoardState.Remove(move.To);
             }
-            BoardState.PlaceEntity(move.To, ChessPieceEntityFactory.Create((ChessPieceName)move.UpdateEntityType, forPlayer));
+            // TODO: EntityFactory needs abstracting
+            var chessPieceEntity = ChessPieceEntityFactory.Create((ChessPieceName)move.UpdateEntityType, (Colours) forPlayer) as TEntity;
+
+            BoardState.PlaceEntity(move.To, chessPieceEntity);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace chess.engine
 {
-    public interface IGameSetup
+    public interface IGameSetup<TEntity> where TEntity : class, IBoardEntity
     {
-        void SetupPieces(ChessBoardEngine engine);
+        void SetupPieces(ChessBoardEngine<TEntity> engine);
     }
 }

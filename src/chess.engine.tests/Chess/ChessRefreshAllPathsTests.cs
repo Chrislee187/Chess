@@ -5,7 +5,6 @@ using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Entities;
 using chess.engine.Game;
-using chess.engine.tests.Builders;
 using Moq;
 using NUnit.Framework;
 
@@ -14,21 +13,21 @@ namespace chess.engine.tests.Chess
     [TestFixture]
     public class ChessRefreshAllPathsTests
     {
-        private LocatedItem<IBoardEntity<ChessPieceName, Colours>> _whiteKing;
-        private LocatedItem<IBoardEntity<ChessPieceName, Colours>> _blackKing;
-        private LocatedItem<IBoardEntity<ChessPieceName, Colours>> _aPawn;
+        private LocatedItem<ChessPieceEntity> _whiteKing;
+        private LocatedItem<ChessPieceEntity> _blackKing;
+        private LocatedItem<ChessPieceEntity> _aPawn;
 
         [SetUp]
         public void Setup()
         {
-            _whiteKing = new LocatedItem<IBoardEntity<ChessPieceName, Colours>>(BoardLocation.At("A1"), ChessPieceEntityFactory.CreateKing(Colours.White), null);
-            _blackKing = new LocatedItem<IBoardEntity<ChessPieceName, Colours>>(BoardLocation.At("H8"), ChessPieceEntityFactory.CreateKing(Colours.Black), null);
-            _aPawn = new LocatedItem<IBoardEntity<ChessPieceName, Colours>>(BoardLocation.At("D2"), ChessPieceEntityFactory.CreatePawn(Colours.White), null);
+            _whiteKing = new LocatedItem<ChessPieceEntity>(BoardLocation.At("A1"), ChessPieceEntityFactory.CreateKing(Colours.White), null);
+            _blackKing = new LocatedItem<ChessPieceEntity>(BoardLocation.At("H8"), ChessPieceEntityFactory.CreateKing(Colours.Black), null);
+            _aPawn = new LocatedItem<ChessPieceEntity>(BoardLocation.At("D2"), ChessPieceEntityFactory.CreatePawn(Colours.White), null);
         }
         [Test]
         public void RefreshAllPaths_generates_king_paths_last()
         {
-            var items = new List<LocatedItem<IBoardEntity<ChessPieceName, Colours>>>
+            var items = new List<LocatedItem<ChessPieceEntity>>
             {
                 _whiteKing, _blackKing, _aPawn
             };
@@ -56,11 +55,11 @@ namespace chess.engine.tests.Chess
 
         }
 
-        private static Mock<IBoardState> CreateCustomBoardStateMock(List<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> items, LocatedItem<IBoardEntity<ChessPieceName, Colours>> whiteKing, LocatedItem<IBoardEntity<ChessPieceName, Colours>> blackKing)
+        private static Mock<IBoardState<ChessPieceEntity>> CreateCustomBoardStateMock(List<LocatedItem<ChessPieceEntity>> items, LocatedItem<ChessPieceEntity> whiteKing, LocatedItem<ChessPieceEntity> blackKing)
         {
             // Create a custom board state, using Mocks,to test that refresh paths works correctly
 
-            var boardState = new Mock<IBoardState>(MockBehavior.Strict);
+            var boardState = new Mock<IBoardState<ChessPieceEntity>>(MockBehavior.Strict);
 
             // Create the MockSequence to validate the call order
             var sequence = new MockSequence();
@@ -68,13 +67,13 @@ namespace chess.engine.tests.Chess
             // Each subsequent Setup() is only used if the previous one was successful
             // Verify order is unimportant, order here IS.
             boardState.InSequence(sequence).Setup(x
-                => x.GeneratePaths(It.Is<IBoardEntity<ChessPieceName, Colours>>(cpe => cpe.EntityType != ChessPieceName.King),
+                => x.GeneratePaths(It.Is<ChessPieceEntity>(cpe => cpe.EntityType != ChessPieceName.King),
                     It.IsAny<BoardLocation>(), It.IsAny<bool>()));
             boardState.InSequence(sequence).Setup(x
-                => x.GeneratePaths(It.Is<IBoardEntity<ChessPieceName, Colours>>(cpe => cpe.EntityType == ChessPieceName.King),
+                => x.GeneratePaths(It.Is<ChessPieceEntity>(cpe => cpe.EntityType == ChessPieceName.King),
                     It.IsAny<BoardLocation>(), It.IsAny<bool>()));
             boardState.InSequence(sequence).Setup(x
-                => x.GeneratePaths(It.Is<IBoardEntity<ChessPieceName, Colours>>(cpe => cpe.EntityType == ChessPieceName.King),
+                => x.GeneratePaths(It.Is<ChessPieceEntity>(cpe => cpe.EntityType == ChessPieceName.King),
                     It.IsAny<BoardLocation>(), It.IsAny<bool>()));
 
             boardState.Setup(bs => bs.GetAllItemLocations)
@@ -83,7 +82,7 @@ namespace chess.engine.tests.Chess
                 .Returns<BoardLocation>((l) => items.Single(i => i.Location.Equals(l)));
 
             boardState.Setup(bs => bs.GetItems(ChessPieceName.King))
-                .Returns(new List<LocatedItem<IBoardEntity<ChessPieceName, Colours>>> {whiteKing, blackKing});
+                .Returns(new List<LocatedItem<ChessPieceEntity>> {whiteKing, blackKing});
             return boardState;
         }
     }

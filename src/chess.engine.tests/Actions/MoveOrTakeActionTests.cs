@@ -1,6 +1,7 @@
 ﻿using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using Moq;
@@ -9,16 +10,16 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class MoveOrTakeActionTests : ActionTestsBase<MoveOrTakeAction>
+    public class MoveOrTakeActionTests : ActionTestsBase<MoveOrTakeAction<ChessPieceEntity>, ChessPieceEntity>
     {
         [SetUp]
         public void Setup()
         {
-            StateMock = new Mock<IBoardState>();
-            FactoryMock = new Mock<IBoardActionFactory>();
+            StateMock = new Mock<IBoardState<ChessPieceEntity>>();
+            FactoryMock = new Mock<IBoardActionFactory<ChessPieceEntity>>();
             BoardActionMock = new Mock<IBoardAction>();
 
-            Action = new MoveOrTakeAction(FactoryMock.Object, StateMock.Object);
+            Action = new MoveOrTakeAction<ChessPieceEntity>(FactoryMock.Object, StateMock.Object);
         }
 
         [Test]

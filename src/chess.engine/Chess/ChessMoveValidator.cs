@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Board;
+using chess.engine.Entities;
+using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Chess
 {
-    public class ChessPathValidator : IPathValidator
+    public class ChessPathValidator : IPathValidator<ChessPieceEntity>
     {
-        private readonly IReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate>> _validationFactory;
+        private readonly IReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate<ChessPieceEntity>>> _validationFactory;
 
-        public ChessPathValidator(IReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate>> validationFactory)
+        public ChessPathValidator(IReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate<ChessPieceEntity>>> validationFactory)
         {
             _validationFactory = validationFactory;
         }
 
-        public Path ValidatePath(Path possiblePath, IBoardState boardState)
+        public Path ValidatePath(Path possiblePath, IBoardState<ChessPieceEntity> boardState)
         {
             var validPath = new Path();
             foreach (var move in possiblePath)
@@ -47,7 +49,7 @@ namespace chess.engine.Chess
             return validPath;
         }
 
-        private static bool MoveIsATake(BoardMove move, IBoardState boardState)
+        private static bool MoveIsATake(BoardMove move, IBoardState<ChessPieceEntity> boardState)
         {
             if (boardState.IsEmpty(move.To)) return false;
 

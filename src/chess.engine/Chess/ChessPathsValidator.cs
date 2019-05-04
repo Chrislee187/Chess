@@ -8,23 +8,23 @@ using chess.engine.Movement;
 
 namespace chess.engine.Chess
 {
-    public interface IChessPathsValidator
+    public interface IChessPathsValidator<TEntity>
     {
-        Paths RemoveInvalidMoves(Paths possiblePaths, IBoardState boardState, bool removeMovesThatLeaveKingInCheck);
-        Paths GeneratePossiblePaths(IBoardEntity<ChessPieceName, Colours> entity, BoardLocation boardLocation);
-        bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move, IBoardState boardState);
+        Paths RemoveInvalidMoves(Paths possiblePaths, IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck);
+        Paths GeneratePossiblePaths(TEntity entity, BoardLocation boardLocation);
+        bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move, IBoardState<TEntity> boardState);
     }
-    public class ChessPathsValidator : IChessPathsValidator
+    public class ChessPathsValidator : IChessPathsValidator<ChessPieceEntity>
     {
-        private readonly IPathValidator _pathValidator;
-        private readonly IBoardActionFactory _actionFactory;
+        private readonly IPathValidator<ChessPieceEntity> _pathValidator;
+        private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory;
 
-        public ChessPathsValidator(IPathValidator pathValidator, IBoardActionFactory actionFactory)
+        public ChessPathsValidator(IPathValidator<ChessPieceEntity> pathValidator, IBoardActionFactory<ChessPieceEntity> actionFactory)
         {
             _actionFactory = actionFactory;
             _pathValidator = pathValidator;
         }
-        public Paths RemoveInvalidMoves(Paths possiblePaths, IBoardState boardState, bool removeMovesThatLeaveKingInCheck)
+        public Paths RemoveInvalidMoves(Paths possiblePaths, IBoardState<ChessPieceEntity> boardState, bool removeMovesThatLeaveKingInCheck)
         {
             var validPaths = new Paths();
 
@@ -46,7 +46,7 @@ namespace chess.engine.Chess
             return validPaths;
         }
 
-        public Paths GeneratePossiblePaths(IBoardEntity<ChessPieceName, Colours> entity, BoardLocation boardLocation)
+        public Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation)
         {
             var paths = new Paths();
             paths.AddRange(
@@ -57,7 +57,7 @@ namespace chess.engine.Chess
             return paths;
         }
 
-        private Paths RemoveMovesThatLeaveKingInCheck(Paths possiblePaths, IBoardState boardState)
+        private Paths RemoveMovesThatLeaveKingInCheck(Paths possiblePaths, IBoardState<ChessPieceEntity> boardState)
         {
             var validPaths = new Paths();
 
@@ -82,16 +82,16 @@ namespace chess.engine.Chess
 
             return validPaths;
         }
-        public bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move, IBoardState boardState)
+        public bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move, IBoardState<ChessPieceEntity> boardState)
         {
-            var clonedState = (BoardState) boardState.Clone();
+            var clonedState = (IBoardState<ChessPieceEntity>) boardState.Clone();
 
             // Execute the move directly, we've already validated it on the original board
             var playerColour = clonedState.GetItem(move.From).Item.Owner;
             var action = _actionFactory.Create(move.MoveType, clonedState);
             action.Execute(move);
 
-            var inCheck = clonedState.CurrentGameState(playerColour) != GameState.InProgress;
+            var inCheck = clonedState.CurrentGameState(playerColour, playerColour.Enemy()) != GameState.InProgress;
             return inCheck;
         }
 

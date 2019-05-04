@@ -3,13 +3,13 @@ using chess.engine.Chess;
 
 namespace chess.engine.Movement.Validators
 {
-    public class UpdatePieceValidator : IMoveValidator
+    public class UpdatePieceValidator<TEntity> : IMoveValidator<TEntity> where TEntity : IBoardEntity
     {
-        public bool ValidateMove(BoardMove move, IBoardState boardState)
+        public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
         {
             var piece = boardState.GetItem(move.From).Item;
             var destinationIsEndRank = move.To.Rank == ChessGame.EndRankFor(piece.Owner);
-            var destinationIsValid = new DestinationIsEmptyOrContainsEnemyValidator().ValidateMove(move, boardState);
+            var destinationIsValid = new DestinationIsEmptyOrContainsEnemyValidator<TEntity>().ValidateMove(move, boardState);
             
             return destinationIsEndRank && destinationIsValid;
         }

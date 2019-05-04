@@ -3,10 +3,11 @@ using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
-    public class MoveOrTakeAction : BoardAction
+    public class MoveOrTakeAction<TEntity> : BoardAction<TEntity>
+        where TEntity : class, IBoardEntity
     {
 
-        public MoveOrTakeAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
+        public MoveOrTakeAction(IBoardActionFactory<TEntity> factory, IBoardState<TEntity> boardState) : base(factory, boardState)
         {
         }
         public override void Execute(BoardMove move)

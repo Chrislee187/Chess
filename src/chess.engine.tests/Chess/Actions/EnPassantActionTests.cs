@@ -1,6 +1,7 @@
 ﻿using chess.engine.Actions;
 using chess.engine.Chess.Actions;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.tests.Actions;
@@ -10,7 +11,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Chess.Actions
 {
     [TestFixture]
-    public class EnPassantActionTests : ActionTestsBase<EnPassantAction>
+    public class EnPassantActionTests : ActionTestsBase<EnPassantAction<ChessPieceEntity>, ChessPieceEntity>
     {
         private static readonly BoardMove EnPassantMove 
             = new BoardMove(BoardLocation.At("B5"), BoardLocation.At("C6"), MoveType.TakeEnPassant);
@@ -18,7 +19,7 @@ namespace chess.engine.tests.Chess.Actions
         public void Setup()
         {
             base.SetUp();
-            Action = new EnPassantAction(FactoryMock.Object, StateMock.Object);
+            Action = new EnPassantAction<ChessPieceEntity>(FactoryMock.Object, StateMock.Object);
         }
 
         [Test]

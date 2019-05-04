@@ -1,5 +1,7 @@
 ﻿using chess.engine.Board;
 using chess.engine.Chess;
+using chess.engine.Entities;
+using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Movement.Validators;
 using chess.engine.tests.Builders;
@@ -11,8 +13,8 @@ namespace chess.engine.tests.Movement
     public class DestinationNotUnderAttackValidationTests
     {
         private EasyBoardBuilder _board;
-        private BoardState _boardState;
-        private DestinationNotUnderAttackValidator _validator;
+        private IBoardState<ChessPieceEntity> _boardState;
+        private DestinationNotUnderAttackValidator<ChessPieceEntity> _validator;
 
         [SetUp]
         public void SetUp()
@@ -29,7 +31,7 @@ namespace chess.engine.tests.Movement
                 );
             var game = new ChessGame(_board.ToGameSetup());
             _boardState = game.BoardState;
-            _validator = new DestinationNotUnderAttackValidator();
+            _validator = new DestinationNotUnderAttackValidator<ChessPieceEntity>();
         }
 
         [Test]

@@ -4,12 +4,17 @@ using chess.engine.Game;
 
 namespace chess.engine.Movement.Validators
 {
-    public class DestinationNotUnderAttackValidator : IMoveValidator
+    public class DestinationNotUnderAttackValidator<TEntity> : IMoveValidator<TEntity> 
+        where TEntity : IBoardEntity
     {
-        public bool ValidateMove(BoardMove move, IBoardState boardState)
+        public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
         {
             var piece = boardState.GetItem(move.From);
-            var enemyColour = piece.Item.Owner.Enemy();
+
+            // TODO: enemy player logic shouldn't be here??? SHould we just force it two player black/white
+            var playerColour = (Colours) piece.Item.Owner;
+            var enemyColour = playerColour.Enemy();
+
             var enemyLocations = boardState.GetItems(enemyColour).Select(i => i.Location);
 
             var enemyPaths = new Paths();

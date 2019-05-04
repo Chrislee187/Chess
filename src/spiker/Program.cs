@@ -111,28 +111,5 @@ namespace spiker
 
             return sb.ToString();
         }
-        public string DynamicBoard(BoardPiece[,] board)
-        {
-            var squareWidth = 1;
-            var squareHeight = 1;
-            var sb = new StringBuilder();
-
-            for (int rank = 7; rank >= 0; rank--)
-            {
-                for (int file = 0; file < 8; file++)
-                {
-                    var boardPiece = board[file, rank];
-
-                    var piece = boardPiece == null ? "." : boardPiece.Name.ToString().First().ToString();
-
-                    sb.Append(piece);
-                }
-
-                sb.AppendLine();
-            }
-
-            return sb.ToString();
-        }
-
     }
 }

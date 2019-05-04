@@ -1,15 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine
 {
-    public interface IBoardEntity<out TEntityType, out TOwner> : ICloneable
+    public interface IBoardEntity: ICloneable
     {
-        IEnumerable<IPathGenerator> PathGenerators { get; }
+        IEnumerable<object> PathGenerators { get; }
 
-        TOwner Owner { get; }
+        Colours Owner { get; }
 
-        TEntityType EntityType { get; }
+        object EntityType { get; }
+
+    }
+    public interface IBoardEntity<out TEntityType> : IBoardEntity
+    {
+        new IEnumerable<IPathGenerator> PathGenerators { get; }
+
+        new TEntityType EntityType { get; }
     }
 }

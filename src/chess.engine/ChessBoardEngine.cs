@@ -2,31 +2,29 @@
 using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Chess;
-using chess.engine.Chess.Entities;
-using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine
 {
 
-    public class ChessBoardEngine
+    public class ChessBoardEngine<TEntity> where TEntity : class, IBoardEntity
     {
-        public readonly BoardState BoardState;
-        private readonly BoardActionFactory _boardActionFactory;
+        public readonly IBoardState<TEntity> BoardState;
+        private readonly BoardActionFactory<TEntity> _boardActionFactory;
 
-        private readonly IGameSetup _gameSetup;
+        private readonly IGameSetup<TEntity> _gameSetup;
         private readonly IRefreshAllPaths _allPathCalculator;
 
-        public ChessBoardEngine(IGameSetup gameSetup, IChessPathsValidator chessPathValidator) : this(gameSetup, chessPathValidator, new DefaultRefreshAllPaths())
+        public ChessBoardEngine(IGameSetup<TEntity> gameSetup, IChessPathsValidator<TEntity> chessPathValidator) : this(gameSetup, chessPathValidator, new DefaultRefreshAllPaths())
         {
         }
 
-        public ChessBoardEngine(IGameSetup gameSetup, IChessPathsValidator chessPathsValidator, IRefreshAllPaths allPathCalculator)
+        public ChessBoardEngine(IGameSetup<TEntity> gameSetup, IChessPathsValidator<TEntity> chessPathsValidator, IRefreshAllPaths allPathCalculator)
         {
-            _boardActionFactory = new BoardActionFactory();
+            _boardActionFactory = new BoardActionFactory<TEntity>();
 
-            BoardState = new BoardState(chessPathsValidator, _boardActionFactory);
+            BoardState = new BoardState<TEntity>(chessPathsValidator, _boardActionFactory);
 
             _gameSetup = gameSetup;
             _gameSetup.SetupPieces(this);
@@ -44,16 +42,16 @@ namespace chess.engine
 
         public void ClearBoard() => BoardState.Clear();
 
-        public ChessBoardEngine AddPiece(IBoardEntity<ChessPieceName, Colours> create, string startingLocation) 
+        public ChessBoardEngine<TEntity> AddPiece(TEntity create, string startingLocation) 
             => AddPiece(create, BoardLocation.At(startingLocation));
-        public ChessBoardEngine AddPiece(IBoardEntity<ChessPieceName, Colours> create, BoardLocation startingLocation)
+        public ChessBoardEngine<TEntity> AddPiece(TEntity create, BoardLocation startingLocation)
         {
             BoardState.PlaceEntity(startingLocation, create);
             return this;
         }
         
-        public LocatedItem<IBoardEntity<ChessPieceName, Colours>> PieceAt(string location) => PieceAt((BoardLocation)location);
-        public LocatedItem<IBoardEntity<ChessPieceName, Colours>> PieceAt(BoardLocation location)
+        public LocatedItem<TEntity> PieceAt(string location) => PieceAt((BoardLocation)location);
+        public LocatedItem<TEntity> PieceAt(BoardLocation location)
         {
             if (BoardState.IsEmpty(location)) return null;
             
@@ -73,13 +71,17 @@ namespace chess.engine
                     {
                         var location = BoardLocation.At(file, rank);
 
+                        if (BoardState.IsEmpty(location))
+                        {
+                            pieces[(int) file - 1, rank - 1] = null;
+                        }
                         var entity = BoardState.IsEmpty(location) 
                             ? null 
                             : BoardState.GetItem(location).Item;
 
                         pieces[(int)file - 1, rank - 1] = entity == null
                             ? null
-                            : new BoardPiece(entity.Owner, entity.EntityType);
+                            : new BoardPiece((Colours)entity.Owner, (ChessPieceName) entity.EntityType);
                     }
                 }
 
@@ -106,13 +108,12 @@ namespace chess.engine
 
         private class DefaultRefreshAllPaths : IRefreshAllPaths
         {
-            public void RefreshAllPaths(IBoardState boardState, bool removeMovesThatLeaveKingInCheck)
+            public void RefreshAllPaths<TEntity>(IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck) where TEntity : IBoardEntity
             {
                 foreach (var loc in boardState.GetAllItemLocations)
                 {
                     boardState.GeneratePaths(boardState.GetItem(loc).Item, loc);
                 }
-
             }
         }
     }

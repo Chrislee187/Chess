@@ -1,19 +1,20 @@
 ﻿using System;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 
 namespace chess.engine.Chess
 {
-    public class ChessBoardSetup : IGameSetup
+    public class ChessBoardSetup : IGameSetup<ChessPieceEntity>
     {
-        public void SetupPieces(ChessBoardEngine engine)
+        public void SetupPieces(ChessBoardEngine<ChessPieceEntity> engine)
         {
             AddPawns(engine);
             AddMajorPieces(engine);
         }
 
 
-        private void AddPawns(ChessBoardEngine engine)
+        private void AddPawns(ChessBoardEngine<ChessPieceEntity> engine)
         {
             foreach (var colour in new[] { Colours.White, Colours.Black })
             {
@@ -25,7 +26,7 @@ namespace chess.engine.Chess
             }
         }
 
-        private void AddMajorPieces(ChessBoardEngine engine)
+        private void AddMajorPieces(ChessBoardEngine<ChessPieceEntity> engine)
         {
             foreach (var rank in new[] { 1, 8 })
             {

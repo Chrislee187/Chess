@@ -4,34 +4,36 @@ using System.Collections.ObjectModel;
 using chess.engine.Board;
 using chess.engine.Chess.Movement;
 using chess.engine.Chess.Movement.Validators;
+using chess.engine.Entities;
+using chess.engine.Game;
 using chess.engine.Movement.Validators;
 
 namespace chess.engine.Movement
 {
-    public delegate bool BoardMovePredicate(BoardMove move, IBoardState boardState);
+    public delegate bool BoardMovePredicate<TEntity>(BoardMove move, IBoardState<TEntity> boardState);
 
-    public class MoveValidationFactory : ReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate>>
+    public class MoveValidationFactory<TEntity> : ReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate<TEntity>>> where TEntity : IBoardEntity
     {
         
-        public MoveValidationFactory() : base(new Dictionary<MoveType, IEnumerable<BoardMovePredicate>>
+        public MoveValidationFactory() : base(new Dictionary<MoveType, IEnumerable<BoardMovePredicate<TEntity>>>
         {
             // Generic move types
-            { MoveType.MoveOnly, new BoardMovePredicate[] {(move, boardState) => new DestinationIsEmptyValidator().ValidateMove(move, boardState) }},
-            { MoveType.MoveOrTake, new BoardMovePredicate[] {(move, boardState) => new DestinationIsEmptyOrContainsEnemyValidator().ValidateMove(move, boardState)}},
-            { MoveType.TakeOnly, new BoardMovePredicate[] {(move, boardState) => new DestinationContainsEnemyMoveValidator().ValidateMove(move, boardState) }},
-            { MoveType.UpdatePiece, new BoardMovePredicate[] { (move, boardState) => new UpdatePieceValidator().ValidateMove(move, boardState) }},
+            { MoveType.MoveOnly, new BoardMovePredicate<TEntity>[] {(move, boardState) => new DestinationIsEmptyValidator<TEntity>().ValidateMove(move, boardState) }},
+            { MoveType.MoveOrTake, new BoardMovePredicate<TEntity>[] {(move, boardState) => new DestinationIsEmptyOrContainsEnemyValidator<TEntity>().ValidateMove(move, boardState)}},
+            { MoveType.TakeOnly, new BoardMovePredicate<TEntity>[] {(move, boardState) => new DestinationContainsEnemyMoveValidator<TEntity>().ValidateMove(move, boardState) }},
+            { MoveType.UpdatePiece, new BoardMovePredicate<TEntity>[] { (move, boardState) => new UpdatePieceValidator<TEntity>().ValidateMove(move, boardState) }},
 
             // TODO: Chess Move types shouldn't be here
-            { MoveType.KingMove, new BoardMovePredicate[] {
-                (move, boardState) => new DestinationIsEmptyValidator().ValidateMove(move, boardState),
-                (move, boardState) => new DestinationNotUnderAttackValidator().ValidateMove(move, boardState)}},
-            { MoveType.TakeEnPassant, new BoardMovePredicate[] {(move, boardState) => new EnPassantTakeValidator().ValidateMove(move, boardState) }},
-            { MoveType.CastleKingSide, new BoardMovePredicate[] { (move, boardState) => new KingCastleValidator().ValidateMove(move, boardState)  }},
-            { MoveType.CastleQueenSide, new BoardMovePredicate[] { (move, boardState) => new KingCastleValidator().ValidateMove(move, boardState) }},
+            { MoveType.KingMove, new BoardMovePredicate<TEntity>[] {
+                (move, boardState) => new DestinationIsEmptyValidator<TEntity>().ValidateMove(move, boardState),
+                (move, boardState) => new DestinationNotUnderAttackValidator<TEntity>().ValidateMove(move, boardState)}},
+            { MoveType.TakeEnPassant, new BoardMovePredicate<TEntity>[] {(move, boardState) => new EnPassantTakeValidator().ValidateMove(move, (IBoardState<ChessPieceEntity>) boardState) }},
+            { MoveType.CastleKingSide, new BoardMovePredicate<TEntity>[] { (move, boardState) => new KingCastleValidator().ValidateMove(move, (IBoardState<ChessPieceEntity>) boardState)  }},
+            { MoveType.CastleQueenSide, new BoardMovePredicate<TEntity>[] { (move, boardState) => new KingCastleValidator().ValidateMove(move, (IBoardState<ChessPieceEntity>) boardState) }},
         })
         {}
 
-        public IEnumerable<BoardMovePredicate> Create(MoveType moveType, IBoardState boardState)
+        public IEnumerable<BoardMovePredicate<TEntity>> Create(MoveType moveType, IBoardState<TEntity> boardState)
         {
             if (ContainsKey(moveType))
             {

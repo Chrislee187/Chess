@@ -3,6 +3,7 @@ using System.Text;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Chess.Pieces;
+using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
 
@@ -126,22 +127,20 @@ namespace chess.engine.tests.Builders
             return this;
         }
 
-        public IGameSetup ToGameSetup()
+        public IGameSetup<ChessPieceEntity> ToGameSetup()
         {
             return new EasyBoardBuilderCustomGameSetup(_board);
         }
 
-        private class EasyBoardBuilderCustomGameSetup : IGameSetup
+        private class EasyBoardBuilderCustomGameSetup : IGameSetup<ChessPieceEntity>
         {
             private char[,] _board;
-
-
 
             public EasyBoardBuilderCustomGameSetup(char[,] board)
             {
                 _board = board;
             }
-            public void SetupPieces(ChessBoardEngine engine)
+            public void SetupPieces(ChessBoardEngine<ChessPieceEntity> engine)
             {
                 for (var rank = 7; rank >= 0; rank--)
                 {

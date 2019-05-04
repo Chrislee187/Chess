@@ -1,6 +1,7 @@
 ﻿using chess.engine.Actions;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using Moq;
@@ -9,7 +10,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class UpdatePieceActionTests : ActionTestsBase<UpdatePieceAction>
+    public class UpdatePieceActionTests : ActionTestsBase<UpdatePieceAction<ChessPieceEntity>, ChessPieceEntity>
     {
         private const ChessPieceName PromotionPiece = ChessPieceName.Queen;
         private static readonly BoardMove PawnPromotionMove = new BoardMove(BoardLocation.At("B7"),BoardLocation.At("B8"), PromotionPiece);
@@ -17,7 +18,7 @@ namespace chess.engine.tests.Actions
         public void Setup()
         {
             base.SetUp();
-            Action = new UpdatePieceAction(FactoryMock.Object, StateMock.Object);
+            Action = new UpdatePieceAction<ChessPieceEntity>(FactoryMock.Object, StateMock.Object);
         }
 
         [Test]

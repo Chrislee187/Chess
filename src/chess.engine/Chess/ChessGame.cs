@@ -2,6 +2,7 @@
 using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Chess.Pieces;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 
@@ -15,23 +16,24 @@ namespace chess.engine.Chess
     public class ChessGame
     {
         public static int EndRankFor(Colours colour) => colour == Colours.White ? 8 : 1;
-        private readonly ChessBoardEngine _engine;
+        public static int EndRankFor(int colour) => EndRankFor((Colours) colour);
+        private readonly ChessBoardEngine<ChessPieceEntity> _engine;
         public Colours CurrentPlayer { get; private set; } = Colours.White;
         private Colours NextPlayer() => CurrentPlayer == Colours.White ? Colours.Black : Colours.White;
 
         public bool InProgress = true;
 
         public BoardPiece[,] Board => _engine.Board;
-        public BoardState BoardState => _engine.BoardState;
+        public IBoardState<ChessPieceEntity> BoardState => _engine.BoardState;
 
         public GameState GameState { get; private set; }
         public ChessGame() : this(new ChessBoardSetup())
         { }
 
-        public ChessGame(IGameSetup setup)
+        public ChessGame(IGameSetup<ChessPieceEntity> setup)
         {
-            _engine = new ChessBoardEngine(setup, 
-                new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory()), new BoardActionFactory()),
+            _engine = new ChessBoardEngine<ChessPieceEntity>(setup, 
+                new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>()), new BoardActionFactory<ChessPieceEntity>()),
                 new ChessRefreshAllPaths());
         }
         
@@ -47,7 +49,7 @@ namespace chess.engine.Chess
             _engine.Move(validated.move);
 
             CurrentPlayer = NextPlayer();
-            GameState = BoardState.CurrentGameState(CurrentPlayer);
+            GameState = BoardState.CurrentGameState(CurrentPlayer, CurrentPlayer.Enemy());
 
             return GameState == GameState.Check || GameState == GameState.Checkmate 
                 ? GameState.ToString() 

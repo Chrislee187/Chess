@@ -1,12 +1,13 @@
 ﻿using chess.engine.Actions;
 using chess.engine.Board;
+using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Chess.Actions
 {
-    public class EnPassantAction : BoardAction
+    public class EnPassantAction<TEntity> : BoardAction<TEntity> where TEntity : IBoardEntity
     {
-        public EnPassantAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
+        public EnPassantAction(IBoardActionFactory<TEntity> factory, IBoardState<TEntity> boardState) : base(factory, boardState)
         {
         }
 

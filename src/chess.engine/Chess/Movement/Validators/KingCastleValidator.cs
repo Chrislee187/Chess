@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Board;
-using chess.engine.Chess.Entities;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
@@ -9,13 +8,13 @@ using chess.engine.Movement.Validators;
 
 namespace chess.engine.Chess.Movement.Validators
 {
-    public class KingCastleValidator : IMoveValidator
+    public class KingCastleValidator : IMoveValidator<ChessPieceEntity> 
     {
 
-        public bool ValidateMove(BoardMove move, IBoardState boardState)
+        public bool ValidateMove(BoardMove move, IBoardState<ChessPieceEntity> boardState)
         {
             var king = boardState.GetItem(move.From).Item;
-            var kingIsValid = king.EntityType == ChessPieceName.King; // && !king.MoveHistory.Any()
+            var kingIsValid = king.EntityType.Equals(ChessPieceName.King); // && !king.MoveHistory.Any()
 
             var rookLoc = move.MoveType == MoveType.CastleKingSide
                 ? BoardLocation.At($"H{move.From.Rank}")
@@ -25,18 +24,18 @@ namespace chess.engine.Chess.Movement.Validators
 
             if (rook == null) return false;
 
-            var rookIsValid = rook.Item.EntityType == ChessPieceName.Rook
+            var rookIsValid = rook.Item.EntityType.Equals(ChessPieceName.Rook)
                               && rook.Item.Owner == king.Owner; // && !rook.MoveHistory.Any()
 
             var pathBetween = CalcPathBetweenKingAndCastle(move, king);
 
-            var destinationIsEmptyValidator = new DestinationIsEmptyValidator();
+            var destinationIsEmptyValidator = new DestinationIsEmptyValidator<ChessPieceEntity>();
             var pathIsEmpty = pathBetween.All(loc 
                 => destinationIsEmptyValidator.ValidateMove(
                     new BoardMove(move.From, loc, MoveType.MoveOnly), 
                     boardState));
 
-            var destinationNotUnderAttackValidator = new DestinationNotUnderAttackValidator();
+            var destinationNotUnderAttackValidator = new DestinationNotUnderAttackValidator<ChessPieceEntity>();
             var pathNotUnderAttack = pathBetween.All(loc 
                 => destinationNotUnderAttackValidator.ValidateMove(
                     new BoardMove(move.From, loc, MoveType.MoveOnly),
@@ -45,7 +44,7 @@ namespace chess.engine.Chess.Movement.Validators
             return kingIsValid && rookIsValid && pathIsEmpty && pathNotUnderAttack;
         }
 
-        private static List<BoardLocation> CalcPathBetweenKingAndCastle(BoardMove move, IBoardEntity<ChessPieceName, Colours> king)
+        private static List<BoardLocation> CalcPathBetweenKingAndCastle(BoardMove move, ChessPieceEntity king)
         {
             var pathBetween = new List<BoardLocation>();
             if (move.From.File < move.To.File)

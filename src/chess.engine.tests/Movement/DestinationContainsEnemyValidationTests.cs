@@ -1,6 +1,7 @@
 ﻿using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Chess;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Movement.Validators;
@@ -13,7 +14,7 @@ namespace chess.engine.tests.Movement
     public class DestinationContainsEnemyValidationTests
     {
         private EasyBoardBuilder _board;
-        private BoardState _boardState;
+        private IBoardState<ChessPieceEntity> _boardState;
 
         [SetUp]
         public void SetUp()
@@ -35,7 +36,7 @@ namespace chess.engine.tests.Movement
         [Test]
         public void Should_return_true_for_valid_take()
         {
-            var validator = new DestinationContainsEnemyMoveValidator();
+            var validator = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>();
 
             var containsEnemy = BoardMove.Create("A1", "A8", MoveType.MoveOrTake);
             Assert.True(validator.ValidateMove(containsEnemy, _boardState));
@@ -44,7 +45,7 @@ namespace chess.engine.tests.Movement
         [Test]
         public void Should_return_false_for_invalid_take()
         {
-            var validator = new DestinationContainsEnemyMoveValidator();
+            var validator = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>();
 
             var noEnemy = BoardMove.Create("E8", "G8", MoveType.MoveOrTake);
             Assert.False(validator.ValidateMove(noEnemy, _boardState));
@@ -70,7 +71,7 @@ namespace chess.engine.tests.Movement
                 );
             var game = new ChessGame(board.ToGameSetup());
 
-            var validator = new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory()), new BoardActionFactory());
+            var validator = new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>()), new BoardActionFactory<ChessPieceEntity>());
 
             var moveOrTake = BoardMove.CreateMoveOrTake(BoardLocation.At("E5"), BoardLocation.At("D4"));
             var doesMoveLeaveMovingPlayersKingInCheck = validator.DoesMoveLeaveMovingPlayersKingInCheck(moveOrTake, game.BoardState);

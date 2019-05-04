@@ -2,6 +2,7 @@
 using chess.engine.Chess.Actions;
 using chess.engine.Chess.Entities;
 using chess.engine.Chess.Pieces;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.tests.Actions;
@@ -10,7 +11,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Chess.Actions
 {
     [TestFixture]
-    public class CastleActionTests : ActionTestsBase<CastleAction>
+    public class CastleActionTests : ActionTestsBase<CastleAction<ChessPieceEntity>, ChessPieceEntity>
     {
         private const bool KingSide = true;
         private const bool QueenSide = false;
@@ -18,7 +19,7 @@ namespace chess.engine.tests.Chess.Actions
         public void Setup()
         {
             base.SetUp();
-            Action = new CastleAction(FactoryMock.Object, StateMock.Object);
+            Action = new CastleAction<ChessPieceEntity>(FactoryMock.Object, StateMock.Object);
         }
 
         [TestCase(Colours.White, KingSide)]

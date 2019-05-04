@@ -1,26 +1,27 @@
 ﻿using System.Linq;
 using chess.engine.Board;
+using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Movement.Validators;
 
 namespace chess.engine.Chess.Movement.Validators
 {
-    public class EnPassantTakeValidator : IMoveValidator
+    public class EnPassantTakeValidator : IMoveValidator<ChessPieceEntity> 
     {
 
-        public bool ValidateMove(BoardMove move, IBoardState boardState)
+        public bool ValidateMove(BoardMove move, IBoardState<ChessPieceEntity> boardState)
         {
-            var normalTakeOk = new DestinationContainsEnemyMoveValidator().ValidateMove(move, boardState);
+            var normalTakeOk = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>().ValidateMove(move, boardState);
 
             var piece = boardState.GetItems(move.From).Single().Item;
 
-            var passingPieceLocation = move.To.MoveBack(piece.Owner);
+            var passingPieceLocation = move.To.MoveBack((Colours)piece.Owner);
 
             if (boardState.IsEmpty(passingPieceLocation)) return false;
             var passingPiece = boardState.GetItems(passingPieceLocation).Single().Item;
-            if (passingPiece.Owner == piece.Owner) return false;
-            if (passingPiece.EntityType != ChessPieceName.Pawn) return false;
+            if (passingPiece.Owner.Equals(piece.Owner)) return false;
+            if (!passingPiece.EntityType.Equals(ChessPieceName.Pawn)) return false;
 
             var enpassantOk = CheckPawnUsedDoubleMove(move.To);
 

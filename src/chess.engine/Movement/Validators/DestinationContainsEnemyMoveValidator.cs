@@ -3,9 +3,9 @@ using chess.engine.Board;
 
 namespace chess.engine.Movement.Validators
 {
-    public class DestinationContainsEnemyMoveValidator : IMoveValidator
+    public class DestinationContainsEnemyMoveValidator<TEntity> : IMoveValidator<TEntity> where TEntity : IBoardEntity
     {
-        public bool ValidateMove(BoardMove move, IBoardState boardState)
+        public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
         {
             var sourcePiece = boardState.GetItems(move.From).SingleOrDefault();
             Guard.NotNull(sourcePiece);

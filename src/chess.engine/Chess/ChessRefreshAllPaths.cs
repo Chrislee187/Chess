@@ -5,12 +5,12 @@ namespace chess.engine.Chess
 {
     public class ChessRefreshAllPaths : IRefreshAllPaths
     {
-        public void RefreshAllPaths(IBoardState boardState, bool removeMovesThatLeaveKingInCheck = true)
+        public void RefreshAllPaths<TEntity>(IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck = true) where TEntity : IBoardEntity 
         {
             foreach (var loc in boardState.GetAllItemLocations)
             {
                 var piece = boardState.GetItem(loc).Item;
-                if (piece.EntityType != ChessPieceName.King)
+                if (!piece.EntityType.Equals(ChessPieceName.King))
                 {
                     boardState.GeneratePaths(piece, loc, removeMovesThatLeaveKingInCheck);
                 }

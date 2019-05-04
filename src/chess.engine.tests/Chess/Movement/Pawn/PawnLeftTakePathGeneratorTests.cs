@@ -16,7 +16,7 @@ namespace chess.engine.tests.Chess.Movement.Pawn
         private PawnLeftTakePathGenerator _gen;
 
         [SetUp]
-        public void SetUp()
+        public new void SetUp()
         {
             _gen = new PawnLeftTakePathGenerator();
         }

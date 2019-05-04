@@ -2,11 +2,11 @@
 
 namespace chess.engine.Movement.Validators
 {
-    public class DestinationIsEmptyOrContainsEnemyValidator : IMoveValidator
+    public class DestinationIsEmptyOrContainsEnemyValidator<TEntity> : IMoveValidator<TEntity> where TEntity : IBoardEntity
     {
-        public bool ValidateMove(BoardMove move, IBoardState boardState)
-            => new DestinationIsEmptyValidator().ValidateMove(move, boardState) 
-               || new DestinationContainsEnemyMoveValidator().ValidateMove(move, boardState);
+        public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
+            => new DestinationIsEmptyValidator<TEntity>().ValidateMove(move, boardState) 
+               || new DestinationContainsEnemyMoveValidator<TEntity>().ValidateMove(move, boardState);
 
     }
 }

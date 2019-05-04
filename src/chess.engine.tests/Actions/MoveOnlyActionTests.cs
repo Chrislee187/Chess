@@ -1,5 +1,6 @@
 ﻿using chess.engine.Actions;
 using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using Moq;
 using NUnit.Framework;
@@ -7,13 +8,13 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class MoveOnlyActionTests : ActionTestsBase<MoveOnlyAction>
+    public class MoveOnlyActionTests : ActionTestsBase<MoveOnlyAction<ChessPieceEntity>, ChessPieceEntity>
     {
         [SetUp]
         public void Setup()
         {
             base.SetUp();
-            Action = new MoveOnlyAction(FactoryMock.Object, StateMock.Object);
+            Action = new MoveOnlyAction<ChessPieceEntity>(FactoryMock.Object, StateMock.Object);
         }
 
         [Test]

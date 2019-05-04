@@ -2,8 +2,8 @@
 
 namespace chess.engine.Movement
 {
-    public interface IPathValidator
+    public interface IPathValidator<TEntity>
     {
-        Path ValidatePath(Path possiblePath, IBoardState boardState);
+        Path ValidatePath(Path possiblePath, IBoardState<TEntity> boardState);
     }
 }

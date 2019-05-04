@@ -2,9 +2,9 @@
 
 namespace chess.engine.Movement.Validators
 {
-    public class DestinationIsEmptyValidator : IMoveValidator
+    public class DestinationIsEmptyValidator<TEntity> : IMoveValidator<TEntity>
     {
-        public bool ValidateMove(BoardMove move, IBoardState boardState)
+        public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
             => boardState.IsEmpty(move.To);
 
     }
