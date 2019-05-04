@@ -3,7 +3,7 @@ using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Movement.SimpleValidators;
+using chess.engine.Movement.Validators;
 using chess.engine.tests.Builders;
 using NUnit.Framework;
 
