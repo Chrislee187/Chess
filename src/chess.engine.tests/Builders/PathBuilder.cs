@@ -11,7 +11,7 @@ namespace chess.engine.tests.Builders
 
         public Path Build()
         {
-            return new PathDestinationsBuilder(BoardLocation.At("D2")).To("D4", ChessMoveType.MoveOnly).Build();
+            return new PathDestinationsBuilder(BoardLocation.At("D2")).To("D4", MoveType.MoveOnly).Build();
         }
     }
 }

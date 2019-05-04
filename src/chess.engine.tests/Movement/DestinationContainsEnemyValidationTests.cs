@@ -37,7 +37,7 @@ namespace chess.engine.tests.Movement
         {
             var validator = new DestinationContainsEnemyMoveValidator();
 
-            var containsEnemy = ChessMove.Create("A1", "A8", ChessMoveType.MoveOrTake);
+            var containsEnemy = BoardMove.Create("A1", "A8", MoveType.MoveOrTake);
             Assert.True(validator.ValidateMove(containsEnemy, _boardState));
 
         }
@@ -46,7 +46,7 @@ namespace chess.engine.tests.Movement
         {
             var validator = new DestinationContainsEnemyMoveValidator();
 
-            var noEnemy = ChessMove.Create("E8", "G8", ChessMoveType.MoveOrTake);
+            var noEnemy = BoardMove.Create("E8", "G8", MoveType.MoveOrTake);
             Assert.False(validator.ValidateMove(noEnemy, _boardState));
 
         }
@@ -72,7 +72,7 @@ namespace chess.engine.tests.Movement
 
             var validator = new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory()), new BoardActionFactory());
 
-            var moveOrTake = ChessMove.CreateMoveOrTake(BoardLocation.At("E5"), BoardLocation.At("D4"));
+            var moveOrTake = BoardMove.CreateMoveOrTake(BoardLocation.At("E5"), BoardLocation.At("D4"));
             var doesMoveLeaveMovingPlayersKingInCheck = validator.DoesMoveLeaveMovingPlayersKingInCheck(moveOrTake, game.BoardState);
 
             Assert.That(doesMoveLeaveMovingPlayersKingInCheck, Is.True);

@@ -17,7 +17,7 @@ namespace chess.engine.tests.Movement
         [Test]
         public void FactorySupportsAllMoveTypes()
         {
-            foreach (ChessMoveType type in Enum.GetValues(typeof(ChessMoveType)))
+            foreach (MoveType type in Enum.GetValues(typeof(MoveType)))
             {
                 Assert.DoesNotThrow(() => _factory.Create(type, null), $"{type} is not support");
             }

@@ -10,18 +10,18 @@ namespace chess.engine.Actions
         {
         }
 
-        public override void Execute(ChessMove move)
+        public override void Execute(BoardMove move)
         {
-            ChessMove kingMove, rookMove;
+            BoardMove kingMove, rookMove;
             if (move.From.File < move.To.File) // King Side
             {
-                kingMove = new ChessMove(move.From, BoardLocation.At($"G{move.From.Rank}"), ChessMoveType.MoveOnly);
-                rookMove = new ChessMove(BoardLocation.At($"H{move.From.Rank}"), BoardLocation.At($"F{move.From.Rank}"), ChessMoveType.MoveOnly);
+                kingMove = new BoardMove(move.From, BoardLocation.At($"G{move.From.Rank}"), MoveType.MoveOnly);
+                rookMove = new BoardMove(BoardLocation.At($"H{move.From.Rank}"), BoardLocation.At($"F{move.From.Rank}"), MoveType.MoveOnly);
             }
             else
             {
-                kingMove = new ChessMove(move.From, BoardLocation.At($"C{move.From.Rank}"), ChessMoveType.MoveOnly);
-                rookMove = new ChessMove(BoardLocation.At($"A{move.From.Rank}"), BoardLocation.At($"D{move.From.Rank}"), ChessMoveType.MoveOnly);
+                kingMove = new BoardMove(move.From, BoardLocation.At($"C{move.From.Rank}"), MoveType.MoveOnly);
+                rookMove = new BoardMove(BoardLocation.At($"A{move.From.Rank}"), BoardLocation.At($"D{move.From.Rank}"), MoveType.MoveOnly);
             }
 
             var moveOnly = Factory.Create(DefaultActions.MoveOnly, BoardState);

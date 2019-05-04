@@ -9,7 +9,7 @@ namespace chess.engine.Actions
         public MoveOrTakeAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
         {
         }
-        public override void Execute(ChessMove move)
+        public override void Execute(BoardMove move)
         {
             var dest = BoardState.GetItem(move.To)?.Item;
 

@@ -35,14 +35,14 @@ namespace chess.engine.tests.Movement
         [Test]
         public void Should_return_true_for_move_to_empty_space()
         {
-            var empty = ChessMove.Create("E1", "E2", ChessMoveType.CastleKingSide);
+            var empty = BoardMove.Create("E1", "E2", MoveType.CastleKingSide);
             Assert.True(_validator.ValidateMove(empty, _boardState));
         }
 
         [Test]
         public void Should_return_false_for_move_to_non_empty_space()
         {
-            var notEmpty = ChessMove.Create("A1", "A8", ChessMoveType.CastleQueenSide);
+            var notEmpty = BoardMove.Create("A1", "A8", MoveType.CastleQueenSide);
             Assert.False(_validator.ValidateMove(notEmpty, _boardState));
         }
     }

@@ -39,16 +39,16 @@ namespace chess.engine.Game
         public BoardLocation KnightHorizontalMove(Colours colour, bool forward, bool right) => MoveRight(colour, forward ? 2 : -2)?.MoveForward(colour, right ? 1 : -1);
 
         public BoardLocation MoveForward(Colours colour, int squares = 1) 
-            => SafeCreate((int)File, Rank + ChessMove.DirectionModifierFor(colour) * squares);
+            => SafeCreate((int)File, Rank + BoardMove.DirectionModifierFor(colour) * squares);
 
         public BoardLocation MoveBack(Colours colour, int squares = 1) 
-            => SafeCreate((int)File, Rank - ChessMove.DirectionModifierFor(colour) * squares);
+            => SafeCreate((int)File, Rank - BoardMove.DirectionModifierFor(colour) * squares);
 
         public BoardLocation MoveLeft(Colours colour, int squares = 1) 
-            => SafeCreate((int) File - (ChessMove.DirectionModifierFor(colour) * squares), Rank);
+            => SafeCreate((int) File - (BoardMove.DirectionModifierFor(colour) * squares), Rank);
 
         public BoardLocation MoveRight(Colours colour, int squares = 1) 
-            => SafeCreate((int) File + (ChessMove.DirectionModifierFor(colour) * squares), Rank);
+            => SafeCreate((int) File + (BoardMove.DirectionModifierFor(colour) * squares), Rank);
 
         #region Object overrides
         public override string ToString() => File.ToString().Substring(0, 1) + Rank;

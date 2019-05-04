@@ -1,6 +1,6 @@
 ﻿namespace chess.engine.Movement
 {
-    public enum ChessMoveType
+    public enum MoveType
     {
         // General moves, not chess specific
         MoveOrTake = 1, 
@@ -8,6 +8,7 @@
         TakeOnly = 3,
         UpdatePiece = 4,
 
+        // ChessSpecific to be refactored in to something more generic
         TakeEnPassant,
         KingMove,
         CastleKingSide,

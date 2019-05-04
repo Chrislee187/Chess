@@ -12,7 +12,7 @@ namespace chess.engine.Movement
             var path = new Path();
             while (next != null)
             {
-                path.Add(ChessMove.CreateMoveOrTake(location, next));
+                path.Add(BoardMove.CreateMoveOrTake(location, next));
                 next = move(next);
             }
 

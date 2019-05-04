@@ -37,8 +37,8 @@ namespace chess.engine.tests.Actions
             var rookStart = BoardLocation.At($"{rookStartFile}{rank}");
             var rookDestination = BoardLocation.At($"{rookDestinationFile}{rank}");
 
-            var actualKingMove = new ChessMove(kingStartLoc, kingDestination, ChessMoveType.MoveOnly);
-            var actualRookMove = new ChessMove(rookStart, rookDestination, ChessMoveType.MoveOnly);
+            var actualKingMove = new BoardMove(kingStartLoc, kingDestination, MoveType.MoveOnly);
+            var actualRookMove = new BoardMove(rookStart, rookDestination, MoveType.MoveOnly);
 
             SetupPieceReturn(kingStartLoc, king);
             SetupPieceReturn(rookStart, rook);

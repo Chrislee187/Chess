@@ -55,7 +55,7 @@ namespace chess.engine.Chess
         }
 
 
-        private (ChessMove move, string errorMessage) ValidateInput(string input)
+        private (BoardMove move, string errorMessage) ValidateInput(string input)
         {
             var from = BoardLocation.At(input.Substring(0, 2));
             var to = BoardLocation.At(input.Substring(2, 2));
@@ -81,7 +81,7 @@ namespace chess.engine.Chess
                 return (null, $"It is not {pieceColour}'s turn.");
             }
 
-            var validMove = piece?.Paths.FindValidMove(to, promotionPiece);
+            var validMove = piece.Paths.FindValidMove(to, promotionPiece);
 
             if (validMove == null)
             {

@@ -13,7 +13,7 @@ namespace chess.engine.Board
         LocatedItem<ChessPieceEntity> GetItem(BoardLocation loc);
 
         bool IsEmpty(BoardLocation location);
-        bool DoesMoveLeaveMovingPlayersKingInCheck(ChessMove move);
+        bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move);
 
         IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(params BoardLocation[] locations);
         IEnumerable<LocatedItem<ChessPieceEntity>> GetItems(ChessPieceName pieceType);

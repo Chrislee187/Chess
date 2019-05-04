@@ -13,12 +13,12 @@ namespace chess.engine.Movement.Pawn
             var oneSquareForward = location.MoveForward(forPlayer);
             if (oneSquareForward.Rank != ChessGame.EndRankFor(forPlayer))
             {
-                var move = ChessMove.CreateMoveOnly(location, oneSquareForward);
+                var move = BoardMove.CreateMoveOnly(location, oneSquareForward);
 
                 var path = new Path {move};
                 if (location.Rank == Pieces.Pawn.StartRankFor(forPlayer))
                 {
-                    path.Add(ChessMove.CreateMoveOnly(location, location.MoveForward(forPlayer, 2)));
+                    path.Add(BoardMove.CreateMoveOnly(location, location.MoveForward(forPlayer, 2)));
                 }
                 paths.Add(path);
             }
@@ -26,7 +26,7 @@ namespace chess.engine.Movement.Pawn
             {
                 foreach (var promotionPieces in new[] { ChessPieceName.Queen, ChessPieceName.Rook, ChessPieceName.Bishop, ChessPieceName.Knight })
                 {
-                    var move = ChessMove.CreatePawnPromotion(location, oneSquareForward, promotionPieces);
+                    var move = BoardMove.CreatePawnPromotion(location, oneSquareForward, promotionPieces);
                     paths.Add(new Path { move });
                 }
             }

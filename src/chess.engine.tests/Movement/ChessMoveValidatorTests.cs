@@ -13,7 +13,7 @@ namespace chess.engine.tests.Movement
     [TestFixture]
     public class ChessMoveValidatorTests : PathGeneratorTestsBase
     {
-        private Mock<IReadOnlyDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>>> _factoryMock;
+        private Mock<IReadOnlyDictionary<MoveType, IEnumerable<ChessBoardMovePredicate>>> _factoryMock;
         private IEnumerable<ChessBoardMovePredicate> _moveTests;
         private readonly IBoardActionFactory _boardActionFactory = new BoardActionFactory();
 
@@ -22,13 +22,13 @@ namespace chess.engine.tests.Movement
         public new void SetUp()
         {
             base.SetUp();
-            _factoryMock = new Mock<IReadOnlyDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>>>();
+            _factoryMock = new Mock<IReadOnlyDictionary<MoveType, IEnumerable<ChessBoardMovePredicate>>>();
 
             _moveTests = new List<ChessBoardMovePredicate>
             {
                 (move, state) => true
             };
-            _factoryMock.Setup(f => f.TryGetValue(It.IsAny<ChessMoveType>(), out _moveTests))
+            _factoryMock.Setup(f => f.TryGetValue(It.IsAny<MoveType>(), out _moveTests))
                 .Returns(true);
 
         }
@@ -48,7 +48,7 @@ namespace chess.engine.tests.Movement
         public void ValidPath_should_return_truncated_path_when_move_test_fails()
         {
             var validator = new ChessPathValidator(_factoryMock.Object);
-            var path = new PathBuilder().From("D2").To("D3").To("D4").To("D5", ChessMoveType.TakeOnly).Build();
+            var path = new PathBuilder().From("D2").To("D3").To("D4").To("D5", MoveType.TakeOnly).Build();
 
             IEnumerable<ChessBoardMovePredicate> failOnD5 = new List<ChessBoardMovePredicate>
             {
@@ -56,7 +56,7 @@ namespace chess.engine.tests.Movement
             };
 
             _factoryMock.Setup(f => f.TryGetValue(
-                    It.IsAny<ChessMoveType>(), 
+                    It.IsAny<MoveType>(), 
                     out failOnD5))
                 .Returns(true);
 
@@ -72,7 +72,7 @@ namespace chess.engine.tests.Movement
         [Test]
         public void ValidPath_should_throw_for_unsupported_MoveType()
         {
-            _factoryMock.Setup(f => f.TryGetValue(It.IsAny<ChessMoveType>(), out _moveTests))
+            _factoryMock.Setup(f => f.TryGetValue(It.IsAny<MoveType>(), out _moveTests))
                 .Returns(false);
 
             var validator = new ChessPathValidator(_factoryMock.Object);

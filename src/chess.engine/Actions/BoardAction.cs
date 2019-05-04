@@ -6,7 +6,7 @@ namespace chess.engine.Actions
 {
     public interface IBoardAction
     {
-        void Execute(ChessMove move);
+        void Execute(BoardMove move);
     }
 
     public abstract class BoardAction : IBoardAction
@@ -20,6 +20,6 @@ namespace chess.engine.Actions
             Factory = factory;
         }
 
-        public abstract void Execute(ChessMove move);
+        public abstract void Execute(BoardMove move);
     }
 }

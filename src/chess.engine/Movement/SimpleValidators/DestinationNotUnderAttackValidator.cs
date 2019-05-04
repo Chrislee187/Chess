@@ -7,7 +7,7 @@ namespace chess.engine.Movement.SimpleValidators
 {
     public class DestinationNotUnderAttackValidator : IMoveValidator
     {
-        public bool ValidateMove(ChessMove move, IBoardState boardState)
+        public bool ValidateMove(BoardMove move, IBoardState boardState)
         {
             var piece = boardState.GetItem(move.From);
             var enemyColour = piece.Item.Player.Enemy();

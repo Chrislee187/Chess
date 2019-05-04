@@ -36,7 +36,7 @@ namespace chess.engine.tests.Movement
         [Test]
         public void Should_return_true_for_valid_take()
         {
-            var promote = ChessMove.CreateTakeOnly(BoardLocation.At("A6"), BoardLocation.At("B7"));
+            var promote = BoardMove.CreateTakeOnly(BoardLocation.At("A6"), BoardLocation.At("B7"));
             Assert.True(_validator.ValidateMove(promote, _boardState));
         }
 
@@ -44,7 +44,7 @@ namespace chess.engine.tests.Movement
         public void Should_return_false_when_no_piece_in_passing_location()
         {
             _boardState.Remove(BoardLocation.At("B6"));
-            var promote = ChessMove.CreateTakeOnly(BoardLocation.At("A6"), BoardLocation.At("B7"));
+            var promote = BoardMove.CreateTakeOnly(BoardLocation.At("A6"), BoardLocation.At("B7"));
             Assert.False(_validator.ValidateMove(promote, _boardState));
         }
 
@@ -52,7 +52,7 @@ namespace chess.engine.tests.Movement
         [TestCase("G6", "H7")]
         public void Should_return_false_when_wrong_piece_in_passing_location(string from, string to)
         {
-            var promote = ChessMove.CreateTakeOnly(BoardLocation.At(from), BoardLocation.At(to));
+            var promote = BoardMove.CreateTakeOnly(BoardLocation.At(from), BoardLocation.At(to));
             Assert.False(_validator.ValidateMove(promote, _boardState));
         }
 

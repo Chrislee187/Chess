@@ -101,7 +101,7 @@ namespace chess.engine.Board
             return clonedState;
         }
 
-        public bool DoesMoveLeaveMovingPlayersKingInCheck(ChessMove move) 
+        public bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move) 
             => _chessPathsValidator.DoesMoveLeaveMovingPlayersKingInCheck(move, this);
 
         public IEnumerable<BoardLocation> GetAllMoveDestinations(Colours forPlayer)

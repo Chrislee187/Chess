@@ -10,8 +10,8 @@ namespace chess.engine.tests.Actions
     [TestFixture]
     public class EnPassantActionTests : ActionTestsBase<EnPassantAction>
     {
-        private static readonly ChessMove EnPassantMove 
-            = new ChessMove(BoardLocation.At("B5"), BoardLocation.At("C6"), ChessMoveType.TakeEnPassant);
+        private static readonly BoardMove EnPassantMove 
+            = new BoardMove(BoardLocation.At("B5"), BoardLocation.At("C6"), MoveType.TakeEnPassant);
         [SetUp]
         public void Setup()
         {

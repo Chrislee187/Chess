@@ -10,12 +10,12 @@ namespace chess.engine.Movement
     /// <summary>
     /// Path is a sequence of Move's that require the previous move to be valid before the next move can be considered
     /// </summary>
-    public class Path : IEnumerable<ChessMove>
+    public class Path : IEnumerable<BoardMove>
     {
-        private readonly List<ChessMove> _moves = new List<ChessMove>();
+        private readonly List<BoardMove> _moves = new List<BoardMove>();
 
 
-        public void Add(ChessMove move) => _moves.Add(move);
+        public void Add(BoardMove move) => _moves.Add(move);
 
         #region Equality, Enumerator and Overrides
 
@@ -35,7 +35,7 @@ namespace chess.engine.Movement
         public override string ToString() 
             => $"{string.Join(", ", _moves.Select(m=> m.ToString()))}";
 
-        public IEnumerator<ChessMove> GetEnumerator() => _moves.GetEnumerator();
+        public IEnumerator<BoardMove> GetEnumerator() => _moves.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
@@ -71,17 +71,17 @@ namespace chess.engine.Movement
 
         #endregion
 
-        public IEnumerable<ChessMove> FlattenMoves() => _paths.SelectMany(ps => ps);
+        public IEnumerable<BoardMove> FlattenMoves() => _paths.SelectMany(ps => ps);
 
         public bool ContainsMoveTo(BoardLocation location)
             => FlattenMoves().Any(m => m.To.Equals(location));
 
-        public ChessMove FindValidMove(BoardLocation destination, ChessPieceName? promotionPiece)
+        public BoardMove FindValidMove(BoardLocation destination, object promotionPiece = null)
         {
             return FlattenMoves()
                 .SingleOrDefault(mv => mv.To.Equals(destination)
-                                       && (!promotionPiece.HasValue
-                                           || mv.PromotionPiece == promotionPiece.Value)
+                                       && (promotionPiece == null
+                                           || mv.UpdateEntityType.Equals(promotionPiece))
                 );
         }
     }

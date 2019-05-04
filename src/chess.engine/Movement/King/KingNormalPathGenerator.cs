@@ -23,7 +23,7 @@ namespace chess.engine.Movement.King
             {
                 if (dest != null)
                 {
-                    paths.Add(new Path { ChessMove.Create(location, dest, ChessMoveType.KingMove) });
+                    paths.Add(new Path { BoardMove.Create(location, dest, MoveType.KingMove) });
                 }
             }
 

@@ -87,9 +87,9 @@ namespace chess.engine
 
         //TODO: Need an abstraction around MoveType's and Actions, to not be Chess specific
         // so will need some default state (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
-        public void Move(ChessMove move)
+        public void Move(BoardMove move)
         {
-            var action = _boardActionFactory.Create(move.ChessMoveType, BoardState);
+            var action = _boardActionFactory.Create(move.MoveType, BoardState);
 
             action.Execute(move);
 

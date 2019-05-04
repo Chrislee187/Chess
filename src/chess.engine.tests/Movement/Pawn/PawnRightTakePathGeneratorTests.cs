@@ -33,7 +33,7 @@ namespace chess.engine.tests.Movement.Pawn
             var paths = _gen.PathsFrom(pieceLocation, Colours.White).ToList();
 
             var ep = new PathBuilder().From(pieceLocation)
-                .To("C3", ChessMoveType.TakeOnly)
+                .To("C3", MoveType.TakeOnly)
                 .Build();
 
             AssertPathContains(paths, ep, Colours.White);

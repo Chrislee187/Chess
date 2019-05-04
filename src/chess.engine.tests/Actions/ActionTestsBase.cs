@@ -9,8 +9,8 @@ namespace chess.engine.tests.Actions
 {
     public abstract class ActionTestsBase<T> where T : IBoardAction
     {
-        protected readonly ChessMove AnyMove = ChessMove.Create("D2", "D4", ChessMoveType.MoveOnly);
-        protected readonly ChessMove AnyTake = ChessMove.Create("D2", "D5", ChessMoveType.MoveOrTake);
+        protected readonly BoardMove AnyMove = BoardMove.Create("D2", "D4", MoveType.MoveOnly);
+        protected readonly BoardMove AnyTake = BoardMove.Create("D2", "D5", MoveType.MoveOrTake);
 
         protected Mock<IBoardState> StateMock = new Mock<IBoardState>();
         protected Mock<IBoardActionFactory> FactoryMock = new Mock<IBoardActionFactory>();
@@ -28,7 +28,7 @@ namespace chess.engine.tests.Actions
         protected void SetupPieceReturn(BoardLocation at, ChessPieceEntity piece) 
             => StateMock.Setup(m => m.GetItem(at)).Returns(new LocatedItem<ChessPieceEntity>(at, piece, null));
 
-        protected void SetupCreateMockActionForMoveType(ChessMoveType moveType)
+        protected void SetupCreateMockActionForMoveType(MoveType moveType)
             => FactoryMock.Setup(m => m.Create(moveType, It.IsAny<IBoardState>()))
                 .Returns(BoardActionMock.Object);
 
@@ -42,13 +42,13 @@ namespace chess.engine.tests.Actions
         protected void VerifyLocationWasNOTCleared(BoardLocation loc)
             => StateMock.Verify(s => s.Remove(loc), Times.Never);
 
-        protected void VerifyActionWasCreated(ChessMoveType moveType)
+        protected void VerifyActionWasCreated(MoveType moveType)
             => FactoryMock.Verify(m => m.Create(moveType, It.IsAny<IBoardState>()), Times.Once);
 
         protected void VerifyActionWasCreated(DefaultActions action)
             => FactoryMock.Verify(m => m.Create(action, It.IsAny<IBoardState>()), Times.Once);
 
-        protected void VerifyActionWasExecuted(ChessMove move)
+        protected void VerifyActionWasExecuted(BoardMove move)
         => BoardActionMock.Verify(m => m.Execute(move), Times.Once);
 
         protected void VerifyEntityWasRetrieved(BoardLocation loc)

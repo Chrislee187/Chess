@@ -24,7 +24,7 @@ namespace chess.engine.Movement.Knight
             {
                 if (dest != null)
                 {
-                    paths.Add(new Path { ChessMove.Create(location, dest, ChessMoveType.MoveOrTake) });
+                    paths.Add(new Path { BoardMove.Create(location, dest, MoveType.MoveOrTake) });
                 }
             }
 

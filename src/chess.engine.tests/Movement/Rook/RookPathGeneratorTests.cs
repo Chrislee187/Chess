@@ -28,32 +28,32 @@ namespace chess.engine.tests.Movement.Rook
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("E5", ChessMoveType.MoveOrTake)
-                    .To("E6", ChessMoveType.MoveOrTake)
-                    .To("E7", ChessMoveType.MoveOrTake)
-                    .To("E8", ChessMoveType.MoveOrTake)
+                    .To("E5", MoveType.MoveOrTake)
+                    .To("E6", MoveType.MoveOrTake)
+                    .To("E7", MoveType.MoveOrTake)
+                    .To("E8", MoveType.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("E3", ChessMoveType.MoveOrTake)
-                    .To("E2", ChessMoveType.MoveOrTake)
-                    .To("E1", ChessMoveType.MoveOrTake)
+                    .To("E3", MoveType.MoveOrTake)
+                    .To("E2", MoveType.MoveOrTake)
+                    .To("E1", MoveType.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("F4", ChessMoveType.MoveOrTake)
-                    .To("G4", ChessMoveType.MoveOrTake)
-                    .To("H4", ChessMoveType.MoveOrTake)
+                    .To("F4", MoveType.MoveOrTake)
+                    .To("G4", MoveType.MoveOrTake)
+                    .To("H4", MoveType.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("D4", ChessMoveType.MoveOrTake)
-                    .To("C4", ChessMoveType.MoveOrTake)
-                    .To("B4", ChessMoveType.MoveOrTake)
-                    .To("A4", ChessMoveType.MoveOrTake)
+                    .To("D4", MoveType.MoveOrTake)
+                    .To("C4", MoveType.MoveOrTake)
+                    .To("B4", MoveType.MoveOrTake)
+                    .To("A4", MoveType.MoveOrTake)
                     .Build(), Colours.White);
 
         }

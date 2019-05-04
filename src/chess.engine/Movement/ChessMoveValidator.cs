@@ -8,9 +8,9 @@ namespace chess.engine.Movement
 {
     public class ChessPathValidator : IPathValidator
     {
-        private readonly IReadOnlyDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>> _validationFactory;
+        private readonly IReadOnlyDictionary<MoveType, IEnumerable<ChessBoardMovePredicate>> _validationFactory;
 
-        public ChessPathValidator(IReadOnlyDictionary<ChessMoveType, IEnumerable<ChessBoardMovePredicate>> validationFactory)
+        public ChessPathValidator(IReadOnlyDictionary<MoveType, IEnumerable<ChessBoardMovePredicate>> validationFactory)
         {
             _validationFactory = validationFactory;
         }
@@ -20,9 +20,9 @@ namespace chess.engine.Movement
             var validPath = new Path();
             foreach (var move in possiblePath)
             {
-                if (!_validationFactory.TryGetValue(move.ChessMoveType, out var moveTests))
+                if (!_validationFactory.TryGetValue(move.MoveType, out var moveTests))
                 {
-                    throw new ArgumentOutOfRangeException(nameof(move.ChessMoveType), move.ChessMoveType, $"No Move Validator implemented for {move.ChessMoveType}");
+                    throw new ArgumentOutOfRangeException(nameof(move.MoveType), move.MoveType, $"No Move Validator implemented for {move.MoveType}");
                 }
 
                 if (!moveTests.All(t => t(move, boardState)))
@@ -47,7 +47,7 @@ namespace chess.engine.Movement
             return validPath;
         }
 
-        private static bool MoveIsATake(ChessMove move, IBoardState boardState)
+        private static bool MoveIsATake(BoardMove move, IBoardState boardState)
         {
             if (boardState.IsEmpty(move.To)) return false;
 

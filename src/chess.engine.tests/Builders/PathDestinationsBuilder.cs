@@ -9,25 +9,25 @@ namespace chess.engine.tests.Builders
     {
         private readonly BoardLocation _start;
 
-        private readonly List<(BoardLocation, ChessMoveType)> _destinations = new List<(BoardLocation, ChessMoveType)>();
+        private readonly List<(BoardLocation, MoveType)> _destinations = new List<(BoardLocation, MoveType)>();
         public PathDestinationsBuilder(BoardLocation start)
         {
             _start = start;
         }
 
-        public PathDestinationsBuilder To(BoardLocation at, ChessMoveType moveType)
+        public PathDestinationsBuilder To(BoardLocation at, MoveType moveType)
         {
             _destinations.Add((at, moveType));
             return this;
         }
-        public PathDestinationsBuilder To(string at, ChessMoveType moveType = ChessMoveType.MoveOnly)
+        public PathDestinationsBuilder To(string at, MoveType moveType = MoveType.MoveOnly)
         {
             return To(BoardLocation.At(at), moveType);
         }
 
         public PathDestinationsBuilder ToUpdatePiece(string at, ChessPieceName promotionPiece)
         {
-            return To(BoardLocation.At(at), ChessMoveType.UpdatePiece);
+            return To(BoardLocation.At(at), MoveType.UpdatePiece);
         }
 
         public Path Build()
@@ -36,7 +36,7 @@ namespace chess.engine.tests.Builders
 
             foreach (var destination in _destinations)
             {
-                path.Add(ChessMove.Create(_start, destination.Item1, destination.Item2));
+                path.Add(BoardMove.Create(_start, destination.Item1, destination.Item2));
             }
 
             return path;

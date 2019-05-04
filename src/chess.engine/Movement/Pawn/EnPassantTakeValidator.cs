@@ -9,7 +9,7 @@ namespace chess.engine.Movement.Pawn
     public class EnPassantTakeValidator : IMoveValidator
     {
 
-        public bool ValidateMove(ChessMove move, IBoardState boardState)
+        public bool ValidateMove(BoardMove move, IBoardState boardState)
         {
             var normalTakeOk = new DestinationContainsEnemyMoveValidator().ValidateMove(move, boardState);
 

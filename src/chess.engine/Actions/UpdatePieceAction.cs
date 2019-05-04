@@ -1,4 +1,5 @@
 ﻿using chess.engine.Board;
+using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Movement;
 
@@ -10,7 +11,7 @@ namespace chess.engine.Actions
         {
         }
 
-        public override void Execute(ChessMove move)
+        public override void Execute(BoardMove move)
         {
             if (BoardState.IsEmpty(move.From)) return;
 
@@ -23,7 +24,7 @@ namespace chess.engine.Actions
             {
                 BoardState.Remove(move.To);
             }
-            BoardState.PlaceEntity(move.To, ChessPieceEntityFactory.Create(move.PromotionPiece, forPlayer));
+            BoardState.PlaceEntity(move.To, ChessPieceEntityFactory.Create((ChessPieceName)move.UpdateEntityType, forPlayer));
         }
     }
 }

@@ -27,21 +27,21 @@ namespace chess.engine.tests.Movement.Knight
             Assert.That(whitePaths.Count(), Is.EqualTo(8));
 
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("F6", ChessMoveType.MoveOrTake).Build(), Colours.White);
+                new PathBuilder().From("E4").To("F6", MoveType.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("D6", ChessMoveType.MoveOrTake).Build(), Colours.White);
+                new PathBuilder().From("E4").To("D6", MoveType.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("F2", ChessMoveType.MoveOrTake).Build(), Colours.White);
+                new PathBuilder().From("E4").To("F2", MoveType.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("D2", ChessMoveType.MoveOrTake).Build(), Colours.White);
+                new PathBuilder().From("E4").To("D2", MoveType.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("G5", ChessMoveType.MoveOrTake).Build(), Colours.White);
+                new PathBuilder().From("E4").To("G5", MoveType.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("G3", ChessMoveType.MoveOrTake).Build(), Colours.White);
+                new PathBuilder().From("E4").To("G3", MoveType.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("C5", ChessMoveType.MoveOrTake).Build(), Colours.White);
+                new PathBuilder().From("E4").To("C5", MoveType.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("C3", ChessMoveType.MoveOrTake).Build(), Colours.White);
+                new PathBuilder().From("E4").To("C3", MoveType.MoveOrTake).Build(), Colours.White);
         }
     }
 

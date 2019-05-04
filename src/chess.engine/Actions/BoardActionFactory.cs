@@ -7,30 +7,30 @@ namespace chess.engine.Actions
 {
     public interface IBoardActionFactory
     {
-        IBoardAction Create(ChessMoveType moveType, IBoardState boardState);
+        IBoardAction Create(MoveType moveType, IBoardState boardState);
         IBoardAction Create(DefaultActions action, IBoardState boardState);
     }
 
     public class BoardActionFactory : IBoardActionFactory
     {
-        private Dictionary<ChessMoveType, Func<IBoardState, IBoardAction>> _actions;
+        private Dictionary<MoveType, Func<IBoardState, IBoardAction>> _actions;
         private Dictionary<DefaultActions, Func<IBoardState, IBoardAction>> _coreActions;
 
         public BoardActionFactory()
         {
-            _actions = new Dictionary<ChessMoveType, Func<IBoardState, IBoardAction>>
+            _actions = new Dictionary<MoveType, Func<IBoardState, IBoardAction>>
             {
                 // Generic
-                {ChessMoveType.MoveOnly, (s) => new MoveOnlyAction(this, s) },
-                {ChessMoveType.TakeOnly, (s) => new TakeOnlyAction(this, s) },
-                {ChessMoveType.MoveOrTake, (s) => new MoveOrTakeAction(this, s) },
-                {ChessMoveType.UpdatePiece, (s) => new UpdatePieceAction(this, s) },
+                {MoveType.MoveOnly, (s) => new MoveOnlyAction(this, s) },
+                {MoveType.TakeOnly, (s) => new TakeOnlyAction(this, s) },
+                {MoveType.MoveOrTake, (s) => new MoveOrTakeAction(this, s) },
+                {MoveType.UpdatePiece, (s) => new UpdatePieceAction(this, s) },
 
                 // Chess Specific
-                {ChessMoveType.KingMove, (s) => new MoveOrTakeAction(this, s) },
-                {ChessMoveType.CastleQueenSide, (s) => new CastleAction(this, s) },
-                {ChessMoveType.CastleKingSide, (s) => new CastleAction(this, s) },
-                {ChessMoveType.TakeEnPassant, (s) => new EnPassantAction(this, s) }
+                {MoveType.KingMove, (s) => new MoveOrTakeAction(this, s) },
+                {MoveType.CastleQueenSide, (s) => new CastleAction(this, s) },
+                {MoveType.CastleKingSide, (s) => new CastleAction(this, s) },
+                {MoveType.TakeEnPassant, (s) => new EnPassantAction(this, s) }
             };
 
             _coreActions = new Dictionary<DefaultActions, Func<IBoardState, IBoardAction>>
@@ -42,7 +42,7 @@ namespace chess.engine.Actions
             };
         }
 
-        public IBoardAction Create(ChessMoveType moveType, IBoardState boardState)
+        public IBoardAction Create(MoveType moveType, IBoardState boardState)
         {
             if (_actions.ContainsKey(moveType))
             {

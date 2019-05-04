@@ -13,7 +13,7 @@ namespace chess.engine.tests.Movement
         protected Mock<IBoardState> BoardStateMock;
 
         protected void AssertPathContains(IEnumerable<Path> paths, Path path, Colours colour)
-            => Assert.That(paths.Contains(path), $"{path} not found for {colour}, check ChessMoveType!");
+            => Assert.That(paths.Contains(path), $"{path} not found for {colour}, check MoveType!");
 
         protected void SetUp()
         {

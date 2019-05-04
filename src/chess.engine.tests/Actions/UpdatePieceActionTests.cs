@@ -12,7 +12,7 @@ namespace chess.engine.tests.Actions
     public class UpdatePieceActionTests : ActionTestsBase<UpdatePieceAction>
     {
         private const ChessPieceName PromotionPiece = ChessPieceName.Queen;
-        private static readonly ChessMove PawnPromotionMove = new ChessMove(BoardLocation.At("B7"),BoardLocation.At("B8"), PromotionPiece);
+        private static readonly BoardMove PawnPromotionMove = new BoardMove(BoardLocation.At("B7"),BoardLocation.At("B8"), PromotionPiece);
         [SetUp]
         public void Setup()
         {

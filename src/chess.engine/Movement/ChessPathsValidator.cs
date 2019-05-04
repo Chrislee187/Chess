@@ -12,7 +12,7 @@ namespace chess.engine.Movement
     {
         Paths RemoveInvalidMoves(Paths possiblePaths, IBoardState boardState, bool removeMovesThatLeaveKingInCheck);
         Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation);
-        bool DoesMoveLeaveMovingPlayersKingInCheck(ChessMove move, IBoardState boardState);
+        bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move, IBoardState boardState);
     }
     public class ChessPathsValidator : IChessPathsValidator
     {
@@ -82,13 +82,13 @@ namespace chess.engine.Movement
 
             return validPaths;
         }
-        public bool DoesMoveLeaveMovingPlayersKingInCheck(ChessMove move, IBoardState boardState)
+        public bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move, IBoardState boardState)
         {
             var clonedState = (BoardState) boardState.Clone();
 
             // Execute the move directly, we've already validated it on the original board
             var playerColour = clonedState.GetItem(move.From).Item.Player;
-            var action = _actionFactory.Create(move.ChessMoveType, clonedState);
+            var action = _actionFactory.Create(move.MoveType, clonedState);
             action.Execute(move);
 
             var inCheck = clonedState.CurrentGameState(playerColour) != GameState.InProgress;

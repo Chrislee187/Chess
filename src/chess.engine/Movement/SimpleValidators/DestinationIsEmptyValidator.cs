@@ -4,7 +4,7 @@ namespace chess.engine.Movement.SimpleValidators
 {
     public class DestinationIsEmptyValidator : IMoveValidator
     {
-        public bool ValidateMove(ChessMove move, IBoardState boardState)
+        public bool ValidateMove(BoardMove move, IBoardState boardState)
             => boardState.IsEmpty(move.To);
 
     }

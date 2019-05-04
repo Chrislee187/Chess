@@ -5,7 +5,7 @@ namespace chess.engine.Movement.SimpleValidators
 {
     public class DestinationContainsEnemyMoveValidator : IMoveValidator
     {
-        public bool ValidateMove(ChessMove move, IBoardState boardState)
+        public bool ValidateMove(BoardMove move, IBoardState boardState)
         {
             var sourcePiece = boardState.GetItems(move.From).SingleOrDefault();
             Guard.NotNull(sourcePiece);

@@ -10,7 +10,7 @@ namespace chess.engine.Actions
         public TakeOnlyAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
         {
         }
-        public override void Execute(ChessMove move)
+        public override void Execute(BoardMove move)
         {
             BoardState.Remove(move.To);
 

@@ -28,8 +28,8 @@ namespace chess.engine.tests.Movement.Pawn
             Assert.That(whitePaths.Count(), Is.EqualTo(1));
             
             var ep = new PathBuilder().From("A2")
-                .To("A3", ChessMoveType.MoveOnly)
-                .To("A4", ChessMoveType.MoveOnly)
+                .To("A3", MoveType.MoveOnly)
+                .To("A4", MoveType.MoveOnly)
                 .Build();
 
             AssertPathContains(whitePaths, ep, Colours.White);
@@ -43,7 +43,7 @@ namespace chess.engine.tests.Movement.Pawn
             Assert.That(whitePaths.Count(), Is.EqualTo(1));
 
             var ep = new PathBuilder().From(startLocation)
-                .To("A4", ChessMoveType.MoveOnly)
+                .To("A4", MoveType.MoveOnly)
                 .Build();
 
             AssertPathContains(whitePaths, ep, Colours.White);

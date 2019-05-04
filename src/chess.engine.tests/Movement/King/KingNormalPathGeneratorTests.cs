@@ -27,21 +27,21 @@ namespace chess.engine.tests.Movement.King
             Assert.That(whitePaths.Count(), Is.EqualTo(8));
 
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("E3", ChessMoveType.KingMove).Build(), Colours.White);
+                new PathBuilder().From("E2").To("E3", MoveType.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("F3", ChessMoveType.KingMove).Build(), Colours.White);
+                new PathBuilder().From("E2").To("F3", MoveType.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("F2", ChessMoveType.KingMove).Build(), Colours.White);
+                new PathBuilder().From("E2").To("F2", MoveType.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("F1", ChessMoveType.KingMove).Build(), Colours.White);
+                new PathBuilder().From("E2").To("F1", MoveType.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("E1", ChessMoveType.KingMove).Build(), Colours.White);
+                new PathBuilder().From("E2").To("E1", MoveType.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("D1", ChessMoveType.KingMove).Build(), Colours.White);
+                new PathBuilder().From("E2").To("D1", MoveType.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("D2", ChessMoveType.KingMove).Build(), Colours.White);
+                new PathBuilder().From("E2").To("D2", MoveType.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("D3", ChessMoveType.KingMove).Build(), Colours.White);
+                new PathBuilder().From("E2").To("D3", MoveType.KingMove).Build(), Colours.White);
         }
     }
 }

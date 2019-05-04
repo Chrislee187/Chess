@@ -18,10 +18,10 @@ namespace chess.engine.Movement.King
                 if (dest != null)
                 {
                     var side = dest.File > location.File
-                            ? ChessMoveType.CastleKingSide
-                            : ChessMoveType.CastleQueenSide;
+                            ? MoveType.CastleKingSide
+                            : MoveType.CastleQueenSide;
 
-                    paths.Add(new Path { ChessMove.Create(location, dest, side) });
+                    paths.Add(new Path { BoardMove.Create(location, dest, side) });
                 }
             }
 

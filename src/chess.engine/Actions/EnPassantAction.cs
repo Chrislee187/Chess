@@ -10,7 +10,7 @@ namespace chess.engine.Actions
         {
         }
 
-        public override void Execute(ChessMove move)
+        public override void Execute(BoardMove move)
         {
             if (BoardState.IsEmpty(move.From)) return;
 
