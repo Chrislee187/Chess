@@ -2,7 +2,7 @@
 using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Movement.Pawn;
+using chess.engine.Movement.ChessPieces.Pawn;
 using chess.engine.tests.Builders;
 using NUnit.Framework;
 

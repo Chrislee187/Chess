@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Actions;
-using chess.engine.Board;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.tests.Builders;
@@ -13,8 +12,8 @@ namespace chess.engine.tests.Movement
     [TestFixture]
     public class ChessMoveValidatorTests : PathGeneratorTestsBase
     {
-        private Mock<IReadOnlyDictionary<MoveType, IEnumerable<ChessBoardMovePredicate>>> _factoryMock;
-        private IEnumerable<ChessBoardMovePredicate> _moveTests;
+        private Mock<IReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate>>> _factoryMock;
+        private IEnumerable<BoardMovePredicate> _moveTests;
         private readonly IBoardActionFactory _boardActionFactory = new BoardActionFactory();
 
 
@@ -22,9 +21,9 @@ namespace chess.engine.tests.Movement
         public new void SetUp()
         {
             base.SetUp();
-            _factoryMock = new Mock<IReadOnlyDictionary<MoveType, IEnumerable<ChessBoardMovePredicate>>>();
+            _factoryMock = new Mock<IReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate>>>();
 
-            _moveTests = new List<ChessBoardMovePredicate>
+            _moveTests = new List<BoardMovePredicate>
             {
                 (move, state) => true
             };
@@ -50,7 +49,7 @@ namespace chess.engine.tests.Movement
             var validator = new ChessPathValidator(_factoryMock.Object);
             var path = new PathBuilder().From("D2").To("D3").To("D4").To("D5", MoveType.TakeOnly).Build();
 
-            IEnumerable<ChessBoardMovePredicate> failOnD5 = new List<ChessBoardMovePredicate>
+            IEnumerable<BoardMovePredicate> failOnD5 = new List<BoardMovePredicate>
             {
                 (move, state) => !move.To.Equals(BoardLocation.At("D5"))
             };

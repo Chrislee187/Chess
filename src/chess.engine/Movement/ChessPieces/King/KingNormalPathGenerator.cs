@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using chess.engine.Game;
+﻿using chess.engine.Game;
 
-namespace chess.engine.Movement.King
+namespace chess.engine.Movement.ChessPieces.King
 {
     public class KingNormalPathGenerator : IPathGenerator
     {

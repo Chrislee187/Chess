@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using chess.engine.Chess;
+﻿using chess.engine.Chess;
 using chess.engine.Game;
 
-namespace chess.engine.Movement.Pawn
+namespace chess.engine.Movement.ChessPieces.Pawn
 {
     public class PawnLeftTakePathGenerator : IPathGenerator
     {

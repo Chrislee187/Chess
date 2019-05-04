@@ -2,7 +2,7 @@ using System.Linq;
 using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Movement.Pawn;
+using chess.engine.Movement.ChessPieces.Pawn;
 using chess.engine.tests.Builders;
 using NUnit.Framework;
 
@@ -14,7 +14,7 @@ namespace chess.engine.tests.Movement.Pawn
         private PawnNormalAndStartingPathGenerator _gen;
 
         [SetUp]
-        public void SetUp()
+        public new void SetUp()
         {
             _gen = new PawnNormalAndStartingPathGenerator();
         }

@@ -4,7 +4,7 @@ using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement.SimpleValidators;
 
-namespace chess.engine.Movement.Pawn
+namespace chess.engine.Movement.ChessPieces.Pawn
 {
     public class EnPassantTakeValidator : IMoveValidator
     {

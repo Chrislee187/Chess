@@ -2,7 +2,7 @@
 using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Movement.Knight;
+using chess.engine.Movement.ChessPieces.Knight;
 
 namespace chess.engine.Entities
 {

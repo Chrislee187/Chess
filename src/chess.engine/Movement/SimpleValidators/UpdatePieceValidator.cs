@@ -1,13 +1,10 @@
 ﻿using chess.engine.Board;
 using chess.engine.Chess;
-using chess.engine.Game;
-using chess.engine.Movement.SimpleValidators;
 
-namespace chess.engine.Movement.Pawn
+namespace chess.engine.Movement.SimpleValidators
 {
     public class UpdatePieceValidator : IMoveValidator
     {
-
         public bool ValidateMove(BoardMove move, IBoardState boardState)
         {
             var piece = boardState.GetItem(move.From).Item;
