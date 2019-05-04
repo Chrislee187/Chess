@@ -2,13 +2,15 @@
 {
     public enum ChessMoveType
     {
-        MoveOrTake,
-        MoveOnly,
-        TakeOnly,
+        // General moves, not chess specific
+        MoveOrTake = 1, 
+        MoveOnly = 2,
+        TakeOnly = 3,
+        UpdatePiece = 4,
+
         TakeEnPassant,
         KingMove,
         CastleKingSide,
         CastleQueenSide,
-        PawnPromotion
     }
 }

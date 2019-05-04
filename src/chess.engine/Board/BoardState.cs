@@ -9,7 +9,7 @@ using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
-    public class BoardState : ICloneable, IBoardState
+    public class BoardState : IBoardState
 // <ChessPieceEntity>
     {
         private readonly IDictionary<BoardLocation, LocatedItem<ChessPieceEntity>> _items;

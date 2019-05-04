@@ -49,16 +49,16 @@ namespace chess.engine.tests.Movement.Pawn
             Assert.That(whitePaths.Count(), Is.EqualTo(4));
 
             AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
-                .ToPromotion("A8", ChessPieceName.Queen)
+                .ToUpdatePiece("A8", ChessPieceName.Queen)
                 .Build(), Colours.White);
             AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
-                .ToPromotion("A8", ChessPieceName.Rook)
+                .ToUpdatePiece("A8", ChessPieceName.Rook)
                 .Build(), Colours.White);
             AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
-                .ToPromotion("A8", ChessPieceName.Bishop)
+                .ToUpdatePiece("A8", ChessPieceName.Bishop)
                 .Build(), Colours.White);
             AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
-                .ToPromotion("A8", ChessPieceName.Knight)
+                .ToUpdatePiece("A8", ChessPieceName.Knight)
                 .Build(), Colours.White);
         }
     }

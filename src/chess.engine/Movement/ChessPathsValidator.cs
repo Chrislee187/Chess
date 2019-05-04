@@ -84,7 +84,7 @@ namespace chess.engine.Movement
         }
         public bool DoesMoveLeaveMovingPlayersKingInCheck(ChessMove move, IBoardState boardState)
         {
-            var clonedState = (BoardState) (boardState as ICloneable).Clone();
+            var clonedState = (BoardState) boardState.Clone();
 
             // Execute the move directly, we've already validated it on the original board
             var playerColour = clonedState.GetItem(move.From).Item.Player;

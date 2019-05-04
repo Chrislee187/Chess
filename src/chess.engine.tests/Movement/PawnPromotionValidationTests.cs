@@ -34,7 +34,7 @@ namespace chess.engine.tests.Movement
         [Test]
         public void Should_return_true_for_valid_promotion()
         {
-            var validator = new PawnPromotionValidator();
+            var validator = new UpdatePieceValidator();
 
             var promote = ChessMove.CreatePawnPromotion(BoardLocation.At("A7"),BoardLocation.At("A8"), ChessPieceName.Queen);
             Assert.True(validator.ValidateMove(promote, _boardState));

@@ -4,9 +4,9 @@ using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
-    public class PawnPromotionAction : BoardAction
+    public class UpdatePieceAction : BoardAction
     {
-        public PawnPromotionAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
+        public UpdatePieceAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
         {
         }
 

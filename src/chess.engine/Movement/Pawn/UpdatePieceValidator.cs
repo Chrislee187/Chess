@@ -5,7 +5,7 @@ using chess.engine.Movement.SimpleValidators;
 
 namespace chess.engine.Movement.Pawn
 {
-    public class PawnPromotionValidator : IMoveValidator
+    public class UpdatePieceValidator : IMoveValidator
     {
 
         public bool ValidateMove(ChessMove move, IBoardState boardState)

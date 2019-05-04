@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using chess.engine.Board;
 using chess.engine.Game;
 
@@ -8,16 +9,15 @@ namespace chess.engine.Movement.SimpleValidators
     {
         public bool ValidateMove(ChessMove move, IBoardState boardState)
         {
-            var movingPiece = boardState.GetItem(move.From);
-            var enemyColour = movingPiece.Item.Player.Enemy();
-            var enemyLocations = boardState.GetItems(enemyColour).Select(i => i.Location).ToList();
+            var piece = boardState.GetItem(move.From);
+            var enemyColour = piece.Item.Player.Enemy();
+            var enemyLocations = boardState.GetItems(enemyColour).Select(i => i.Location);
 
             var enemyPaths = new Paths();
-            var locatedItems = boardState.GetItems(enemyLocations.ToArray()).ToList();
-            var selectMany = locatedItems.SelectMany(li => li.Paths).ToList();
-            enemyPaths.AddRange(selectMany);
+            var enemyItems = boardState.GetItems(enemyLocations.ToArray());
+            enemyPaths.AddRange(enemyItems.SelectMany(li => li.Paths));
 
-            return !enemyPaths.FlattenMoves().Any(enemyMove=> enemyMove.To.Equals(move.To));
+            return !enemyPaths.ContainsMoveTo(move.To);
 
         }
     }

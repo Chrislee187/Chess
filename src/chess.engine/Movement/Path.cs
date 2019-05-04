@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using chess.engine.Chess;
 using chess.engine.Game;
 
 namespace chess.engine.Movement
@@ -74,5 +75,14 @@ namespace chess.engine.Movement
 
         public bool ContainsMoveTo(BoardLocation location)
             => FlattenMoves().Any(m => m.To.Equals(location));
+
+        public ChessMove FindValidMove(BoardLocation destination, ChessPieceName? promotionPiece)
+        {
+            return FlattenMoves()
+                .SingleOrDefault(mv => mv.To.Equals(destination)
+                                       && (!promotionPiece.HasValue
+                                           || mv.PromotionPiece == promotionPiece.Value)
+                );
+        }
     }
 }

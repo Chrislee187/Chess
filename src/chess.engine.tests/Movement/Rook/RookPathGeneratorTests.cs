@@ -13,7 +13,7 @@ namespace chess.engine.tests.Movement.Rook
         private RookPathGenerator _gen;
 
         [SetUp]
-        public void SetUp()
+        public new void SetUp()
         {
             _gen = new RookPathGenerator();
         }

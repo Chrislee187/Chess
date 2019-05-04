@@ -7,9 +7,9 @@ namespace chess.engine.tests.Builders
 {
     public class PathDestinationsBuilder
     {
-        private BoardLocation _start;
+        private readonly BoardLocation _start;
 
-        private List<(BoardLocation, ChessMoveType)> _destinations = new List<(BoardLocation, ChessMoveType)>();
+        private readonly List<(BoardLocation, ChessMoveType)> _destinations = new List<(BoardLocation, ChessMoveType)>();
         public PathDestinationsBuilder(BoardLocation start)
         {
             _start = start;
@@ -25,9 +25,9 @@ namespace chess.engine.tests.Builders
             return To(BoardLocation.At(at), moveType);
         }
 
-        public PathDestinationsBuilder ToPromotion(string at, ChessPieceName promotionPiece)
+        public PathDestinationsBuilder ToUpdatePiece(string at, ChessPieceName promotionPiece)
         {
-            return To(BoardLocation.At(at), ChessMoveType.PawnPromotion);
+            return To(BoardLocation.At(at), ChessMoveType.UpdatePiece);
         }
 
         public Path Build()

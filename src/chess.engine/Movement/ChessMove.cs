@@ -26,7 +26,7 @@ namespace chess.engine.Movement
 
         public ChessPieceName PromotionPiece { get; }
         public ChessMove(BoardLocation from, BoardLocation to, ChessPieceName promotionPiece) : this(from, to,
-            ChessMoveType.PawnPromotion)
+            ChessMoveType.UpdatePiece)
         {
             PromotionPiece = promotionPiece;
             
@@ -45,6 +45,10 @@ namespace chess.engine.Movement
         {
             return Equals(From, other.From)
                    && Equals(To, other.To)
+//                   && (
+//                       ChessMoveType != ChessMoveType.PawnPromotion 
+//                       || Equals(PromotionPiece, other.PromotionPiece)
+//                       )
                    && ChessMoveType.Equals(other.ChessMoveType);
         }
 

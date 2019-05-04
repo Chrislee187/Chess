@@ -1,10 +1,7 @@
 ﻿# TODOS
 
  * Tests for Check/CheckMate/Stalemate detection
- * BoardState tests
- * CHessGame tests
- * ChessBoardEngine tests
-* Improve readability of Path and Path's usage, extension methods?
+  Improve readability of Path and Path's usage, extension methods?
 * Move history
 	* Enhance enpassant rule to ensure enemy pawn did it's double step the previous turn
 	* Enhance castline move validation to ensure king and castle haven't moved and king doesn't move through check

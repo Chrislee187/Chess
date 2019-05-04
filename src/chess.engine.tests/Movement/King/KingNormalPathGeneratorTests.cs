@@ -13,7 +13,7 @@ namespace chess.engine.tests.Movement.King
         private KingNormalPathGenerator _gen;
 
         [SetUp]
-        public void SetUp()
+        public new void SetUp()
         {
             _gen = new KingNormalPathGenerator();
         }

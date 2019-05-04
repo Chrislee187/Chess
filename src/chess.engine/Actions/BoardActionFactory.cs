@@ -24,12 +24,12 @@ namespace chess.engine.Actions
                 {ChessMoveType.MoveOnly, (s) => new MoveOnlyAction(this, s) },
                 {ChessMoveType.TakeOnly, (s) => new TakeOnlyAction(this, s) },
                 {ChessMoveType.MoveOrTake, (s) => new MoveOrTakeAction(this, s) },
+                {ChessMoveType.UpdatePiece, (s) => new UpdatePieceAction(this, s) },
 
                 // Chess Specific
                 {ChessMoveType.KingMove, (s) => new MoveOrTakeAction(this, s) },
                 {ChessMoveType.CastleQueenSide, (s) => new CastleAction(this, s) },
                 {ChessMoveType.CastleKingSide, (s) => new CastleAction(this, s) },
-                {ChessMoveType.PawnPromotion, (s) => new PawnPromotionAction(this, s) },
                 {ChessMoveType.TakeEnPassant, (s) => new EnPassantAction(this, s) }
             };
 
@@ -38,6 +38,7 @@ namespace chess.engine.Actions
                 {DefaultActions.MoveOnly, (s) => new MoveOnlyAction(this, s) },
                 {DefaultActions.TakeOnly, (s) => new TakeOnlyAction(this, s) },
                 {DefaultActions.MoveOrTake, (s) => new MoveOrTakeAction(this, s) },
+                {DefaultActions.UpdatePiece, (s) => new UpdatePieceAction(this, s) },
             };
         }
 
@@ -64,6 +65,7 @@ namespace chess.engine.Actions
 
     public enum DefaultActions
     {
-        MoveOnly, TakeOnly, MoveOrTake
+        MoveOnly, TakeOnly, MoveOrTake,
+        UpdatePiece
     }
 }

@@ -74,7 +74,6 @@ namespace chess.engine.Chess
                 }
 
             }
-
             var piece = _engine.PieceAt(from);
             var pieceColour = piece.Item.Player;
             if (pieceColour != CurrentPlayer)
@@ -82,13 +81,7 @@ namespace chess.engine.Chess
                 return (null, $"It is not {pieceColour}'s turn.");
             }
 
-            var validMove = piece?
-                .Paths.FlattenMoves()
-                .SingleOrDefault(move => move.To.Equals(to) 
-                     && (!promotionPiece.HasValue 
-                         || move.PromotionPiece == promotionPiece.Value)
-                
-                );
+            var validMove = piece?.Paths.FindValidMove(to, promotionPiece);
 
             if (validMove == null)
             {

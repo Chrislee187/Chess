@@ -13,7 +13,7 @@ namespace chess.engine.tests.Movement.Queen
         private QueenPathGenerator _gen;
 
         [SetUp]
-        public void SetUp()
+        public new void SetUp()
         {
             _gen = new QueenPathGenerator();
         }

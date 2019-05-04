@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class PawnPromotionActionTests : ActionTestsBase<PawnPromotionAction>
+    public class UpdatePieceActionTests : ActionTestsBase<UpdatePieceAction>
     {
         private const ChessPieceName PromotionPiece = ChessPieceName.Queen;
         private static readonly ChessMove PawnPromotionMove = new ChessMove(BoardLocation.At("B7"),BoardLocation.At("B8"), PromotionPiece);
@@ -17,7 +17,7 @@ namespace chess.engine.tests.Actions
         public void Setup()
         {
             base.SetUp();
-            Action = new PawnPromotionAction(FactoryMock.Object, StateMock.Object);
+            Action = new UpdatePieceAction(FactoryMock.Object, StateMock.Object);
         }
 
         [Test]

@@ -13,7 +13,7 @@ namespace chess.engine.tests.Movement.Bishop
         private BishopPathGenerator _gen;
 
         [SetUp]
-        public void SetUp()
+        public new void SetUp()
         {
             _gen = new BishopPathGenerator();
         }
