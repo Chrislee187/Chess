@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Movement.ChessPieces.Bishop;
 
-namespace chess.engine.Entities
+namespace chess.engine.Chess.Entities
 {
     public class BishopEntity : ChessPieceEntity
     {

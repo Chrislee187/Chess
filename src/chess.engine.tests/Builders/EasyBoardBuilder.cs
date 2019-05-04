@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using chess.engine.Chess;
-using chess.engine.Entities;
+using chess.engine.Chess.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
 using chess.engine.Pieces;

@@ -3,7 +3,7 @@ using System.Linq;
 using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Chess;
-using chess.engine.Entities;
+using chess.engine.Chess.Entities;
 using chess.engine.Game;
 
 namespace chess.engine.Movement

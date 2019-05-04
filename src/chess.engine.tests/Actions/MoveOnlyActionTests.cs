@@ -1,5 +1,5 @@
 ﻿using chess.engine.Actions;
-using chess.engine.Entities;
+using chess.engine.Chess.Entities;
 using chess.engine.Game;
 using Moq;
 using NUnit.Framework;

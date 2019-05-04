@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using chess.engine.Chess;
 using chess.engine.Game;
 
-namespace chess.engine.Entities
+namespace chess.engine.Chess.Entities
 {
     public static class ChessPieceEntityFactory
     {

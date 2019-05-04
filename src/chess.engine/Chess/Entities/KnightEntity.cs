@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
-using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.Movement.ChessPieces.Queen;
+using chess.engine.Movement.ChessPieces.Knight;
 
-namespace chess.engine.Entities
+namespace chess.engine.Chess.Entities
 {
-    public class QueenEntity : ChessPieceEntity
+    public class KnightEntity : ChessPieceEntity
     {
-        public QueenEntity(Colours owner) : base(ChessPieceName.Queen, owner)
+        public KnightEntity(Colours owner) : base(ChessPieceName.Knight, owner)
         {
         }
         public override IEnumerable<IPathGenerator> PathGenerators =>
             new List<IPathGenerator>
             {
-                new QueenPathGenerator()
+                new KnightPathGenerator()
             };
+
         public override object Clone()
         {
-            return new QueenEntity(Player);
+            return new KnightEntity(Player);
         }
 
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Board;
-using chess.engine.Entities;
 
 namespace chess.engine.Movement
 {

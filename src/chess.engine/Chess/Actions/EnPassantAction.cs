@@ -1,8 +1,8 @@
-﻿using chess.engine.Board;
-using chess.engine.Game;
+﻿using chess.engine.Actions;
+using chess.engine.Board;
 using chess.engine.Movement;
 
-namespace chess.engine.Actions
+namespace chess.engine.Chess.Actions
 {
     public class EnPassantAction : BoardAction
     {

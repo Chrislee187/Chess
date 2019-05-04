@@ -1,5 +1,5 @@
 ﻿using System;
-using chess.engine.Entities;
+using chess.engine.Chess.Entities;
 using chess.engine.Game;
 
 namespace chess.engine.Chess

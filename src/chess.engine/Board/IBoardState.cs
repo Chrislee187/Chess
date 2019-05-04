@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using chess.engine.Chess;
-using chess.engine.Entities;
+using chess.engine.Chess.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 
