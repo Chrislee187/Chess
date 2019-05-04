@@ -1,4 +1,5 @@
 ﻿using chess.engine.Actions;
+using chess.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
@@ -13,11 +14,11 @@ namespace chess.engine.tests.Actions
         [SetUp]
         public void Setup()
         {
-            StateMock = new Mock<IBoardStateActions>();
+            StateMock = new Mock<IBoardState>();
             FactoryMock = new Mock<IBoardActionFactory>();
             BoardActionMock = new Mock<IBoardAction>();
 
-            Action = new MoveOrTakeAction(StateMock.Object, FactoryMock.Object);
+            Action = new MoveOrTakeAction(FactoryMock.Object, StateMock.Object);
         }
 
         [Test]

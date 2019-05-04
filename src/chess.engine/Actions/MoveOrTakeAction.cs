@@ -1,4 +1,4 @@
-﻿using chess.engine.Game;
+﻿using chess.engine.Board;
 using chess.engine.Movement;
 
 namespace chess.engine.Actions
@@ -6,20 +6,20 @@ namespace chess.engine.Actions
     public class MoveOrTakeAction : BoardAction
     {
 
-        public MoveOrTakeAction(IBoardStateActions state, IBoardActionFactory factory) : base(state, factory)
+        public MoveOrTakeAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
         {
         }
         public override void Execute(ChessMove move)
         {
-            var dest = _state.GetEntity(move.To);
+            var dest = BoardState.GetItem(move.To)?.Item;
 
             if (dest != null)
             {
-                _factory.Create(DefaultActions.TakeOnly, _state).Execute(move);
+                Factory.Create(DefaultActions.TakeOnly, BoardState).Execute(move);
             }
             else
             {
-                _factory.Create(DefaultActions.MoveOnly, _state).Execute(move);
+                Factory.Create(DefaultActions.MoveOnly, BoardState).Execute(move);
             }
 
         }

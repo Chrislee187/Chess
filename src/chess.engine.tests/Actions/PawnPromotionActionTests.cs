@@ -16,7 +16,7 @@ namespace chess.engine.tests.Actions
         public void Setup()
         {
             base.SetUp();
-            Action = new PawnPromotionAction(StateMock.Object, FactoryMock.Object);
+            Action = new PawnPromotionAction(FactoryMock.Object, StateMock.Object);
         }
 
         [Test]

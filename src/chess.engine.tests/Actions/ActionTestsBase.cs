@@ -1,4 +1,5 @@
 ﻿using chess.engine.Actions;
+using chess.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
@@ -11,7 +12,7 @@ namespace chess.engine.tests.Actions
         protected readonly ChessMove AnyMove = ChessMove.Create("D2", "D4", ChessMoveType.MoveOnly);
         protected readonly ChessMove AnyTake = ChessMove.Create("D2", "D5", ChessMoveType.MoveOrTake);
 
-        protected Mock<IBoardStateActions> StateMock = new Mock<IBoardStateActions>();
+        protected Mock<IBoardState> StateMock = new Mock<IBoardState>();
         protected Mock<IBoardActionFactory> FactoryMock = new Mock<IBoardActionFactory>();
         protected Mock<IBoardAction> BoardActionMock = new Mock<IBoardAction>();
 
@@ -19,40 +20,43 @@ namespace chess.engine.tests.Actions
 
         protected void SetUp()
         {
-            StateMock = new Mock<IBoardStateActions>();
+            StateMock = new Mock<IBoardState>();
             FactoryMock = new Mock<IBoardActionFactory>();
             BoardActionMock = new Mock<IBoardAction>();
         }
 
         protected void SetupPieceReturn(BoardLocation at, ChessPieceEntity piece) 
-            => StateMock.Setup(m => m.GetEntity(at)).Returns(piece);
+            => StateMock.Setup(m => m.GetItem(at)).Returns(new LocatedItem<ChessPieceEntity>(at, piece, null));
 
         protected void SetupCreateMockActionForMoveType(ChessMoveType moveType)
-            => FactoryMock.Setup(m => m.Create(moveType, It.IsAny<IBoardStateActions>()))
+            => FactoryMock.Setup(m => m.Create(moveType, It.IsAny<IBoardState>()))
                 .Returns(BoardActionMock.Object);
 
         protected void SetupCreateMockActionForMoveType(DefaultActions action)
-            => FactoryMock.Setup(m => m.Create(action, It.IsAny<IBoardStateActions>()))
+            => FactoryMock.Setup(m => m.Create(action, It.IsAny<IBoardState>()))
                 .Returns(BoardActionMock.Object);
 
         protected void VerifyLocationWasCleared(BoardLocation loc)
-            => StateMock.Verify(s => s.ClearLocation(loc), Times.Once);
+            => StateMock.Verify(s => s.Remove(loc), Times.Once);
 
         protected void VerifyActionWasCreated(ChessMoveType moveType)
-            => FactoryMock.Verify(m => m.Create(moveType, It.IsAny<IBoardStateActions>()), Times.Once);
+            => FactoryMock.Verify(m => m.Create(moveType, It.IsAny<IBoardState>()), Times.Once);
 
         protected void VerifyActionWasCreated(DefaultActions action)
-            => FactoryMock.Verify(m => m.Create(action, It.IsAny<IBoardStateActions>()), Times.Once);
+            => FactoryMock.Verify(m => m.Create(action, It.IsAny<IBoardState>()), Times.Once);
 
         protected void VerifyActionWasExecuted(ChessMove move)
         => BoardActionMock.Verify(m => m.Execute(move), Times.Once);
 
         protected void VerifyEntityWasRetrieved(BoardLocation loc)
-            => StateMock.Verify(m => m.GetEntity(loc), Times.Once);
+            => StateMock.Verify(m => m.GetItem(loc), Times.Once);
 
         protected void VerifyEntityWasPlaced(BoardLocation loc, ChessPieceEntity piece)
-            => StateMock.Verify(m => m.SetEntity(loc, piece), Times.Once);
+            => StateMock.Verify(m => m.PlaceEntity(loc, piece, It.IsAny<bool>()), Times.Once);
         protected void VerifyNewEntityWasPlaced(BoardLocation loc, ChessPieceEntity piece)
-            => StateMock.Verify(m => m.SetEntity(loc, It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Player == piece.Player)), Times.Once);
+            => StateMock.Verify(m => m.PlaceEntity(loc, 
+                It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Player == piece.Player)
+                , It.IsAny<bool>()
+                ), Times.Once);
     }
 }

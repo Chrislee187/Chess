@@ -16,7 +16,7 @@ namespace chess.engine.tests.Actions
         public void Setup()
         {
             base.SetUp();
-            Action = new CastleAction(StateMock.Object, FactoryMock.Object);
+            Action = new CastleAction(FactoryMock.Object, StateMock.Object);
         }
 
         [TestCase(Colours.White, KingSide)]

@@ -1,20 +1,23 @@
-﻿using chess.engine.Movement;
+﻿using chess.engine.Board;
+using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
     public class EnPassantAction : BoardAction
     {
-        public EnPassantAction(IBoardStateActions state, IBoardActionFactory factory) : base(state, factory)
+        public EnPassantAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
         {
         }
 
         public override void Execute(ChessMove move)
         {
-            var piece = _state.GetEntity(move.From);
+            if (BoardState.IsEmpty(move.From)) return;
+
+            var piece = BoardState.GetItem(move.From).Item;
             var passedPieceLoc = move.To.MoveBack(piece.Player);
 
-            _state.ClearLocation(passedPieceLoc);
-            _factory.Create(DefaultActions.MoveOnly, _state).Execute(move);
+            BoardState.Remove(passedPieceLoc);
+            Factory.Create(DefaultActions.MoveOnly, BoardState).Execute(move);
         }
     }
 }

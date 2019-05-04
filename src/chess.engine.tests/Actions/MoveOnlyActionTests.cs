@@ -13,7 +13,7 @@ namespace chess.engine.tests.Actions
         public void Setup()
         {
             base.SetUp();
-            Action = new MoveOnlyAction(StateMock.Object, FactoryMock.Object);
+            Action = new MoveOnlyAction(FactoryMock.Object, StateMock.Object);
         }
 
         [Test]

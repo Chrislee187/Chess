@@ -1,24 +1,29 @@
-﻿using chess.engine.Entities;
+﻿using chess.engine.Board;
+using chess.engine.Entities;
 using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
     public class PawnPromotionAction : BoardAction
     {
-        public PawnPromotionAction(IBoardStateActions state, IBoardActionFactory factory) : base(state, factory)
+        public PawnPromotionAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
         {
         }
 
         public override void Execute(ChessMove move)
         {
-            var forPlayer = _state.GetEntity(move.From).Player;
-            _state.ClearLocation(move.From);
+            if (BoardState.IsEmpty(move.From)) return;
 
-            if (_state.GetEntity(move.To) != null)
+            var piece = BoardState.GetItem(move.From).Item;
+            var forPlayer = piece.Player;
+
+            BoardState.Remove(move.From);
+
+            if (!BoardState.IsEmpty(move.To))
             {
-                _state.ClearLocation(move.To);
+                BoardState.Remove(move.To);
             }
-            _state.SetEntity(move.To, ChessPieceEntityFactory.Create(move.PromotionPiece, forPlayer));
+            BoardState.PlaceEntity(move.To, ChessPieceEntityFactory.Create(move.PromotionPiece, forPlayer));
         }
     }
 }

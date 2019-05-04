@@ -1,4 +1,5 @@
-﻿using chess.engine.Game;
+﻿using chess.engine.Board;
+using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Actions
@@ -6,14 +7,14 @@ namespace chess.engine.Actions
     public class TakeOnlyAction : BoardAction
     {
 
-        public TakeOnlyAction(IBoardStateActions state, IBoardActionFactory factory) : base(state, factory)
+        public TakeOnlyAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
         {
         }
         public override void Execute(ChessMove move)
         {
-            _state.ClearLocation(move.To);
+            BoardState.Remove(move.To);
 
-            _factory.Create(DefaultActions.MoveOnly, _state).Execute(move);
+            Factory.Create(DefaultActions.MoveOnly, BoardState).Execute(move);
         }
     }
 }

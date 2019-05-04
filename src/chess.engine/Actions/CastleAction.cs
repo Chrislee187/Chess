@@ -1,11 +1,12 @@
-﻿using chess.engine.Game;
+﻿using chess.engine.Board;
+using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
     public class CastleAction : BoardAction
     {
-        public CastleAction(IBoardStateActions state, IBoardActionFactory factory) : base(state, factory)
+        public CastleAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
         {
         }
 
@@ -23,7 +24,7 @@ namespace chess.engine.Actions
                 rookMove = new ChessMove(BoardLocation.At($"A{move.From.Rank}"), BoardLocation.At($"D{move.From.Rank}"), ChessMoveType.MoveOnly);
             }
 
-            var moveOnly = _factory.Create(DefaultActions.MoveOnly, _state);
+            var moveOnly = Factory.Create(DefaultActions.MoveOnly, BoardState);
             moveOnly.Execute(kingMove);
             moveOnly.Execute(rookMove);
         }

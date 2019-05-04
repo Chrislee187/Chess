@@ -8,7 +8,7 @@ using chess.engine.Movement;
 namespace chess.engine
 {
 
-    public class ChessBoardEngine : IBoardStateActions
+    public class ChessBoardEngine
     {
         public readonly BoardState BoardState;
         private readonly BoardActionFactory _boardActionFactory;
@@ -88,7 +88,7 @@ namespace chess.engine
         // so will need some default state (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
         public void Move(ChessMove move)
         {
-            var action = _boardActionFactory.Create(move.ChessMoveType, this);
+            var action = _boardActionFactory.Create(move.ChessMoveType, BoardState);
 
             action.Execute(move);
 
@@ -102,15 +102,16 @@ namespace chess.engine
         }
 
         #region Board Actions
-        ChessPieceEntity IBoardStateActions.GetEntity(BoardLocation loc) 
+
+        public ChessPieceEntity GetEntity(BoardLocation loc) 
             => BoardState.IsEmpty(loc) ? null : BoardState.GetItem(loc).Item;
 
-        void IBoardStateActions.SetEntity(BoardLocation loc, ChessPieceEntity entity)
+        public void SetEntity(BoardLocation loc, ChessPieceEntity entity)
         {
             BoardState.PlaceEntity(loc, entity);
         }
 
-        void IBoardStateActions.ClearLocation(BoardLocation loc)
+        public void ClearLocation(BoardLocation loc)
         {
             BoardState.Remove(loc);
         }

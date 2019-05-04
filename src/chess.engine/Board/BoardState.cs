@@ -9,7 +9,7 @@ using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
-    public class BoardState : IBoardStateActions, ICloneable, IBoardState
+    public class BoardState : ICloneable, IBoardState
 // <ChessPieceEntity>
     {
         private readonly IPathValidator _pathValidator;
@@ -234,21 +234,6 @@ namespace chess.engine.Board
         {
             _items.Remove(loc);
         }
-
-        #region Board Actions
-        ChessPieceEntity IBoardStateActions.GetEntity(BoardLocation loc)
-            => IsEmpty(loc) ? null : GetItem(loc).Item;
-
-        void IBoardStateActions.SetEntity(BoardLocation loc, ChessPieceEntity entity)
-        {
-            PlaceEntity(loc, entity);
-        }
-
-        void IBoardStateActions.ClearLocation(BoardLocation loc)
-        {
-            Remove(loc);
-        }
-        #endregion
     }
 
 }

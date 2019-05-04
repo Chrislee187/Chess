@@ -41,7 +41,7 @@ namespace chess.engine.Movement
         })
         {}
 
-        public IEnumerable<ChessBoardMovePredicate> Create(ChessMoveType moveType, IBoardStateActions boardState)
+        public IEnumerable<ChessBoardMovePredicate> Create(ChessMoveType moveType, IBoardState boardState)
         {
             if (ContainsKey(moveType))
             {

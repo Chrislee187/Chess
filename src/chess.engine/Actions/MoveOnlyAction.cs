@@ -1,18 +1,21 @@
-﻿using chess.engine.Movement;
+﻿using chess.engine.Board;
+using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
     public class MoveOnlyAction : BoardAction
     {
-        public MoveOnlyAction(IBoardStateActions state, IBoardActionFactory factory) : base(state, factory)
+        public MoveOnlyAction(IBoardActionFactory factory, IBoardState boardState) : base(factory, boardState)
         {
         }
 
         public override void Execute(ChessMove move)
         {
-            var piece = _state.GetEntity(move.From);
-            _state.ClearLocation(move.From);
-            _state.SetEntity(move.To, piece);
+            if (BoardState.IsEmpty(move.From)) return;
+
+            var piece = BoardState.GetItem(move.From).Item;
+            BoardState.Remove(move.From);
+            BoardState.PlaceEntity(move.To, piece);
         }
     }
 }

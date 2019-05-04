@@ -15,7 +15,7 @@ namespace chess.engine.tests.Actions
         public void Setup()
         {
             base.SetUp();
-            Action = new EnPassantAction(StateMock.Object, FactoryMock.Object);
+            Action = new EnPassantAction(FactoryMock.Object, StateMock.Object);
         }
 
         [Test]
