@@ -9,29 +9,29 @@ namespace chess.engine.tests
         [Test]
         public void PlaceEntity_generateMoves_flag_tests()
         {
-            throw new NotImplementedException();
+            Assert.Inconclusive();
         }
         [Test]
         public void CurrentGameState_tests()
         {
-            throw new NotImplementedException();
+            Assert.Inconclusive();
         }
         [Test]
         public void GetItem_tests()
         {
-            throw new NotImplementedException();
+            Assert.Inconclusive();
         }
 
         [Test]
         public void GeneratePath_tests()
         {
-            throw new NotImplementedException();
+            Assert.Inconclusive();
         }
 
         [Test]
         public void IsEmpty_tests()
         {
-            throw new NotImplementedException();
+            Assert.Inconclusive();
         }
     }
 }

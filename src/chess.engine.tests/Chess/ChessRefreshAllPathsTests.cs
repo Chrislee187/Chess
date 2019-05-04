@@ -64,7 +64,7 @@ namespace chess.engine.tests.Chess
             // Create the MockSequence to validate the call order
             var sequence = new MockSequence();
 
-            // Create the expectations, basically each subsequent Setup() is only used if the previous one was successful
+            // Each subsequent Setup() is only used if the previous one was successful
             // Verify order is unimportant, order here IS.
             boardState.InSequence(sequence).Setup(x
                 => x.GeneratePaths(It.Is<ChessPieceEntity>(cpe => cpe.EntityType != ChessPieceName.King),

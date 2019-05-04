@@ -35,7 +35,8 @@ namespace chess.engine.tests
         [Test]
         public void GameState_some_checks_for_this()
         {
-            throw new NotImplementedException();
+            Assert.Inconclusive();
+
         }
     }
 }

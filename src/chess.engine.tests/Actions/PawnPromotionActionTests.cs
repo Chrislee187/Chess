@@ -3,6 +3,7 @@ using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
+using Moq;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Actions
@@ -30,6 +31,18 @@ namespace chess.engine.tests.Actions
 
             VerifyLocationWasCleared(PawnPromotionMove.From);
             VerifyNewEntityWasPlaced(PawnPromotionMove.To, promotedPiece);
+        }
+
+        [Test]
+        public void Execute_empty_from_does_nothing()
+        {
+            StateMock.Setup(s => s.IsEmpty(It.IsAny<BoardLocation>()))
+                .Returns(true);
+
+            Action.Execute(PawnPromotionMove);
+
+            VerifyEntityWasNOTRetrieved(PawnPromotionMove.From);
+
         }
 
     }

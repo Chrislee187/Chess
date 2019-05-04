@@ -39,6 +39,9 @@ namespace chess.engine.tests.Actions
         protected void VerifyLocationWasCleared(BoardLocation loc)
             => StateMock.Verify(s => s.Remove(loc), Times.Once);
 
+        protected void VerifyLocationWasNOTCleared(BoardLocation loc)
+            => StateMock.Verify(s => s.Remove(loc), Times.Never);
+
         protected void VerifyActionWasCreated(ChessMoveType moveType)
             => FactoryMock.Verify(m => m.Create(moveType, It.IsAny<IBoardState>()), Times.Once);
 
@@ -51,12 +54,20 @@ namespace chess.engine.tests.Actions
         protected void VerifyEntityWasRetrieved(BoardLocation loc)
             => StateMock.Verify(m => m.GetItem(loc), Times.Once);
 
+        protected void VerifyEntityWasNOTRetrieved(BoardLocation loc)
+            => StateMock.Verify(m => m.GetItem(loc), Times.Never);
+
         protected void VerifyEntityWasPlaced(BoardLocation loc, ChessPieceEntity piece)
             => StateMock.Verify(m => m.PlaceEntity(loc, piece, It.IsAny<bool>()), Times.Once);
         protected void VerifyNewEntityWasPlaced(BoardLocation loc, ChessPieceEntity piece)
-            => StateMock.Verify(m => m.PlaceEntity(loc, 
+            => StateMock.Verify(m => m.PlaceEntity(loc,
                 It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Player == piece.Player)
                 , It.IsAny<bool>()
-                ), Times.Once);
+            ), Times.Once);
+        protected void VerifyNewEntityWasNOTPlaced(BoardLocation loc, ChessPieceEntity piece)
+            => StateMock.Verify(m => m.PlaceEntity(loc,
+                It.Is<ChessPieceEntity>(cpe => cpe.EntityType == piece.EntityType && cpe.Player == piece.Player)
+                , It.IsAny<bool>()
+            ), Times.Never);
     }
 }

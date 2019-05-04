@@ -58,10 +58,8 @@ namespace chess.engine.Game
         {
             if (s.Length != 2) throw new ArgumentException($"Invalid BoardLocation {s}");
 
-            int rank;
-            ChessFile file;
-            if (!Enum.TryParse(s[0].ToString().ToUpper(), out file)) throw new ArgumentException($"Invalid BoardLocation {s}");
-            if (!int.TryParse(s[1].ToString(), out rank)) throw new ArgumentException($"Invalid BoardLocation {s}");
+            if (!Enum.TryParse(s[0].ToString().ToUpper(), out ChessFile file)) throw new ArgumentException($"Invalid BoardLocation {s}");
+            if (!int.TryParse(s[1].ToString(), out var rank)) throw new ArgumentException($"Invalid BoardLocation {s}");
 
             return new BoardLocation(file, rank);
         }

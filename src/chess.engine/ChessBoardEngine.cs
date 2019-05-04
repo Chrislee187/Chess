@@ -42,7 +42,8 @@ namespace chess.engine
 
         public void ClearBoard() => BoardState.Clear();
 
-        public ChessBoardEngine AddPiece(ChessPieceEntity create, string startingLocation) => AddPiece(create, BoardLocation.At(startingLocation));
+        public ChessBoardEngine AddPiece(ChessPieceEntity create, string startingLocation) 
+            => AddPiece(create, BoardLocation.At(startingLocation));
         public ChessBoardEngine AddPiece(ChessPieceEntity create, BoardLocation startingLocation)
         {
             BoardState.PlaceEntity(startingLocation, create);
@@ -100,22 +101,6 @@ namespace chess.engine
         {
             _allPathCalculator.RefreshAllPaths(BoardState, true);
         }
-
-        #region Board Actions
-
-        public ChessPieceEntity GetEntity(BoardLocation loc) 
-            => BoardState.IsEmpty(loc) ? null : BoardState.GetItem(loc).Item;
-
-        public void SetEntity(BoardLocation loc, ChessPieceEntity entity)
-        {
-            BoardState.PlaceEntity(loc, entity);
-        }
-
-        public void ClearLocation(BoardLocation loc)
-        {
-            BoardState.Remove(loc);
-        }
-        #endregion
 
         private class DefaultRefreshAllPaths : IRefreshAllPaths
         {

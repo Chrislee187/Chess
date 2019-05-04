@@ -28,6 +28,20 @@ namespace chess.engine.tests.Actions
             VerifyLocationWasCleared(AnyMove.From);
             VerifyEntityWasPlaced(AnyMove.To, piece);
         }
-        
+
+
+
+        [Test]
+        public void Execute_empty_from_does_nothing()
+        {
+            StateMock.Setup(s => s.IsEmpty(It.IsAny<BoardLocation>()))
+                .Returns(true);
+
+            Action.Execute(AnyMove);
+
+            VerifyEntityWasNOTRetrieved(AnyMove.From);
+
+        }
+
     }
 }
