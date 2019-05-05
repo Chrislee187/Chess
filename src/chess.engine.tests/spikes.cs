@@ -25,7 +25,7 @@ namespace chess.engine.tests
 
             var piece = engine.BoardState.GetItem(startLocation);
 
-            Assert.That(piece.Item.EntityType, Is.EqualTo(ChessPieceName.Pawn));
+            Assert.That(piece.Item.Piece, Is.EqualTo(ChessPieceName.Pawn));
 
             var paths = piece.Paths;
             Assert.That(paths.Count(), Is.EqualTo(1));

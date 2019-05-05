@@ -7,14 +7,13 @@ using chess.engine.Movement;
 namespace chess.engine.Actions
 {
     public interface IBoardActionFactory<TEntity> 
-        where TEntity : IBoardEntity
     {
         IBoardAction Create(MoveType moveType, IBoardState<TEntity> boardState);
         IBoardAction Create(DefaultActions action, IBoardState<TEntity> boardState);
     }
 
-    public class BoardActionFactory<TEntity> : IBoardActionFactory<TEntity>
-        where TEntity : class, IBoardEntity
+    public class BoardActionFactory<TEntity> : IBoardActionFactory<TEntity> where TEntity : class, IBoardEntity
+
     {
         private Dictionary<MoveType, Func<IBoardState<TEntity>, IBoardAction>> _actions;
         private Dictionary<DefaultActions, Func<IBoardState<TEntity>, IBoardAction>> _coreActions;

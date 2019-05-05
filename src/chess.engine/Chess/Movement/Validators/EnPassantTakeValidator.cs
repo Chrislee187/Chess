@@ -21,7 +21,7 @@ namespace chess.engine.Chess.Movement.Validators
             if (boardState.IsEmpty(passingPieceLocation)) return false;
             var passingPiece = boardState.GetItems(passingPieceLocation).Single().Item;
             if (passingPiece.Owner.Equals(piece.Owner)) return false;
-            if (!passingPiece.EntityType.Equals(ChessPieceName.Pawn)) return false;
+            if (!passingPiece.Piece.Equals(ChessPieceName.Pawn)) return false;
 
             var enpassantOk = CheckPawnUsedDoubleMove(move.To);
 

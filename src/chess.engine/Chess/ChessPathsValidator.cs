@@ -1,20 +1,13 @@
 ﻿using System.Linq;
 using chess.engine.Actions;
 using chess.engine.Board;
-using chess.engine.Chess.Entities;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Chess
 {
-    public interface IChessPathsValidator<TEntity>
-    {
-        Paths RemoveInvalidMoves(Paths possiblePaths, IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck);
-        Paths GeneratePossiblePaths(TEntity entity, BoardLocation boardLocation);
-        bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move, IBoardState<TEntity> boardState);
-    }
-    public class ChessPathsValidator : IChessPathsValidator<ChessPieceEntity>
+    public class ChessPathsValidator : IPathsValidator<ChessPieceEntity>
     {
         private readonly IPathValidator<ChessPieceEntity> _pathValidator;
         private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory;
@@ -94,9 +87,5 @@ namespace chess.engine.Chess
             var inCheck = clonedState.CurrentGameState(playerColour, playerColour.Enemy()) != GameState.InProgress;
             return inCheck;
         }
-
-
     }
-
-
 }

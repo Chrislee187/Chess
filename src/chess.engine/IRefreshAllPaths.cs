@@ -2,8 +2,8 @@
 
 namespace chess.engine
 {
-    public interface IRefreshAllPaths
+    public interface IRefreshAllPaths<TEntity>
     {
-        void RefreshAllPaths<TEntity>(IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck) where TEntity : IBoardEntity;
+        void RefreshAllPaths(IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck);
     }
 }

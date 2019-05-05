@@ -7,20 +7,20 @@ using chess.engine.Movement;
 
 namespace chess.engine
 {
-
+    // TODO: This almost fully generic, refactor ChessFile references to ints
     public class ChessBoardEngine<TEntity> where TEntity : class, IBoardEntity
     {
         public readonly IBoardState<TEntity> BoardState;
         private readonly BoardActionFactory<TEntity> _boardActionFactory;
 
         private readonly IGameSetup<TEntity> _gameSetup;
-        private readonly IRefreshAllPaths _allPathCalculator;
+        private readonly IRefreshAllPaths<TEntity> _allPathCalculator;
 
-        public ChessBoardEngine(IGameSetup<TEntity> gameSetup, IChessPathsValidator<TEntity> chessPathValidator) : this(gameSetup, chessPathValidator, new DefaultRefreshAllPaths())
+        public ChessBoardEngine(IGameSetup<TEntity> gameSetup, IPathsValidator<TEntity> chessPathValidator) : this(gameSetup, chessPathValidator, new DefaultRefreshAllPaths())
         {
         }
 
-        public ChessBoardEngine(IGameSetup<TEntity> gameSetup, IChessPathsValidator<TEntity> chessPathsValidator, IRefreshAllPaths allPathCalculator)
+        public ChessBoardEngine(IGameSetup<TEntity> gameSetup, IPathsValidator<TEntity> chessPathsValidator, IRefreshAllPaths<TEntity> allPathCalculator)
         {
             _boardActionFactory = new BoardActionFactory<TEntity>();
 
@@ -81,7 +81,7 @@ namespace chess.engine
 
                         pieces[(int)file - 1, rank - 1] = entity == null
                             ? null
-                            : new BoardPiece((Colours)entity.Owner, (ChessPieceName) entity.EntityType);
+                            : new BoardPiece((Colours)entity.Owner,(ChessPieceName) Enum.Parse(typeof(ChessPieceName), entity.EntityName));
                     }
                 }
 
@@ -106,9 +106,9 @@ namespace chess.engine
             _allPathCalculator.RefreshAllPaths(BoardState, true);
         }
 
-        private class DefaultRefreshAllPaths : IRefreshAllPaths
+        private class DefaultRefreshAllPaths : IRefreshAllPaths<TEntity>
         {
-            public void RefreshAllPaths<TEntity>(IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck) where TEntity : IBoardEntity
+            public void RefreshAllPaths(IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck)
             {
                 foreach (var loc in boardState.GetAllItemLocations)
                 {

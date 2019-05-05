@@ -11,8 +11,7 @@ namespace chess.engine.Movement.Validators
         {
             var piece = boardState.GetItem(move.From);
 
-            // TODO: enemy player logic shouldn't be here??? SHould we just force it two player black/white
-            var playerColour = (Colours) piece.Item.Owner;
+            var playerColour = piece.Item.Owner;
             var enemyColour = playerColour.Enemy();
 
             var enemyLocations = boardState.GetItems(enemyColour).Select(i => i.Location);

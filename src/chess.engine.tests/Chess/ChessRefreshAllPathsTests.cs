@@ -67,13 +67,13 @@ namespace chess.engine.tests.Chess
             // Each subsequent Setup() is only used if the previous one was successful
             // Verify order is unimportant, order here IS.
             boardState.InSequence(sequence).Setup(x
-                => x.GeneratePaths(It.Is<ChessPieceEntity>(cpe => cpe.EntityType != ChessPieceName.King),
+                => x.GeneratePaths(It.Is<ChessPieceEntity>(cpe => cpe.Piece != ChessPieceName.King),
                     It.IsAny<BoardLocation>(), It.IsAny<bool>()));
             boardState.InSequence(sequence).Setup(x
-                => x.GeneratePaths(It.Is<ChessPieceEntity>(cpe => cpe.EntityType == ChessPieceName.King),
+                => x.GeneratePaths(It.Is<ChessPieceEntity>(cpe => cpe.Piece == ChessPieceName.King),
                     It.IsAny<BoardLocation>(), It.IsAny<bool>()));
             boardState.InSequence(sequence).Setup(x
-                => x.GeneratePaths(It.Is<ChessPieceEntity>(cpe => cpe.EntityType == ChessPieceName.King),
+                => x.GeneratePaths(It.Is<ChessPieceEntity>(cpe => cpe.Piece == ChessPieceName.King),
                     It.IsAny<BoardLocation>(), It.IsAny<bool>()));
 
             boardState.Setup(bs => bs.GetAllItemLocations)

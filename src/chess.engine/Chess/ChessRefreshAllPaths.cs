@@ -1,16 +1,17 @@
 ﻿using System.Linq;
 using chess.engine.Board;
+using chess.engine.Entities;
 
 namespace chess.engine.Chess
 {
-    public class ChessRefreshAllPaths : IRefreshAllPaths
+    public class ChessRefreshAllPaths : IRefreshAllPaths<ChessPieceEntity>
     {
-        public void RefreshAllPaths<TEntity>(IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck = true) where TEntity : IBoardEntity 
+        public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState, bool removeMovesThatLeaveKingInCheck = true)
         {
             foreach (var loc in boardState.GetAllItemLocations)
             {
                 var piece = boardState.GetItem(loc).Item;
-                if (!piece.EntityType.Equals(ChessPieceName.King))
+                if (piece.Piece != ChessPieceName.King)
                 {
                     boardState.GeneratePaths(piece, loc, removeMovesThatLeaveKingInCheck);
                 }
@@ -22,5 +23,4 @@ namespace chess.engine.Chess
             boardState.GeneratePaths(kings[1].Item, kings[1].Location, removeMovesThatLeaveKingInCheck);
         }
     }
-
 }

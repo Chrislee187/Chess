@@ -27,9 +27,9 @@ namespace chess.engine.Actions
                 BoardState.Remove(move.To);
             }
             // TODO: EntityFactory needs abstracting
-            var chessPieceEntity = ChessPieceEntityFactory.Create((ChessPieceName)move.UpdateEntityType, (Colours) forPlayer) as TEntity;
+            var chessPieceEntity = ChessPieceEntityFactory.Create((ChessPieceName)move.UpdateEntityType, (Colours) forPlayer);
 
-            BoardState.PlaceEntity(move.To, chessPieceEntity);
+            BoardState.PlaceEntity(move.To, chessPieceEntity as TEntity);
         }
     }
 }

@@ -63,15 +63,18 @@ namespace chess.engine.tests.Actions
 
         protected void VerifyEntityWasPlaced(BoardLocation loc, TEntity piece)
             => StateMock.Verify(m => m.PlaceEntity(loc, piece, It.IsAny<bool>()), Times.Once);
-        protected void VerifyNewEntityWasPlaced(BoardLocation loc, IBoardEntity<ChessPieceName> piece)
+        protected void VerifyNewEntityWasPlaced(BoardLocation loc, IBoardEntity piece)
             => StateMock.Verify(m => m.PlaceEntity(loc,
-                It.Is<TEntity>(cpe => cpe.EntityType.Equals(piece.EntityType) && cpe.Owner.Equals(piece.Owner))
+                It.Is<TEntity>(cpe => cpe.EntityName.Equals(piece.EntityName) && cpe.Owner.Equals(piece.Owner))
                 , It.IsAny<bool>()
             ), Times.Once);
-        protected void VerifyNewEntityWasNOTPlaced(BoardLocation loc, IBoardEntity<ChessPieceName> piece)
+        protected void VerifyNewEntityWasNOTPlaced(BoardLocation loc, IBoardEntity piece)
             => StateMock.Verify(m => m.PlaceEntity(loc,
-                It.Is<TEntity>(cpe => cpe.EntityType.Equals(piece.EntityType) && cpe.Owner.Equals(piece.Owner))
+                It.Is<TEntity>(cpe => cpe.EntityName.Equals(piece.EntityName) && cpe.Owner.Equals(piece.Owner))
                 , It.IsAny<bool>()
             ), Times.Never);
+
+        protected void SetupStateIsEmpty(BoardLocation at, bool isEmpty) 
+            => StateMock.Setup(s => s.IsEmpty(It.Is<BoardLocation>(bl => bl.Equals(at)))).Returns(isEmpty);
     }
 }

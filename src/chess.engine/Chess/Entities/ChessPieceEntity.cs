@@ -7,27 +7,22 @@ namespace chess.engine.Entities
 {
     // TODO: Abstract to a generic, PathGens is the the common thing, piece and owner are chess specific
 
-    public abstract class ChessPieceEntity : IBoardEntity<ChessPieceName>
+    public abstract class ChessPieceEntity : IBoardEntity
     {
-        protected ChessPieceEntity(ChessPieceName piece, Colours owner)
+        public ChessPieceName Piece { get; protected set; }
+        protected ChessPieceEntity(string entityName, Colours owner)
         {
-            EntityType = piece;
+            EntityName = entityName;
             Owner = owner;
         }
 
-        public ChessPieceName EntityType { get; }
+        public string EntityName { get; }
 
 
         public Colours Owner { get; }
         public abstract IEnumerable<IPathGenerator> PathGenerators { get; }
 
         public abstract object Clone();
-
-        #region plain IBoardEntity implementation
-        Colours IBoardEntity.Owner => Owner;
-        object IBoardEntity.EntityType => EntityType;
-        IEnumerable<object> IBoardEntity.PathGenerators => PathGenerators;
-        #endregion
 
     }
 }

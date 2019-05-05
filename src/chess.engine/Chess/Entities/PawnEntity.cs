@@ -8,8 +8,9 @@ namespace chess.engine.Chess.Entities
 {
     public class PawnEntity : ChessPieceEntity
     {
-        public PawnEntity(Colours owner) : base(ChessPieceName.Pawn, owner)
+        public PawnEntity(Colours owner) : base(ChessPieceName.Pawn.ToString(), owner)
         {
+            Piece = ChessPieceName.Pawn;
         }
         public override IEnumerable<IPathGenerator> PathGenerators =>
             new List<IPathGenerator>

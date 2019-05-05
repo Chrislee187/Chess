@@ -14,7 +14,7 @@ namespace chess.engine.Chess.Movement.Validators
         public bool ValidateMove(BoardMove move, IBoardState<ChessPieceEntity> boardState)
         {
             var king = boardState.GetItem(move.From).Item;
-            var kingIsValid = king.EntityType.Equals(ChessPieceName.King); // && !king.MoveHistory.Any()
+            var kingIsValid = king.Piece.Equals(ChessPieceName.King); // && !king.MoveHistory.Any()
 
             var rookLoc = move.MoveType == MoveType.CastleKingSide
                 ? BoardLocation.At($"H{move.From.Rank}")
@@ -24,7 +24,7 @@ namespace chess.engine.Chess.Movement.Validators
 
             if (rook == null) return false;
 
-            var rookIsValid = rook.Item.EntityType.Equals(ChessPieceName.Rook)
+            var rookIsValid = rook.Item.Piece.Equals(ChessPieceName.Rook)
                               && rook.Item.Owner == king.Owner; // && !rook.MoveHistory.Any()
 
             var pathBetween = CalcPathBetweenKingAndCastle(move, king);
