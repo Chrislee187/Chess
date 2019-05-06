@@ -1,11 +1,9 @@
 ﻿using chess.engine.Board;
 using chess.engine.Chess;
-using chess.engine.Chess.Movement;
 using chess.engine.Chess.Movement.Validators;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.tests.Builders;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Chess.Movement.Pawn

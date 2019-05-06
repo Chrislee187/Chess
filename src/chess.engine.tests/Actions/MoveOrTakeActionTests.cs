@@ -3,7 +3,6 @@ using chess.engine.Board;
 using chess.engine.Chess.Entities;
 using chess.engine.Entities;
 using chess.engine.Game;
-using chess.engine.Movement;
 using Moq;
 using NUnit.Framework;
 

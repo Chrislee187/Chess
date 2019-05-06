@@ -3,7 +3,6 @@ using System.Linq;
 using chess.engine.Actions;
 using chess.engine.Chess;
 using chess.engine.Game;
-using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
@@ -38,7 +37,7 @@ namespace chess.engine.Board
             => GetItems(loc).SingleOrDefault();
 
         public IEnumerable<LocatedItem<TEntity>> GetItems(params BoardLocation[] locations)
-            => _items.Where(itm => locations.Contains(itm.Key)).Select(kvp => kvp.Value).Cast<LocatedItem<TEntity>>();
+            => _items.Where(itm => locations.Contains(itm.Key)).Select(kvp => kvp.Value);
 
         public IEnumerable<LocatedItem<TEntity>> GetItems(ChessPieceName pieceType)
             => _items.Values.Where(itm => itm.Item.EntityName == pieceType.ToString());
@@ -66,7 +65,7 @@ namespace chess.engine.Board
         // TODO: This should not be here, pull in to something with a simple dependency on the IBoardState interface
         public GameState CurrentGameState(Colours currentPlayer, Colours enemy)
         {
-            var items = GetEnemiesAttackingKing(currentPlayer);
+            var items = GetEnemiesAttackingKing(currentPlayer).ToList();
             if (items.Any())
             {
                 return CheckForCheckMate(currentPlayer, items);
@@ -119,7 +118,7 @@ namespace chess.engine.Board
         public IEnumerable<BoardLocation> LocationsOf(Colours owner, ChessPieceName piece)
         {
             return _items
-                .Where(kvp => kvp.Value.Item.EntityName.Equals(piece)
+                .Where(kvp => kvp.Value.Item.EntityName.Equals(piece.ToString())
                               && kvp.Value.Item.Owner.Equals(owner))
                 .Select(kvp => kvp.Key);
         }
@@ -161,7 +160,7 @@ namespace chess.engine.Board
         
         public IEnumerable<BoardLocation> GetAllMoveDestinations(Colours forPlayer)
         {
-            var friendlyItems = GetItems(forPlayer).Where(i => !i.Item.EntityName.Equals(ChessPieceName.King));
+            var friendlyItems = GetItems(forPlayer).Where(i => !i.Item.EntityName.Equals(ChessPieceName.King.ToString()));
             var friendlyDestinations = friendlyItems.SelectMany(fi => fi.Paths.FlattenMoves()).Select(m => m.To);
             return friendlyDestinations;
         }

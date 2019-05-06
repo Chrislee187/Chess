@@ -5,7 +5,6 @@ using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
-using chess.engine.tests.Builders;
 using NUnit.Framework;
 
 namespace chess.engine.tests
@@ -110,11 +109,11 @@ namespace chess.engine.tests
         }
 
         [Test]
-        public void METHOD()
+        public void Should_play_the_manually_parsed_wiki_gamed()
         {
             var game = new ChessGame();
             var moveIdx = 0;
-            foreach (var move in WikiGameMoves)
+            foreach (var move in ManullyParsedWikiGame)
             {
                 Console.WriteLine($"Move #{++moveIdx}: {move}");
                 var msg = game.Move(move);
@@ -130,7 +129,9 @@ namespace chess.engine.tests
             Console.WriteLine("GAME OVER!");
         }
 
-        private string[] WikiGameMoves = new[]
+        // Manually parsed to co-ordinate notation from
+        // https://en.wikipedia.org/wiki/Portable_Game_Notation
+        private static readonly string[] ManullyParsedWikiGame = new[]
         {
             "e2e4",
             "e7e5",

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using chess.engine.Actions;
+﻿using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Game;
@@ -21,7 +17,7 @@ namespace chess.engine.Chess
          *      see if king is in check
          *
          */
-         private IBoardActionFactory<ChessPieceEntity> _actionFactory = new BoardActionFactory<ChessPieceEntity>();
+         private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory = new BoardActionFactory<ChessPieceEntity>();
 
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
         {

@@ -1,6 +1,14 @@
 ﻿# TODOS
+* Missing tests around check/check mate discovery and handling
+* Missing tests around path refreshing
+* PGN Move support
+	* Manually parsed game from the WIKI page works
+	* Use existing PGNQuery stuff, double check it's suitable
+	* Already have the list of moves to query so just need the parsed text to match against
+	* Need to this to do more comprehensive testing against a larger database of games, 
 * Detailed logging would be nice
 * MOre tests around king handling needed
+* Chessboard serializations (use the easyboardbuilder to drive this out, it should read and write serialized boards) - needed for any WEBAPI stuff
 * Refactor ChessFile out of core board engine, just use ints.
  * Tests for Check/CheckMate/Stalemate detection
   Improve readability of Path and Path's usage, extension methods?
@@ -9,7 +17,6 @@
 	* Enhance castline move validation to ensure king and castle haven't moved and king doesn't move through check
 * Better input error handling, extract out to a proper system with tests
 * Find a test game to play out (one from the angular app?) as a simple integration test.
-* PGN Move support
 * Performance Metrics
 * ChessBoardEngine tests
 * pgn2json to use new engine

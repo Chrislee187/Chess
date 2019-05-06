@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using chess.engine.Game;
+﻿using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Chess.Movement.ChessPieces.Pawn

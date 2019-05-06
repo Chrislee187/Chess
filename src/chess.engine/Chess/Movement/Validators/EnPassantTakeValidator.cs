@@ -24,9 +24,7 @@ namespace chess.engine.Chess.Movement.Validators
             if (passingPiece.Owner.Equals(piece.Owner)) return false;
             if (!passingPiece.Piece.Equals(ChessPieceName.Pawn)) return false;
 
-            var enpassantOk = CheckPawnUsedDoubleMove(move.To);
-
-            return normalTakeOk || enpassantOk;
+            return CheckPawnUsedDoubleMove(move.To);
         }
 
 

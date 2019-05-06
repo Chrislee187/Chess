@@ -1,5 +1,4 @@
-﻿using System;
-using chess.engine.Chess;
+﻿using chess.engine.Chess;
 using chess.engine.Game;
 using NUnit.Framework;
 

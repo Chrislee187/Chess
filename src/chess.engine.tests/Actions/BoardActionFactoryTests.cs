@@ -1,7 +1,6 @@
 ﻿using System;
 using chess.engine.Actions;
 using chess.engine.Entities;
-using chess.engine.Game;
 using chess.engine.Movement;
 using NUnit.Framework;
 

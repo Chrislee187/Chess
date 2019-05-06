@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using chess.engine.Actions;
 using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
@@ -17,7 +16,6 @@ namespace chess.engine.tests.Chess.Movement
     {
         private Mock<IReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate<ChessPieceEntity>>>> _factoryMock;
         private IEnumerable<BoardMovePredicate<ChessPieceEntity>> _moveTests;
-        private readonly IBoardActionFactory<ChessPieceEntity> _boardActionFactory = new BoardActionFactory<ChessPieceEntity>();
 
 
         [SetUp]
