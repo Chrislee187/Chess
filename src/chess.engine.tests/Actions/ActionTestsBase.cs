@@ -11,7 +11,7 @@ namespace chess.engine.tests.Actions
 {
     public abstract class ActionTestsBase<TAction, TEntity> 
         where TAction : IBoardAction 
-        where TEntity : IBoardEntity
+        where TEntity : class, IBoardEntity
     {
         protected readonly BoardMove AnyMove = BoardMove.Create("D2", "D4", MoveType.MoveOnly);
         protected readonly BoardMove AnyTake = BoardMove.Create("D2", "D5", MoveType.MoveOrTake);
@@ -62,17 +62,13 @@ namespace chess.engine.tests.Actions
             => StateMock.Verify(m => m.GetItem(loc), Times.Never);
 
         protected void VerifyEntityWasPlaced(BoardLocation loc, TEntity piece)
-            => StateMock.Verify(m => m.PlaceEntity(loc, piece, It.IsAny<bool>()), Times.Once);
+            => StateMock.Verify(m => m.PlaceEntity(loc, piece), Times.Once);
         protected void VerifyNewEntityWasPlaced(BoardLocation loc, IBoardEntity piece)
             => StateMock.Verify(m => m.PlaceEntity(loc,
-                It.Is<TEntity>(cpe => cpe.EntityName.Equals(piece.EntityName) && cpe.Owner.Equals(piece.Owner))
-                , It.IsAny<bool>()
-            ), Times.Once);
+                It.Is<TEntity>(cpe => cpe.EntityName.Equals(piece.EntityName) && cpe.Owner.Equals(piece.Owner))), Times.Once);
         protected void VerifyNewEntityWasNOTPlaced(BoardLocation loc, IBoardEntity piece)
             => StateMock.Verify(m => m.PlaceEntity(loc,
-                It.Is<TEntity>(cpe => cpe.EntityName.Equals(piece.EntityName) && cpe.Owner.Equals(piece.Owner))
-                , It.IsAny<bool>()
-            ), Times.Never);
+                It.Is<TEntity>(cpe => cpe.EntityName.Equals(piece.EntityName) && cpe.Owner.Equals(piece.Owner))), Times.Never);
 
         protected void SetupStateIsEmpty(BoardLocation at, bool isEmpty) 
             => StateMock.Setup(s => s.IsEmpty(It.Is<BoardLocation>(bl => bl.Equals(at)))).Returns(isEmpty);

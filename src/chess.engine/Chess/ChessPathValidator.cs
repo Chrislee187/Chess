@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Board;
 using chess.engine.Entities;
-using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Chess
@@ -17,7 +16,7 @@ namespace chess.engine.Chess
             _validationFactory = validationFactory;
         }
 
-        public Path ValidatePath(Path possiblePath, IBoardState<ChessPieceEntity> boardState)
+        public Path ValidatePath(IBoardState<ChessPieceEntity> boardState, Path possiblePath)
         {
             var validPath = new Path();
             foreach (var move in possiblePath)
@@ -32,24 +31,15 @@ namespace chess.engine.Chess
                     break;
                 }
 
-                var moveIsATake = MoveIsATake(move, boardState);
+                validPath.Add(move);
 
-                var moveLeavesKingInCheck = boardState.DoesMoveLeaveMovingPlayersKingInCheck(move);
-                // TODO: Does move leave king in check?
-                if (!moveLeavesKingInCheck)
-                {
-                    validPath.Add(move);
-                }
-
-
-                // If move was a take path is blocked so stop here
-                if (moveIsATake) break;
+                if (PathIsBlocked(move, boardState)) break;
             }
 
             return validPath;
         }
 
-        private static bool MoveIsATake(BoardMove move, IBoardState<ChessPieceEntity> boardState)
+        private static bool PathIsBlocked(BoardMove move, IBoardState<ChessPieceEntity> boardState)
         {
             if (boardState.IsEmpty(move.To)) return false;
 

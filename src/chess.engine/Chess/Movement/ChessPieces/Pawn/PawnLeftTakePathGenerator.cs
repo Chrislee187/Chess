@@ -1,4 +1,5 @@
-﻿using chess.engine.Game;
+﻿using System.Diagnostics;
+using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine.Chess.Movement.ChessPieces.Pawn
@@ -9,7 +10,7 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
         {
             var paths = new Paths();
 
-            var takeType = location.Rank == Pieces.Pawn.EnPassantRankFor(forPlayer)
+ var takeType = location.Rank == Pieces.Pawn.EnPassantRankFor(forPlayer)
                 ? MoveType.TakeEnPassant
                 : MoveType.TakeOnly;
 

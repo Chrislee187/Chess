@@ -9,7 +9,7 @@ namespace chess.engine.Actions
         void Execute(BoardMove move);
     }
 
-    public abstract class BoardAction<TEntity> : IBoardAction where TEntity : IBoardEntity
+    public abstract class BoardAction<TEntity> : IBoardAction where TEntity : class, IBoardEntity
     {
         protected readonly IBoardActionFactory<TEntity> Factory;
         protected readonly IBoardState<TEntity> BoardState;

@@ -1,13 +1,12 @@
-﻿using chess.engine.Board;
+﻿using System;
+using chess.engine.Board;
 using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine
 {
-    public interface IPathsValidator<TEntity>
+    public interface IPathsValidator<TEntity> where TEntity : class, ICloneable
     {
-        Paths RemoveInvalidMoves(Paths possiblePaths, IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck);
-        Paths GeneratePossiblePaths(TEntity entity, BoardLocation boardLocation);
-        bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move, IBoardState<TEntity> boardState);
+        Paths GeneratePossiblePaths(IBoardState<TEntity> boardState, TEntity entity, BoardLocation boardLocation);
     }
 }

@@ -4,7 +4,7 @@ using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
-    public class LocatedItem<T> 
+    public class LocatedItem<T> : ICloneable where T : class, ICloneable
     {
         public LocatedItem(BoardLocation location, T item, Paths paths)
         {
@@ -20,6 +20,14 @@ namespace chess.engine.Board
         public void UpdatePaths(Paths paths)
         {
             Paths = paths ?? new Paths();
+        }
+
+        public object Clone()
+        {
+            return new LocatedItem<T>(
+                Location.Clone() as BoardLocation, 
+                Item.Clone() as T, 
+                Paths.Clone() as Paths);
         }
     }
 }

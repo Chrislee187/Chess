@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Board;
 using chess.engine.Entities;
@@ -15,6 +16,7 @@ namespace chess.engine.Chess.Movement.Validators
         {
             var king = boardState.GetItem(move.From).Item;
             var kingIsValid = king.Piece.Equals(ChessPieceName.King); // && !king.MoveHistory.Any()
+            if (!kingIsValid) return false;
 
             var rookLoc = move.MoveType == MoveType.CastleKingSide
                 ? BoardLocation.At($"H{move.From.Rank}")
@@ -26,6 +28,8 @@ namespace chess.engine.Chess.Movement.Validators
 
             var rookIsValid = rook.Item.Piece.Equals(ChessPieceName.Rook)
                               && rook.Item.Owner == king.Owner; // && !rook.MoveHistory.Any()
+
+            if (!rookIsValid) return false;
 
             var pathBetween = CalcPathBetweenKingAndCastle(move, king);
 
@@ -46,17 +50,32 @@ namespace chess.engine.Chess.Movement.Validators
 
         private static List<BoardLocation> CalcPathBetweenKingAndCastle(BoardMove move, ChessPieceEntity king)
         {
+            // TODO: This needs tests
             var pathBetween = new List<BoardLocation>();
+
+            BoardLocation KingSide(Colours c, int i) 
+                => c == Colours.White 
+                    ? move.From.MoveRight(c, i) 
+                    : move.From.MoveLeft(c, i);
+
+            BoardLocation QueenSide(Colours c, int i)
+                => c == Colours.White
+                    ? move.From.MoveLeft(c, i)
+                    : move.From.MoveRight(c, i);
+
+
+            var kingOwner = king.Owner;
+
             if (move.From.File < move.To.File)
             {
-                pathBetween.Add(move.From.MoveRight(king.Owner));
-                pathBetween.Add(move.From.MoveRight(king.Owner, 2));
+                Func<Colours, int, BoardLocation> moveRight = move.From.MoveRight;
+                pathBetween.Add(KingSide(kingOwner, 1));
+                pathBetween.Add(KingSide(kingOwner, 2));
             }
             else
             {
-                pathBetween.Add(move.From.MoveLeft(king.Owner));
-                pathBetween.Add(move.From.MoveLeft(king.Owner, 2));
-                pathBetween.Add(move.From.MoveLeft(king.Owner, 3));
+                pathBetween.Add(QueenSide(kingOwner, 1));
+                pathBetween.Add(QueenSide(kingOwner, 2));
             }
 
             pathBetween.RemoveAll(location => location == null);

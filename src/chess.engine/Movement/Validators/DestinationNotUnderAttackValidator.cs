@@ -5,7 +5,7 @@ using chess.engine.Game;
 namespace chess.engine.Movement.Validators
 {
     public class DestinationNotUnderAttackValidator<TEntity> : IMoveValidator<TEntity> 
-        where TEntity : IBoardEntity
+        where TEntity : class, IBoardEntity
     {
         public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
         {

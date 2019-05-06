@@ -3,7 +3,7 @@ using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
-    public class MoveOnlyAction<TEntity> : BoardAction<TEntity> where TEntity : IBoardEntity
+    public class MoveOnlyAction<TEntity> : BoardAction<TEntity> where TEntity : class, IBoardEntity
     {
         public MoveOnlyAction(IBoardActionFactory<TEntity> factory, IBoardState<TEntity> boardState) : base(factory, boardState)
         {

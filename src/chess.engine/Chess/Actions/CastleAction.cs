@@ -5,7 +5,7 @@ using chess.engine.Movement;
 
 namespace chess.engine.Chess.Actions
 {
-    public class CastleAction<TEntity> : BoardAction<TEntity> where TEntity : IBoardEntity
+    public class CastleAction<TEntity> : BoardAction<TEntity> where TEntity : class, IBoardEntity
     {
         public CastleAction(IBoardActionFactory<TEntity> factory, IBoardState<TEntity> boardState) : base(factory, boardState)
         {

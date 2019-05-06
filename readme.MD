@@ -1,5 +1,6 @@
 ﻿# TODOS
-
+* Detailed logging would be nice
+* MOre tests around king handling needed
 * Refactor ChessFile out of core board engine, just use ints.
  * Tests for Check/CheckMate/Stalemate detection
   Improve readability of Path and Path's usage, extension methods?

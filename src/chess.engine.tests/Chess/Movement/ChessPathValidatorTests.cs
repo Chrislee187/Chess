@@ -41,7 +41,7 @@ namespace chess.engine.tests.Chess.Movement
             var validator = new ChessPathValidator(_factoryMock.Object);
             var path = new PathBuilder().Build();
 
-            validator.ValidatePath(path, BoardStateMock.Object);
+            validator.ValidatePath(BoardStateMock.Object, path);
 
             Assert.That(path.Any());
         }
@@ -62,7 +62,7 @@ namespace chess.engine.tests.Chess.Movement
                     out failOnD5))
                 .Returns(true);
 
-            var validPath = validator.ValidatePath(path, BoardStateMock.Object);
+            var validPath = validator.ValidatePath(BoardStateMock.Object, path);
             
             AssertPathContains(new List<Path>{validPath}, 
                 new PathBuilder().From("D2")
@@ -79,7 +79,7 @@ namespace chess.engine.tests.Chess.Movement
 
             var validator = new ChessPathValidator(_factoryMock.Object);
             var path = new PathBuilder().Build();
-            Assert.That(() => validator.ValidatePath(path, BoardStateMock.Object), 
+            Assert.That(() => validator.ValidatePath(BoardStateMock.Object, path), 
                 Throws.Exception);
         }
     }

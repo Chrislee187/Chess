@@ -1,9 +1,10 @@
-﻿using chess.engine.Board;
+﻿using System;
+using chess.engine.Board;
 
 namespace chess.engine.Movement
 {
-    public interface IPathValidator<TEntity>
+    public interface IPathValidator<TEntity> where TEntity : class, ICloneable
     {
-        Path ValidatePath(Path possiblePath, IBoardState<TEntity> boardState);
+        Path ValidatePath(IBoardState<TEntity> boardState, Path possiblePath);
     }
 }

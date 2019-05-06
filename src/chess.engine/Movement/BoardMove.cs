@@ -1,8 +1,9 @@
-﻿using chess.engine.Game;
+﻿using System;
+using chess.engine.Game;
 
 namespace chess.engine.Movement
 {
-    public class BoardMove
+    public class BoardMove : ICloneable
     {
         public static BoardMove CreateMoveOrTake(BoardLocation from, BoardLocation to) => new BoardMove(@from, to, MoveType.MoveOrTake);
         public static BoardMove CreateMoveOnly(BoardLocation from, BoardLocation to) => new BoardMove(@from, to, MoveType.MoveOnly);
@@ -22,12 +23,19 @@ namespace chess.engine.Movement
         public BoardLocation To { get; }
         public MoveType MoveType { get; }
 
-        public object UpdateEntityType { get; }
+        public object UpdateEntityType { get; private set; }
+        public BoardMove(string from, string to, object updateEntityType) : this(BoardLocation.At(from), BoardLocation.At(to),
+            updateEntityType)
+        { }
         public BoardMove(BoardLocation from, BoardLocation to, object updateEntityType) : this(from, to, MoveType.UpdatePiece)
         {
             UpdateEntityType = updateEntityType;
             
         }
+
+        public BoardMove(string from, string to, MoveType moveType) : this(BoardLocation.At(from), BoardLocation.At(to),
+            moveType)
+        { }
 
         public BoardMove(BoardLocation from, BoardLocation to, MoveType moveType)
         {
@@ -69,6 +77,13 @@ namespace chess.engine.Movement
         public override string ToString()
         {
             return $"{From}{To}{MoveType}";
+        }
+
+        public object Clone()
+        {
+            var boardMove = new BoardMove(From, To, MoveType);
+            boardMove.UpdateEntityType = UpdateEntityType;
+            return boardMove;
         }
 
         #endregion

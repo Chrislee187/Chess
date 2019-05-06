@@ -7,7 +7,11 @@ using chess.engine.Movement;
 
 namespace chess.engine
 {
-    // TODO: This almost fully generic, refactor ChessFile references to ints
+    // TODO: This almost fully generic for any kind of "entity" we want to put on a chess-like board
+    // * refactor ChessFile references to ints
+    // * refactor Player Colours references to ints
+    // * reefactor next player logic to be external
+
     public class ChessBoardEngine<TEntity> where TEntity : class, IBoardEntity
     {
         public readonly IBoardState<TEntity> BoardState;
@@ -20,7 +24,10 @@ namespace chess.engine
         {
         }
 
-        public ChessBoardEngine(IGameSetup<TEntity> gameSetup, IPathsValidator<TEntity> chessPathsValidator, IRefreshAllPaths<TEntity> allPathCalculator)
+        public ChessBoardEngine(
+            IGameSetup<TEntity> gameSetup, 
+            IPathsValidator<TEntity> chessPathsValidator, 
+            IRefreshAllPaths<TEntity> allPathCalculator)
         {
             _boardActionFactory = new BoardActionFactory<TEntity>();
 
@@ -30,14 +37,14 @@ namespace chess.engine
             _gameSetup.SetupPieces(this);
 
             _allPathCalculator = allPathCalculator;
-            RefreshAllPaths();
+            _allPathCalculator.RefreshAllPaths(BoardState);
         }
 
         public void ResetBoard()
         {
             ClearBoard();
             _gameSetup.SetupPieces(this);
-            RefreshAllPaths();
+            _allPathCalculator.RefreshAllPaths(BoardState);
         }
 
         public void ClearBoard() => BoardState.Clear();
@@ -90,29 +97,23 @@ namespace chess.engine
         }
 
         //TODO: Need an abstraction around MoveType's and Actions, to not be Chess specific
-        // so will need some default state (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
+        // so will need some default types (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
         public void Move(BoardMove move)
         {
             var action = _boardActionFactory.Create(move.MoveType, BoardState);
 
             action.Execute(move);
 
-            _allPathCalculator.RefreshAllPaths(BoardState, true);
-
-        }
-
-        private void RefreshAllPaths()
-        {
-            _allPathCalculator.RefreshAllPaths(BoardState, true);
+            _allPathCalculator.RefreshAllPaths(BoardState);
         }
 
         private class DefaultRefreshAllPaths : IRefreshAllPaths<TEntity>
         {
-            public void RefreshAllPaths(IBoardState<TEntity> boardState, bool removeMovesThatLeaveKingInCheck)
+            public void RefreshAllPaths(IBoardState<TEntity> boardState)
             {
                 foreach (var loc in boardState.GetAllItemLocations)
                 {
-                    boardState.GeneratePaths(boardState.GetItem(loc).Item, loc);
+                    boardState.RegeneratePaths(loc);
                 }
             }
         }

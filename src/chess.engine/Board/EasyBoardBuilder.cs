@@ -7,7 +7,7 @@ using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
 
-namespace chess.engine.tests.Builders
+namespace chess.engine.Board
 {
     public class EasyBoardBuilder
     {

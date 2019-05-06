@@ -60,23 +60,23 @@ namespace chess.engine.tests.Movement
         public void Should_find_move_that_leaves_king_in_check()
         {
             var board = new EasyBoardBuilder()
-                .Board("r   k  r" +
+                .Board("    k   " +
                        "        " +
                        "        " +
                        "    p   " +
                        "   PQ   " +
                        "        " +
                        "        " +
-                       "R   K  R"
+                       "    K   "
                 );
             var game = new ChessGame(board.ToGameSetup());
 
-            var validator = new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>()), new BoardActionFactory<ChessPieceEntity>());
+            var blockedPieceLocation = BoardLocation.At("E5");
 
-            var moveOrTake = BoardMove.CreateMoveOrTake(BoardLocation.At("E5"), BoardLocation.At("D4"));
-            var doesMoveLeaveMovingPlayersKingInCheck = validator.DoesMoveLeaveMovingPlayersKingInCheck(moveOrTake, game.BoardState);
+            var blockedPiece = game.BoardState.GetItem(blockedPieceLocation);
 
-            Assert.That(doesMoveLeaveMovingPlayersKingInCheck, Is.True);
+            Assert.False(blockedPiece.Paths.ContainsMoveTo(BoardLocation.At("D4")),
+                $"Pawn at E5 should NOT be able to move D4");
         }
 
     }

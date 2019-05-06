@@ -23,12 +23,6 @@ namespace chess.engine.tests
         }
 
         [Test]
-        public void GeneratePath_tests()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
         public void IsEmpty_tests()
         {
             Assert.Inconclusive();

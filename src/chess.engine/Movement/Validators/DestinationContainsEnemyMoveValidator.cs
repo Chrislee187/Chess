@@ -3,7 +3,7 @@ using chess.engine.Board;
 
 namespace chess.engine.Movement.Validators
 {
-    public class DestinationContainsEnemyMoveValidator<TEntity> : IMoveValidator<TEntity> where TEntity : IBoardEntity
+    public class DestinationContainsEnemyMoveValidator<TEntity> : IMoveValidator<TEntity> where TEntity : class, IBoardEntity
     {
         public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
         {

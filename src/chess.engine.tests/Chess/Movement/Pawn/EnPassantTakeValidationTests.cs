@@ -13,7 +13,8 @@ namespace chess.engine.tests.Chess.Movement.Pawn
     [TestFixture]
     public class EnPassantTakeValidationTests
     {
-        private EasyBoardBuilder _board;
+        private 
+            EasyBoardBuilder _board;
         private IBoardState<ChessPieceEntity> _boardState;
         private EnPassantTakeValidator _validator;
 

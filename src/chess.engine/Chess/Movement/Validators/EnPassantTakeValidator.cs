@@ -13,6 +13,7 @@ namespace chess.engine.Chess.Movement.Validators
         public bool ValidateMove(BoardMove move, IBoardState<ChessPieceEntity> boardState)
         {
             var normalTakeOk = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>().ValidateMove(move, boardState);
+            if (normalTakeOk) return true;
 
             var piece = boardState.GetItems(move.From).Single().Item;
 

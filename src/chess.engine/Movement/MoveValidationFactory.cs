@@ -10,9 +10,9 @@ using chess.engine.Movement.Validators;
 
 namespace chess.engine.Movement
 {
-    public delegate bool BoardMovePredicate<TEntity>(BoardMove move, IBoardState<TEntity> boardState);
+    public delegate bool BoardMovePredicate<TEntity>(BoardMove move, IBoardState<TEntity> boardState) where TEntity : class, ICloneable;
 
-    public class MoveValidationFactory<TEntity> : ReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate<TEntity>>> where TEntity : IBoardEntity
+    public class MoveValidationFactory<TEntity> : ReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate<TEntity>>> where TEntity : class, IBoardEntity
     {
         
         public MoveValidationFactory() : base(new Dictionary<MoveType, IEnumerable<BoardMovePredicate<TEntity>>>
@@ -25,7 +25,7 @@ namespace chess.engine.Movement
 
             // TODO: Chess Move types shouldn't be here
             { MoveType.KingMove, new BoardMovePredicate<TEntity>[] {
-                (move, boardState) => new DestinationIsEmptyValidator<TEntity>().ValidateMove(move, boardState),
+                (move, boardState) => new DestinationIsEmptyOrContainsEnemyValidator<TEntity>().ValidateMove(move, boardState),
                 (move, boardState) => new DestinationNotUnderAttackValidator<TEntity>().ValidateMove(move, boardState)}},
             { MoveType.TakeEnPassant, new BoardMovePredicate<TEntity>[] {(move, boardState) => new EnPassantTakeValidator().ValidateMove(move, (IBoardState<ChessPieceEntity>) boardState) }},
             { MoveType.CastleKingSide, new BoardMovePredicate<TEntity>[] { (move, boardState) => new KingCastleValidator().ValidateMove(move, (IBoardState<ChessPieceEntity>) boardState)  }},

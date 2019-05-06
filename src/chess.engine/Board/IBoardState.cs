@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using chess.engine.Chess;
 using chess.engine.Game;
-using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
     // TODO: Want to make this generic, but so much depends on BoardState
-    public interface IBoardState<TEntity> : ICloneable
+    public interface IBoardState<TEntity> : ICloneable where TEntity : class, ICloneable
     {
-        void PlaceEntity(BoardLocation loc, TEntity entity, bool generateMoves = true);
+        void PlaceEntity(BoardLocation loc, TEntity entity);
         LocatedItem<TEntity> GetItem(BoardLocation loc);
 
         bool IsEmpty(BoardLocation location);
-        bool DoesMoveLeaveMovingPlayersKingInCheck(BoardMove move);
 
         IEnumerable<LocatedItem<TEntity>> GetItems(params BoardLocation[] locations);
         IEnumerable<LocatedItem<TEntity>> GetItems(ChessPieceName pieceType);
@@ -28,9 +26,10 @@ namespace chess.engine.Board
         IEnumerable<BoardLocation> LocationsOf(Colours owner);
         IEnumerable<BoardLocation> GetAllItemLocations { get; }
 
-        void GeneratePaths(TEntity forEntity, BoardLocation at, bool removeMovesThatLeaveKingInCheck = true);
-//        Paths GeneratePossiblePaths(ChessPieceEntity entity, BoardLocation boardLocation);
-        GameState CheckForCheckMate(Colours forPlayer, List<LocatedItem<TEntity>> enemiesAttackingKing);
+        void RegeneratePaths(BoardLocation at);
+
         GameState CurrentGameState(Colours currentPlayer, Colours enemy);
+        void RegeneratePaths(Colours colour);
+        void RegenerateAllPaths();
     }
 }
