@@ -28,7 +28,6 @@ namespace chess.engine.Board
 
         void RegeneratePaths(BoardLocation at);
 
-        GameState CurrentGameState(Colours currentPlayer, Colours enemy);
         void RegeneratePaths(Colours colour);
         void RegenerateAllPaths();
     }

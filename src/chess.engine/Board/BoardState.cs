@@ -62,58 +62,6 @@ namespace chess.engine.Board
             return clonedState;
         }
 
-        // TODO: This should not be here, pull in to something with a simple dependency on the IBoardState interface
-        public GameState CurrentGameState(Colours currentPlayer, Colours enemy)
-        {
-            var items = GetEnemiesAttackingKing(currentPlayer).ToList();
-            if (items.Any())
-            {
-                return CheckForCheckMate(currentPlayer, items);
-            }
-
-            return GameState.InProgress;
-        }
-
-        // TODO: Pull out of board state, probably need some form of ChessGameState component we can passin!
-        private IEnumerable<LocatedItem<TEntity>> GetEnemiesAttackingKing(Colours kingColour)
-        {
-            var king = GetItems(kingColour, ChessPieceName.King).First();
-
-            var locatedItems = GetItems(kingColour.Enemy());
-
-            var enemiesAttackingKing = locatedItems.Where(itm
-                => itm.Paths.ContainsMoveTo(king.Location)).ToList();
-            return enemiesAttackingKing;
-        }
-
-        private GameState CheckForCheckMate(Colours forPlayer, IEnumerable<LocatedItem<TEntity>> enemiesAttackingKing)
-        {
-            // TODO: Pull this out to test
-            var state = GameState.Check;
-            var king = GetItems(forPlayer, ChessPieceName.King).Single();
-            var kingCannotMove = !king.Paths.Any(); // Move validator will ensure we can't move into check
-
-            var friendlyDestinations = GetAllMoveDestinations(forPlayer);
-
-            bool canBlock = enemiesAttackingKing.All(enemy =>
-            {
-                var attackingPath = enemy.Paths
-                    .Single(attackPath => attackPath.Any(p => p.To.Equals(king.Location)));
-
-                // Check if any friendly pieces can move to the path or take the item
-                return friendlyDestinations.Any(fd => fd.Equals(enemy.Location)
-                                                      || attackingPath.Any(move => move.To.Equals(fd))
-                );
-            });
-
-            if (kingCannotMove && !canBlock)
-            {
-                state = GameState.Checkmate;
-            }
-
-            return state;
-        }
-
         // TODO: ChessPieceName, Colours are not generic
         public IEnumerable<BoardLocation> LocationsOf(Colours owner, ChessPieceName piece)
         {
@@ -165,5 +113,4 @@ namespace chess.engine.Board
             return friendlyDestinations;
         }
     }
-
 }

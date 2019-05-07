@@ -26,6 +26,8 @@ namespace chess.engine.Chess
 
         public IBoardState<ChessPieceEntity> BoardState => _engine.BoardState;
 
+        private ChessGameState _chessGameState;
+
         public ChessGame() : this(new ChessBoardSetup())
         { }
 
@@ -34,6 +36,8 @@ namespace chess.engine.Chess
             _engine = new BoardEngine<ChessPieceEntity>(setup, 
                 new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>())),
                 new ChessRefreshAllPaths());
+
+            _chessGameState = new ChessGameState();
 
             CurrentPlayer = whoseTurn;
         }
@@ -55,7 +59,7 @@ namespace chess.engine.Chess
             _engine.Move(validated.move);
 
             CurrentPlayer = NextPlayer();
-            GameState = BoardState.CurrentGameState(CurrentPlayer, CurrentPlayer.Enemy());
+            GameState = _chessGameState.CurrentGameState(BoardState, CurrentPlayer, CurrentPlayer.Enemy());
 
             return GameState == GameState.Check || GameState == GameState.Checkmate 
                 ? GameState.ToString() 
@@ -64,8 +68,6 @@ namespace chess.engine.Chess
 
         private (BoardMove move, string errorMessage) ValidateInput(string input)
         {
-//            if (input == "f1b5") Debugger.Break();
-
             var from = BoardLocation.At(input.Substring(0, 2));
             var to = BoardLocation.At(input.Substring(2, 2));
             ChessPieceName? promotionPiece = null;
