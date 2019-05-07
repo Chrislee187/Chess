@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Entities;
@@ -13,17 +12,12 @@ namespace chess.engine.Chess
     /// not leave the moving pieces king in check. To ascertain this we play out the move on a cloned
     /// copy of the board, regenerate all the moves now available the enemy player, and see if any of those
     /// attack the friendly king
+    ///
+    /// NB. This is hard to test in isolation (as it depends on so much state from the board to work) so there
+    /// are no unit tests, any test that generates a board exercises this code however.
     /// </summary>
     public class ChessRefreshAllPaths : IRefreshAllPaths<ChessPieceEntity>
     {
-        /*
-         * Generate 1st level paths (no check detection)
-         * foreach move
-         *      play move on cloned board
-         *      generate paths with check detection for OPPOSITE side only
-         *      check for in-check
-         *
-         */
          private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory = new BoardActionFactory<ChessPieceEntity>();
          private readonly IChessGameState _chessGameState = new ChessGameState();
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
@@ -32,7 +26,6 @@ namespace chess.engine.Chess
 
             foreach (var loc in boardState.GetAllItemLocations)
             {
-//                if(loc.X == 5 && loc.Y == 8) Debugger.Break();
                 RemovePathsThatContainMovesThatLeaveUsInCheck(boardState, loc);
             }
         }
@@ -52,7 +45,7 @@ namespace chess.engine.Chess
         private Path ValidatePathForDiscoveredCheck(IBoardState<ChessPieceEntity> boardState, Path path)
         {
             var validPath = new Path();
-            var pieceColour = boardState.GetItem(path.First().From).Item.Owner;
+            var pieceColour = boardState.GetItem(path.First().From).Item.Player;
             foreach (var move in path)
             {
                 var inCheck = DoeMoveLeaveUsInCheck(boardState, move, pieceColour);
@@ -69,7 +62,7 @@ namespace chess.engine.Chess
             var action = _actionFactory.Create(move.MoveType, clonedBoardState);
             action.Execute(move);
 
-            clonedBoardState.RegeneratePaths(pieceColour.Enemy());
+            clonedBoardState.RegeneratePaths((int)pieceColour.Enemy());
 
             var inCheck = _chessGameState.CurrentGameState(clonedBoardState, pieceColour)
                           != GameState.InProgress;

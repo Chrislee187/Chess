@@ -6,7 +6,7 @@ using chess.engine.Movement;
 
 namespace chess.engine.Actions
 {
-    public interface IBoardActionFactory<TEntity> where TEntity : class, ICloneable
+    public interface IBoardActionFactory<TEntity> where TEntity : class, IBoardEntity
     {
         IBoardAction Create(MoveType moveType, IBoardState<TEntity> boardState);
         IBoardAction Create(DefaultActions action, IBoardState<TEntity> boardState);

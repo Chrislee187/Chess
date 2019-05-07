@@ -1,9 +1,8 @@
-﻿using System;
-using chess.engine.Board;
+﻿using chess.engine.Board;
 
 namespace chess.engine.Movement
 {
-    public interface IMoveValidator<TEntity> where TEntity : class, ICloneable
+    public interface IMoveValidator<TEntity> where TEntity : class, IBoardEntity
     {
         bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState);
     }

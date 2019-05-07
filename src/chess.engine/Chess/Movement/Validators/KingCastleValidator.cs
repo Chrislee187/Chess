@@ -26,7 +26,7 @@ namespace chess.engine.Chess.Movement.Validators
             if (rook == null) return false;
 
             var rookIsValid = rook.Item.Piece.Equals(ChessPieceName.Rook)
-                              && rook.Item.Owner == king.Owner; // && !rook.MoveHistory.Any()
+                              && rook.Item.Player == king.Player; // && !rook.MoveHistory.Any()
 
             if (!rookIsValid) return false;
 
@@ -63,7 +63,7 @@ namespace chess.engine.Chess.Movement.Validators
                     : move.From.MoveRight(c, i);
 
 
-            var kingOwner = king.Owner;
+            var kingOwner = king.Player;
 
             if (move.From.X < move.To.X)
             {

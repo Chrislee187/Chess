@@ -6,6 +6,7 @@ namespace chess.engine.Movement.Validators
 {
     public class DestinationContainsEnemyMoveValidator<TEntity> : IMoveValidator<TEntity> where TEntity : class, IBoardEntity
     {
+        // TODO: Needs unit test
         public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
         {
             if (boardState.IsEmpty(move.From)) throw new SystemException($"Piece missing at {move.From}");

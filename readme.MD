@@ -1,14 +1,13 @@
 ﻿# TODOS
+* MOre tests around king handling needed
 * Proper README.MD
 	* Design approach, reasoning etc.
-* Missing tests around path refreshing
+* Detailed logging would be nice
 * PGN Move support
 	* Manually parsed game from the WIKI page works
 	* Use existing PGNQuery stuff, double check it's suitable
 	* Already have the list of moves to query so just need the parsed text to match against
 	* Need to this to do more comprehensive testing against a larger database of games, 
-* Detailed logging would be nice
-* MOre tests around king handling needed
 * Chessboard serializations (use the easyboardbuilder to drive this out, it should read and write serialized boards) - needed for any WEBAPI stuff
 * Refactor ChessFile out of core board engine, just use ints.
  * Tests for Check/CheckMate/Stalemate detection

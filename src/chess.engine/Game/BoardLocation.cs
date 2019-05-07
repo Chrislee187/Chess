@@ -3,6 +3,7 @@ using chess.engine.Movement;
 
 namespace chess.engine.Game
 {
+    // TODO: Refactor 'Colours' out of here
     public class BoardLocation : ICloneable
     {
         public int X { get; }

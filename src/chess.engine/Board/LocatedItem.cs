@@ -4,7 +4,7 @@ using chess.engine.Movement;
 
 namespace chess.engine.Board
 {
-    public class LocatedItem<T> : ICloneable where T : class, ICloneable
+    public class LocatedItem<T> : ICloneable where T : class, ICloneable, IBoardEntity
     {
         public LocatedItem(BoardLocation location, T item, Paths paths)
         {

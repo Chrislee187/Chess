@@ -43,9 +43,9 @@ namespace chess.engine.Chess
         {
             if (boardState.IsEmpty(move.To)) return false;
 
-            var movePlayerColour = boardState.GetItem(move.From)?.Item.Owner;
+            var movePlayerColour = boardState.GetItem(move.From)?.Item.Player;
             var takeEntity = boardState.GetItem(move.To)?.Item;
-            var moveIsATake = takeEntity != null && takeEntity.Owner != movePlayerColour;
+            var moveIsATake = takeEntity != null && takeEntity.Player != movePlayerColour;
             return moveIsATake;
         }
     }

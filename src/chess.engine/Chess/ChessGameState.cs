@@ -25,9 +25,9 @@ namespace chess.engine.Chess
         private IEnumerable<LocatedItem<ChessPieceEntity>> GetEnemiesAttackingKing(
             IBoardState<ChessPieceEntity> boardState, Colours kingColour)
         {
-            var king = boardState.GetItems(kingColour, ChessPieceName.King).First();
+            var king = boardState.GetItems((int) kingColour, (int) ChessPieceName.King).First();
 
-            var locatedItems = boardState.GetItems(kingColour.Enemy());
+            var locatedItems = boardState.GetItems((int) kingColour.Enemy());
 
             var enemiesAttackingKing = locatedItems.Where(itm
                 => itm.Paths.ContainsMoveTo(king.Location));
@@ -39,10 +39,10 @@ namespace chess.engine.Chess
         {
             // TODO: Pull this out to test
             var state = GameState.Check;
-            var king = boardState.GetItems(forPlayer, ChessPieceName.King).Single();
+            var king = boardState.GetItems((int)forPlayer, (int)ChessPieceName.King).Single();
             var kingCannotMove = !king.Paths.Any(); // Move validator will ensure we can't move into check
 
-            var friendlyDestinations = boardState.GetAllMoveDestinations(forPlayer);
+            var friendlyDestinations = boardState.GetAllMoveDestinations((int) forPlayer);
 
             var canBlock = enemiesAttackingKing.All(enemy =>
             {

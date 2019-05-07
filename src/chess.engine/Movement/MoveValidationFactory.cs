@@ -8,7 +8,8 @@ using chess.engine.Movement.Validators;
 
 namespace chess.engine.Movement
 {
-    public delegate bool BoardMovePredicate<TEntity>(BoardMove move, IBoardState<TEntity> boardState) where TEntity : class, ICloneable;
+    public delegate bool BoardMovePredicate<TEntity>(BoardMove move, IBoardState<TEntity> boardState) 
+        where TEntity : class, IBoardEntity;
 
     public class MoveValidationFactory<TEntity> : ReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate<TEntity>>> where TEntity : class, IBoardEntity
     {

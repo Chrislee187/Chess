@@ -17,11 +17,11 @@ namespace chess.engine.Chess.Movement.Validators
 
             var piece = boardState.GetItems(move.From).Single().Item;
 
-            var passingPieceLocation = move.To.MoveBack(piece.Owner);
+            var passingPieceLocation = move.To.MoveBack(piece.Player);
 
             if (boardState.IsEmpty(passingPieceLocation)) return false;
             var passingPiece = boardState.GetItems(passingPieceLocation).Single().Item;
-            if (passingPiece.Owner.Equals(piece.Owner)) return false;
+            if (passingPiece.Player.Equals(piece.Player)) return false;
             if (!passingPiece.Piece.Equals(ChessPieceName.Pawn)) return false;
 
             return CheckPawnUsedDoubleMove(move.To);

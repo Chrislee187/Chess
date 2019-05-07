@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using chess.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Game;
@@ -18,11 +17,10 @@ namespace chess.engine.Chess
 
         public Paths GeneratePossiblePaths(IBoardState<ChessPieceEntity> boardState, ChessPieceEntity entity, BoardLocation boardLocation)
         {
-//            if(boardLocation.X == 5 && boardLocation.Y == 8) Debugger.Break();
             var paths = new Paths();
             paths.AddRange(
                 entity.PathGenerators
-                    .SelectMany(pg => pg.PathsFrom(boardLocation, entity.Owner))
+                    .SelectMany(pg => pg.PathsFrom(boardLocation, entity.Player))
             );
 
             return RemoveInvalidMoves(boardState, paths);
@@ -44,6 +42,5 @@ namespace chess.engine.Chess
 
             return validPaths;
         }
-
     }
 }

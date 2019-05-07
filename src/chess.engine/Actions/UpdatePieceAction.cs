@@ -18,7 +18,7 @@ namespace chess.engine.Actions
             if (BoardState.IsEmpty(move.From)) return;
 
             TEntity piece = BoardState.GetItem(move.From).Item;
-            object forPlayer = piece.Owner;
+            int forOwner = piece.Owner;
 
             BoardState.Remove(move.From);
 
@@ -27,7 +27,7 @@ namespace chess.engine.Actions
                 BoardState.Remove(move.To);
             }
             // TODO: EntityFactory needs abstracting
-            var chessPieceEntity = ChessPieceEntityFactory.Create((ChessPieceName)move.UpdateEntityType, (Colours) forPlayer);
+            var chessPieceEntity = ChessPieceEntityFactory.Create((ChessPieceName)move.UpdateEntityType, (Colours)forOwner);
 
             BoardState.PlaceEntity(move.To, chessPieceEntity as TEntity);
         }

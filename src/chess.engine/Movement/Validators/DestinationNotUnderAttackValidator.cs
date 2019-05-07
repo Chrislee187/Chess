@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using chess.engine.Board;
-using chess.engine.Game;
 
 namespace chess.engine.Movement.Validators
 {
@@ -11,10 +10,9 @@ namespace chess.engine.Movement.Validators
         {
             var piece = boardState.GetItem(move.From);
 
-            var playerColour = piece.Item.Owner;
-            var enemyColour = playerColour.Enemy();
+            var owner = piece.Item.Owner;
 
-            var enemyLocations = boardState.GetItems(enemyColour).Select(i => i.Location);
+            var enemyLocations = boardState.GetAllItems().Where(i => i.Item.Owner != owner).Select(i => i.Location);
 
             var enemyPaths = new Paths();
             var enemyItems = boardState.GetItems(enemyLocations.ToArray());

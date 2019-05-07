@@ -101,7 +101,7 @@ namespace spiker
                     {
                         var entity = boardPiece.Item;
                         var piece = entity.Piece == ChessPieceName.Knight ? "N" : entity.Piece.ToString().First().ToString();
-                        sb.Append(entity.Owner == Colours.White ? piece.ToUpper() : piece.ToLower());
+                        sb.Append(entity.Player == Colours.White ? piece.ToUpper() : piece.ToLower());
                     }
                 }
                 sb.Append($" {rank + 1}");

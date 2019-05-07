@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine
@@ -9,8 +8,10 @@ namespace chess.engine
     {
         IEnumerable<IPathGenerator> PathGenerators { get; }
 
-        Colours Owner { get; }
-
         string EntityName { get; }
+
+        int EntityType { get; }
+
+        int Owner { get; }
     }
 }

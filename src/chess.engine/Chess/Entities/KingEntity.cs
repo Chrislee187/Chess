@@ -8,7 +8,7 @@ namespace chess.engine.Chess.Entities
 {
     public class KingEntity : ChessPieceEntity
     {
-        public KingEntity(Colours owner) : base(ChessPieceName.King.ToString(), owner)
+        public KingEntity(Colours player) : base(player, ChessPieceName.King)
         {
             Piece = ChessPieceName.King;
         }
@@ -21,7 +21,7 @@ namespace chess.engine.Chess.Entities
 
         public override object Clone()
         {
-            return new KingEntity(Owner);
+            return new KingEntity(Player);
         }
 
     }

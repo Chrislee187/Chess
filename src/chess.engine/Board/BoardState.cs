@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Actions;
-using chess.engine.Chess;
 using chess.engine.Game;
 
 namespace chess.engine.Board
@@ -39,16 +38,16 @@ namespace chess.engine.Board
         public IEnumerable<LocatedItem<TEntity>> GetItems(params BoardLocation[] locations)
             => _items.Where(itm => locations.Contains(itm.Key)).Select(kvp => kvp.Value);
 
-        public IEnumerable<LocatedItem<TEntity>> GetItems(ChessPieceName pieceType)
-            => _items.Values.Where(itm => itm.Item.EntityName == pieceType.ToString());
-
-        public IEnumerable<LocatedItem<TEntity>> GetItems(Colours owner)
+        public IEnumerable<LocatedItem<TEntity>> GetItems(int owner)
             => _items.Where(itm => itm.Value.Item.Owner.Equals(owner)).Select(kvp => kvp.Value);
 
-        public IEnumerable<LocatedItem<TEntity>> GetItems(Colours owner, ChessPieceName piece) =>
+        public IEnumerable<LocatedItem<TEntity>> GetItems(int owner, int entityType) =>
             _items.Where(itm => itm.Value.Item.Owner.Equals(owner)
-                                && itm.Value.Item.EntityName == piece.ToString()
+                                && itm.Value.Item.EntityType == entityType
             ).Select(kvp => kvp.Value);
+
+        public IEnumerable<LocatedItem<TEntity>> GetAllItems()
+            => _items.Values;
 
         public void Remove(BoardLocation loc) => _items.Remove(loc);
         public void Clear() => _items.Clear();
@@ -60,22 +59,6 @@ namespace chess.engine.Board
             var clonedState = new BoardState<TEntity>(_pathsValidator, _actionFactory, clonedItems);
 
             return clonedState;
-        }
-
-        // TODO: ChessPieceName, Colours are not generic
-        public IEnumerable<BoardLocation> LocationsOf(Colours owner, ChessPieceName piece)
-        {
-            return _items
-                .Where(kvp => kvp.Value.Item.EntityName.Equals(piece.ToString())
-                              && kvp.Value.Item.Owner.Equals(owner))
-                .Select(kvp => kvp.Key);
-        }
-
-        public IEnumerable<BoardLocation> LocationsOf(Colours owner)
-        {
-            return _items
-                .Where(kvp => kvp.Value.Item.Owner.Equals(owner))
-                .Select(kvp => kvp.Key);
         }
 
         public bool IsEmpty(BoardLocation location) => !_items.ContainsKey(location);
@@ -98,17 +81,18 @@ namespace chess.engine.Board
                 RegeneratePaths(loc);
             }
         }
-        public void RegeneratePaths(Colours colour)
+        public void RegeneratePaths(int owner)
         {
-            foreach (var enemyPiece in GetItems(colour))
+            foreach (var enemyPiece in GetItems(owner))
             {
                 RegeneratePaths(enemyPiece.Location);
             }
         }
         
-        public IEnumerable<BoardLocation> GetAllMoveDestinations(Colours forPlayer)
+        public IEnumerable<BoardLocation> GetAllMoveDestinations(int owner)
         {
-            var friendlyItems = GetItems(forPlayer).Where(i => !i.Item.EntityName.Equals(ChessPieceName.King.ToString()));
+            var friendlyItems = GetItems(owner)
+                .Where(i => !i.Item.EntityType.Equals(owner));
             var friendlyDestinations = friendlyItems.SelectMany(fi => fi.Paths.FlattenMoves()).Select(m => m.To);
             return friendlyDestinations;
         }

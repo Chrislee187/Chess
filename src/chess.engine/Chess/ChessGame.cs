@@ -44,6 +44,7 @@ namespace chess.engine.Chess
         
         public string Move(string input)
         {
+            // TODO: Unit test this?
             var validated = ValidateInput(input);
 
             if (!string.IsNullOrEmpty(validated.errorMessage))
@@ -86,7 +87,7 @@ namespace chess.engine.Chess
 
             }
             var piece = _engine.PieceAt(from);
-            var pieceColour = piece.Item.Owner;
+            var pieceColour = piece.Item.Player;
             if (pieceColour != CurrentPlayer)
             {
                 return (null, $"It is not {pieceColour}'s turn.");
@@ -108,7 +109,6 @@ namespace chess.engine.Chess
         
         #region Meta Info
         public static int EndRankFor(Colours colour) => colour == Colours.White ? 8 : 1;
-        public static int EndRankFor(int colour) => EndRankFor((Colours)colour);
         #endregion
     }
 }
