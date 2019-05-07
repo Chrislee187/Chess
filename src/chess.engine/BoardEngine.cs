@@ -3,6 +3,7 @@ using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Game;
 using chess.engine.Movement;
+using Microsoft.Extensions.Logging;
 
 namespace chess.engine
 {
@@ -17,21 +18,28 @@ namespace chess.engine
 
         private readonly IGameSetup<TEntity> _gameSetup;
         private readonly IRefreshAllPaths<TEntity> _allPathCalculator;
+        private ILogger<BoardEngine<TEntity>> _logger;
 
         public int Width { get; private set; } = 8;
         public int Height { get; private set; } = 8;
 
 
 
-        public BoardEngine(IGameSetup<TEntity> gameSetup, IPathsValidator<TEntity> pathsValidator) : this(gameSetup, pathsValidator, new DefaultRefreshAllPaths())
+        public BoardEngine(
+            ILogger<BoardEngine<TEntity>> logger,
+            IGameSetup<TEntity> gameSetup, 
+            IPathsValidator<TEntity> pathsValidator) 
+            : this(logger, gameSetup, pathsValidator, new DefaultRefreshAllPaths())
         {
         }
 
         public BoardEngine(
-            IGameSetup<TEntity> gameSetup, 
-            IPathsValidator<TEntity> pathsValidator, 
+            ILogger<BoardEngine<TEntity>> logger, 
+            IGameSetup<TEntity> gameSetup,
+            IPathsValidator<TEntity> pathsValidator,
             IRefreshAllPaths<TEntity> allPathCalculator)
         {
+            _logger = logger;
             _boardActionFactory = new BoardActionFactory<TEntity>();
 
             BoardState = new BoardState<TEntity>(pathsValidator, _boardActionFactory);

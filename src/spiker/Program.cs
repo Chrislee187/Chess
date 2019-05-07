@@ -6,6 +6,7 @@ using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
+using Microsoft.Extensions.Logging;
 
 namespace spiker
 {
@@ -15,7 +16,9 @@ namespace spiker
         {
             var refreshAllPaths = AppContainer.GetService<IRefreshAllPaths<ChessPieceEntity>>();
             var chessPathsValidator = AppContainer.GetService<IPathsValidator<ChessPieceEntity>>();
-            var game = new ChessGame(refreshAllPaths, chessPathsValidator);
+            var logger = AppContainer.GetService<ILogger<ChessGame>>();
+            var engineProvider = AppContainer.GetService<IBoardEngineProvider<ChessPieceEntity>>();
+            var game = new ChessGame(logger, engineProvider);
 
             var lastResult = "";
 

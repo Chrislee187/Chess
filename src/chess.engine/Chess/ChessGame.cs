@@ -5,6 +5,8 @@ using chess.engine.Chess.Pieces;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
+using Microsoft.Extensions.Logging;
+
 
 namespace chess.engine.Chess
 {
@@ -28,20 +30,24 @@ namespace chess.engine.Chess
         public IBoardState<ChessPieceEntity> BoardState => _engine.BoardState;
 
         private readonly ChessGameState _chessGameState;
+        private ILogger<ChessGame> _logger;
 
-        public ChessGame(IRefreshAllPaths<ChessPieceEntity> chessRefreshAllPaths, 
-            IPathsValidator<ChessPieceEntity> chessPathsValidator) 
-            : this(chessRefreshAllPaths, new ChessBoardSetup(), chessPathsValidator)
+        public ChessGame(
+            ILogger<ChessGame> logger,
+            IBoardEngineProvider<ChessPieceEntity> boardEngineProvider) 
+            : this(logger, boardEngineProvider, new ChessBoardSetup())
         { }
 
-        public ChessGame(IRefreshAllPaths<ChessPieceEntity> chessRefreshAllPaths, 
-            IGameSetup<ChessPieceEntity> setup, 
-            IPathsValidator<ChessPieceEntity> chessPathsValidator,
+        public ChessGame(
+            ILogger<ChessGame> logger, 
+            IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
+            IGameSetup<ChessPieceEntity> setup,
             Colours whoseTurn = Colours.White)
         {
-            _engine = new BoardEngine<ChessPieceEntity>(setup, 
-                chessPathsValidator,
-                chessRefreshAllPaths);
+            _logger = logger;
+            _logger.LogInformation("Initialising new chess game");
+
+            _engine = boardEngineProvider.Provide(setup);
 
             _chessGameState = new ChessGameState();
 

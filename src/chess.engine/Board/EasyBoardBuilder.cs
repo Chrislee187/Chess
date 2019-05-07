@@ -140,7 +140,12 @@ namespace chess.engine.Board
         public IBoardState<ChessPieceEntity> ToBoardState()
         {
             IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
-            return new ChessGame(new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance), ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory))).BoardState;
+            var engineProvider = new ChessBoardEngineProvider(
+                NullLogger<BoardEngine<ChessPieceEntity>>.Instance,
+                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance),
+                new ChessPathsValidator(new ChessPathValidator(validationFactory)));
+
+            return new ChessGame(NullLogger<ChessGame>.Instance, engineProvider, ToGameSetup()).BoardState;
         }
         private class EasyBoardBuilderCustomGameSetup : IGameSetup<ChessPieceEntity>
         {

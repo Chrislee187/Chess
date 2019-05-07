@@ -3,6 +3,7 @@ using chess.engine.Chess;
 using chess.engine.Chess.Movement.ChessPieces.King;
 using chess.engine.Entities;
 using chess.engine.Movement;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Chess.Movement.King
@@ -35,8 +36,7 @@ namespace chess.engine.tests.Chess.Movement.King
                        "   K   R"
                 );
 
-            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
-            var boardState = new ChessGame(new ChessRefreshAllPaths(ChessRefreshAllPathsNullLogger), board.ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory))).BoardState;
+            var boardState = new ChessGame(NullLogger<ChessGame>.Instance,ChessBoardEngineProvider, board.ToGameSetup()).BoardState;
 
             Assert.True(_validator.ValidateMove(_whiteInvalidKingCastle, boardState), "Invalid castle move allowed");
             Assert.True(_validator.ValidateMove(_whiteInvalidQueenCastle, boardState), "Invalid castle move allowed");
@@ -56,7 +56,7 @@ namespace chess.engine.tests.Chess.Movement.King
                 );
 
             IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
-            var boardState = new ChessGame(new ChessRefreshAllPaths(ChessRefreshAllPathsNullLogger), board.ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory))).BoardState;
+            var boardState = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, board.ToGameSetup()).BoardState;
 
             Assert.False(_validator.ValidateMove(_whiteQueenSideCastle, boardState), "Invalid queen side castle move allowed");
             Assert.False(_validator.ValidateMove(_whiteKingSideCastle, boardState), "Invalid king side castle move allowed");
@@ -76,7 +76,7 @@ namespace chess.engine.tests.Chess.Movement.King
                 );
 
             IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
-            var boardState = new ChessGame(new ChessRefreshAllPaths(ChessRefreshAllPathsNullLogger), board.ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory))).BoardState;
+            var boardState = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, board.ToGameSetup()).BoardState;
 
             Assert.False(_validator.ValidateMove(_whiteKingSideCastle, boardState), "Invalid king side castle move allowed");
         }
@@ -95,7 +95,7 @@ namespace chess.engine.tests.Chess.Movement.King
                 );
 
             IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
-            var boardState = new ChessGame(new ChessRefreshAllPaths(ChessRefreshAllPathsNullLogger), board.ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory))).BoardState;
+            var boardState = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, board.ToGameSetup()).BoardState;
 
             Assert.False(_validator.ValidateMove(_whiteKingSideCastle, boardState), "Invalid king side castle move allowed");
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Movement;
@@ -67,6 +68,9 @@ namespace chess.engine
                 ChessPathValidator>();
             services.AddTransient<IPathsValidator<ChessPieceEntity>,
                 ChessPathsValidator>();
+
+            services.AddTransient<IBoardEngineProvider<ChessPieceEntity>,ChessBoardEngineProvider>();
+
         }
     }
 }

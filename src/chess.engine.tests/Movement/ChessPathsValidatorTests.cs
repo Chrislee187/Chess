@@ -4,6 +4,7 @@ using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.tests.Chess.Movement.King;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
@@ -26,7 +27,7 @@ namespace chess.engine.tests.Movement
                        "    K   "
                 );
             IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
-            var game = new ChessGame(new ChessRefreshAllPaths(MockLogger<ChessRefreshAllPaths>()), board.ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory)));
+            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, board.ToGameSetup());
 
             var blockedPieceLocation = BoardLocation.At("E5");
 

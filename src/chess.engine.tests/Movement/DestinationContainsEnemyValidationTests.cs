@@ -4,6 +4,7 @@ using chess.engine.Entities;
 using chess.engine.Movement;
 using chess.engine.Movement.Validators;
 using chess.engine.tests.Chess.Movement.King;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
@@ -28,7 +29,7 @@ namespace chess.engine.tests.Movement
                        "R   K  R"
                 );
             IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
-            var game = new ChessGame(new ChessRefreshAllPaths(MockLogger<ChessRefreshAllPaths>()), _board.ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory)));
+            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider);
             _boardState = game.BoardState;
         }
 
