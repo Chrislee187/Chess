@@ -132,9 +132,9 @@ namespace chess.engine.Board
             return this;
         }
 
-        public IGameSetup<ChessPieceEntity> ToGameSetup()
+        public IBoardSetup<ChessPieceEntity> ToGameSetup()
         {
-            return new EasyBoardBuilderCustomGameSetup(_board);
+            return new EasyBoardBuilderCustomBoardSetup(_board);
         }
 
         public IBoardState<ChessPieceEntity> ToBoardState()
@@ -142,16 +142,18 @@ namespace chess.engine.Board
             IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
             var engineProvider = new ChessBoardEngineProvider(
                 NullLogger<BoardEngine<ChessPieceEntity>>.Instance,
-                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance),
-                new ChessPathsValidator(new ChessPathValidator(validationFactory)));
+                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance, new ChessGameState(NullLogger<ChessGameState>.Instance)),
+                new ChessPathsValidator(
+                    NullLogger<ChessPathValidator>.Instance, 
+                    new ChessPathValidator(NullLogger<ChessPathValidator>.Instance, validationFactory)));
 
             return new ChessGame(NullLogger<ChessGame>.Instance, engineProvider, ToGameSetup()).BoardState;
         }
-        private class EasyBoardBuilderCustomGameSetup : IGameSetup<ChessPieceEntity>
+        private class EasyBoardBuilderCustomBoardSetup : IBoardSetup<ChessPieceEntity>
         {
             private char[,] _board;
 
-            public EasyBoardBuilderCustomGameSetup(char[,] board)
+            public EasyBoardBuilderCustomBoardSetup(char[,] board)
             {
                 _board = board;
             }

@@ -22,7 +22,7 @@ namespace chess.engine.tests
 
             _engineProvider = new ChessBoardEngineProvider(NullLogger<BoardEngine<ChessPieceEntity>>.Instance,
                 _chessRefreshAllPaths,
-                new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>()))
+                new ChessPathsValidator(NullLogger<ChessPathValidator>.Instance, new ChessPathValidator(NullLogger<ChessPathValidator>.Instance, new MoveValidationFactory<ChessPieceEntity>()))
             );
         }
         [Test]
@@ -37,8 +37,8 @@ namespace chess.engine.tests
         {
             var engineProvider = new ChessBoardEngineProvider(
                 NullLogger<BoardEngine<ChessPieceEntity>>.Instance,
-                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance),
-                new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>()))
+                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance, new ChessGameState(NullLogger<ChessGameState>.Instance)),
+                new ChessPathsValidator(NullLogger<ChessPathValidator>.Instance, new ChessPathValidator(NullLogger<ChessPathValidator>.Instance, new MoveValidationFactory<ChessPieceEntity>()))
             );
             var game = new ChessGame(NullLogger<ChessGame>.Instance, engineProvider);
 

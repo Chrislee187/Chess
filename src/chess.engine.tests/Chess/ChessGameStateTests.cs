@@ -4,6 +4,7 @@ using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement.Validators;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Chess
@@ -15,7 +16,7 @@ namespace chess.engine.tests.Chess
         [Test]
         public void Should_find_simple_check_condition()
         {
-            var result = new ChessGameState()
+            var result = new ChessGameState(NullLogger<ChessGameState>.Instance)
                 .CurrentGameState(new EasyBoardBuilder()
                     .Board("R   k   " +
                            "        " +
@@ -42,7 +43,7 @@ namespace chess.engine.tests.Chess
                        "        " +
                        "    K   "
                 ).ToBoardState();
-            var result = new ChessGameState()
+            var result = new ChessGameState(NullLogger<ChessGameState>.Instance)
                 .CurrentGameState(boardState, Colours.Black);
 
             Assert.That(result, Is.EqualTo(GameState.Checkmate));

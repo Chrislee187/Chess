@@ -20,10 +20,10 @@ namespace chess.engine.Chess
             _refreshAllPaths = refreshAllPaths;
             _boardEngineLogger = boardEngineLogger;
         }
-        public BoardEngine<ChessPieceEntity> Provide(IGameSetup<ChessPieceEntity> gameSetup)
+        public BoardEngine<ChessPieceEntity> Provide(IBoardSetup<ChessPieceEntity> boardSetup)
         {
             return new BoardEngine<ChessPieceEntity>(_boardEngineLogger,
-                gameSetup,
+                boardSetup,
                 _chessPathsValidator,
                 _refreshAllPaths);
         }

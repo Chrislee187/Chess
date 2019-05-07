@@ -4,20 +4,27 @@ using System.Linq;
 using chess.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Movement;
+using Microsoft.Extensions.Logging;
 
 namespace chess.engine.Chess
 {
     public class ChessPathValidator : IPathValidator<ChessPieceEntity>
     {
         private readonly IMoveValidationFactory<ChessPieceEntity> _validationFactory;
+        private ILogger<ChessPathValidator> _logger;
 
-        public ChessPathValidator(IMoveValidationFactory<ChessPieceEntity> validationFactory)
+        public ChessPathValidator(
+            ILogger<ChessPathValidator> logger,
+            IMoveValidationFactory<ChessPieceEntity> validationFactory
+            )
         {
+            _logger = logger;
             _validationFactory = validationFactory;
         }
 
         public Path ValidatePath(IBoardState<ChessPieceEntity> boardState, Path possiblePath)
         {
+            _logger.LogDebug($"Validating path: {possiblePath}");
             var validPath = new Path();
             foreach (var move in possiblePath)
             {
@@ -34,6 +41,11 @@ namespace chess.engine.Chess
                 validPath.Add(move);
 
                 if (PathIsBlocked(move, boardState)) break;
+            }
+
+            if (validPath.Any())
+            {
+                _logger.LogDebug($"Path validated as: {validPath}");
             }
 
             return validPath;

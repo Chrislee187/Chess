@@ -1,7 +1,10 @@
 ﻿# TODOS
+* More logging
+* BoardLocation extension method ToCoordNotation()
+* Better input error handling, extract out to a proper system with tests
+* test mechanism to run a game through console app.
 * Proper README.MD
 	* Design approach, reasoning etc.
-* Detailed logging would be nice
 * PGN Move support
 	* Manually parsed game from the WIKI page works
 	* Use existing PGNQuery stuff, double check it's suitable
@@ -12,7 +15,7 @@
 * Move history
 	* Enhance enpassant rule to ensure enemy pawn did it's double step the previous turn
 	* Enhance castline move validation to ensure king and castle haven't moved and king doesn't move through check
-* Better input error handling, extract out to a proper system with tests
+
 * Performance Metrics
 * ChessBoardEngine tests
 * pgn2json to use new engine
@@ -67,3 +70,6 @@ PUT /chess/serializedboard/move
 # FONTS
 * Using chars from default Arial font
 	* ЌќЮюВвЯяЍйРр
+
+
+

@@ -70,6 +70,7 @@ namespace chess.engine
                 ChessPathsValidator>();
 
             services.AddTransient<IBoardEngineProvider<ChessPieceEntity>,ChessBoardEngineProvider>();
+            services.AddTransient<IChessGameState,ChessGameState>();
 
         }
     }

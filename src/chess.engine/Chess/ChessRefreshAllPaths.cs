@@ -5,6 +5,7 @@ using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace chess.engine.Chess
 {
@@ -22,22 +23,30 @@ namespace chess.engine.Chess
         private readonly ILogger _logger;
 
         private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory = new BoardActionFactory<ChessPieceEntity>();
-        private readonly IChessGameState _chessGameState = new ChessGameState();
+        // TODO: Sort of logger
+        private readonly IChessGameState _chessGameState;
 
-        public ChessRefreshAllPaths(ILogger<ChessRefreshAllPaths> logger)
+        public ChessRefreshAllPaths(
+            ILogger<ChessRefreshAllPaths> logger,
+                IChessGameState chessGameState
+            )
         {
             _logger = logger;
+            _chessGameState = chessGameState;
         }
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
         {
-            _logger.LogInformation("Beginning all path refresh process...");
+            _logger.LogDebug("Beginning RefreshAllPaths process...");
             boardState.RegenerateAllPaths();
 
-            foreach (var loc in boardState.GetAllItemLocations)
+            var boardStateGetAllItemLocations = boardState.GetAllItemLocations.ToList();
+            
+            foreach (var loc in boardStateGetAllItemLocations)
             {
                 RemovePathsThatContainMovesThatLeaveUsInCheck(boardState, loc);
             }
-            _logger.LogInformation("all path refresh finished...");
+
+            _logger.LogDebug($"RefreshAllPaths process finished... {boardStateGetAllItemLocations.Count()} paths refreshed");
         }
 
         private void RemovePathsThatContainMovesThatLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardLocation loc)

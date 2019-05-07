@@ -14,8 +14,6 @@ namespace spiker
     {
         static void Main(string[] args)
         {
-            var refreshAllPaths = AppContainer.GetService<IRefreshAllPaths<ChessPieceEntity>>();
-            var chessPathsValidator = AppContainer.GetService<IPathsValidator<ChessPieceEntity>>();
             var logger = AppContainer.GetService<ILogger<ChessGame>>();
             var engineProvider = AppContainer.GetService<IBoardEngineProvider<ChessPieceEntity>>();
             var game = new ChessGame(logger, engineProvider);

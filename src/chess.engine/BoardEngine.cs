@@ -16,7 +16,7 @@ namespace chess.engine
         public readonly IBoardState<TEntity> BoardState;
         private readonly BoardActionFactory<TEntity> _boardActionFactory;
 
-        private readonly IGameSetup<TEntity> _gameSetup;
+        private readonly IBoardSetup<TEntity> _boardSetup;
         private readonly IRefreshAllPaths<TEntity> _allPathCalculator;
         private ILogger<BoardEngine<TEntity>> _logger;
 
@@ -27,15 +27,15 @@ namespace chess.engine
 
         public BoardEngine(
             ILogger<BoardEngine<TEntity>> logger,
-            IGameSetup<TEntity> gameSetup, 
+            IBoardSetup<TEntity> boardSetup, 
             IPathsValidator<TEntity> pathsValidator) 
-            : this(logger, gameSetup, pathsValidator, new DefaultRefreshAllPaths())
+            : this(logger, boardSetup, pathsValidator, new DefaultRefreshAllPaths())
         {
         }
 
         public BoardEngine(
             ILogger<BoardEngine<TEntity>> logger, 
-            IGameSetup<TEntity> gameSetup,
+            IBoardSetup<TEntity> boardSetup,
             IPathsValidator<TEntity> pathsValidator,
             IRefreshAllPaths<TEntity> allPathCalculator)
         {
@@ -44,8 +44,8 @@ namespace chess.engine
 
             BoardState = new BoardState<TEntity>(pathsValidator, _boardActionFactory);
 
-            _gameSetup = gameSetup;
-            _gameSetup.SetupPieces(this);
+            _boardSetup = boardSetup;
+            _boardSetup.SetupPieces(this);
 
             _allPathCalculator = allPathCalculator;
             _allPathCalculator.RefreshAllPaths(BoardState);
@@ -54,7 +54,7 @@ namespace chess.engine
         public void ResetBoard()
         {
             ClearBoard();
-            _gameSetup.SetupPieces(this);
+            _boardSetup.SetupPieces(this);
             _allPathCalculator.RefreshAllPaths(BoardState);
         }
 

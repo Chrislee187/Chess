@@ -20,16 +20,22 @@ namespace chess.engine.tests
         {
             _chessBoardEngineProvider = new ChessBoardEngineProvider(
                 NullLogger<BoardEngine<ChessPieceEntity>>.Instance,
-                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance),
-                new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>())));
+                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance,
+                    new ChessGameState(NullLogger<ChessGameState>.Instance)),
+                new ChessPathsValidator(NullLogger<ChessPathValidator>.Instance,
+                    new ChessPathValidator(NullLogger<ChessPathValidator>.Instance,
+                        new MoveValidationFactory<ChessPieceEntity>())));
         }
         [Test]
         public void Should()
         {
-            var engine = new BoardEngine<ChessPieceEntity>(NullLogger<BoardEngine<ChessPieceEntity>>.Instance, 
-                new ChessBoardSetup(), 
-                new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>())),
-                    new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance));
+            var engine = new BoardEngine<ChessPieceEntity>(NullLogger<BoardEngine<ChessPieceEntity>>.Instance,
+                new ChessBoardSetup(),
+                new ChessPathsValidator(NullLogger<ChessPathValidator>.Instance,
+                    new ChessPathValidator(NullLogger<ChessPathValidator>.Instance,
+                        new MoveValidationFactory<ChessPieceEntity>())),
+                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance,
+                    new ChessGameState(NullLogger<ChessGameState>.Instance)));
 
             var startLocation = BoardLocation.At("B2");
 
@@ -46,10 +52,6 @@ namespace chess.engine.tests
         public void Spike_easy_board_builder_to_from_ChessGame()
         {
             var setup = new EasyBoardBuilder()
-                    //                .X(8, "rnbqkbnr")
-                    //                .Y(ChessFile.A, "RP    pr")
-                    //                .At(ChessFile.D, 2, 'P')
-                    //                .FromChessGame(new ChessGame())
                     .Board("rnbqkbnr" +
                            "pppppppp" +
                            "        " +

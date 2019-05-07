@@ -3,6 +3,7 @@ using System.Linq;
 using chess.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Game;
+using Microsoft.Extensions.Logging;
 
 namespace chess.engine.Chess
 {
@@ -13,6 +14,12 @@ namespace chess.engine.Chess
 
     public class ChessGameState : IChessGameState
     {
+        private ILogger<ChessGameState> _logger;
+
+        public ChessGameState(ILogger<ChessGameState> logger)
+        {
+            _logger = logger;
+        }
         // TODO: Needs tests
         public GameState CurrentGameState(IBoardState<ChessPieceEntity> boardState, Colours currentPlayer)
         {

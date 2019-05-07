@@ -5,7 +5,7 @@ using chess.engine.Game;
 
 namespace chess.engine.Chess
 {
-    public class ChessBoardSetup : IGameSetup<ChessPieceEntity>
+    public class ChessBoardSetup : IBoardSetup<ChessPieceEntity>
     {
         public void SetupPieces(BoardEngine<ChessPieceEntity> engine)
         {

@@ -6,6 +6,7 @@ using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 
 namespace chess.engine.Chess
@@ -30,7 +31,7 @@ namespace chess.engine.Chess
         public IBoardState<ChessPieceEntity> BoardState => _engine.BoardState;
 
         private readonly ChessGameState _chessGameState;
-        private ILogger<ChessGame> _logger;
+        private readonly ILogger<ChessGame> _logger;
 
         public ChessGame(
             ILogger<ChessGame> logger,
@@ -41,21 +42,22 @@ namespace chess.engine.Chess
         public ChessGame(
             ILogger<ChessGame> logger, 
             IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
-            IGameSetup<ChessPieceEntity> setup,
+            IBoardSetup<ChessPieceEntity> setup,
             Colours whoseTurn = Colours.White)
         {
             _logger = logger;
-            _logger.LogInformation("Initialising new chess game");
+            _logger.LogDebug("Initialising new chess game");
 
             _engine = boardEngineProvider.Provide(setup);
 
-            _chessGameState = new ChessGameState();
+            _chessGameState = new ChessGameState(NullLogger<ChessGameState>.Instance);
 
             CurrentPlayer = whoseTurn;
         }
         
         public string Move(string input)
         {
+            _logger.LogDebug($"Attempting move {input}");
             // TODO: Unit test this?
             var validated = ValidateInput(input);
 

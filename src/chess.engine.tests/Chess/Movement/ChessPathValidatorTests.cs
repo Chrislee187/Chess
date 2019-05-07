@@ -6,6 +6,7 @@ using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.tests.Builders;
 using chess.engine.tests.Movement;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 
@@ -36,7 +37,7 @@ namespace chess.engine.tests.Chess.Movement
         [Test]
         public void ValidPath_should_return_validPath()
         {
-            var validator = new ChessPathValidator(_factoryMock.Object);
+            var validator = new ChessPathValidator(NullLogger<ChessPathValidator>.Instance, _factoryMock.Object);
             var path = new PathBuilder().Build();
 
             validator.ValidatePath(BoardStateMock.Object, path);
@@ -47,7 +48,7 @@ namespace chess.engine.tests.Chess.Movement
         [Test]
         public void ValidPath_should_return_truncated_path_when_move_test_fails()
         {
-            var validator = new ChessPathValidator(_factoryMock.Object);
+            var validator = new ChessPathValidator(NullLogger<ChessPathValidator>.Instance, _factoryMock.Object);
             var path = new PathBuilder().From("D2").To("D3").To("D4").To("D5", MoveType.TakeOnly).Build();
 
             IEnumerable<BoardMovePredicate<ChessPieceEntity>> failOnD5 = new List<BoardMovePredicate<ChessPieceEntity>>
@@ -75,7 +76,7 @@ namespace chess.engine.tests.Chess.Movement
             _factoryMock.Setup(f => f.TryGetValue(It.IsAny<MoveType>(), out _moveTests))
                 .Returns(false);
 
-            var validator = new ChessPathValidator(_factoryMock.Object);
+            var validator = new ChessPathValidator(NullLogger<ChessPathValidator>.Instance, _factoryMock.Object);
             var path = new PathBuilder().Build();
             Assert.That(() => validator.ValidatePath(BoardStateMock.Object, path), 
                 Throws.Exception);

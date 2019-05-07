@@ -31,5 +31,9 @@ namespace chess.engine.Entities
 
         public abstract object Clone();
 
+        public override string ToString()
+        {
+            return $"{Player.ToString()} {EntityName}";
+        }
     }
 }
