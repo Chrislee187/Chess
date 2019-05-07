@@ -9,9 +9,9 @@ namespace chess.engine.Chess
 {
     public class ChessPathValidator : IPathValidator<ChessPieceEntity>
     {
-        private readonly IReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate<ChessPieceEntity>>> _validationFactory;
+        private readonly IMoveValidationFactory<ChessPieceEntity> _validationFactory;
 
-        public ChessPathValidator(IReadOnlyDictionary<MoveType, IEnumerable<BoardMovePredicate<ChessPieceEntity>>> validationFactory)
+        public ChessPathValidator(IMoveValidationFactory<ChessPieceEntity> validationFactory)
         {
             _validationFactory = validationFactory;
         }

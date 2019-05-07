@@ -4,12 +4,13 @@ using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Movement.Validators;
+using chess.engine.tests.Chess.Movement.King;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
 {
     [TestFixture]
-    public class UpdatePieceValidationTests
+    public class UpdatePieceValidationTests : ValidatorTestsBase
     {
         private EasyBoardBuilder _board;
         private IBoardState<ChessPieceEntity> _boardState;
@@ -27,7 +28,8 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "    K  R"
                 );
-            var game = new ChessGame(_board.ToGameSetup());
+            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
+            var game = new ChessGame(new ChessRefreshAllPaths(MockLogger<ChessRefreshAllPaths>()), _board.ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory)));
             _boardState = game.BoardState;
         }
 

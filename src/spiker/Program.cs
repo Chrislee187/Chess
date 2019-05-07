@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using chess.engine;
 using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Entities;
@@ -12,8 +13,9 @@ namespace spiker
     {
         static void Main(string[] args)
         {
-
-            var game = new ChessGame();
+            var refreshAllPaths = AppContainer.GetService<IRefreshAllPaths<ChessPieceEntity>>();
+            var chessPathsValidator = AppContainer.GetService<IPathsValidator<ChessPieceEntity>>();
+            var game = new ChessGame(refreshAllPaths, chessPathsValidator);
 
             var lastResult = "";
 
@@ -24,8 +26,6 @@ namespace spiker
 
                 var board = new StringBoardBuilder().BuildSimpleTestBoard(game.Board);
 
-
-                //                Console.WriteLine(board);
                 var lines = board.Split('\n');
                 WriteLinesAt(1, 2, lines);
                 Console.CursorTop = 2;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
@@ -6,6 +7,9 @@ using chess.engine.Chess.Pieces;
 using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
+using chess.engine.Movement;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace chess.engine.Board
 {
@@ -135,7 +139,8 @@ namespace chess.engine.Board
 
         public IBoardState<ChessPieceEntity> ToBoardState()
         {
-            return new ChessGame(ToGameSetup()).BoardState;
+            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
+            return new ChessGame(new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance), ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory))).BoardState;
         }
         private class EasyBoardBuilderCustomGameSetup : IGameSetup<ChessPieceEntity>
         {

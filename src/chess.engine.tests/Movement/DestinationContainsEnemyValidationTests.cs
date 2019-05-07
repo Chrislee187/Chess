@@ -1,15 +1,15 @@
 ﻿using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Entities;
-using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Movement.Validators;
+using chess.engine.tests.Chess.Movement.King;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
 {
     [TestFixture]
-    public class DestinationContainsEnemyValidationTests
+    public class DestinationContainsEnemyValidationTests :ValidatorTestsBase
     {
         private EasyBoardBuilder _board;
         private IBoardState<ChessPieceEntity> _boardState;
@@ -27,7 +27,8 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "R   K  R"
                 );
-            var game = new ChessGame(_board.ToGameSetup());
+            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
+            var game = new ChessGame(new ChessRefreshAllPaths(MockLogger<ChessRefreshAllPaths>()), _board.ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory)));
             _boardState = game.BoardState;
         }
 
@@ -49,33 +50,5 @@ namespace chess.engine.tests.Movement
             Assert.False(validator.ValidateMove(noEnemy, _boardState));
 
         }
-    }
-    [TestFixture]
-    public class ChessPathsValidatorTests
-    {
-
-        [Test]
-        public void Should_find_move_that_leaves_king_in_check()
-        {
-            var board = new EasyBoardBuilder()
-                .Board("    k   " +
-                       "        " +
-                       "        " +
-                       "    p   " +
-                       "   PQ   " +
-                       "        " +
-                       "        " +
-                       "    K   "
-                );
-            var game = new ChessGame(board.ToGameSetup());
-
-            var blockedPieceLocation = BoardLocation.At("E5");
-
-            var blockedPiece = game.BoardState.GetItem(blockedPieceLocation);
-
-            Assert.False(blockedPiece.Paths.ContainsMoveTo(BoardLocation.At("D4")),
-                $"Pawn at E5 should NOT be able to move D4");
-        }
-
     }
 }

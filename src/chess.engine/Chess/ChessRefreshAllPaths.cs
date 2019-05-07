@@ -4,6 +4,7 @@ using chess.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
+using Microsoft.Extensions.Logging;
 
 namespace chess.engine.Chess
 {
@@ -18,16 +19,25 @@ namespace chess.engine.Chess
     /// </summary>
     public class ChessRefreshAllPaths : IRefreshAllPaths<ChessPieceEntity>
     {
-         private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory = new BoardActionFactory<ChessPieceEntity>();
-         private readonly IChessGameState _chessGameState = new ChessGameState();
+        private readonly ILogger _logger;
+
+        private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory = new BoardActionFactory<ChessPieceEntity>();
+        private readonly IChessGameState _chessGameState = new ChessGameState();
+
+        public ChessRefreshAllPaths(ILogger<ChessRefreshAllPaths> logger)
+        {
+            _logger = logger;
+        }
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
         {
+            _logger.LogInformation("Beginning all path refresh process...");
             boardState.RegenerateAllPaths();
 
             foreach (var loc in boardState.GetAllItemLocations)
             {
                 RemovePathsThatContainMovesThatLeaveUsInCheck(boardState, loc);
             }
+            _logger.LogInformation("all path refresh finished...");
         }
 
         private void RemovePathsThatContainMovesThatLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardLocation loc)

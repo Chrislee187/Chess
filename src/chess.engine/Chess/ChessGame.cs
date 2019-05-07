@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using chess.engine.Board;
 using chess.engine.Chess.Pieces;
 using chess.engine.Entities;
@@ -26,16 +27,21 @@ namespace chess.engine.Chess
 
         public IBoardState<ChessPieceEntity> BoardState => _engine.BoardState;
 
-        private ChessGameState _chessGameState;
+        private readonly ChessGameState _chessGameState;
 
-        public ChessGame() : this(new ChessBoardSetup())
+        public ChessGame(IRefreshAllPaths<ChessPieceEntity> chessRefreshAllPaths, 
+            IPathsValidator<ChessPieceEntity> chessPathsValidator) 
+            : this(chessRefreshAllPaths, new ChessBoardSetup(), chessPathsValidator)
         { }
 
-        public ChessGame(IGameSetup<ChessPieceEntity> setup, Colours whoseTurn = Colours.White)
+        public ChessGame(IRefreshAllPaths<ChessPieceEntity> chessRefreshAllPaths, 
+            IGameSetup<ChessPieceEntity> setup, 
+            IPathsValidator<ChessPieceEntity> chessPathsValidator,
+            Colours whoseTurn = Colours.White)
         {
             _engine = new BoardEngine<ChessPieceEntity>(setup, 
-                new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>())),
-                new ChessRefreshAllPaths());
+                chessPathsValidator,
+                chessRefreshAllPaths);
 
             _chessGameState = new ChessGameState();
 

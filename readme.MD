@@ -1,5 +1,4 @@
 ﻿# TODOS
-* MOre tests around king handling needed
 * Proper README.MD
 	* Design approach, reasoning etc.
 * Detailed logging would be nice
@@ -9,14 +8,11 @@
 	* Already have the list of moves to query so just need the parsed text to match against
 	* Need to this to do more comprehensive testing against a larger database of games, 
 * Chessboard serializations (use the easyboardbuilder to drive this out, it should read and write serialized boards) - needed for any WEBAPI stuff
-* Refactor ChessFile out of core board engine, just use ints.
- * Tests for Check/CheckMate/Stalemate detection
-  Improve readability of Path and Path's usage, extension methods?
+ * Stalemate detection
 * Move history
 	* Enhance enpassant rule to ensure enemy pawn did it's double step the previous turn
 	* Enhance castline move validation to ensure king and castle haven't moved and king doesn't move through check
 * Better input error handling, extract out to a proper system with tests
-* Find a test game to play out (one from the angular app?) as a simple integration test.
 * Performance Metrics
 * ChessBoardEngine tests
 * pgn2json to use new engine

@@ -5,6 +5,9 @@ using chess.engine.Chess;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 using NUnit.Framework;
 
 namespace chess.engine.tests
@@ -17,7 +20,7 @@ namespace chess.engine.tests
         {
             var engine = new BoardEngine<ChessPieceEntity>(new ChessBoardSetup(), 
                 new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>())),
-                    new ChessRefreshAllPaths());
+                    new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance));
 
             var startLocation = BoardLocation.At("B2");
 
@@ -49,7 +52,8 @@ namespace chess.engine.tests
                     .ToGameSetup()
                 ;
 
-            var game = new ChessGame(setup);
+            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
+            var game = new ChessGame(new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance), setup, new ChessPathsValidator(new ChessPathValidator(validationFactory)));
 
             var board = new EasyBoardBuilder().FromChessGame(game).ToString();
             Console.WriteLine(board);
@@ -74,7 +78,8 @@ namespace chess.engine.tests
                     .ToGameSetup()
                 ;
 
-            var game = new ChessGame(setup);
+            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
+            var game = new ChessGame(new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance), setup, new ChessPathsValidator(new ChessPathValidator(validationFactory)));
 
             var board = new EasyBoardBuilder().FromChessGame(game).ToString();
             Console.WriteLine(board);
@@ -98,7 +103,8 @@ namespace chess.engine.tests
                            "RNBQR.K.")
                 ;
 
-            var game = new ChessGame(board.ToGameSetup(), Colours.White);
+            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
+            var game = new ChessGame(new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance), board.ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory)), Colours.White);
 
             // TODO: Fix this bug, pawn can't take pawn, something to do with
             // enpassant i guess based on pawn positions
@@ -111,7 +117,8 @@ namespace chess.engine.tests
         [Test]
         public void Should_play_the_manually_parsed_wiki_gamed()
         {
-            var game = new ChessGame();
+            IMoveValidationFactory<ChessPieceEntity> moveValidationFactory = new MoveValidationFactory<ChessPieceEntity>();
+            var game = new ChessGame(new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance), new ChessPathsValidator(new ChessPathValidator(moveValidationFactory)));
             var moveIdx = 0;
             foreach (var move in ManullyParsedWikiGame)
             {

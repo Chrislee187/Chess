@@ -4,12 +4,13 @@ using chess.engine.Chess.Movement.ChessPieces.Pawn;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
+using chess.engine.tests.Chess.Movement.King;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Chess.Movement.Pawn
 {
     [TestFixture]
-    public class EnPassantTakeValidationTests
+    public class EnPassantTakeValidationTests : ValidatorTestsBase
     {
         private 
             EasyBoardBuilder _board;
@@ -29,7 +30,8 @@ namespace chess.engine.tests.Chess.Movement.Pawn
                        "        " +
                        "    K  R"
                 );
-            var game = new ChessGame(_board.ToGameSetup());
+            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
+            var game = new ChessGame(new ChessRefreshAllPaths(MockLogger<ChessRefreshAllPaths>()), _board.ToGameSetup(), new ChessPathsValidator(new ChessPathValidator(validationFactory)));
             _boardState = game.BoardState;
             _validator = new EnPassantTakeValidator();
         }
