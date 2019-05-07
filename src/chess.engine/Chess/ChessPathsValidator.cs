@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using chess.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Game;
@@ -17,6 +18,7 @@ namespace chess.engine.Chess
 
         public Paths GeneratePossiblePaths(IBoardState<ChessPieceEntity> boardState, ChessPieceEntity entity, BoardLocation boardLocation)
         {
+//            if(boardLocation.X == 5 && boardLocation.Y == 8) Debugger.Break();
             var paths = new Paths();
             paths.AddRange(
                 entity.PathGenerators

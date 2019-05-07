@@ -59,7 +59,7 @@ namespace chess.engine.Chess
             _engine.Move(validated.move);
 
             CurrentPlayer = NextPlayer();
-            GameState = _chessGameState.CurrentGameState(BoardState, CurrentPlayer, CurrentPlayer.Enemy());
+            GameState = _chessGameState.CurrentGameState(BoardState, CurrentPlayer);
 
             return GameState == GameState.Check || GameState == GameState.Checkmate 
                 ? GameState.ToString() 

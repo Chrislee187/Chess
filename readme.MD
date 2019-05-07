@@ -1,7 +1,6 @@
 ﻿# TODOS
 * Proper README.MD
 	* Design approach, reasoning etc.
-* Missing tests around check/check mate discovery and handling
 * Missing tests around path refreshing
 * PGN Move support
 	* Manually parsed game from the WIKI page works

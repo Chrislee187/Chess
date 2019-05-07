@@ -6,10 +6,15 @@ using chess.engine.Game;
 
 namespace chess.engine.Chess
 {
-    public class ChessGameState
+    public interface IChessGameState
+    {
+        GameState CurrentGameState(IBoardState<ChessPieceEntity> boardState, Colours currentPlayer);
+    }
+
+    public class ChessGameState : IChessGameState
     {
         // TODO: Needs tests
-        public GameState CurrentGameState(IBoardState<ChessPieceEntity> boardState, Colours currentPlayer, Colours enemy)
+        public GameState CurrentGameState(IBoardState<ChessPieceEntity> boardState, Colours currentPlayer)
         {
             var items = GetEnemiesAttackingKing(boardState, currentPlayer).ToList();
             return items.Any() 
@@ -17,7 +22,6 @@ namespace chess.engine.Chess
                 : GameState.InProgress;
         }
 
-        // TODO: Pull out of board state, probably need some form of ChessGameState component we can passin!
         private IEnumerable<LocatedItem<ChessPieceEntity>> GetEnemiesAttackingKing(
             IBoardState<ChessPieceEntity> boardState, Colours kingColour)
         {

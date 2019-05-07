@@ -1,4 +1,5 @@
-﻿using chess.engine.Actions;
+﻿using System.Linq;
+using chess.engine.Actions;
 using chess.engine.Board;
 using chess.engine.Game;
 using chess.engine.Movement;
@@ -109,13 +110,8 @@ namespace chess.engine
 
         private class DefaultRefreshAllPaths : IRefreshAllPaths<TEntity>
         {
-            public void RefreshAllPaths(IBoardState<TEntity> boardState)
-            {
-                foreach (var loc in boardState.GetAllItemLocations)
-                {
-                    boardState.RegeneratePaths(loc);
-                }
-            }
+            public void RefreshAllPaths(IBoardState<TEntity> boardState) 
+                => boardState.GetAllItemLocations.ToList().ForEach(boardState.RegeneratePaths);
         }
     }
 }

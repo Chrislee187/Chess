@@ -133,6 +133,10 @@ namespace chess.engine.Board
             return new EasyBoardBuilderCustomGameSetup(_board);
         }
 
+        public IBoardState<ChessPieceEntity> ToBoardState()
+        {
+            return new ChessGame(ToGameSetup()).BoardState;
+        }
         private class EasyBoardBuilderCustomGameSetup : IGameSetup<ChessPieceEntity>
         {
             private char[,] _board;
