@@ -6,7 +6,7 @@ using chess.engine.Game;
 using chess.engine.Movement;
 using chess.engine.Movement.Validators;
 
-namespace chess.engine.Chess.Movement.Validators
+namespace chess.engine.Chess.Movement.ChessPieces.King
 {
     public class KingCastleValidator : IMoveValidator<ChessPieceEntity> 
     {

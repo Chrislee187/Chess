@@ -1,6 +1,6 @@
 ﻿using chess.engine.Board;
 using chess.engine.Chess;
-using chess.engine.Chess.Movement.Validators;
+using chess.engine.Chess.Movement.ChessPieces.Pawn;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;

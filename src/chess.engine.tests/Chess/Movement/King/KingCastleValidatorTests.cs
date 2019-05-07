@@ -1,10 +1,10 @@
 ﻿using chess.engine.Board;
 using chess.engine.Chess;
-using chess.engine.Chess.Movement.Validators;
+using chess.engine.Chess.Movement.ChessPieces.King;
 using chess.engine.Movement;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Chess.Validators
+namespace chess.engine.tests.Chess.Movement.King
 {
     [TestFixture]
     public class KingCastleValidatorTests

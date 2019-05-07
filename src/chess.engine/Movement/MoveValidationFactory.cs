@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using chess.engine.Board;
-using chess.engine.Chess.Movement.Validators;
+using chess.engine.Chess.Movement.ChessPieces.King;
 using chess.engine.Entities;
 using chess.engine.Movement.Validators;
 
