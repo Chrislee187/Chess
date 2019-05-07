@@ -9,14 +9,14 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
         {
             var paths = new Paths();
 
- var takeType = location.Rank == Pieces.Pawn.EnPassantRankFor(forPlayer)
+            var takeType = location.Y == Pieces.Pawn.EnPassantRankFor(forPlayer)
                 ? MoveType.TakeEnPassant
                 : MoveType.TakeOnly;
 
             var takeLocation = location.MoveForward(forPlayer).MoveLeft(forPlayer);
 
             if (takeLocation == null) return paths;
-            if (takeLocation.Rank != ChessGame.EndRankFor(forPlayer))
+            if (takeLocation.Y != ChessGame.EndRankFor(forPlayer))
             {
                 var move = BoardMove.Create(location, takeLocation, takeType);
 

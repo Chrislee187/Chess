@@ -2,6 +2,6 @@
 {
     public interface IGameSetup<TEntity> where TEntity : class, IBoardEntity
     {
-        void SetupPieces(ChessBoardEngine<TEntity> engine);
+        void SetupPieces(BoardEngine<TEntity> engine);
     }
 }

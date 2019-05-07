@@ -17,7 +17,7 @@ namespace chess.engine.Chess.Movement.Validators
 
             var piece = boardState.GetItems(move.From).Single().Item;
 
-            var passingPieceLocation = move.To.MoveBack((Colours)piece.Owner);
+            var passingPieceLocation = move.To.MoveBack(piece.Owner);
 
             if (boardState.IsEmpty(passingPieceLocation)) return false;
             var passingPiece = boardState.GetItems(passingPieceLocation).Single().Item;

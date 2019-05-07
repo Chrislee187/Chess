@@ -14,7 +14,7 @@ namespace chess.engine.Chess
 
     public class ChessGame
     {
-        private readonly ChessBoardEngine<ChessPieceEntity> _engine;
+        private readonly BoardEngine<ChessPieceEntity> _engine;
 
         public Colours CurrentPlayer { get; private set; }
         private Colours NextPlayer() => CurrentPlayer == Colours.White ? Colours.Black : Colours.White;
@@ -22,7 +22,7 @@ namespace chess.engine.Chess
         public GameState GameState { get; private set; }
         public bool InProgress => GameState == GameState.InProgress;
 
-        public BoardPiece[,] Board => _engine.Board;
+        public LocatedItem<ChessPieceEntity>[,] Board => _engine.Board;
 
         public IBoardState<ChessPieceEntity> BoardState => _engine.BoardState;
 
@@ -31,7 +31,7 @@ namespace chess.engine.Chess
 
         public ChessGame(IGameSetup<ChessPieceEntity> setup, Colours whoseTurn = Colours.White)
         {
-            _engine = new ChessBoardEngine<ChessPieceEntity>(setup, 
+            _engine = new BoardEngine<ChessPieceEntity>(setup, 
                 new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>())),
                 new ChessRefreshAllPaths());
 

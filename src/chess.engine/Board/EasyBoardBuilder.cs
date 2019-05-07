@@ -117,8 +117,9 @@ namespace chess.engine.Board
                     else
                     {
                         // TODO: Stop using ToString()/ToUpper() and create a proper abstraction to convert to a single char
-                        var c = piece.Name == ChessPieceName.Knight ? 'N' : piece.Name.ToString().First();
-                        if (piece.Colour == Colours.Black) c = c.ToString().ToLower().First();
+                        var entity = piece.Item;
+                        var c = entity.Piece == ChessPieceName.Knight ? 'N' : entity.Piece.ToString().First();
+                        if (entity.Owner == Colours.Black) c = c.ToString().ToLower().First();
                         _board[file, rank] = c;
                     }
                 }
@@ -140,7 +141,7 @@ namespace chess.engine.Board
             {
                 _board = board;
             }
-            public void SetupPieces(ChessBoardEngine<ChessPieceEntity> engine)
+            public void SetupPieces(BoardEngine<ChessPieceEntity> engine)
             {
                 for (var rank = 7; rank >= 0; rank--)
                 {

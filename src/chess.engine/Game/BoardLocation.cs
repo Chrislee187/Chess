@@ -5,68 +5,66 @@ namespace chess.engine.Game
 {
     public class BoardLocation : ICloneable
     {
-        public int Rank { get; }
-        public ChessFile File { get; }
+        public int X { get; }
+        public int Y { get; }
 
-        public BoardLocation(ChessFile file, int rank)
+        private BoardLocation(int x, int y)
         {
-            Guard.ArgumentException(() => OutOfBounds(rank), $"Invalid rank: {rank}" );
-            Guard.ArgumentException(() => OutOfBounds((int) file), $"Invalid file: {file}");
-            File = file;
-            Rank = rank;
+            Guard.ArgumentException(() => OutOfBounds(x), $"Invalid x: {x}" );
+            Guard.ArgumentException(() => OutOfBounds(y), $"Invalid y: {y}");
+            Y = y;
+            X = x;
         }
 
-        public static BoardLocation At(ChessFile file, int rank)
-            => new BoardLocation(file, rank);
-
-        public static BoardLocation At(int file, int rank)
-            => At((ChessFile)file, rank);
+        public static BoardLocation At(int x, int y)
+            => new BoardLocation(x, y);
 
         public static BoardLocation At(string at)
             => (BoardLocation)at;
 
         private bool OutOfBounds(int value) => value < 1 || value > 8;
 
-        private BoardLocation SafeCreate(int file, int rank)
+        private BoardLocation SafeCreate(int x, int y)
         {
-            if (OutOfBounds(rank)) return null;
-            if (OutOfBounds(file)) return null;
+            if (OutOfBounds(y)) return null;
+            if (OutOfBounds(x)) return null;
 
-            return At(file, rank);
+            return At(x, y);
         }
 
         public BoardLocation KnightVerticalMove(Colours colour, bool forward, bool right) => MoveForward(colour, forward ? 2 : -2)?.MoveRight(colour, right ? 1 : -1);
         public BoardLocation KnightHorizontalMove(Colours colour, bool forward, bool right) => MoveRight(colour, forward ? 2 : -2)?.MoveForward(colour, right ? 1 : -1);
 
         public BoardLocation MoveForward(Colours colour, int squares = 1) 
-            => SafeCreate((int)File, Rank + BoardMove.DirectionModifierFor(colour) * squares);
+            => SafeCreate(X, Y + BoardMove.DirectionModifierFor(colour) * squares);
 
         public BoardLocation MoveBack(Colours colour, int squares = 1) 
-            => SafeCreate((int)File, Rank - BoardMove.DirectionModifierFor(colour) * squares);
+            => SafeCreate(X, Y - BoardMove.DirectionModifierFor(colour) * squares);
 
         public BoardLocation MoveLeft(Colours colour, int squares = 1) 
-            => SafeCreate((int) File - (BoardMove.DirectionModifierFor(colour) * squares), Rank);
+            => SafeCreate(X - (BoardMove.DirectionModifierFor(colour) * squares), Y);
 
         public BoardLocation MoveRight(Colours colour, int squares = 1) 
-            => SafeCreate((int) File + (BoardMove.DirectionModifierFor(colour) * squares), Rank);
+            => SafeCreate(X + (BoardMove.DirectionModifierFor(colour) * squares), Y);
 
         #region Object overrides
-        public override string ToString() => File.ToString().Substring(0, 1) + Rank;
-        public object Clone() => At(File, Rank);
+        public override string ToString() => $"({X},{Y})";
+        public object Clone() => At(X, Y);
 
         public static explicit operator BoardLocation(string s)
         {
             if (s.Length != 2) throw new ArgumentException($"Invalid BoardLocation {s}");
 
-            if (!Enum.TryParse(s[0].ToString().ToUpper(), out ChessFile file)) throw new ArgumentException($"Invalid BoardLocation {s}");
-            if (!int.TryParse(s[1].ToString(), out var rank)) throw new ArgumentException($"Invalid BoardLocation {s}");
+            // TODO: This is nice helper function but does make it dependent on ChessFile a Chess specific!!!
+            if (!Enum.TryParse(s[0].ToString().ToUpper(), out ChessFile x)) throw new ArgumentException($"Invalid BoardLocation {s}");
+            if (!int.TryParse(s[1].ToString(), out var y)) throw new ArgumentException($"Invalid BoardLocation {s}");
 
-            return new BoardLocation(file, rank);
+            return new BoardLocation((int) x, y);
         }
 
         protected bool Equals(BoardLocation other)
         {
-            return Rank == other.Rank && File == other.File;
+            return X == other.X && Y == other.Y;
         }
 
         public override bool Equals(object obj)
@@ -81,7 +79,7 @@ namespace chess.engine.Game
         {
             unchecked
             {
-                return (Rank * 397) ^ (int)File;
+                return (X * 397) ^ Y;
             }
         }
 

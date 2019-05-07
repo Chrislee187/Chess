@@ -29,7 +29,7 @@ namespace chess.engine.tests.Chess.Actions
             int rank = colour == Colours.White ? 1 : 8;
 
             var king = new KingEntity(colour);
-            var kingStartFile = King.StartPositionFor(colour).File;
+            var kingStartFile = King.StartPositionFor(colour).X;
             var kingDestinationFile = side ? ChessFile.G : ChessFile.C;
             var kingStartLoc = BoardLocation.At($"{kingStartFile}{rank}");
             var kingDestination = BoardLocation.At($"{kingDestinationFile}{rank}");

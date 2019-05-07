@@ -10,12 +10,12 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
             var paths = new Paths();
 
             var oneSquareForward = location.MoveForward(forPlayer);
-            if (oneSquareForward.Rank != ChessGame.EndRankFor(forPlayer))
+            if (oneSquareForward.Y != ChessGame.EndRankFor(forPlayer))
             {
                 var move = BoardMove.CreateMoveOnly(location, oneSquareForward);
 
                 var path = new Path {move};
-                if (location.Rank == Pieces.Pawn.StartRankFor(forPlayer))
+                if (location.Y == Pieces.Pawn.StartRankFor(forPlayer))
                 {
                     path.Add(BoardMove.CreateMoveOnly(location, location.MoveForward(forPlayer, 2)));
                 }

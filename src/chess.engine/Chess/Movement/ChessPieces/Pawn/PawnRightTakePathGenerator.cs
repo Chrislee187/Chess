@@ -8,12 +8,12 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
         public Paths PathsFrom(BoardLocation location, Colours forPlayer)
         {
             Guard.ArgumentException(
-                () => location.Rank == BoardMove.EndRankFor(forPlayer),
+                () => location.Y == BoardMove.EndRankFor(forPlayer),
                 $"{ChessPieceName.Pawn} is invalid at {location}.");
 
             var paths = new Paths();
 
-            var takeType = location.Rank == Pieces.Pawn.EnPassantRankFor(forPlayer)
+            var takeType = location.Y == Pieces.Pawn.EnPassantRankFor(forPlayer)
                 ? MoveType.TakeEnPassant
                 : MoveType.TakeOnly;
 
@@ -21,7 +21,7 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
             var takeLocation = location.MoveForward(forPlayer).MoveRight(forPlayer);
             if (takeLocation == null) return paths;
 
-            if (takeLocation.Rank != ChessGame.EndRankFor(forPlayer))
+            if (takeLocation.Y != ChessGame.EndRankFor(forPlayer))
             {
                 var move = BoardMove.Create(location, takeLocation, takeType);
                 paths.Add(new Path {move});

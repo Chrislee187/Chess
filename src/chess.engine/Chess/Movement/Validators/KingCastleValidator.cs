@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Board;
 using chess.engine.Entities;
@@ -19,8 +18,8 @@ namespace chess.engine.Chess.Movement.Validators
             if (!kingIsValid) return false;
 
             var rookLoc = move.MoveType == MoveType.CastleKingSide
-                ? BoardLocation.At($"H{move.From.Rank}")
-                : BoardLocation.At($"A{move.From.Rank}");
+                ? BoardLocation.At($"H{move.From.Y}")
+                : BoardLocation.At($"A{move.From.Y}");
 
             var rook = boardState.GetItem(rookLoc);
 
@@ -66,9 +65,8 @@ namespace chess.engine.Chess.Movement.Validators
 
             var kingOwner = king.Owner;
 
-            if (move.From.File < move.To.File)
+            if (move.From.X < move.To.X)
             {
-                Func<Colours, int, BoardLocation> moveRight = move.From.MoveRight;
                 pathBetween.Add(KingSide(kingOwner, 1));
                 pathBetween.Add(KingSide(kingOwner, 2));
             }

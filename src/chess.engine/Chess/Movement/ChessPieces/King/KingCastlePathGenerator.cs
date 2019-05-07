@@ -17,7 +17,7 @@ namespace chess.engine.Chess.Movement.ChessPieces.King
             {
                 if (dest != null)
                 {
-                    var side = dest.File > location.File
+                    var side = dest.X > location.X
                             ? MoveType.CastleKingSide
                             : MoveType.CastleQueenSide;
 

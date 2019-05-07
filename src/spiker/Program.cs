@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using chess.engine.Board;
 using chess.engine.Chess;
+using chess.engine.Entities;
 using chess.engine.Game;
 
 namespace spiker
@@ -81,7 +82,7 @@ namespace spiker
 
     public class StringBoardBuilder
     {
-        public string BuildSimpleTestBoard(BoardPiece[,] board)
+        public string BuildSimpleTestBoard(LocatedItem<ChessPieceEntity>[,] board)
         {
             var sb = new StringBuilder();
             sb.AppendLine("  ABCDEFGH");
@@ -98,10 +99,10 @@ namespace spiker
                     }
                     else
                     {
-                        var piece = boardPiece.Name == ChessPieceName.Knight ? "N" : boardPiece.Name.ToString().First().ToString();
-                        sb.Append(boardPiece.Colour == Colours.White ? piece.ToUpper() : piece.ToLower());
+                        var entity = boardPiece.Item;
+                        var piece = entity.Piece == ChessPieceName.Knight ? "N" : entity.Piece.ToString().First().ToString();
+                        sb.Append(entity.Owner == Colours.White ? piece.ToUpper() : piece.ToLower());
                     }
-
                 }
                 sb.Append($" {rank + 1}");
 

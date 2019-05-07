@@ -15,7 +15,7 @@ namespace chess.engine.tests
         [Test]
         public void Should()
         {
-            var engine = new ChessBoardEngine<ChessPieceEntity>(new ChessBoardSetup(), 
+            var engine = new BoardEngine<ChessPieceEntity>(new ChessBoardSetup(), 
                 new ChessPathsValidator(new ChessPathValidator(new MoveValidationFactory<ChessPieceEntity>())),
                     new ChessRefreshAllPaths());
 
@@ -34,8 +34,8 @@ namespace chess.engine.tests
         public void Spike_easy_board_builder_to_from_ChessGame()
         {
             var setup = new EasyBoardBuilder()
-                    //                .Rank(8, "rnbqkbnr")
-                    //                .File(ChessFile.A, "RP    pr")
+                    //                .X(8, "rnbqkbnr")
+                    //                .Y(ChessFile.A, "RP    pr")
                     //                .At(ChessFile.D, 2, 'P')
                     //                .FromChessGame(new ChessGame())
                     .Board("rnbqkbnr" +
@@ -59,8 +59,8 @@ namespace chess.engine.tests
         public void Spike_easy_board_builder_to_from_ChessGame2()
         {
             var setup = new EasyBoardBuilder()
-                    //                .Rank(8, "rnbqkbnr")
-                    //                .File(ChessFile.A, "RP    pr")
+                    //                .X(8, "rnbqkbnr")
+                    //                .Y(ChessFile.A, "RP    pr")
                     //                .At(ChessFile.D, 2, 'P')
                     //                .FromChessGame(new ChessGame())
                     .Board("rnbqkbnr" +
@@ -84,8 +84,8 @@ namespace chess.engine.tests
         public void Spike_debugging_a_move_problem()
         {
             var board = new EasyBoardBuilder()
-                    //                .Rank(8, "rnbqkbnr")
-                    //                .File(ChessFile.A, "RP    pr")
+                    //                .X(8, "rnbqkbnr")
+                    //                .Y(ChessFile.A, "RP    pr")
                     //                .At(ChessFile.D, 2, 'P')
                     //                .FromChessGame(new ChessGame())
                     .Board("r.bq.rk." +

@@ -7,26 +7,26 @@ namespace chess.engine.Chess
 {
     public class ChessBoardSetup : IGameSetup<ChessPieceEntity>
     {
-        public void SetupPieces(ChessBoardEngine<ChessPieceEntity> engine)
+        public void SetupPieces(BoardEngine<ChessPieceEntity> engine)
         {
             AddPawns(engine);
             AddMajorPieces(engine);
         }
 
 
-        private void AddPawns(ChessBoardEngine<ChessPieceEntity> engine)
+        private void AddPawns(BoardEngine<ChessPieceEntity> engine)
         {
             foreach (var colour in new[] { Colours.White, Colours.Black })
             {
-                foreach (var file in Enum.GetValues(typeof(ChessFile)))
+                for (int x = 1; x <= engine.Width; x++)
                 {
                     engine.AddPiece(ChessPieceEntityFactory.CreatePawn(colour),
-                        BoardLocation.At((ChessFile)file, colour == Colours.White ? 2 : 7));
+                        BoardLocation.At(x, colour == Colours.White ? 2 : 7));
                 }
             }
         }
 
-        private void AddMajorPieces(ChessBoardEngine<ChessPieceEntity> engine)
+        private void AddMajorPieces(BoardEngine<ChessPieceEntity> engine)
         {
             foreach (var rank in new[] { 1, 8 })
             {

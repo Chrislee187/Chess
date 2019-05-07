@@ -1,18 +1,15 @@
-﻿using System;
-using chess.engine.Actions;
+﻿using chess.engine.Actions;
 using chess.engine.Board;
-using chess.engine.Chess;
 using chess.engine.Game;
 using chess.engine.Movement;
 
 namespace chess.engine
 {
     // TODO: This almost fully generic for any kind of "entity" we want to put on a chess-like board
-    // * refactor ChessFile references to ints
-    // * refactor Player Colours references to ints
-    // * reefactor next player logic to be external
+    // * refactor to not be Colours
+    // * refactor next player logic to be external
 
-    public class ChessBoardEngine<TEntity> where TEntity : class, IBoardEntity
+    public class BoardEngine<TEntity> where TEntity : class, IBoardEntity
     {
         public readonly IBoardState<TEntity> BoardState;
         private readonly BoardActionFactory<TEntity> _boardActionFactory;
@@ -20,18 +17,23 @@ namespace chess.engine
         private readonly IGameSetup<TEntity> _gameSetup;
         private readonly IRefreshAllPaths<TEntity> _allPathCalculator;
 
-        public ChessBoardEngine(IGameSetup<TEntity> gameSetup, IPathsValidator<TEntity> chessPathValidator) : this(gameSetup, chessPathValidator, new DefaultRefreshAllPaths())
+        public int Width { get; private set; } = 8;
+        public int Height { get; private set; } = 8;
+
+
+
+        public BoardEngine(IGameSetup<TEntity> gameSetup, IPathsValidator<TEntity> pathsValidator) : this(gameSetup, pathsValidator, new DefaultRefreshAllPaths())
         {
         }
 
-        public ChessBoardEngine(
+        public BoardEngine(
             IGameSetup<TEntity> gameSetup, 
-            IPathsValidator<TEntity> chessPathsValidator, 
+            IPathsValidator<TEntity> pathsValidator, 
             IRefreshAllPaths<TEntity> allPathCalculator)
         {
             _boardActionFactory = new BoardActionFactory<TEntity>();
 
-            BoardState = new BoardState<TEntity>(chessPathsValidator, _boardActionFactory);
+            BoardState = new BoardState<TEntity>(pathsValidator, _boardActionFactory);
 
             _gameSetup = gameSetup;
             _gameSetup.SetupPieces(this);
@@ -49,9 +51,9 @@ namespace chess.engine
 
         public void ClearBoard() => BoardState.Clear();
 
-        public ChessBoardEngine<TEntity> AddPiece(TEntity create, string startingLocation) 
+        public BoardEngine<TEntity> AddPiece(TEntity create, string startingLocation) 
             => AddPiece(create, BoardLocation.At(startingLocation));
-        public ChessBoardEngine<TEntity> AddPiece(TEntity create, BoardLocation startingLocation)
+        public BoardEngine<TEntity> AddPiece(TEntity create, BoardLocation startingLocation)
         {
             BoardState.PlaceEntity(startingLocation, create);
             return this;
@@ -67,28 +69,26 @@ namespace chess.engine
             return piece;
         }
 
-        public BoardPiece[,] Board
+        public LocatedItem<TEntity>[,] Board
         {
             get
             {
-                var pieces = new BoardPiece[8, 8];
-                foreach (ChessFile file in Enum.GetValues(typeof(ChessFile)))
+                var pieces = new LocatedItem<TEntity>[8, 8];
+                for (int x = 1; x <= Width; x++)
                 {
-                    for (var rank = 8; rank > 0; rank--)
+                    for (var y = Height; y > 0; y--)
                     {
-                        var location = BoardLocation.At(file, rank);
+                        var location = BoardLocation.At(x, y);
 
                         if (BoardState.IsEmpty(location))
                         {
-                            pieces[(int) file - 1, rank - 1] = null;
+                            pieces[x - 1, y - 1] = null;
                         }
-                        var entity = BoardState.IsEmpty(location) 
-                            ? null 
-                            : BoardState.GetItem(location).Item;
-
-                        pieces[(int)file - 1, rank - 1] = entity == null
-                            ? null
-                            : new BoardPiece((Colours)entity.Owner,(ChessPieceName) Enum.Parse(typeof(ChessPieceName), entity.EntityName));
+                        else
+                        {
+                            var entity = BoardState.GetItem(location);
+                            pieces[x - 1, y - 1] = entity;
+                        }
                     }
                 }
 
