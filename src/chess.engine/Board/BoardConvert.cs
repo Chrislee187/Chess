@@ -74,7 +74,7 @@ namespace chess.engine.Board
                 var locX = (idx-1) % 8 + 1;
                 var locY = 8 - (idx-1) / 8;
 
-                if (piece != '.')
+                if (piece != '.' && piece != ' ')
                 {
                     var chessPieceName = PieceNameMapper.FromChar(piece);
                     var colour = char.IsUpper(piece) ? Colours.White : Colours.Black;

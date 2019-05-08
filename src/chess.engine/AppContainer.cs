@@ -20,7 +20,7 @@ namespace chess.engine
             var serviceCollection = new ServiceCollection();
             var config = serviceCollection.ConfigureConfig();
             serviceCollection.ConfigureLogging(config);
-            serviceCollection.ConfigureServices();
+            serviceCollection.ConfigureChessDependencies();
 
 
             //            serviceCollection.AddLogging(configure => configure.AddConfiguration(a => a.))
@@ -49,13 +49,14 @@ namespace chess.engine
             });
 
             Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
                 .ReadFrom.Configuration(config)
-                .MinimumLevel.Debug()
                 .Enrich.FromLogContext()
                 .CreateLogger();
 
         }
-        private static void ConfigureServices(this IServiceCollection services)
+
+        public static void ConfigureChessDependencies(this IServiceCollection services)
         {
 
 

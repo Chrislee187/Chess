@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CSharpChess\CSharpChess.csproj" />
     <ProjectReference Include="..\chess.engine\chess.engine.csproj" />
   </ItemGroup>
 
