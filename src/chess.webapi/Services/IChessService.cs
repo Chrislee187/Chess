@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using chess.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Entities;
+using chess.engine.Extensions;
 using chess.engine.Game;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace chess.webapi.Services
@@ -32,40 +31,40 @@ namespace chess.webapi.Services
                 _boardEngineProvider
             );
 
-            return BoardConvert.Serialise(game);
+            return ChessGameConvert.Serialise(game);
 
         }
 
         public string PlayMove(string board, string move)
         {
-            var chessGame = BoardConvert.Deserialise(board);
+            var chessGame = ChessGameConvert.Deserialise(board);
 
             var msg = chessGame.Move(move);
 
-            return BoardConvert.Serialise(chessGame) + $"\n{msg}";
+            return ChessGameConvert.Serialise(chessGame) + $"\n{msg}";
         }
 
         public string GetMoves(string board)
         {
-            var chessGame = BoardConvert.Deserialise(board);
+            var chessGame = ChessGameConvert.Deserialise(board);
             var locatedItems = chessGame.BoardState.GetAllItems();
-            return GetMovesForItems(locatedItems.ToArray());
+            return ToMoveList(locatedItems.ToArray());
         }
         public string GetMovesForPlayer(string board, Colours forPlayer)
         {
-            var chessGame = BoardConvert.Deserialise(board);
+            var chessGame = ChessGameConvert.Deserialise(board);
             var locatedItems = chessGame.BoardState.GetItems((int) forPlayer);
-            return GetMovesForItems(locatedItems.ToArray());
+            return ToMoveList(locatedItems.ToArray());
         }
         public string GetMovesForLocation(string board, string location)
         {
-            var chessGame = BoardConvert.Deserialise(board);
+            var chessGame = ChessGameConvert.Deserialise(board);
             var loc = BoardLocation.At(location);
             var locatedItems = chessGame.BoardState.GetItem(loc);
-            return GetMovesForItems(locatedItems);
+            return ToMoveList(locatedItems);
         }
 
-        private static string GetMovesForItems(params LocatedItem<ChessPieceEntity>[] locatedItems)
+        private static string ToMoveList(params LocatedItem<ChessPieceEntity>[] locatedItems)
         {
             var sb = new StringBuilder();
 
@@ -92,13 +91,5 @@ namespace chess.webapi.Services
         string GetMoves(string board);
         string GetMovesForPlayer(string board, Colours forPlayer);
         string GetMovesForLocation(string board, string location);
-    }
-
-    public static class BoardLocationExtensions
-    {
-        public static string ToChessCoord(this BoardLocation loc)
-        {
-            return $"{(char)('A' + loc.X - 1)}{loc.Y}";
-        }
     }
 }

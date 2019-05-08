@@ -1,47 +1,43 @@
 ﻿# TODOS
-* More logging
-* BoardLocation extension method ToCoordNotation()
-* Better input error handling, extract out to a proper system with tests
-* test mechanism to run a game through console app.
 * Proper README.MD
-	* Design approach, reasoning etc.
-* PGN Move support
-	* Manually parsed game from the WIKI page works
-	* Use existing PGNQuery stuff, double check it's suitable
-	* Already have the list of moves to query so just need the parsed text to match against
-	* Need to this to do more comprehensive testing against a larger database of games, 
-* Chessboard serializations (use the easyboardbuilder to drive this out, it should read and write serialized boards) - needed for any WEBAPI stuff
- * Stalemate detection
+
+* Design docs
+
+* Need to this to do more comprehensive testing against a larger database of games, 
+
+## PGN2JSON Library
+* Implement PGN Parsing, base on old version
+
+## SPIKER/Console Player
+* Can I reuse anything from the old consoleplayer? Do I want to?
+* Keep it simple, do not create the console window library you keep thinking about:)
+	* Proper menu/command system , TBD
+	* Save game ability
+
+
+
+## Chess.Engine
+* better error handling in ChessGame
 * Move history
 	* Enhance enpassant rule to ensure enemy pawn did it's double step the previous turn
 	* Enhance castline move validation to ensure king and castle haven't moved and king doesn't move through check
+	* Stalemate detection
+	* PGN output (optional)
+* PGN Move support
+	* Dependent on the PGNParser/PGN2JSON
+	* Already have the list of moves to query now so just need the parsed text to match against
 
-* Performance Metrics
-* ChessBoardEngine tests
-* pgn2json to use new engine
+* Still need to seperate out NextPlayer logic from the Board
+* 
+
+* Performance tests
+	* Add some multithreading where approriate around the path regeneration mechanisms
 * Invalid board state detection (should be able to be turned off) to allow custom boards without kings
 * Undo/Redo support
 	* Advanced Feature: Branched Undo/Redo
 
-# Chess WebAPI
-Swagger!
-
-* Get a newboard in serialized form
-GET /chess
-returns serialized newboard
-
-serializeedboard  = 64 chars (Ee for pawns that can be taken with enpassant)
-					+ single char b/w for whose turn it is
-					+ 4 optional flags for White/BlackKingCanCastleQueen/Kingside (needs to be validated by move history which can't easily be encoded in single chars')
-
-* Get available moves for board, all or colour specific
-GET /chess/serializedboard
-GET /chess/serializedboard/white
-GET /chess/serializedboard/black
-
-
-* Play a move, returns new board
-PUT /chess/serializedboard/move
+## Chess.WebAPI
+* better error handling in ChessGame
 
 
 # CONSOLE STUFF SUPPORT

@@ -12,7 +12,7 @@ namespace chess.engine.tests.Serialisation
         public void Should_serialise_and_deserialise_to_68char_format()
         {
             var chessGame = HelperFactory.NewChessGameNoLoggers;
-            var actualNewBoard = BoardConvert.Serialise(chessGame);
+            var actualNewBoard = ChessGameConvert.Serialise(chessGame);
 
             var expectedNewBoard = "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR" // The board
                                    + "W" // Whose turn
@@ -20,7 +20,7 @@ namespace chess.engine.tests.Serialisation
 
             Assert.That(actualNewBoard, Is.EqualTo(expectedNewBoard));
 
-            var actualGame = BoardConvert.Deserialise(actualNewBoard);
+            var actualGame = ChessGameConvert.Deserialise(actualNewBoard);
 
             var actualGameAsString = new EasyBoardBuilder().FromChessGame(actualGame).ToString();
             var expectedGameAsString = new EasyBoardBuilder().FromChessGame(chessGame).ToString();

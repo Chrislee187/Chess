@@ -33,7 +33,6 @@ namespace chess.webapi
             services.ConfigureLogging(config);
             services.AddSwaggerDocument();
 
-
             services.AddTransient<IChessService, ChessService>();
             services.ConfigureChessDependencies();
         }

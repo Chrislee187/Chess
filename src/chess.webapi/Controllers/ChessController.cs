@@ -22,13 +22,15 @@ namespace chess.webapi.Controllers
         }
 
         // GET
+
         public ActionResult<string> Index()
         {
+            this.ControllerContext.HttpContext
             return _chessService.GetNewBoard();
         }
 
         [HttpGet("{board}/{move}")]
-        public ActionResult<string> Move(string board, string move)
+        public ActionResult<string> Move(string board, string move, string format)
         {
             return _chessService.PlayMove(board, move);
         }

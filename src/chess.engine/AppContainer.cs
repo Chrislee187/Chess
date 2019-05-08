@@ -58,8 +58,6 @@ namespace chess.engine
 
         public static void ConfigureChessDependencies(this IServiceCollection services)
         {
-
-
             services.AddTransient<IRefreshAllPaths<ChessPieceEntity>, 
                 ChessRefreshAllPaths>();
             services.AddTransient<IMoveValidationFactory<ChessPieceEntity>,
