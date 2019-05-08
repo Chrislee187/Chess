@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using chess.engine.Game;
 
 namespace chess.engine.Chess.Pieces
 {
@@ -22,6 +24,13 @@ namespace chess.engine.Chess.Pieces
         public static ChessPieceName FromChar(char c)
         {
             return _pieceNameMapper[c];
+        }
+
+        public static char ToChar(ChessPieceName piece, Colours colour)
+        {
+            var c = _pieceNameMapper.FirstOrDefault(n => n.Value == piece).Key;
+
+            return colour == Colours.White ? char.ToUpper(c) : char.ToLower(c);
         }
     }
 }

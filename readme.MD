@@ -31,7 +31,8 @@ GET /chess
 returns serialized newboard
 
 serializeedboard  = 64 chars (Ee for pawns that can be taken with enpassant)
-					+ 4 optional flags for White/BlackKingCanCastleQueen/Kingside 
+					+ single char b/w for whose turn it is
+					+ 4 optional flags for White/BlackKingCanCastleQueen/Kingside (needs to be validated by move history which can't easily be encoded in single chars')
 
 * Get available moves for board, all or colour specific
 GET /chess/serializedboard
