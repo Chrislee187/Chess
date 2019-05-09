@@ -33,7 +33,7 @@ namespace chess.webapi.Services
             _logger = logger;
         }
 
-        public ChessGameResult GetNewBoard()
+        public ChessWebApiResult GetNewBoard()
         {
             var game = new ChessGame(
                 _chessGameLogger,
@@ -41,37 +41,37 @@ namespace chess.webapi.Services
                 _entityFactory,
                 _chessGameStateService
             );
-            var result = new ChessGameResult(game, game.BoardState.GetAllItems().ToArray());
+            var result = new ChessWebApiResult(game, game.BoardState.GetAllItems().ToArray());
             return result;
         }
 
-        public ChessGameResult PlayMove(string board, string move)
+        public ChessWebApiResult PlayMove(string board, string move)
         {
             var game= CreateChessGame(board);
             var msg = game.Move(move);
-            return new ChessGameResult(game, msg);
+            return new ChessWebApiResult(game, msg);
         }
 
-        public ChessGameResult GetMoves(string board)
+        public ChessWebApiResult GetMoves(string board)
         {
             var game = CreateChessGame(board);
             var items = game.BoardState.GetAllItems();
-            return new ChessGameResult(game, items.ToArray());
+            return new ChessWebApiResult(game, items.ToArray());
         }
 
-        public ChessGameResult GetMovesForPlayer(string board, Colours forPlayer)
+        public ChessWebApiResult GetMovesForPlayer(string board, Colours forPlayer)
         {
             var game = CreateChessGame(board);
             var items = game.BoardState.GetItems((int) forPlayer);
-            return new ChessGameResult(game, items.ToArray());
+            return new ChessWebApiResult(game, items.ToArray());
         }
 
-        public ChessGameResult GetMovesForLocation(string board, string location)
+        public ChessWebApiResult GetMovesForLocation(string board, string location)
         {
             var game = CreateChessGame(board);
             var loc = location.ToBoardLocation();
             var item = game.BoardState.GetItem(loc);
-            return new ChessGameResult(game, item);
+            return new ChessWebApiResult(game, item);
         }
 
 

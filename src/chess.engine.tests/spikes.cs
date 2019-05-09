@@ -12,6 +12,15 @@ namespace chess.engine.tests
     [TestFixture]
     public class spikes
     {
+        // TODO: Smoke tests, for example: 
+        // https://localhost:5001/api/ChessGame
+        // should return newboard, inprogress, white turn, valid moves etc.
+        // https://localhost:5001/api/ChessGame/....k%20%20%20%20ppppppp................................%20PPPPPPPRNBQKBNRW0000/a1a8
+        // should return checkmate 
+        // https://localhost:5001/api/ChessGame/asdasd
+        // should return 404 invalid board 
+        // https://localhost:5001/api/ChessGame/....k%20%20%20%20ppppppp................................%20PPPPPPPRNBQKBNRW0000/a1a2
+        // should return 404 invalid move
         [SetUp]
         public void Setup()
         {

@@ -76,7 +76,7 @@ namespace chess.engine
             // TODO: Handling of invalid formats
             int idx = 1;
 
-            var setup = CreatePieceEntitiesSetupActions(boardformat69char.Trim().Substring(0, 64), idx);
+            var setup = CreatePieceEntitiesSetupActions(boardformat69char.Substring(0, 64), idx);
 
             var whoseTurn = boardformat69char[64] == 'W'
                 ? Colours.White

@@ -4,10 +4,10 @@ namespace chess.webapi.Services
 {
     public interface IChessService
     {
-        ChessGameResult GetNewBoard();
-        ChessGameResult PlayMove(string board, string move);
-        ChessGameResult GetMoves(string board);
-        ChessGameResult GetMovesForPlayer(string board, Colours forPlayer);
-        ChessGameResult GetMovesForLocation(string board, string location);
+        ChessWebApiResult GetNewBoard();
+        ChessWebApiResult PlayMove(string board, string move);
+        ChessWebApiResult GetMoves(string board);
+        ChessWebApiResult GetMovesForPlayer(string board, Colours forPlayer);
+        ChessWebApiResult GetMovesForLocation(string board, string location);
     }
 }

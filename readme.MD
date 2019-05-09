@@ -1,5 +1,8 @@
 ﻿# TODOS
-* Proper README.MD
+* Split board.engine tests from chess.engine.tests
+* Proper README.MD for each project
+* HIgh level readme.md in root
+* 
 * Publish WebAPI somewhere
 * Put in github and hook up to my teamcity for automated build and deployment
 * Design docs

@@ -11,20 +11,20 @@ using Newtonsoft.Json;
 
 namespace chess.webapi.Services
 {
-    public class ChessGameResult
+    public class ChessWebApiResult
     {
+        public string Message { get; }
+        public string Board { get; set; }
+        public string BoardText { get; set; }
+        public string[] AvailableMoves { get; }
+
         [JsonIgnore]
         public ChessGame Game { get; }
 
         [JsonIgnore]
         public IEnumerable<BoardMove> Moves { get; }
 
-        public string Board { get; set; }
-        public string BoardText { get; set; }
-
-        public string[] AvailableMoves { get; }
-        public string Message{ get; }
-        public ChessGameResult(ChessGame game, string msg = "")
+        public ChessWebApiResult(ChessGame game, string msg = "")
         {
             Game = game;
             Board = ChessGameConvert.Serialise(game);
@@ -35,7 +35,7 @@ namespace chess.webapi.Services
             Message = msg;
         }
 
-        public ChessGameResult(ChessGame game, params LocatedItem<ChessPieceEntity>[] items) :this(game)
+        public ChessWebApiResult(ChessGame game, params LocatedItem<ChessPieceEntity>[] items) :this(game)
         {
             Moves = items.SelectMany(i => i.Paths.FlattenMoves());
             AvailableMoves = ToMoveList(items);
