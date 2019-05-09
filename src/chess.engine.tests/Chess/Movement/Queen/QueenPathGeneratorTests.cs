@@ -1,7 +1,8 @@
 using System.Linq;
+using board.engine.Actions;
 using chess.engine.Chess.Movement.ChessPieces.Queen;
+using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement;
 using chess.engine.tests.Builders;
 using chess.engine.tests.Movement;
 using NUnit.Framework;
@@ -22,67 +23,67 @@ namespace chess.engine.tests.Chess.Movement.Queen
         [Test]
         public void PathsFrom_returns_all_directions()
         {
-            var boardLocation = BoardLocation.At("E4");
-            var whitePaths = _gen.PathsFrom(boardLocation, Colours.White).ToList();
+            var boardLocation = "E4".ToBoardLocation();
+            var whitePaths = _gen.PathsFrom(boardLocation, (int) Colours.White).ToList();
 
             Assert.That(whitePaths.Count(), Is.EqualTo(8));
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("F5", MoveType.MoveOrTake)
-                    .To("G6", MoveType.MoveOrTake)
-                    .To("H7", MoveType.MoveOrTake)
+                    .To("F5", (int) DefaultActions.MoveOrTake)
+                    .To("G6", (int) DefaultActions.MoveOrTake)
+                    .To("H7", (int) DefaultActions.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("D5", MoveType.MoveOrTake)
-                    .To("C6", MoveType.MoveOrTake)
-                    .To("B7", MoveType.MoveOrTake)
-                    .To("A8", MoveType.MoveOrTake)
+                    .To("D5", (int) DefaultActions.MoveOrTake)
+                    .To("C6", (int) DefaultActions.MoveOrTake)
+                    .To("B7", (int) DefaultActions.MoveOrTake)
+                    .To("A8", (int) DefaultActions.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("F3", MoveType.MoveOrTake)
-                    .To("G2", MoveType.MoveOrTake)
-                    .To("H1", MoveType.MoveOrTake)
+                    .To("F3", (int) DefaultActions.MoveOrTake)
+                    .To("G2", (int) DefaultActions.MoveOrTake)
+                    .To("H1", (int) DefaultActions.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("D3", MoveType.MoveOrTake)
-                    .To("C2", MoveType.MoveOrTake)
-                    .To("B1", MoveType.MoveOrTake)
+                    .To("D3", (int) DefaultActions.MoveOrTake)
+                    .To("C2", (int) DefaultActions.MoveOrTake)
+                    .To("B1", (int) DefaultActions.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("F5", MoveType.MoveOrTake)
-                    .To("G6", MoveType.MoveOrTake)
-                    .To("H7", MoveType.MoveOrTake)
+                    .To("F5", (int) DefaultActions.MoveOrTake)
+                    .To("G6", (int) DefaultActions.MoveOrTake)
+                    .To("H7", (int) DefaultActions.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("D5", MoveType.MoveOrTake)
-                    .To("C6", MoveType.MoveOrTake)
-                    .To("B7", MoveType.MoveOrTake)
-                    .To("A8", MoveType.MoveOrTake)
+                    .To("D5", (int) DefaultActions.MoveOrTake)
+                    .To("C6", (int) DefaultActions.MoveOrTake)
+                    .To("B7", (int) DefaultActions.MoveOrTake)
+                    .To("A8", (int) DefaultActions.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("F3", MoveType.MoveOrTake)
-                    .To("G2", MoveType.MoveOrTake)
-                    .To("H1", MoveType.MoveOrTake)
+                    .To("F3", (int) DefaultActions.MoveOrTake)
+                    .To("G2", (int) DefaultActions.MoveOrTake)
+                    .To("H1", (int) DefaultActions.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
                 new PathBuilder().From("E4")
-                    .To("D3", MoveType.MoveOrTake)
-                    .To("C2", MoveType.MoveOrTake)
-                    .To("B1", MoveType.MoveOrTake)
+                    .To("D3", (int) DefaultActions.MoveOrTake)
+                    .To("C2", (int) DefaultActions.MoveOrTake)
+                    .To("B1", (int) DefaultActions.MoveOrTake)
                     .Build(), Colours.White);
 
         }

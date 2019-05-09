@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using board.engine;
+using chess.engine.Game;
 
 namespace chess.engine.Extensions
 {
@@ -15,5 +17,17 @@ namespace chess.engine.Extensions
             for (var i = 0; i < str.Length; i += partLength)
                 yield return str.Substring(i, Math.Min(partLength, str.Length - i));
         }
+
+        public static BoardLocation ToBoardLocation(this string s)
+        {
+            if (s.Length != 2) throw new ArgumentException($"Invalid BoardLocation {s}");
+
+            // TODO: This is nice helper function but does make it dependent on ChessFile a Chess specific!!!
+            if (!Enum.TryParse(s[0].ToString().ToUpper(), out ChessFile x)) throw new ArgumentException($"Invalid BoardLocation {s}");
+            if (!int.TryParse(s[1].ToString(), out var y)) throw new ArgumentException($"Invalid BoardLocation {s}");
+
+            return BoardLocation.At((int)x, y);
+        }
+
     }
 }

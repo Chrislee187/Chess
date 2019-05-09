@@ -1,6 +1,6 @@
-﻿using chess.engine.Actions;
+﻿using board.engine;
+using board.engine.Actions;
 using chess.engine.Chess.Entities;
-using chess.engine.Entities;
 using chess.engine.Game;
 using Moq;
 using NUnit.Framework;
@@ -14,14 +14,14 @@ namespace chess.engine.tests.Actions
         public void Setup()
         {
             base.SetUp();
-            Action = new MoveOnlyAction<ChessPieceEntity>(FactoryMock.Object, StateMock.Object);
+            Action = new MoveOnlyAction<ChessPieceEntity>(ActionFactoryMock.Object, StateMock.Object);
         }
 
         [Test]
         public void Execute_clears_from_location_and_replaces_to()
         {
             var piece = new PawnEntity(Colours.White);
-            SetupPieceReturn(AnyMove.From, piece);
+            SetupLocationReturn(AnyMove.From, piece);
 
             Action.Execute(AnyMove);
 

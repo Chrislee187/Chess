@@ -1,33 +1,33 @@
-﻿using chess.engine.Game;
-using chess.engine.Movement;
+﻿using board.engine;
+using board.engine.Movement;
+using chess.engine.Game;
 
 namespace chess.engine.Chess.Movement.ChessPieces.King
 {
     public class KingCastlePathGenerator : IPathGenerator
     {
-        public Paths PathsFrom(BoardLocation location, Colours forPlayer)
+        public Paths PathsFrom(BoardLocation location, int forPlayer)
         {
             var paths = new Paths();
 
+            var playerIdx = (Colours) forPlayer;
             foreach (var dest in new[]
             {
-                location.MoveRight(forPlayer,2),
-                location.MoveLeft(forPlayer,2),
+                location.MoveRight(playerIdx,2),
+                location.MoveLeft(playerIdx,2),
             })
             {
                 if (dest != null)
                 {
                     var side = dest.X > location.X
-                            ? MoveType.CastleKingSide
-                            : MoveType.CastleQueenSide;
+                            ? ChessMoveTypes.CastleKingSide
+                            : ChessMoveTypes.CastleQueenSide;
 
-                    paths.Add(new Path { BoardMove.Create(location, dest, side) });
+                    paths.Add(new Path { BoardMove.Create(location, dest, (int) side) });
                 }
             }
 
             return paths;
         }
-
-        public Paths PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
     }
 }

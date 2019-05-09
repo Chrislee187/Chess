@@ -1,8 +1,12 @@
 ﻿using System;
-using chess.engine.Board;
+using board.engine;
+using board.engine.Actions;
+using board.engine.Board;
+using board.engine.Movement;
 using chess.engine.Chess;
-using chess.engine.Entities;
-using chess.engine.Movement;
+using chess.engine.Chess.Actions;
+using chess.engine.Chess.Entities;
+using chess.engine.Chess.Movement;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -16,9 +20,9 @@ namespace chess.engine
         static AppContainer()
         {
             var serviceCollection = new ServiceCollection();
-            var config = serviceCollection.ConfigureConfig();
-            serviceCollection.ConfigureLogging(config);
-            serviceCollection.AddChessDependencies();
+            var config = ConfigureConfig(serviceCollection);
+            ConfigureLogging(serviceCollection, config);
+            AddChessDependencies(serviceCollection);
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
         }
@@ -54,18 +58,15 @@ namespace chess.engine
 
         public static void AddChessDependencies(this IServiceCollection services)
         {
-            services.AddTransient<IRefreshAllPaths<ChessPieceEntity>, 
-                ChessRefreshAllPaths>();
-            services.AddTransient<IMoveValidationFactory<ChessPieceEntity>,
-                MoveValidationFactory<ChessPieceEntity>>();
-
-            services.AddTransient<IPathValidator<ChessPieceEntity>,
-                ChessPathValidator>();
-            services.AddTransient<IPathsValidator<ChessPieceEntity>,
-                ChessPathsValidator>();
+            services.AddTransient<IRefreshAllPaths<ChessPieceEntity>, ChessRefreshAllPaths>();
+            services.AddTransient<IPathsValidator<ChessPieceEntity>, ChessPathsValidator>();
+            services.AddTransient<IPathValidator<ChessPieceEntity>,ChessPathValidator>();
+            services.AddTransient<IMoveValidationFactory<ChessPieceEntity>, ChessMoveValidationProvider>();
 
             services.AddTransient<IBoardEngineProvider<ChessPieceEntity>,ChessBoardEngineProvider>();
-            services.AddTransient<IChessGameState,ChessGameState>();
+            services.AddTransient<IBoardActionFactory<ChessPieceEntity>,ChessBoardActionProvider>();
+            services.AddTransient<IBoardEntityFactory<ChessPieceEntity>,ChessPieceEntityFactory>();
+            services.AddTransient<IChessGameStateService,ChessGameStateService>();
 
         }
     }

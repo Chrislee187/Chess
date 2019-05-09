@@ -1,36 +1,38 @@
-﻿using chess.engine.Game;
-using chess.engine.Movement;
+﻿using board.engine;
+using board.engine.Actions;
+using board.engine.Movement;
+using chess.engine.Chess.Movement.ChessPieces.King;
+using chess.engine.Game;
 
 namespace chess.engine.Chess.Movement.ChessPieces.Knight
 {
     public class KnightPathGenerator : IPathGenerator
     {
-        public Paths PathsFrom(BoardLocation location, Colours forPlayer)
+        public Paths PathsFrom(BoardLocation location, int forPlayer)
         {
             var paths = new Paths();
 
+            var playerIdx = (Colours) forPlayer;
             foreach (var dest in new[]
             {
-                location.KnightVerticalMove(forPlayer, true, true),
-                location.KnightVerticalMove(forPlayer, true, false),
-                location.KnightVerticalMove(forPlayer, false, true),
-                location.KnightVerticalMove(forPlayer, false, false),
+                location.KnightVerticalMove(playerIdx, true, true),
+                location.KnightVerticalMove(playerIdx, true, false),
+                location.KnightVerticalMove(playerIdx, false, true),
+                location.KnightVerticalMove(playerIdx, false, false),
 
-                location.KnightHorizontalMove(forPlayer, true, true),
-                location.KnightHorizontalMove(forPlayer, true, false),
-                location.KnightHorizontalMove(forPlayer, false, true),
-                location.KnightHorizontalMove(forPlayer, false, false),
+                location.KnightHorizontalMove(playerIdx, true, true),
+                location.KnightHorizontalMove(playerIdx, true, false),
+                location.KnightHorizontalMove(playerIdx, false, true),
+                location.KnightHorizontalMove(playerIdx, false, false),
             })
             {
                 if (dest != null)
                 {
-                    paths.Add(new Path { BoardMove.Create(location, dest, MoveType.MoveOrTake) });
+                    paths.Add(new Path { BoardMove.Create(location, dest, (int)DefaultActions.MoveOrTake) });
                 }
             }
 
             return paths;
         }
-
-        public Paths PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
     }
 }

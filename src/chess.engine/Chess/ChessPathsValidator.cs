@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using chess.engine.Board;
-using chess.engine.Entities;
-using chess.engine.Game;
-using chess.engine.Movement;
+using board.engine;
+using board.engine.Board;
+using board.engine.Movement;
+using chess.engine.Chess.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace chess.engine.Chess
@@ -10,10 +10,10 @@ namespace chess.engine.Chess
     public class ChessPathsValidator : IPathsValidator<ChessPieceEntity>
     {
         private readonly IPathValidator<ChessPieceEntity> _pathValidator;
-        private readonly ILogger<ChessPathValidator> _logger;
+        private readonly ILogger<ChessPathsValidator> _logger;
 
         public ChessPathsValidator(
-            ILogger<ChessPathValidator> logger,
+            ILogger<ChessPathsValidator> logger,
             IPathValidator<ChessPieceEntity> pathValidator
             )
         {
@@ -27,7 +27,7 @@ namespace chess.engine.Chess
             var paths = new Paths();
             paths.AddRange(
                 entity.PathGenerators
-                    .SelectMany(pg => pg.PathsFrom(boardLocation, entity.Player))
+                    .SelectMany(pg => pg.PathsFrom(boardLocation, (int) entity.Player))
             );
 
             var validPaths = RemoveInvalidMoves(boardState, paths);

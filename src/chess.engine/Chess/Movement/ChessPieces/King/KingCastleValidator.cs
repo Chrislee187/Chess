@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using chess.engine.Board;
-using chess.engine.Entities;
+using board.engine;
+using board.engine.Actions;
+using board.engine.Board;
+using board.engine.Movement;
+using board.engine.Movement.Validators;
+using chess.engine.Chess.Entities;
+using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement;
-using chess.engine.Movement.Validators;
 
 namespace chess.engine.Chess.Movement.ChessPieces.King
 {
@@ -17,9 +20,9 @@ namespace chess.engine.Chess.Movement.ChessPieces.King
             var kingIsValid = king.Piece.Equals(ChessPieceName.King); // && !king.MoveHistory.Any()
             if (!kingIsValid) return false;
 
-            var rookLoc = move.MoveType == MoveType.CastleKingSide
-                ? BoardLocation.At($"H{move.From.Y}")
-                : BoardLocation.At($"A{move.From.Y}");
+            var rookLoc = move.ChessMoveTypes == (int) ChessMoveTypes.CastleKingSide
+                ? $"H{move.From.Y}".ToBoardLocation()
+                : $"A{move.From.Y}".ToBoardLocation();
 
             var rook = boardState.GetItem(rookLoc);
 
@@ -35,16 +38,16 @@ namespace chess.engine.Chess.Movement.ChessPieces.King
             var destinationIsEmptyValidator = new DestinationIsEmptyValidator<ChessPieceEntity>();
             var pathIsEmpty = pathBetween.All(loc 
                 => destinationIsEmptyValidator.ValidateMove(
-                    new BoardMove(move.From, loc, MoveType.MoveOnly), 
+                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly), 
                     boardState));
 
             var destinationNotUnderAttackValidator = new DestinationNotUnderAttackValidator<ChessPieceEntity>();
             var pathNotUnderAttack = pathBetween.All(loc 
                 => destinationNotUnderAttackValidator.ValidateMove(
-                    new BoardMove(move.From, loc, MoveType.MoveOnly),
+                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly),
                     boardState));
             
-            return kingIsValid && rookIsValid && pathIsEmpty && pathNotUnderAttack;
+            return pathIsEmpty && pathNotUnderAttack;
         }
 
         private static List<BoardLocation> CalcPathBetweenKingAndCastle(BoardMove move, ChessPieceEntity king)

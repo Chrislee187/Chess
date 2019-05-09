@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net.NetworkInformation;
-using chess.engine.Board;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Serialisation
@@ -11,7 +9,7 @@ namespace chess.engine.tests.Serialisation
         [Test]
         public void Should_serialise_and_deserialise_to_68char_format()
         {
-            var chessGame = HelperFactory.NewChessGameNoLoggers;
+            var chessGame = ChessFactory.NewChessGame(ChessFactory.LoggerType.Null);
             var actualNewBoard = ChessGameConvert.Serialise(chessGame);
 
             var expectedNewBoard = "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR" // The board
@@ -22,8 +20,8 @@ namespace chess.engine.tests.Serialisation
 
             var actualGame = ChessGameConvert.Deserialise(actualNewBoard);
 
-            var actualGameAsString = new EasyBoardBuilder().FromChessGame(actualGame).ToString();
-            var expectedGameAsString = new EasyBoardBuilder().FromChessGame(chessGame).ToString();
+            var actualGameAsString = new ChessBoardBuilder().FromChessGame(actualGame).ToString();
+            var expectedGameAsString = new ChessBoardBuilder().FromChessGame(chessGame).ToString();
             Assert.That(actualGameAsString, Is.EqualTo(expectedGameAsString));
             Console.WriteLine(actualGameAsString);
         }

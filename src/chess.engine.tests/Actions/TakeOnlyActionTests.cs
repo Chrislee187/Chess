@@ -1,7 +1,6 @@
-﻿using chess.engine.Actions;
-using chess.engine.Board;
+﻿using board.engine.Actions;
+using board.engine.Board;
 using chess.engine.Chess.Entities;
-using chess.engine.Entities;
 using chess.engine.Game;
 using Moq;
 using NUnit.Framework;
@@ -15,9 +14,9 @@ namespace chess.engine.tests.Actions
         public void Setup()
         {
             StateMock = new Mock<IBoardState<ChessPieceEntity>>();
-            FactoryMock = new Mock<IBoardActionFactory<ChessPieceEntity>>();
+            ActionFactoryMock = new Mock<IBoardActionFactory<ChessPieceEntity>>();
             BoardActionMock = new Mock<IBoardAction>();
-            Action = new TakeOnlyAction<ChessPieceEntity>(FactoryMock.Object, StateMock.Object);
+            Action = new TakeOnlyAction<ChessPieceEntity>(ActionFactoryMock.Object, StateMock.Object);
         }
 
         [Test]
@@ -26,14 +25,14 @@ namespace chess.engine.tests.Actions
             var piece = new RookEntity(Colours.White);
             var takePiece = new RookEntity(Colours.Black);
 
-            SetupPieceReturn(AnyTake.From, piece);
-            SetupPieceReturn(AnyTake.To, takePiece);
-            SetupCreateMockActionForMoveType(DefaultActions.MoveOnly);
+            SetupLocationReturn(AnyTake.From, piece);
+            SetupLocationReturn(AnyTake.To, takePiece);
+            SetupMockActionForMoveType((int)DefaultActions.MoveOnly);
 
             Action.Execute(AnyTake);
 
             VerifyLocationWasCleared(AnyTake.To);
-            VerifyActionWasCreated(DefaultActions.MoveOnly);
+            VerifyActionWasCreated((int)DefaultActions.MoveOnly);
             VerifyActionWasExecuted(AnyTake);
         }
     }

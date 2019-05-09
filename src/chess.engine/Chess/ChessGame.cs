@@ -1,21 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using chess.engine.Board;
+using board.engine;
+using board.engine.Board;
+using board.engine.Movement;
+using chess.engine.Chess.Entities;
 using chess.engine.Chess.Pieces;
-using chess.engine.Entities;
+using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 
 namespace chess.engine.Chess
 {
-    public enum GameState
-    {
-        InProgress, Check, Checkmate
-    }
-
     public class ChessGame
     {
         private readonly BoardEngine<ChessPieceEntity> _engine;
@@ -30,43 +27,51 @@ namespace chess.engine.Chess
 
         public IBoardState<ChessPieceEntity> BoardState => _engine.BoardState;
 
-        private readonly ChessGameState _chessGameState;
         private readonly ILogger<ChessGame> _logger;
+        private IBoardEntityFactory<ChessPieceEntity> _entityFactory;
+        private readonly IChessGameStateService _gameStateService;
 
         public ChessGame(
             ILogger<ChessGame> logger,
-            IBoardEngineProvider<ChessPieceEntity> boardEngineProvider) 
-            : this(logger, boardEngineProvider, new ChessBoardSetup())
-        { }
+            IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
+            IBoardEntityFactory<ChessPieceEntity> entityFactory,
+            IChessGameStateService gameStateService
+        )
+            : this(logger, boardEngineProvider, entityFactory, gameStateService, new ChessBoardSetup(entityFactory))
+        {
+        }
 
         public ChessGame(
-            ILogger<ChessGame> logger, 
+            ILogger<ChessGame> logger,
             IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
+            IBoardEntityFactory<ChessPieceEntity> entityFactory,
+            IChessGameStateService gameStateService,
             IBoardSetup<ChessPieceEntity> setup,
             Colours whoseTurn = Colours.White)
         {
+
             _logger = logger;
             _logger.LogDebug("Initialising new chess game");
 
             _engine = boardEngineProvider.Provide(setup);
-
-            _chessGameState = new ChessGameState(NullLogger<ChessGameState>.Instance);
-
+            _entityFactory = entityFactory;
+            _gameStateService = gameStateService;
             CurrentPlayer = whoseTurn;
+            GameState = _gameStateService.CurrentGameState(BoardState, CurrentPlayer);
         }
-        
+
         public string Move(string input)
         {
             _logger.LogDebug($"Attempting move {input}");
             // TODO: Unit test this?
             var validated = ValidateInput(input);
 
-            if (!string.IsNullOrEmpty(validated.errorMessage))
+            if (!String.IsNullOrEmpty(validated.errorMessage))
             {
-                var from = BoardLocation.At(input.Substring(0, 2));
+                var from = input.Substring(0, 2).ToBoardLocation();
                 var items = BoardState.GetItem(from);
                 var moves = items.Paths.FlattenMoves().Select(m => m.ToString()).ToList();
-                var debug = $"{this.ToText()}\nValid move list for piece at {from};\n" + string.Join(", ", moves);
+                var debug = $"{this.ToText()}\nValid move list for piece at {from};\n" + String.Join(", ", moves);
 
                 return validated.errorMessage + $"\n\nDEBUG INFO\n{debug}";
             }
@@ -74,25 +79,33 @@ namespace chess.engine.Chess
             _engine.Move(validated.move);
 
             CurrentPlayer = NextPlayer();
-            GameState = _chessGameState.CurrentGameState(BoardState, CurrentPlayer);
+            GameState = _gameStateService.CurrentGameState(BoardState, CurrentPlayer);
 
-            return GameState == GameState.Check || GameState == GameState.Checkmate 
-                ? GameState.ToString() 
+            return GameState == GameState.Check || GameState == GameState.Checkmate
+                ? GameState.ToString()
                 : "";
         }
 
         private (BoardMove move, string errorMessage) ValidateInput(string input)
         {
-            var from = BoardLocation.At(input.Substring(0, 2));
-            var to = BoardLocation.At(input.Substring(2, 2));
-            ChessPieceName? promotionPiece = null;
+            var from = input.Substring(0, 2).ToBoardLocation();
+            var to = input.Substring(2, 2).ToBoardLocation();
+            ChessPieceEntity promotionPiece = null;
+            var piece = _engine.PieceAt(from);
+            var pieceColour = piece.Item.Player;
+
             if (input.Length == 6)
             {
                 var extra = input.Substring(4, 2).ToList();
 
                 if (extra[0] == '+')
                 {
-                    promotionPiece = PieceNameMapper.FromChar(extra[1]);
+                    var extraData = new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+                    {
+                        Owner = pieceColour,
+                        PieceName = PieceNameMapper.FromChar(extra[1])
+                    };
+                    promotionPiece = _entityFactory.Create(extraData);
                 }
                 else
                 {
@@ -100,13 +113,12 @@ namespace chess.engine.Chess
                 }
 
             }
-            var piece = _engine.PieceAt(from);
-            var pieceColour = piece.Item.Player;
+
             if (pieceColour != CurrentPlayer)
             {
                 return (null, $"It is not {pieceColour}'s turn.");
             }
-            
+
             var validMove = piece.Paths.FindValidMove(from, to, promotionPiece);
 
             if (validMove == null)
@@ -118,11 +130,24 @@ namespace chess.engine.Chess
             {
                 return (null, $"Cannot take the king");
             }
-            return (validMove, string.Empty);
+
+            return (validMove, String.Empty);
         }
-        
+
+
+
         #region Meta Info
+
+        public static int DirectionModifierFor(Colours player) => player == Colours.White ? +1 : -1;
         public static int EndRankFor(Colours colour) => colour == Colours.White ? 8 : 1;
+
         #endregion
+    }
+
+    public enum GameState
+    {
+        InProgress,
+        Check,
+        Checkmate
     }
 }

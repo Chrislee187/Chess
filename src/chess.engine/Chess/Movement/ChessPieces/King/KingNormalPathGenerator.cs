@@ -1,35 +1,34 @@
-﻿using chess.engine.Game;
-using chess.engine.Movement;
+﻿using board.engine;
+using board.engine.Movement;
+using chess.engine.Game;
 
 namespace chess.engine.Chess.Movement.ChessPieces.King
 {
     public class KingNormalPathGenerator : IPathGenerator
     {
-        public Paths PathsFrom(BoardLocation location, Colours forPlayer)
+        public Paths PathsFrom(BoardLocation location, int forPlayer)
         {
             var paths = new Paths();
-
+            var playerIdx = (Colours) forPlayer;
             foreach (var dest in new[]
             {
-                location.MoveForward(forPlayer),
-                location.MoveForward(forPlayer)?.MoveRight(forPlayer),
-                location.MoveRight(forPlayer),
-                location.MoveBack(forPlayer)?.MoveRight(forPlayer),
-                location.MoveBack(forPlayer),
-                location.MoveBack(forPlayer)?.MoveLeft(forPlayer),
-                location.MoveLeft(forPlayer),
-                location.MoveLeft(forPlayer)?.MoveForward(forPlayer)
+                location.MoveForward(playerIdx),
+                location.MoveForward(playerIdx)?.MoveRight(playerIdx),
+                location.MoveRight(playerIdx),
+                location.MoveBack(playerIdx)?.MoveRight(playerIdx),
+                location.MoveBack(playerIdx),
+                location.MoveBack(playerIdx)?.MoveLeft(playerIdx),
+                location.MoveLeft(playerIdx),
+                location.MoveLeft(playerIdx)?.MoveForward(playerIdx)
             })
             {
                 if (dest != null)
                 {
-                    paths.Add(new Path { BoardMove.Create(location, dest, MoveType.KingMove) });
+                    paths.Add(new Path { BoardMove.Create(location, dest, (int)ChessMoveTypes.KingMove) });
                 }
             }
 
             return paths;
         }
-
-        public Paths PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
     }
 }

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using chess.engine.Board;
-using chess.engine.Entities;
+using board.engine.Board;
+using board.engine.Movement;
+using chess.engine.Chess.Entities;
 using chess.engine.Game;
-using chess.engine.Movement;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -16,7 +16,7 @@ namespace chess.engine.tests.Movement
         protected Mock<ILogger> LoggerMock;
 
         protected void AssertPathContains(IEnumerable<Path> paths, Path path, Colours colour)
-            => Assert.That(paths.Contains(path), $"{path} not found for {colour}, check MoveType!");
+            => Assert.That(paths.Contains(path), $"{path} not found for {colour}, check ChessMoveTypes!");
 
         protected void SetUp()
         {

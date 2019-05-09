@@ -1,9 +1,10 @@
 ﻿using System.Linq;
-using chess.engine.Board;
-using chess.engine.Entities;
-using chess.engine.Game;
-using chess.engine.Movement;
-using chess.engine.Movement.Validators;
+using board.engine;
+using board.engine.Board;
+using board.engine.Movement;
+using board.engine.Movement.Validators;
+using chess.engine.Chess.Entities;
+using chess.engine.Chess.Movement.ChessPieces.King;
 
 namespace chess.engine.Chess.Movement.ChessPieces.Pawn
 {
@@ -36,4 +37,38 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
             return true;
         }
     }
+
+    public class ChessMoveValidators : MoveValidationProvider<ChessPieceEntity>
+    {
+        public ChessMoveValidators()
+        {
+            Validators.Add((int) ChessMoveTypes.KingMove, new BoardMovePredicate<ChessPieceEntity>[]
+            {
+                (move, boardState) =>
+                    new DestinationIsEmptyOrContainsEnemyValidator<ChessPieceEntity>().ValidateMove(move, boardState),
+                (move, boardState) =>
+                    new DestinationNotUnderAttackValidator<ChessPieceEntity>().ValidateMove(move, boardState)
+            });
+
+            Validators.Add(
+                (int) ChessMoveTypes.TakeEnPassant, new BoardMovePredicate<ChessPieceEntity>[]
+                {
+                    (move, boardState)
+                        => new EnPassantTakeValidator().ValidateMove(move, boardState)
+                });
+            Validators.Add(
+                (int) ChessMoveTypes.CastleKingSide, new BoardMovePredicate<ChessPieceEntity>[]
+                {
+                    (move, boardState)
+                        => new KingCastleValidator().ValidateMove(move, boardState)
+                });
+            Validators.Add(
+                (int) ChessMoveTypes.CastleQueenSide, new BoardMovePredicate<ChessPieceEntity>[]
+                {
+                    (move, boardState)
+                        => new KingCastleValidator().ValidateMove(move, boardState)
+                });
+        }
+    }
+
 }

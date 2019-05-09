@@ -6,7 +6,7 @@ namespace chess.engine.Chess.Pieces
 {
     public static class PieceNameMapper
     {
-        private static readonly IDictionary<char, ChessPieceName> _pieceNameMapper = new Dictionary<char, ChessPieceName>
+        private static readonly IDictionary<char, ChessPieceName> PieceNames = new Dictionary<char, ChessPieceName>
         {
             {'p', ChessPieceName.Pawn },
             {'P', ChessPieceName.Pawn },
@@ -23,12 +23,15 @@ namespace chess.engine.Chess.Pieces
         };
         public static ChessPieceName FromChar(char c)
         {
-            return _pieceNameMapper[c];
+            return PieceNames[c];
         }
-
+        public static Colours ColourFromChar(char c)
+        {
+            return char.IsUpper(c) ? Colours.White : Colours.Black;
+        }
         public static char ToChar(ChessPieceName piece, Colours colour)
         {
-            var c = _pieceNameMapper.FirstOrDefault(n => n.Value == piece).Key;
+            var c = PieceNames.FirstOrDefault(n => n.Value == piece).Key;
 
             return colour == Colours.White ? char.ToUpper(c) : char.ToLower(c);
         }

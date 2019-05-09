@@ -1,9 +1,10 @@
-﻿using chess.engine.Actions;
+﻿using board.engine;
+using board.engine.Actions;
+using board.engine.Movement;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
-using chess.engine.Entities;
+using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement;
 using Moq;
 using NUnit.Framework;
 
@@ -13,12 +14,17 @@ namespace chess.engine.tests.Actions
     public class UpdatePieceActionTests : ActionTestsBase<UpdatePieceAction<ChessPieceEntity>, ChessPieceEntity>
     {
         private const ChessPieceName PromotionPiece = ChessPieceName.Queen;
-        private static readonly BoardMove PawnPromotionMove = new BoardMove(BoardLocation.At("B7"),BoardLocation.At("B8"), PromotionPiece);
+        private static readonly BoardMove PawnPromotionMove 
+            = new BoardMove("B7".ToBoardLocation(), "B8".ToBoardLocation(), (int)DefaultActions.UpdatePiece, new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            {
+                Owner = Colours.White,
+                PieceName = PromotionPiece
+            });
         [SetUp]
         public void Setup()
         {
-            base.SetUp();
-            Action = new UpdatePieceAction<ChessPieceEntity>(FactoryMock.Object, StateMock.Object);
+            SetUp();
+            Action = new UpdatePieceAction<ChessPieceEntity>(EntityFactoryMock.Object, ActionFactoryMock.Object, StateMock.Object);
         }
 
         [Test]
@@ -26,8 +32,8 @@ namespace chess.engine.tests.Actions
         {
             var piece = new PawnEntity(Colours.White);
             var promotedPiece = new QueenEntity(Colours.White);
-            SetupPieceReturn(PawnPromotionMove.From, piece);
-
+            SetupLocationReturn(PawnPromotionMove.From, piece);
+            SetupPromotionPiece(promotedPiece);
             Action.Execute(PawnPromotionMove);
 
             VerifyLocationWasCleared(PawnPromotionMove.From);

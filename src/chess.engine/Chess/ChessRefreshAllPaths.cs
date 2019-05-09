@@ -1,11 +1,12 @@
-﻿using System.Linq;
-using chess.engine.Actions;
-using chess.engine.Board;
-using chess.engine.Entities;
+﻿using System;
+using System.Linq;
+using board.engine;
+using board.engine.Actions;
+using board.engine.Board;
+using board.engine.Movement;
+using chess.engine.Chess.Entities;
 using chess.engine.Game;
-using chess.engine.Movement;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace chess.engine.Chess
 {
@@ -22,17 +23,19 @@ namespace chess.engine.Chess
     {
         private readonly ILogger _logger;
 
-        private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory = new BoardActionFactory<ChessPieceEntity>();
+        private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory;
         // TODO: Sort of logger
-        private readonly IChessGameState _chessGameState;
+        private readonly IChessGameStateService _chessGameStateService;
 
         public ChessRefreshAllPaths(
             ILogger<ChessRefreshAllPaths> logger,
-                IChessGameState chessGameState
+            IBoardActionFactory<ChessPieceEntity> actionFactory,
+                IChessGameStateService chessGameStateService
             )
         {
             _logger = logger;
-            _chessGameState = chessGameState;
+            _actionFactory = actionFactory;
+            _chessGameStateService = chessGameStateService;
         }
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
         {
@@ -75,15 +78,15 @@ namespace chess.engine.Chess
             return !validPath.Any() ? null : validPath;
         }
 
-        private bool DoeMoveLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move, Colours pieceColour)
+        private bool DoeMoveLeaveUsInCheck(ICloneable boardState, BoardMove move, Colours pieceColour)
         {
             var clonedBoardState = (IBoardState<ChessPieceEntity>) boardState.Clone();
-            var action = _actionFactory.Create(move.MoveType, clonedBoardState);
+            var action = _actionFactory.Create(move.ChessMoveTypes, clonedBoardState);
             action.Execute(move);
 
             clonedBoardState.RegeneratePaths((int)pieceColour.Enemy());
 
-            var inCheck = _chessGameState.CurrentGameState(clonedBoardState, pieceColour)
+            var inCheck = _chessGameStateService.CurrentGameState(clonedBoardState, pieceColour)
                           != GameState.InProgress;
             return inCheck;
         }

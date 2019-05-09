@@ -1,22 +1,27 @@
-﻿using chess.engine.Game;
-using chess.engine.Movement;
+﻿using board.engine;
+using board.engine.Actions;
+using board.engine.Movement;
+using chess.engine.Chess.Entities;
+using chess.engine.Chess.Movement.ChessPieces.King;
+using chess.engine.Game;
 
 namespace chess.engine.Chess.Movement.ChessPieces.Pawn
 {
     public class PawnLeftTakePathGenerator : IPathGenerator
     {
-        public Paths PathsFrom(BoardLocation location, Colours forPlayer)
+        public Paths PathsFrom(BoardLocation location, int forPlayer)
         {
             var paths = new Paths();
 
-            var takeType = location.Y == Pieces.Pawn.EnPassantRankFor(forPlayer)
-                ? MoveType.TakeEnPassant
-                : MoveType.TakeOnly;
+            var playerIdx = (Colours) forPlayer;
+            var takeType = location.Y == Pieces.Pawn.EnPassantRankFor(playerIdx)
+                ? (int)ChessMoveTypes.TakeEnPassant
+                : (int)DefaultActions.TakeOnly;
 
-            var takeLocation = location.MoveForward(forPlayer).MoveLeft(forPlayer);
+            var takeLocation = location.MoveForward(playerIdx).MoveLeft(playerIdx);
 
             if (takeLocation == null) return paths;
-            if (takeLocation.Y != ChessGame.EndRankFor(forPlayer))
+            if (takeLocation.Y != ChessGame.EndRankFor(playerIdx))
             {
                 var move = BoardMove.Create(location, takeLocation, takeType);
 
@@ -28,14 +33,17 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
             {
                 foreach (var promotionPieces in new[] { ChessPieceName.Queen, ChessPieceName.Rook, ChessPieceName.Bishop, ChessPieceName.Knight })
                 {
-                    var move = BoardMove.CreateUpdatePiece(location, takeLocation, promotionPieces);
+                    var move = new BoardMove(location, takeLocation, (int) DefaultActions.UpdatePiece,
+                        new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+                        {
+                            Owner = playerIdx,
+                            PieceName = promotionPieces
+                        });
                     paths.Add(new Path { move });
                 }
             }
 
             return paths;
         }
-
-        public Paths PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
     }
 }

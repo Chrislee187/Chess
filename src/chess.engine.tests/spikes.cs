@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Linq;
-using chess.engine.Board;
 using chess.engine.Chess;
-using chess.engine.Entities;
+using chess.engine.Chess.Entities;
+using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Moq;
+using chess.engine.tests.Builders;
 using NUnit.Framework;
 
 namespace chess.engine.tests
@@ -18,26 +15,15 @@ namespace chess.engine.tests
         [SetUp]
         public void Setup()
         {
-            _chessBoardEngineProvider = new ChessBoardEngineProvider(
-                NullLogger<BoardEngine<ChessPieceEntity>>.Instance,
-                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance,
-                    new ChessGameState(NullLogger<ChessGameState>.Instance)),
-                new ChessPathsValidator(NullLogger<ChessPathValidator>.Instance,
-                    new ChessPathValidator(NullLogger<ChessPathValidator>.Instance,
-                        new MoveValidationFactory<ChessPieceEntity>())));
+            _chessBoardSetup = new ChessBoardSetup(new ChessPieceEntityFactory());
+
         }
         [Test]
         public void Should()
         {
-            var engine = new BoardEngine<ChessPieceEntity>(NullLogger<BoardEngine<ChessPieceEntity>>.Instance,
-                new ChessBoardSetup(),
-                new ChessPathsValidator(NullLogger<ChessPathValidator>.Instance,
-                    new ChessPathValidator(NullLogger<ChessPathValidator>.Instance,
-                        new MoveValidationFactory<ChessPieceEntity>())),
-                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance,
-                    new ChessGameState(NullLogger<ChessGameState>.Instance)));
+            var engine = new ChessGameBuilder().BuildEngineProvider().Provide(_chessBoardSetup);
 
-            var startLocation = BoardLocation.At("B2");
+            var startLocation = "B2".ToBoardLocation();
 
             var piece = engine.BoardState.GetItem(startLocation);
 
@@ -51,7 +37,7 @@ namespace chess.engine.tests
         [Test]
         public void Spike_easy_board_builder_to_from_ChessGame()
         {
-            var setup = new EasyBoardBuilder()
+            var setup = new ChessBoardBuilder()
                     .Board("rnbqkbnr" +
                            "pppppppp" +
                            "        " +
@@ -63,19 +49,16 @@ namespace chess.engine.tests
                     .ToGameSetup()
                 ;
 
-            var game = new ChessGame(
-                NullLogger<ChessGame>.Instance, 
-                _chessBoardEngineProvider, 
-                setup);
+            var game = new ChessGameBuilder().BuildGame(setup);
 
-            var board = new EasyBoardBuilder().FromChessGame(game).ToString();
+            var board = new ChessBoardBuilder().FromChessGame(game).ToString();
             Console.WriteLine(board);
         }
 
         [Test]
         public void Spike_easy_board_builder_to_from_ChessGame2()
         {
-            var setup = new EasyBoardBuilder()
+            var setup = new ChessBoardBuilder()
                     //                .X(8, "rnbqkbnr")
                     //                .Y(ChessFile.A, "RP    pr")
                     //                .At(ChessFile.D, 2, 'P')
@@ -91,17 +74,17 @@ namespace chess.engine.tests
                     .ToGameSetup()
                 ;
 
-            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, _chessBoardEngineProvider, setup);
 
-            var board = new EasyBoardBuilder().FromChessGame(game).ToString();
+            var game = new ChessGameBuilder().BuildGame(setup);
+
+            var board = new ChessBoardBuilder().FromChessGame(game).ToString();
             Console.WriteLine(board);
         }
 
         [Test]
         public void Spike_debugging_a_move_problem()
         {
-            var board = new EasyBoardBuilder()
+            var board = new ChessBoardBuilder()
                     //                .X(8, "rnbqkbnr")
                     //                .Y(ChessFile.A, "RP    pr")
                     //                .At(ChessFile.D, 2, 'P')
@@ -116,7 +99,8 @@ namespace chess.engine.tests
                            "RNBQR.K.")
                 ;
 
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, _chessBoardEngineProvider, board.ToGameSetup(), Colours.White);
+            var game = new ChessGameBuilder().BuildGame(board.ToGameSetup());
+//            var game = new ChessGame(NullLogger<ChessGame>.Instance, _chessBoardEngineProvider, board.ToGameSetup(), Colours.White);
 
             // TODO: Fix this bug, pawn can't take pawn, something to do with
             // enpassant i guess based on pawn positions
@@ -129,7 +113,7 @@ namespace chess.engine.tests
         [Test]
         public void Should_play_the_manually_parsed_wiki_gamed()
         {
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, _chessBoardEngineProvider);
+            var game = new ChessGameBuilder().BuildGame();
             var moveIdx = 0;
             foreach (var move in ManullyParsedWikiGame)
             {
@@ -238,6 +222,6 @@ namespace chess.engine.tests
             "a6e6"
         };
 
-        private ChessBoardEngineProvider _chessBoardEngineProvider;
+        private ChessBoardSetup _chessBoardSetup;
     }
 }

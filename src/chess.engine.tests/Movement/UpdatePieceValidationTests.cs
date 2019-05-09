@@ -1,9 +1,11 @@
-﻿using chess.engine.Board;
+﻿using board.engine;
+using board.engine.Actions;
+using board.engine.Board;
+using board.engine.Movement;
+using board.engine.Movement.Validators;
 using chess.engine.Chess;
-using chess.engine.Entities;
-using chess.engine.Game;
-using chess.engine.Movement;
-using chess.engine.Movement.Validators;
+using chess.engine.Chess.Entities;
+using chess.engine.Extensions;
 using chess.engine.tests.Chess.Movement.King;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
@@ -18,7 +20,7 @@ namespace chess.engine.tests.Movement
         [SetUp]
         public void SetUp()
         {
-            var board = new EasyBoardBuilder()
+            var board = new ChessBoardBuilder()
                 .Board("   qk  r" +
                        "P       " +
                        "        " +
@@ -28,7 +30,7 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "    K  R"
                 );
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, board.ToGameSetup());
+            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityFactory, ChessGameStateService, board.ToGameSetup());
             _boardState = game.BoardState;
         }
 
@@ -37,7 +39,12 @@ namespace chess.engine.tests.Movement
         {
             var validator = new UpdatePieceValidator<ChessPieceEntity>();
 
-            var promote = BoardMove.CreateUpdatePiece(BoardLocation.At("A7"),BoardLocation.At("A8"), ChessPieceName.Queen);
+            BoardLocation to = "A8".ToBoardLocation();
+            var promote = new BoardMove("A7".ToBoardLocation(), to, (int)DefaultActions.UpdatePiece, new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            {
+                Owner = 0,
+                PieceName = ChessPieceName.Queen
+            });
             Assert.True(validator.ValidateMove(promote, _boardState));
         }
     }

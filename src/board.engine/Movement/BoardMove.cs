@@ -1,0 +1,69 @@
+﻿using System;
+using board.engine.Board;
+
+namespace board.engine.Movement
+{
+    public class BoardMove : ICloneable
+    {
+        public static BoardMove Create(BoardLocation from, BoardLocation to, int moveType)
+            => new BoardMove(from, to, moveType);
+
+        public BoardLocation From { get; }
+        public BoardLocation To { get; }
+        public int ChessMoveTypes { get; }
+
+        public object ExtraData { get; private set; }
+
+        public BoardMove(BoardLocation from, BoardLocation to, int chessMoveTypes, object extraData = null)
+        {
+            From = from;
+            To = to;
+            ChessMoveTypes = chessMoveTypes;
+            ExtraData = extraData;
+        }
+
+        #region Equality & ToString()
+
+        protected bool Equals(BoardMove other)
+        {
+            return Equals(From, other.From)
+                   && Equals(To, other.To)
+//                   && (
+//                       MoveType != MoveType.PawnPromotion 
+//                       || Equals(ExtraData, other.ExtraData)
+//                       )
+                   && ChessMoveTypes.Equals(other.ChessMoveTypes);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((BoardMove)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((From != null ? From.GetHashCode() : 0) * 397) ^ (To != null ? To.GetHashCode() : 0);
+            }
+        }
+
+
+        public override string ToString()
+        {
+            return $"{From}{To}{ChessMoveTypes}";
+        }
+
+        public object Clone()
+        {
+            var boardMove = new BoardMove(From, To, ChessMoveTypes);
+            boardMove.ExtraData = ExtraData;
+            return boardMove;
+        }
+
+        #endregion
+    }
+}

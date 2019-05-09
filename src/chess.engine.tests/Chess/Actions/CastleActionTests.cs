@@ -1,10 +1,10 @@
-﻿using chess.engine.Actions;
+﻿using board.engine.Actions;
+using board.engine.Movement;
 using chess.engine.Chess.Actions;
 using chess.engine.Chess.Entities;
 using chess.engine.Chess.Pieces;
-using chess.engine.Entities;
+using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement;
 using chess.engine.tests.Actions;
 using NUnit.Framework;
 
@@ -18,8 +18,8 @@ namespace chess.engine.tests.Chess.Actions
         [SetUp]
         public void Setup()
         {
-            base.SetUp();
-            Action = new CastleAction<ChessPieceEntity>(FactoryMock.Object, StateMock.Object);
+            SetUp();
+            Action = new CastleAction<ChessPieceEntity>(ActionFactoryMock.Object, StateMock.Object);
         }
 
         [TestCase(Colours.White, KingSide)]
@@ -31,24 +31,24 @@ namespace chess.engine.tests.Chess.Actions
             var king = new KingEntity(colour);
             var kingStartFile = King.StartPositionFor(colour).X;
             var kingDestinationFile = side ? ChessFile.G : ChessFile.C;
-            var kingStartLoc = BoardLocation.At($"{kingStartFile}{rank}");
-            var kingDestination = BoardLocation.At($"{kingDestinationFile}{rank}");
+            var kingStartLoc = $"{kingStartFile}{rank}".ToBoardLocation();
+            var kingDestination = $"{kingDestinationFile}{rank}".ToBoardLocation();
 
             var rook = new RookEntity(colour);
             var rookStartFile = side ? ChessFile.H : ChessFile.A;
             var rookDestinationFile = side ? ChessFile.F : ChessFile.D;
-            var rookStart = BoardLocation.At($"{rookStartFile}{rank}");
-            var rookDestination = BoardLocation.At($"{rookDestinationFile}{rank}");
+            var rookStart = $"{rookStartFile}{rank}".ToBoardLocation();
+            var rookDestination = $"{rookDestinationFile}{rank}".ToBoardLocation();
 
-            var actualKingMove = new BoardMove(kingStartLoc, kingDestination, MoveType.MoveOnly);
-            var actualRookMove = new BoardMove(rookStart, rookDestination, MoveType.MoveOnly);
+            var actualKingMove = new BoardMove(kingStartLoc, kingDestination, (int) DefaultActions.MoveOnly);
+            var actualRookMove = new BoardMove(rookStart, rookDestination, (int)DefaultActions.MoveOnly);
 
-            SetupPieceReturn(kingStartLoc, king);
-            SetupPieceReturn(rookStart, rook);
-            SetupCreateMockActionForMoveType(DefaultActions.MoveOnly);
+            SetupLocationReturn(kingStartLoc, king);
+            SetupLocationReturn(rookStart, rook);
+            SetupMockActionForMoveType((int)DefaultActions.MoveOnly);
             Action.Execute(actualKingMove);
 
-            VerifyActionWasCreated(DefaultActions.MoveOnly);
+            VerifyActionWasCreated((int)DefaultActions.MoveOnly);
             VerifyActionWasExecuted(actualKingMove);
             VerifyActionWasExecuted(actualRookMove);
         }

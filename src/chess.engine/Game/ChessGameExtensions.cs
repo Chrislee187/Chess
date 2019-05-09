@@ -1,5 +1,4 @@
-﻿using chess.engine.Board;
-using chess.engine.Chess;
+﻿using chess.engine.Chess;
 
 namespace chess.engine.Game
 {
@@ -7,7 +6,7 @@ namespace chess.engine.Game
     {
         public static string ToText(this ChessGame game)
         {
-            return new EasyBoardBuilder().FromChessGame(game).ToString();
+            return new ChessBoardBuilder().FromChessGame(game).ToString();
         }
     }
 }

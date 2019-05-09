@@ -1,8 +1,5 @@
-﻿using chess.engine.Board;
-using chess.engine.Chess;
-using chess.engine.Entities;
-using chess.engine.Game;
-using chess.engine.Movement;
+﻿using chess.engine.Chess;
+using chess.engine.Extensions;
 using chess.engine.tests.Chess.Movement.King;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
@@ -16,7 +13,7 @@ namespace chess.engine.tests.Movement
         [Test]
         public void Should_find_move_that_leaves_king_in_check()
         {
-            var board = new EasyBoardBuilder()
+            var board = new ChessBoardBuilder()
                 .Board("    k   " +
                        "        " +
                        "        " +
@@ -26,14 +23,13 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "    K   "
                 );
-            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, board.ToGameSetup());
+            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityFactory, ChessGameStateService, board.ToGameSetup());
 
-            var blockedPieceLocation = BoardLocation.At("E5");
+            var blockedPieceLocation = "E5".ToBoardLocation();
 
             var blockedPiece = game.BoardState.GetItem(blockedPieceLocation);
 
-            Assert.False(blockedPiece.Paths.ContainsMoveTo(BoardLocation.At("D4")),
+            Assert.False(blockedPiece.Paths.ContainsMoveTo("D4".ToBoardLocation()),
                 $"Pawn at E5 should NOT be able to move D4");
         }
 

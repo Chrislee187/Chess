@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using board.engine.Actions;
+using board.engine.Movement;
 using chess.engine.Chess;
-using chess.engine.Entities;
+using chess.engine.Chess.Entities;
+using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement;
 using chess.engine.tests.Builders;
 using chess.engine.tests.Movement;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -29,7 +31,7 @@ namespace chess.engine.tests.Chess.Movement
             {
                 (move, state) => true
             };
-            _factoryMock.Setup(f => f.TryGetValue(It.IsAny<MoveType>(), out _moveTests))
+            _factoryMock.Setup(f => f.TryGetValue(It.IsAny<int>(), out _moveTests))
                 .Returns(true);
 
         }
@@ -49,15 +51,15 @@ namespace chess.engine.tests.Chess.Movement
         public void ValidPath_should_return_truncated_path_when_move_test_fails()
         {
             var validator = new ChessPathValidator(NullLogger<ChessPathValidator>.Instance, _factoryMock.Object);
-            var path = new PathBuilder().From("D2").To("D3").To("D4").To("D5", MoveType.TakeOnly).Build();
+            var path = new PathBuilder().From("D2").To("D3").To("D4").To("D5", (int)DefaultActions.TakeOnly).Build();
 
             IEnumerable<BoardMovePredicate<ChessPieceEntity>> failOnD5 = new List<BoardMovePredicate<ChessPieceEntity>>
             {
-                (move, state) => !move.To.Equals(BoardLocation.At("D5"))
+                (move, state) => !move.To.Equals("D5".ToBoardLocation())
             };
 
             _factoryMock.Setup(f => f.TryGetValue(
-                    It.IsAny<MoveType>(), 
+                    It.IsAny<int>(), 
                     out failOnD5))
                 .Returns(true);
 
@@ -73,7 +75,7 @@ namespace chess.engine.tests.Chess.Movement
         [Test]
         public void ValidPath_should_throw_for_unsupported_MoveType()
         {
-            _factoryMock.Setup(f => f.TryGetValue(It.IsAny<MoveType>(), out _moveTests))
+            _factoryMock.Setup(f => f.TryGetValue(It.IsAny<int>(), out _moveTests))
                 .Returns(false);
 
             var validator = new ChessPathValidator(NullLogger<ChessPathValidator>.Instance, _factoryMock.Object);

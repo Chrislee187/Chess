@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
-using chess.engine.Chess;
+using board.engine;
+using board.engine.Movement;
 using chess.engine.Game;
-using chess.engine.Movement;
 
-namespace chess.engine.Entities
+namespace chess.engine.Chess.Entities
 {
-    // TODO: Abstract to a generic, PathGens is the the common thing, piece and player are chess specific
-
     public abstract class ChessPieceEntity : IBoardEntity
     {
         public int EntityType { get; }
+        public abstract IEnumerable<IPathGenerator> PathGenerators { get; }
         public string EntityName { get; }
         public int Owner { get; }
 
@@ -26,8 +25,6 @@ namespace chess.engine.Entities
             Player = player;
             Piece = piece;
         }
-
-        public abstract IEnumerable<IPathGenerator> PathGenerators { get; }
 
         public abstract object Clone();
 

@@ -1,9 +1,11 @@
-﻿using chess.engine.Actions;
+﻿using board.engine;
+using board.engine.Actions;
+using board.engine.Movement;
 using chess.engine.Chess.Actions;
 using chess.engine.Chess.Entities;
-using chess.engine.Entities;
+using chess.engine.Chess.Movement.ChessPieces.King;
+using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement;
 using chess.engine.tests.Actions;
 using Moq;
 using NUnit.Framework;
@@ -14,12 +16,12 @@ namespace chess.engine.tests.Chess.Actions
     public class EnPassantActionTests : ActionTestsBase<EnPassantAction<ChessPieceEntity>, ChessPieceEntity>
     {
         private static readonly BoardMove EnPassantMove 
-            = new BoardMove(BoardLocation.At("B5"), BoardLocation.At("C6"), MoveType.TakeEnPassant);
+            = new BoardMove("B5".ToBoardLocation(), "C6".ToBoardLocation(), (int) ChessMoveTypes.TakeEnPassant);
         [SetUp]
         public void Setup()
         {
             base.SetUp();
-            Action = new EnPassantAction<ChessPieceEntity>(FactoryMock.Object, StateMock.Object);
+            Action = new EnPassantAction<ChessPieceEntity>(ActionFactoryMock.Object, StateMock.Object);
         }
 
         [Test]
@@ -30,9 +32,9 @@ namespace chess.engine.tests.Chess.Actions
 
             var takenPieceLocation = EnPassantMove.To.MoveBack(Colours.White);
 
-            SetupPieceReturn(EnPassantMove.From, piece);
-            SetupPieceReturn(takenPieceLocation, takenPiece);
-            SetupCreateMockActionForMoveType(DefaultActions.MoveOnly);
+            SetupLocationReturn(EnPassantMove.From, piece);
+            SetupLocationReturn(takenPieceLocation, takenPiece);
+            SetupMockActionForMoveType((int)DefaultActions.MoveOnly);
 
             Action.Execute(EnPassantMove);
 

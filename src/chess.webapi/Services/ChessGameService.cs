@@ -1,7 +1,10 @@
 ﻿using System.Linq;
-using chess.engine.Board;
+using board.engine;
+using board.engine.Board;
+using chess.engine;
 using chess.engine.Chess;
-using chess.engine.Entities;
+using chess.engine.Chess.Entities;
+using chess.engine.Extensions;
 using chess.engine.Game;
 using Microsoft.Extensions.Logging;
 
@@ -9,15 +12,22 @@ namespace chess.webapi.Services
 {
     public class ChessGameService : IChessService
     {
-        private ILogger<ChessGameService> _logger;
+        private readonly ILogger<ChessGameService> _logger;
         private readonly ILogger<ChessGame> _chessGameLogger;
         private readonly IBoardEngineProvider<ChessPieceEntity> _boardEngineProvider;
+        private readonly IBoardEntityFactory<ChessPieceEntity> _entityFactory;
+        private readonly IChessGameStateService _chessGameStateService;
 
         public ChessGameService(
             ILogger<ChessGameService> logger,
             ILogger<ChessGame> chessGameLogger, 
-            IBoardEngineProvider<ChessPieceEntity> boardEngineProvider)
+            IChessGameStateService chessGameStateService, 
+            IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
+            IBoardEntityFactory<ChessPieceEntity> entityFactory
+            )
         {
+            _chessGameStateService = chessGameStateService;
+            _entityFactory = entityFactory;
             _chessGameLogger = chessGameLogger;
             _boardEngineProvider = boardEngineProvider;
             _logger = logger;
@@ -27,7 +37,9 @@ namespace chess.webapi.Services
         {
             var game = new ChessGame(
                 _chessGameLogger,
-                _boardEngineProvider
+                _boardEngineProvider,
+                _entityFactory,
+                _chessGameStateService
             );
             var result = new ChessGameResult(game, game.BoardState.GetAllItems().ToArray());
             return result;
@@ -57,7 +69,7 @@ namespace chess.webapi.Services
         public ChessGameResult GetMovesForLocation(string board, string location)
         {
             var game = CreateChessGame(board);
-            var loc = BoardLocation.At(location);
+            var loc = location.ToBoardLocation();
             var item = game.BoardState.GetItem(loc);
             return new ChessGameResult(game, item);
         }

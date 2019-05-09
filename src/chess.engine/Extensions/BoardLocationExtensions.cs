@@ -1,5 +1,5 @@
-﻿using chess.engine.Game;
-using chess.engine.Movement;
+﻿using board.engine;
+using board.engine.Movement;
 
 namespace chess.engine.Extensions
 {

@@ -1,9 +1,6 @@
-﻿using System;
-using chess.engine.Board;
-using chess.engine.Chess;
-using chess.engine.Entities;
+﻿using chess.engine.Chess;
 using chess.engine.Game;
-using chess.engine.Movement.Validators;
+using chess.engine.tests.Builders;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
@@ -16,24 +13,24 @@ namespace chess.engine.tests.Chess
         [Test]
         public void Should_find_simple_check_condition()
         {
-            var result = new ChessGameState(NullLogger<ChessGameState>.Instance)
-                .CurrentGameState(new EasyBoardBuilder()
-                    .Board("R   k   " +
-                           "        " +
-                           "        " +
-                           "        " +
-                           "        " +
-                           "        " +
-                           "        " +
-                           "    K  R"
-                    ).ToBoardState(), Colours.Black);
+            var builder = new ChessBoardBuilder()
+                .Board("R   k   " +
+                       "        " +
+                       "        " +
+                       "        " +
+                       "        " +
+                       "        " +
+                       "        " +
+                       "    K  R"
+                );
+            var result = ChessFactory.CustomChessGame(builder.ToGameSetup(), Colours.Black);
 
-            Assert.That(result, Is.EqualTo(GameState.Check));
+            Assert.That(result.GameState, Is.EqualTo(GameState.Check));
         }
         [Test]
         public void Should_find_simple_checkmate_condition()
         {
-            var boardState = new EasyBoardBuilder()
+            var result = ChessFactory.CustomChessGame(new ChessBoardBuilder()
                 .Board("R   k   " +
                        "       R" +
                        "        " +
@@ -42,9 +39,7 @@ namespace chess.engine.tests.Chess
                        "        " +
                        "        " +
                        "    K   "
-                ).ToBoardState();
-            var result = new ChessGameState(NullLogger<ChessGameState>.Instance)
-                .CurrentGameState(boardState, Colours.Black);
+                ).ToGameSetup(), Colours.Black).GameState;
 
             Assert.That(result, Is.EqualTo(GameState.Checkmate));
         }

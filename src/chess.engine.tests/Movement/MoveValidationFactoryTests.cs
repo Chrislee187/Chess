@@ -1,6 +1,7 @@
 ﻿using System;
-using chess.engine.Entities;
-using chess.engine.Movement;
+using board.engine.Actions;
+using board.engine.Movement;
+using chess.engine.Chess.Entities;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
@@ -8,19 +9,19 @@ namespace chess.engine.tests.Movement
     [TestFixture]
     public class MoveValidationFactoryTests
     {
-        private MoveValidationFactory<ChessPieceEntity> _factory;
+        private MoveValidationProvider<ChessPieceEntity> _provider;
 
         [SetUp]
         public void SetUp()
         {
-            _factory = new MoveValidationFactory<ChessPieceEntity>();
+            _provider = new MoveValidationProvider<ChessPieceEntity>();
         }
         [Test]
         public void FactorySupportsAllMoveTypes()
         {
-            foreach (MoveType type in Enum.GetValues(typeof(MoveType)))
+            foreach (ChessMoveTypes type in Enum.GetValues(typeof(DefaultActions)))
             {
-                Assert.DoesNotThrow(() => _factory.Create(type, null), $"{type} is not support");
+                Assert.DoesNotThrow(() => _provider.Create((int)type, null), $"{type} is not support");
             }
         }
     }

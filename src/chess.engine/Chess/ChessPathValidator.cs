@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using chess.engine.Board;
-using chess.engine.Entities;
-using chess.engine.Movement;
+using board.engine.Board;
+using board.engine.Movement;
+using chess.engine.Chess.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace chess.engine.Chess
@@ -28,9 +27,9 @@ namespace chess.engine.Chess
             var validPath = new Path();
             foreach (var move in possiblePath)
             {
-                if (!_validationFactory.TryGetValue(move.MoveType, out var moveTests))
+                if (!_validationFactory.TryGetValue(move.ChessMoveTypes, out var moveTests))
                 {
-                    throw new ArgumentOutOfRangeException(nameof(move.MoveType), move.MoveType, $"No Move Validator implemented for {move.MoveType}");
+                    throw new ArgumentOutOfRangeException(nameof(move.ChessMoveTypes), move.ChessMoveTypes, $"No Move Validator implemented for {move.ChessMoveTypes}");
                 }
 
                 if (!moveTests.All(t => t(move, boardState)))

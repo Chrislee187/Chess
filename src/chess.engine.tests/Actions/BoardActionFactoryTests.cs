@@ -1,7 +1,10 @@
 ﻿using System;
-using chess.engine.Actions;
-using chess.engine.Entities;
-using chess.engine.Movement;
+using board.engine;
+using board.engine.Actions;
+using board.engine.Movement;
+using chess.engine.Chess.Actions;
+using chess.engine.Chess.Entities;
+using Moq;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Actions
@@ -14,14 +17,24 @@ namespace chess.engine.tests.Actions
         [SetUp]
         public void SetUp()
         {
-            _factory = new BoardActionFactory<ChessPieceEntity>();
+            _factory = new ChessBoardActionProvider(
+                new Mock<IBoardEntityFactory<ChessPieceEntity>>().Object
+                );
         }
         [Test]
-        public void FactorySupportsAllMoveTypes()
+        public void FactorySupportsDefaultActions()
         {
-            foreach (MoveType type in Enum.GetValues(typeof(MoveType)))
+            foreach (var type in Enum.GetValues(typeof(DefaultActions)))
             {
-                Assert.DoesNotThrow(() => _factory.Create(type, null), $"{type} is not support");
+                Assert.DoesNotThrow(() => _factory.Create((int) type, null), $"{type} is not support");
+            }
+        }
+        [Test]
+        public void FactorySupportsChessActions()
+        {
+            foreach (var type in Enum.GetValues(typeof(ChessMoveTypes)))
+            {
+                Assert.DoesNotThrow(() => _factory.Create((int)type, null), $"{type} is not support");
             }
         }
     }

@@ -1,10 +1,11 @@
-﻿using chess.engine.Board;
-using chess.engine.Chess;
-using chess.engine.Entities;
-using chess.engine.Movement;
-using chess.engine.Movement.Validators;
+﻿using board.engine.Actions;
+using board.engine.Board;
+using board.engine.Movement;
+using board.engine.Movement.Validators;
+using chess.engine.Chess.Entities;
+using chess.engine.Extensions;
+using chess.engine.tests.Builders;
 using chess.engine.tests.Chess.Movement.King;
-using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
@@ -12,13 +13,13 @@ namespace chess.engine.tests.Movement
     [TestFixture]
     public class DestinationContainsEnemyValidationTests :ValidatorTestsBase
     {
-        private EasyBoardBuilder _board;
+        private ChessBoardBuilder _board;
         private IBoardState<ChessPieceEntity> _boardState;
 
         [SetUp]
         public void SetUp()
         {
-            _board = new EasyBoardBuilder()
+            _board = new ChessBoardBuilder()
                 .Board("r  qk  r" +
                        "        " +
                        "        " +
@@ -28,8 +29,7 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "R   K  R"
                 );
-            IMoveValidationFactory<ChessPieceEntity> validationFactory = new MoveValidationFactory<ChessPieceEntity>();
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider);
+            var game = new ChessGameBuilder().BuildGame();
             _boardState = game.BoardState;
         }
 
@@ -38,7 +38,7 @@ namespace chess.engine.tests.Movement
         {
             var validator = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>();
 
-            var containsEnemy = BoardMove.Create("A1", "A8", MoveType.MoveOrTake);
+            var containsEnemy = BoardMove.Create("A1".ToBoardLocation(), "A8".ToBoardLocation(), (int) DefaultActions.MoveOrTake);
             Assert.True(validator.ValidateMove(containsEnemy, _boardState));
 
         }
@@ -47,7 +47,7 @@ namespace chess.engine.tests.Movement
         {
             var validator = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>();
 
-            var noEnemy = BoardMove.Create("E8", "G8", MoveType.MoveOrTake);
+            var noEnemy = BoardMove.Create("E8".ToBoardLocation(), "G8".ToBoardLocation(), (int) DefaultActions.MoveOrTake);
             Assert.False(validator.ValidateMove(noEnemy, _boardState));
 
         }

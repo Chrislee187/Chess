@@ -1,20 +1,23 @@
-﻿using chess.engine.Game;
-using chess.engine.Movement;
+﻿using board.engine;
+using board.engine.Movement;
+using chess.engine.Chess.Movement.ChessPieces.King;
+using chess.engine.Game;
 
 namespace chess.engine.Chess.Movement.ChessPieces.Bishop
 {
     public class BishopPathGenerator : StraightLinePathExtender, IPathGenerator
     {
-        public Paths PathsFrom(BoardLocation location, Colours forPlayer)
+        public Paths PathsFrom(BoardLocation location, int forPlayer)
         {
             var paths = new Paths();
 
+            var playerIdx = (Colours)forPlayer;
             foreach (var path in new[]
             {
-                ExtendedPathFrom(location, start => start.MoveForward(forPlayer)?.MoveRight(forPlayer)),
-                ExtendedPathFrom(location, start => start.MoveForward(forPlayer)?.MoveLeft(forPlayer)),
-                ExtendedPathFrom(location, start => start.MoveBack(forPlayer)?.MoveRight(forPlayer)),
-                ExtendedPathFrom(location, start => start.MoveBack(forPlayer)?.MoveLeft(forPlayer))
+                ExtendedPathFrom(location, start => start.MoveForward(playerIdx)?.MoveRight(playerIdx)),
+                ExtendedPathFrom(location, start => start.MoveForward(playerIdx)?.MoveLeft(playerIdx)),
+                ExtendedPathFrom(location, start => start.MoveBack(playerIdx)?.MoveRight(playerIdx)),
+                ExtendedPathFrom(location, start => start.MoveBack(playerIdx)?.MoveLeft(playerIdx))
             })
             {
                 if (path != null)
@@ -25,8 +28,5 @@ namespace chess.engine.Chess.Movement.ChessPieces.Bishop
 
             return paths;
         }
-
-        public Paths PathsFrom(string location, Colours forPlayer) => PathsFrom((BoardLocation)location, forPlayer);
-
     }
 }

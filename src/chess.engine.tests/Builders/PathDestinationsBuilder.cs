@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using board.engine;
+using board.engine.Actions;
+using board.engine.Movement;
 using chess.engine.Chess;
-using chess.engine.Game;
-using chess.engine.Movement;
+using chess.engine.Extensions;
 
 namespace chess.engine.tests.Builders
 {
@@ -9,25 +11,25 @@ namespace chess.engine.tests.Builders
     {
         private readonly BoardLocation _start;
 
-        private readonly List<(BoardLocation, MoveType)> _destinations = new List<(BoardLocation, MoveType)>();
+        private readonly List<(BoardLocation, int)> _destinations = new List<(BoardLocation, int)>();
         public PathDestinationsBuilder(BoardLocation start)
         {
             _start = start;
         }
 
-        public PathDestinationsBuilder To(BoardLocation at, MoveType moveType)
+        public PathDestinationsBuilder To(BoardLocation at, int chessMoveTypes)
         {
-            _destinations.Add((at, moveType));
+            _destinations.Add((at, chessMoveTypes));
             return this;
         }
-        public PathDestinationsBuilder To(string at, MoveType moveType = MoveType.MoveOnly)
+        public PathDestinationsBuilder To(string at, int chessMoveTypes = (int) DefaultActions.MoveOnly)
         {
-            return To(BoardLocation.At(at), moveType);
+            return To(at.ToBoardLocation(), chessMoveTypes);
         }
 
         public PathDestinationsBuilder ToUpdatePiece(string at, ChessPieceName promotionPiece)
         {
-            return To(BoardLocation.At(at), MoveType.UpdatePiece);
+            return To(at.ToBoardLocation(), (int) DefaultActions.UpdatePiece);
         }
 
         public Path Build()

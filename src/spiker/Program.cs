@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using board.engine;
+using board.engine.Board;
 using chess.engine;
-using chess.engine.Board;
 using chess.engine.Chess;
-using chess.engine.Entities;
+using chess.engine.Chess.Entities;
 using chess.engine.Game;
 using Microsoft.Extensions.Logging;
 
@@ -15,8 +16,10 @@ namespace spiker
         static void Main(string[] args)
         {
             var logger = AppContainer.GetService<ILogger<ChessGame>>();
+            var gameStateService = AppContainer.GetService<IChessGameStateService>();
             var engineProvider = AppContainer.GetService<IBoardEngineProvider<ChessPieceEntity>>();
-            var game = new ChessGame(logger, engineProvider);
+            var entityFactory = AppContainer.GetService<IBoardEntityFactory<ChessPieceEntity>>();
+            var game = new ChessGame(logger, engineProvider, entityFactory, gameStateService);
 
             var lastResult = "";
 

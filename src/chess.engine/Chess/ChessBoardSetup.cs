@@ -1,26 +1,31 @@
-﻿using System;
+﻿using board.engine;
 using chess.engine.Chess.Entities;
-using chess.engine.Entities;
+using chess.engine.Extensions;
 using chess.engine.Game;
 
 namespace chess.engine.Chess
 {
     public class ChessBoardSetup : IBoardSetup<ChessPieceEntity>
     {
+        private readonly IBoardEntityFactory<ChessPieceEntity> _entityFactory;
+
+        public ChessBoardSetup(IBoardEntityFactory<ChessPieceEntity> entityFactory)
+        {
+            _entityFactory = entityFactory;
+        }
         public void SetupPieces(BoardEngine<ChessPieceEntity> engine)
         {
             AddPawns(engine);
             AddMajorPieces(engine);
         }
-
-
+        
         private void AddPawns(BoardEngine<ChessPieceEntity> engine)
         {
             foreach (var colour in new[] { Colours.White, Colours.Black })
             {
                 for (int x = 1; x <= engine.Width; x++)
                 {
-                    engine.AddPiece(ChessPieceEntityFactory.CreatePawn(colour),
+                    engine.AddPiece(CreatePawn(colour),
                         BoardLocation.At(x, colour == Colours.White ? 2 : 7));
                 }
             }
@@ -32,15 +37,59 @@ namespace chess.engine.Chess
             {
                 var colour = rank == 1 ? Colours.White : Colours.Black;
 
-                engine.AddPiece(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"A{rank}"));
-                engine.AddPiece(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"B{rank}"));
-                engine.AddPiece(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"C{rank}"));
-                engine.AddPiece(ChessPieceEntityFactory.CreateQueen(colour), BoardLocation.At($"D{rank}"));
-                engine.AddPiece(ChessPieceEntityFactory.CreateKing(colour), BoardLocation.At($"E{rank}"));
-                engine.AddPiece(ChessPieceEntityFactory.CreateBishop(colour), BoardLocation.At($"F{rank}"));
-                engine.AddPiece(ChessPieceEntityFactory.CreateKnight(colour), BoardLocation.At($"G{rank}"));
-                engine.AddPiece(ChessPieceEntityFactory.CreateRook(colour), BoardLocation.At($"H{rank}"));
+                engine.AddPiece(CreateRook(colour), $"A{rank}".ToBoardLocation());
+                engine.AddPiece(CreateKnight(colour), $"B{rank}".ToBoardLocation());
+                engine.AddPiece(CreateBishop(colour), $"C{rank}".ToBoardLocation());
+                engine.AddPiece(CreateQueen(colour), $"D{rank}".ToBoardLocation());
+                engine.AddPiece(CreateKing(colour), $"E{rank}".ToBoardLocation());
+                engine.AddPiece(CreateBishop(colour), $"F{rank}".ToBoardLocation());
+                engine.AddPiece(CreateKnight(colour), $"G{rank}".ToBoardLocation());
+                engine.AddPiece(CreateRook(colour), $"H{rank}".ToBoardLocation());
             }
         }
+
+
+        private ChessPieceEntity CreatePawn(Colours colour) =>
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            {
+                Owner = colour,
+                PieceName = ChessPieceName.Pawn
+            });
+
+        private ChessPieceEntity CreateRook(Colours colour) =>
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            {
+                Owner = colour,
+                PieceName = ChessPieceName.Rook
+            });
+
+        private ChessPieceEntity CreateKnight(Colours colour) =>
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            {
+                Owner = colour,
+                PieceName = ChessPieceName.Knight
+            });
+
+        private ChessPieceEntity CreateBishop(Colours colour) =>
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            {
+                Owner = colour,
+                PieceName = ChessPieceName.Bishop
+            });
+
+        private ChessPieceEntity CreateQueen(Colours colour) =>
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            {
+                Owner = colour,
+                PieceName = ChessPieceName.Queen
+            });
+
+        private ChessPieceEntity CreateKing(Colours colour) =>
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            {
+                Owner = colour,
+                PieceName = ChessPieceName.King
+            });
+
     }
 }

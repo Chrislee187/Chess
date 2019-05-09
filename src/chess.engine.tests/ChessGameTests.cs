@@ -1,10 +1,8 @@
-﻿using chess.engine.Board;
-using chess.engine.Chess;
-using chess.engine.Entities;
+﻿using chess.engine.Chess;
+using chess.engine.Chess.Entities;
 using chess.engine.Game;
-using chess.engine.Movement;
+using chess.engine.tests.Builders;
 using Microsoft.Extensions.Logging.Abstractions;
-using Moq;
 using NUnit.Framework;
 
 namespace chess.engine.tests
@@ -12,35 +10,31 @@ namespace chess.engine.tests
     [TestFixture]
     public class ChessGameTests
     {
-        private IRefreshAllPaths<ChessPieceEntity> _chessRefreshAllPaths;
         private ChessBoardEngineProvider _engineProvider;
+        private ChessPieceEntityFactory _chessPieceEntityFactory;
+        private IChessGameStateService _chessGameStateService;
 
         [SetUp]
         public void Setup()
         {
-            _chessRefreshAllPaths = new Mock<IRefreshAllPaths<ChessPieceEntity>>().Object;
-
-            _engineProvider = new ChessBoardEngineProvider(NullLogger<BoardEngine<ChessPieceEntity>>.Instance,
-                _chessRefreshAllPaths,
-                new ChessPathsValidator(NullLogger<ChessPathValidator>.Instance, new ChessPathValidator(NullLogger<ChessPathValidator>.Instance, new MoveValidationFactory<ChessPieceEntity>()))
-            );
+            _chessPieceEntityFactory = new ChessGameBuilder().BuildEntityFactory();
+            _engineProvider = new ChessGameBuilder().BuildEngineProvider();
+            _chessGameStateService = ChessFactory.ChessGameStateService(ChessFactory.LoggerType.Null);
         }
         [Test]
         public void New_game_should_have_white_as_first_played()
         {
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, _engineProvider);
+            var game = new ChessGame(
+                NullLogger<ChessGame>.Instance, 
+                _engineProvider, 
+                _chessPieceEntityFactory, _chessGameStateService);
             Assert.That(game.CurrentPlayer, Is.EqualTo(Colours.White));
         }
 
         [Test]
         public void Move_should_update_current_player_when_valid()
         {
-            var engineProvider = new ChessBoardEngineProvider(
-                NullLogger<BoardEngine<ChessPieceEntity>>.Instance,
-                new ChessRefreshAllPaths(NullLogger<ChessRefreshAllPaths>.Instance, new ChessGameState(NullLogger<ChessGameState>.Instance)),
-                new ChessPathsValidator(NullLogger<ChessPathValidator>.Instance, new ChessPathValidator(NullLogger<ChessPathValidator>.Instance, new MoveValidationFactory<ChessPieceEntity>()))
-            );
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, engineProvider);
+            var game = new ChessGame(NullLogger<ChessGame>.Instance, _engineProvider, _chessPieceEntityFactory, _chessGameStateService);
 
             game.Move("D2D4");
             Assert.That(game.CurrentPlayer, Is.EqualTo(Colours.Black));
