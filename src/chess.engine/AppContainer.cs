@@ -5,9 +5,7 @@ using chess.engine.Entities;
 using chess.engine.Movement;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Events;
 
 namespace chess.engine
 {
@@ -20,10 +18,8 @@ namespace chess.engine
             var serviceCollection = new ServiceCollection();
             var config = serviceCollection.ConfigureConfig();
             serviceCollection.ConfigureLogging(config);
-            serviceCollection.ConfigureChessDependencies();
+            serviceCollection.AddChessDependencies();
 
-
-            //            serviceCollection.AddLogging(configure => configure.AddConfiguration(a => a.))
             ServiceProvider = serviceCollection.BuildServiceProvider();
         }
 
@@ -56,7 +52,7 @@ namespace chess.engine
 
         }
 
-        public static void ConfigureChessDependencies(this IServiceCollection services)
+        public static void AddChessDependencies(this IServiceCollection services)
         {
             services.AddTransient<IRefreshAllPaths<ChessPieceEntity>, 
                 ChessRefreshAllPaths>();

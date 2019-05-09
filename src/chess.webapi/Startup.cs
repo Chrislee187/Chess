@@ -33,8 +33,8 @@ namespace chess.webapi
             services.ConfigureLogging(config);
             services.AddSwaggerDocument();
 
-            services.AddTransient<IChessService, ChessService>();
-            services.ConfigureChessDependencies();
+            services.AddTransient<IChessService, ChessGameService>();
+            services.AddChessDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

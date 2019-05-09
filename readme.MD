@@ -1,9 +1,13 @@
 ﻿# TODOS
 * Proper README.MD
-
+* Publish WebAPI somewhere
+* Put in github and hook up to my teamcity for automated build and deployment
 * Design docs
 
 * Need to this to do more comprehensive testing against a larger database of games, 
+
+* Integration test library for the webapi
+	* Not much to test in this as the controllers are VERY light but should check they return something
 
 ## PGN2JSON Library
 * Implement PGN Parsing, base on old version
