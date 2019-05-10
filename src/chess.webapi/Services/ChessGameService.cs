@@ -41,7 +41,11 @@ namespace chess.webapi.Services
                 _entityFactory,
                 _chessGameStateService
             );
-            var result = new ChessWebApiResult(game, game.BoardState.GetAllItems().ToArray());
+            var result = new ChessWebApiResult(
+                game,
+                game.CurrentPlayer,
+                string.Empty,
+                game.BoardState.GetItems((int) Colours.White).ToArray());
             return result;
         }
 
@@ -49,21 +53,27 @@ namespace chess.webapi.Services
         {
             var game= CreateChessGame(board);
             var msg = game.Move(move);
-            return new ChessWebApiResult(game, msg);
+            
+            return new ChessWebApiResult(
+                game,
+                game.CurrentPlayer,
+                msg,
+                game.BoardState.GetItems((int)game.CurrentPlayer).ToArray()
+                );
         }
 
         public ChessWebApiResult GetMoves(string board)
         {
             var game = CreateChessGame(board);
             var items = game.BoardState.GetAllItems();
-            return new ChessWebApiResult(game, items.ToArray());
+            return new ChessWebApiResult(game, game.CurrentPlayer, string.Empty, items.ToArray());
         }
 
         public ChessWebApiResult GetMovesForPlayer(string board, Colours forPlayer)
         {
             var game = CreateChessGame(board);
             var items = game.BoardState.GetItems((int) forPlayer);
-            return new ChessWebApiResult(game, items.ToArray());
+            return new ChessWebApiResult(game, forPlayer, string.Empty, items.ToArray());
         }
 
         public ChessWebApiResult GetMovesForLocation(string board, string location)
@@ -71,7 +81,7 @@ namespace chess.webapi.Services
             var game = CreateChessGame(board);
             var loc = location.ToBoardLocation();
             var item = game.BoardState.GetItem(loc);
-            return new ChessWebApiResult(game, item);
+            return new ChessWebApiResult(game,item.Item.Player, string.Empty, item);
         }
 
 

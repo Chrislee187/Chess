@@ -6,6 +6,7 @@ using chess.engine;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Extensions;
+using chess.engine.Game;
 using Newtonsoft.Json;
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -17,7 +18,7 @@ namespace chess.webapi.Services
         public string Board { get; set; }
         public string BoardText { get; set; }
         public string[] AvailableMoves { get; }
-
+        public string WhoseTurn { get; }
         [JsonIgnore]
         public ChessGame Game { get; }
 
@@ -35,10 +36,17 @@ namespace chess.webapi.Services
             Message = msg;
         }
 
-        public ChessWebApiResult(ChessGame game, params LocatedItem<ChessPieceEntity>[] items) :this(game)
+        public ChessWebApiResult(
+            ChessGame game, 
+            Colours toMove, 
+            string message, 
+            params LocatedItem<ChessPieceEntity>[] items
+            ) :this(game)
         {
             Moves = items.SelectMany(i => i.Paths.FlattenMoves());
             AvailableMoves = ToMoveList(items);
+            WhoseTurn = toMove.ToString();
+            Message = message;
         }
 
         public string[] ToMoveList(params LocatedItem<ChessPieceEntity>[] locatedItems)

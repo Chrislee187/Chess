@@ -1,7 +1,7 @@
 # Overview
 Generate and  manipulate the board state of a game played on a chess board, with each piece on the board knowing where it can move to. This gives enough information to implement the basics rules of a game by validating and executiong moves.
 
-# Introduction
+# Introduction 
 Initially built purely for chess, it was refactored (and redesigned along the way] out to be a stand-alone component which managed all aspect of the interaction and state of an actual (for example] chess board.
 
 This includes adding, removing and moving pieces around a board. It is also responsible for both validating and executing moves however it does not explicitly know the individual rules for when and under what circumstand pieces can be added, removed or moved around, anything specific to an individual game is implemented via a supporting interfaces such as;
