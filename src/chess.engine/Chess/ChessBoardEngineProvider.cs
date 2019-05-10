@@ -11,16 +11,16 @@ namespace chess.engine.Chess
         private readonly ILogger<BoardEngine<ChessPieceEntity>> _boardEngineLogger;
         private readonly IRefreshAllPaths<ChessPieceEntity> _refreshAllPaths;
         private readonly IPathsValidator<ChessPieceEntity> _chessPathsValidator;
-        private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory;
+        private readonly IBoardActionProvider<ChessPieceEntity> _actionProvider;
 
         public ChessBoardEngineProvider(
             ILogger<BoardEngine<ChessPieceEntity>> boardEngineLogger,
             IRefreshAllPaths<ChessPieceEntity> refreshAllPaths,
             IPathsValidator<ChessPieceEntity> chessPathsValidator,
-            IBoardActionFactory<ChessPieceEntity> actionFactory
+            IBoardActionProvider<ChessPieceEntity> actionProvider
         )
         {
-            _actionFactory = actionFactory;
+            _actionProvider = actionProvider;
             _chessPathsValidator = chessPathsValidator;
             _refreshAllPaths = refreshAllPaths;
             _boardEngineLogger = boardEngineLogger;
@@ -30,7 +30,7 @@ namespace chess.engine.Chess
             return new BoardEngine<ChessPieceEntity>(_boardEngineLogger,
                 boardSetup,
                 _chessPathsValidator,
-                _actionFactory,
+                _actionProvider,
                 _refreshAllPaths);
         }
     }

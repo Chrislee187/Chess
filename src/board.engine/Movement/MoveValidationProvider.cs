@@ -6,7 +6,7 @@ using board.engine.Movement.Validators;
 
 namespace board.engine.Movement
 {
-    public class MoveValidationProvider<TEntity> : IMoveValidationFactory<TEntity>
+    public class MoveValidationProvider<TEntity> : IMoveValidationProvider<TEntity>
        where TEntity : class, IBoardEntity
     {
         protected static Dictionary<int, IEnumerable<BoardMovePredicate<TEntity>>> Validators;

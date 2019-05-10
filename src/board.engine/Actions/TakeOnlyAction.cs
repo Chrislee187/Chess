@@ -6,14 +6,14 @@ namespace board.engine.Actions
     public class TakeOnlyAction<TEntity> : BoardAction<TEntity> where TEntity : class, IBoardEntity
     {
 
-        public TakeOnlyAction(IBoardActionFactory<TEntity> actionFactory, IBoardState<TEntity> boardState) : base(actionFactory, boardState)
+        public TakeOnlyAction(IBoardActionProvider<TEntity> actionProvider, IBoardState<TEntity> boardState) : base(actionProvider, boardState)
         {
         }
         public override void Execute(BoardMove move)
         {
             BoardState.Remove(move.To);
 
-            ActionFactory.Create((int)DefaultActions.MoveOnly, BoardState).Execute(move);
+            ActionProvider.Create((int)DefaultActions.MoveOnly, BoardState).Execute(move);
         }
     }
 }

@@ -7,22 +7,22 @@ namespace board.engine.Board
     public class BoardState<TEntity> : IBoardState<TEntity> where TEntity : class, IBoardEntity
     {
         private readonly IDictionary<BoardLocation, LocatedItem<TEntity>> _items;
-        private readonly IBoardActionFactory<TEntity> _actionFactory;
+        private readonly IBoardActionProvider<TEntity> _actionProvider;
         private readonly IPathsValidator<TEntity> _pathsValidator;
 
         public BoardState(IPathsValidator<TEntity> pathsValidator, 
-            IBoardActionFactory<TEntity> actionFactory) : this(pathsValidator, actionFactory, null)
+            IBoardActionProvider<TEntity> actionProvider) : this(pathsValidator, actionProvider, null)
         {
         }
 
         private BoardState(IPathsValidator<TEntity> pathsValidator, 
-            IBoardActionFactory<TEntity> actionFactory, 
+            IBoardActionProvider<TEntity> actionProvider, 
             IEnumerable<LocatedItem<TEntity>> clonedItems) 
         {
             _items = clonedItems?.ToDictionary(k => k.Location, k => k) 
                      ?? new Dictionary<BoardLocation, LocatedItem<TEntity>>();
             _pathsValidator = pathsValidator;
-            _actionFactory = actionFactory;
+            _actionProvider = actionProvider;
         }
 
 
@@ -55,7 +55,7 @@ namespace board.engine.Board
         {
             var clonedItems = _items.Values.Select(e => e.Clone() as LocatedItem<TEntity>);
 
-            var clonedState = new BoardState<TEntity>(_pathsValidator, _actionFactory, clonedItems);
+            var clonedState = new BoardState<TEntity>(_pathsValidator, _actionProvider, clonedItems);
 
             return clonedState;
         }

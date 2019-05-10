@@ -44,7 +44,7 @@ namespace chess.engine
             {
                 bool CanCastle(ChessMoveTypes castleSide)
                 {
-                    return kingMoves.Any(p => p.ChessMoveTypes == (int) castleSide);
+                    return kingMoves.Any(p => p.MoveType == (int) castleSide);
                 }
 
                 sb.Append(CanCastle(ChessMoveTypes.CastleQueenSide) ? "1" : "0");

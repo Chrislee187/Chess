@@ -14,7 +14,7 @@ namespace chess.engine.tests.Actions
         public void Setup()
         {
             StateMock = new Mock<IBoardState<ChessPieceEntity>>();
-            ActionFactoryMock = new Mock<IBoardActionFactory<ChessPieceEntity>>();
+            ActionFactoryMock = new Mock<IBoardActionProvider<ChessPieceEntity>>();
             BoardActionMock = new Mock<IBoardAction>();
             Action = new TakeOnlyAction<ChessPieceEntity>(ActionFactoryMock.Object, StateMock.Object);
         }

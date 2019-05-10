@@ -75,5 +75,21 @@
 * Using chars from default Arial font
 	* ЌќЮюВвЯяЍйРр
 
+------------------------------------------------GLOBAL READ ME--------------------------------
+# Introduction
+I've always had largish personal projects of some sort on the go, I like to have larger more complex sandbox to play in than small kata's and nothing beats having a large more complex code-base to really thrash out design and implementation approachs.
+
+Several several years ago I was playing some online chess while working away from home and started thinking (in C#) about how, if you had a `IEnumerable<ChessPiece>` and `ChessPiece` contained a `IEnumerable<Move>` you had almost everything you needed to produce an "engine" that understood the rules of chess, from which you could easily produce simple chess players for two humans to play chess on to validate and execute the moves.
+
+The next step would be to use all the valid move information to produce "AI" players which could analyse the state of the board and produce a move to play.
+
+My "Chess Engine" has been through several iterations since then, this is my current version, and is complete ground up re-write in .NET Core and doesn't have all the features I want yet but currently does support the playing (with two humans, at one keyboard) of valid game of chess (although at time of writing I haven't written a decent interface so your stuck with a noddy console app [Spiker](link.Spiker) or playing chess with cut-n-paste through the [web-api][link.chess.webapi.live].
+
+
+# Comments/Notes/Thoughts
+As long as your happy a
+
+[link.chess.webapi.live]: http:xyz
+[link.Spiker]: http:todo
 
 

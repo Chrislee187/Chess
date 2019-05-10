@@ -10,13 +10,13 @@ namespace board.engine.Actions
 
     public abstract class BoardAction<TEntity> : IBoardAction where TEntity : class, IBoardEntity
     {
-        protected readonly IBoardActionFactory<TEntity> ActionFactory;
+        protected readonly IBoardActionProvider<TEntity> ActionProvider;
         protected readonly IBoardState<TEntity> BoardState;
 
-        protected BoardAction(IBoardActionFactory<TEntity> actionFactory, IBoardState<TEntity> boardState)
+        protected BoardAction(IBoardActionProvider<TEntity> actionProvider, IBoardState<TEntity> boardState)
         {
             BoardState = boardState;
-            ActionFactory = actionFactory;
+            ActionProvider = actionProvider;
         }
 
         public abstract void Execute(BoardMove move);

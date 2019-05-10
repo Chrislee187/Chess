@@ -5,7 +5,7 @@ using chess.engine.Chess.Entities;
 
 namespace chess.engine.Chess.Actions
 {
-    public class ChessBoardActionProvider : BoardActionFactory<ChessPieceEntity>
+    public class ChessBoardActionProvider : BoardActionProvider<ChessPieceEntity>
     {
         public ChessBoardActionProvider(IBoardEntityFactory<ChessPieceEntity> entityFactory) 
             : base(entityFactory)

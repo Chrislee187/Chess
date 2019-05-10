@@ -10,9 +10,9 @@ namespace board.engine.Actions
 
         public UpdatePieceAction(
             IBoardEntityFactory<TEntity> entityFactory,
-            IBoardActionFactory<TEntity> actionFactory, 
+            IBoardActionProvider<TEntity> actionProvider, 
             IBoardState<TEntity> boardState
-            ) : base(actionFactory, boardState)
+            ) : base(actionProvider, boardState)
         {
             _entityFactory = entityFactory;
         }

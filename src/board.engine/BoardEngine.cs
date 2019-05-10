@@ -13,12 +13,12 @@ namespace board.engine
     public class BoardEngine<TEntity> where TEntity : class, IBoardEntity
     {
         public readonly IBoardState<TEntity> BoardState;
-        private readonly IBoardActionFactory<TEntity> _boardActionFactory;
+        private readonly IBoardActionProvider<TEntity> _boardActionProvider;
 
         private readonly IBoardSetup<TEntity> _boardSetup;
         private readonly IRefreshAllPaths<TEntity> _allPathCalculator;
         private ILogger<BoardEngine<TEntity>> _logger;
-        private IBoardActionFactory<TEntity> _actionFactory;
+        private IBoardActionProvider<TEntity> _actionProvider;
 
         public int Width { get; private set; } = 8;
         public int Height { get; private set; } = 8;
@@ -29,10 +29,10 @@ namespace board.engine
             ILogger<BoardEngine<TEntity>> logger,
             IBoardSetup<TEntity> boardSetup, 
             IPathsValidator<TEntity> pathsValidator,
-            IBoardActionFactory<TEntity> actionFactory
+            IBoardActionProvider<TEntity> actionProvider
             )
 
-            : this(logger, boardSetup, pathsValidator, actionFactory, new DefaultRefreshAllPaths())
+            : this(logger, boardSetup, pathsValidator, actionProvider, new DefaultRefreshAllPaths())
         {
         }
 
@@ -40,14 +40,14 @@ namespace board.engine
             ILogger<BoardEngine<TEntity>> logger, 
             IBoardSetup<TEntity> boardSetup,
             IPathsValidator<TEntity> pathsValidator,
-            IBoardActionFactory<TEntity> actionFactory,
+            IBoardActionProvider<TEntity> actionProvider,
             IRefreshAllPaths<TEntity> allPathCalculator)
         {
-            _actionFactory = actionFactory;
+            _actionProvider = actionProvider;
             _logger = logger;
-            _boardActionFactory = actionFactory;
+            _boardActionProvider = actionProvider;
 
-            BoardState = new BoardState<TEntity>(pathsValidator, _boardActionFactory);
+            BoardState = new BoardState<TEntity>(pathsValidator, _boardActionProvider);
 
             _boardSetup = boardSetup;
             _boardSetup.SetupPieces(this);
@@ -111,7 +111,7 @@ namespace board.engine
         // so will need some default types (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
         public void Move(BoardMove move)
         {
-            var action = _boardActionFactory.Create((int) move.ChessMoveTypes, BoardState);
+            var action = _boardActionProvider.Create((int) move.MoveType, BoardState);
 
             action.Execute(move);
 

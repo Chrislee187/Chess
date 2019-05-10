@@ -9,16 +9,16 @@ namespace chess.engine.Chess
 {
     public class ChessPathValidator : IPathValidator<ChessPieceEntity>
     {
-        private readonly IMoveValidationFactory<ChessPieceEntity> _validationFactory;
+        private readonly IMoveValidationProvider<ChessPieceEntity> _validationProvider;
         private ILogger<ChessPathValidator> _logger;
 
         public ChessPathValidator(
             ILogger<ChessPathValidator> logger,
-            IMoveValidationFactory<ChessPieceEntity> validationFactory
+            IMoveValidationProvider<ChessPieceEntity> validationProvider
             )
         {
             _logger = logger;
-            _validationFactory = validationFactory;
+            _validationProvider = validationProvider;
         }
 
         public Path ValidatePath(IBoardState<ChessPieceEntity> boardState, Path possiblePath)
@@ -27,9 +27,9 @@ namespace chess.engine.Chess
             var validPath = new Path();
             foreach (var move in possiblePath)
             {
-                if (!_validationFactory.TryGetValue(move.ChessMoveTypes, out var moveTests))
+                if (!_validationProvider.TryGetValue(move.MoveType, out var moveTests))
                 {
-                    throw new ArgumentOutOfRangeException(nameof(move.ChessMoveTypes), move.ChessMoveTypes, $"No Move Validator implemented for {move.ChessMoveTypes}");
+                    throw new ArgumentOutOfRangeException(nameof(move.MoveType), move.MoveType, $"No Move Validator implemented for {move.MoveType}");
                 }
 
                 if (!moveTests.All(t => t(move, boardState)))

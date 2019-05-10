@@ -5,7 +5,7 @@ namespace board.engine.Actions
 {
     public class MoveOnlyAction<TEntity> : BoardAction<TEntity> where TEntity : class, IBoardEntity
     {
-        public MoveOnlyAction(IBoardActionFactory<TEntity> actionFactory, IBoardState<TEntity> boardState) : base(actionFactory, boardState)
+        public MoveOnlyAction(IBoardActionProvider<TEntity> actionProvider, IBoardState<TEntity> boardState) : base(actionProvider, boardState)
         {
         }
 

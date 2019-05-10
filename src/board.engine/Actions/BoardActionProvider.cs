@@ -4,17 +4,17 @@ using board.engine.Board;
 
 namespace board.engine.Actions
 {
-    public interface IBoardActionFactory<TEntity> where TEntity : class, IBoardEntity
+    public interface IBoardActionProvider<TEntity> where TEntity : class, IBoardEntity
     {
         IBoardAction Create(int action, IBoardState<TEntity> boardState);
     }
 
-    public class BoardActionFactory<TEntity> : IBoardActionFactory<TEntity> where TEntity : class, IBoardEntity
+    public class BoardActionProvider<TEntity> : IBoardActionProvider<TEntity> where TEntity : class, IBoardEntity
 
     {
         protected readonly Dictionary<int, Func<IBoardState<TEntity>, IBoardAction>> Actions;
 
-        public BoardActionFactory(IBoardEntityFactory<TEntity> entityFactory)
+        public BoardActionProvider(IBoardEntityFactory<TEntity> entityFactory)
         {
             Actions = new Dictionary<int, Func<IBoardState<TEntity>, IBoardAction>>
             {

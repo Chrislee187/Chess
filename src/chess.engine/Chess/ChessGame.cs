@@ -28,7 +28,7 @@ namespace chess.engine.Chess
         public IBoardState<ChessPieceEntity> BoardState => _engine.BoardState;
 
         private readonly ILogger<ChessGame> _logger;
-        private IBoardEntityFactory<ChessPieceEntity> _entityFactory;
+        private readonly IBoardEntityFactory<ChessPieceEntity> _entityFactory;
         private readonly IChessGameStateService _gameStateService;
 
         public ChessGame(

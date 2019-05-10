@@ -33,11 +33,11 @@ namespace chess.engine.tests.Builders
         }
 
 
-        public IBoardActionFactory<ChessPieceEntity> BuildActionFactory()
+        public IBoardActionProvider<ChessPieceEntity> BuildActionFactory()
         {
             return new ChessBoardActionProvider(BuildEntityFactory());
         }
-        public IMoveValidationFactory<ChessPieceEntity> BuildValidationFactory()
+        public IMoveValidationProvider<ChessPieceEntity> BuildValidationFactory()
         {
             return new ChessMoveValidationProvider();
         }

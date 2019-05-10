@@ -3,9 +3,9 @@ using board.engine.Movement;
 
 namespace board.engine.Board
 {
-    public class LocatedItem<T> : ICloneable where T : class, ICloneable, IBoardEntity
+    public class LocatedItem<TEntity> : ICloneable where TEntity : class, ICloneable, IBoardEntity
     {
-        public LocatedItem(BoardLocation location, T item, Paths paths)
+        public LocatedItem(BoardLocation location, TEntity item, Paths paths)
         {
             Location = location;
             Item = item;
@@ -13,7 +13,7 @@ namespace board.engine.Board
         }
 
         public BoardLocation Location { get; }
-        public T Item { get; }
+        public TEntity Item { get; }
         public Paths Paths { get; private set; }
 
         public void UpdatePaths(Paths paths)
@@ -23,9 +23,9 @@ namespace board.engine.Board
 
         public object Clone()
         {
-            return new LocatedItem<T>(
+            return new LocatedItem<TEntity>(
                 Location.Clone() as BoardLocation, 
-                Item.Clone() as T, 
+                Item.Clone() as TEntity, 
                 Paths.Clone() as Paths);
         }
     }

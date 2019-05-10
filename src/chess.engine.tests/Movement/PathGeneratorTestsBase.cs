@@ -16,7 +16,7 @@ namespace chess.engine.tests.Movement
         protected Mock<ILogger> LoggerMock;
 
         protected void AssertPathContains(IEnumerable<Path> paths, Path path, Colours colour)
-            => Assert.That(paths.Contains(path), $"{path} not found for {colour}, check ChessMoveTypes!");
+            => Assert.That(paths.Contains(path), $"{path} not found for {colour}, check MoveType!");
 
         protected void SetUp()
         {

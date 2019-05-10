@@ -20,7 +20,7 @@ namespace chess.engine.Chess.Movement.ChessPieces.King
             var kingIsValid = king.Piece.Equals(ChessPieceName.King); // && !king.MoveHistory.Any()
             if (!kingIsValid) return false;
 
-            var rookLoc = move.ChessMoveTypes == (int) ChessMoveTypes.CastleKingSide
+            var rookLoc = move.MoveType == (int) ChessMoveTypes.CastleKingSide
                 ? $"H{move.From.Y}".ToBoardLocation()
                 : $"A{move.From.Y}".ToBoardLocation();
 

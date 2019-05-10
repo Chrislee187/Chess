@@ -15,7 +15,7 @@ namespace chess.engine.tests.Actions
         protected readonly BoardMove AnyTake = BoardMove.Create("D2".ToBoardLocation(), "D5".ToBoardLocation(), (int)DefaultActions.MoveOrTake);
 
         protected Mock<IBoardState<TEntity>> StateMock;
-        protected Mock<IBoardActionFactory<TEntity>> ActionFactoryMock;
+        protected Mock<IBoardActionProvider<TEntity>> ActionFactoryMock;
         protected Mock<IBoardAction> BoardActionMock = new Mock<IBoardAction>();
         protected Mock<IBoardEntityFactory<TEntity>> EntityFactoryMock = new Mock<IBoardEntityFactory<TEntity>>();
 
@@ -24,7 +24,7 @@ namespace chess.engine.tests.Actions
         protected void SetUp()
         {
             StateMock = new Mock<IBoardState<TEntity>>();
-            ActionFactoryMock = new Mock<IBoardActionFactory<TEntity>>();
+            ActionFactoryMock = new Mock<IBoardActionProvider<TEntity>>();
             BoardActionMock = new Mock<IBoardAction>();
         }
 

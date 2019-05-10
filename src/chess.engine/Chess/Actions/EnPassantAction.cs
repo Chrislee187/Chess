@@ -10,9 +10,9 @@ namespace chess.engine.Chess.Actions
     public class EnPassantAction<TEntity> : BoardAction<TEntity> where TEntity : class, IBoardEntity
     {
         public EnPassantAction(
-            IBoardActionFactory<TEntity> factory, 
+            IBoardActionProvider<TEntity> provider, 
             IBoardState<TEntity> boardState
-            ) : base(factory, boardState)
+            ) : base(provider, boardState)
         {
         }
 
@@ -25,7 +25,7 @@ namespace chess.engine.Chess.Actions
             var passedPieceLoc = move.To.MoveBack((Colours) piece.Owner);
 
             BoardState.Remove(passedPieceLoc);
-            ActionFactory.Create((int) DefaultActions.MoveOnly, BoardState).Execute(move);
+            ActionProvider.Create((int) DefaultActions.MoveOnly, BoardState).Execute(move);
         }
     }
 }

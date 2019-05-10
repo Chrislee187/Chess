@@ -61,10 +61,10 @@ namespace chess.engine
             services.AddTransient<IRefreshAllPaths<ChessPieceEntity>, ChessRefreshAllPaths>();
             services.AddTransient<IPathsValidator<ChessPieceEntity>, ChessPathsValidator>();
             services.AddTransient<IPathValidator<ChessPieceEntity>,ChessPathValidator>();
-            services.AddTransient<IMoveValidationFactory<ChessPieceEntity>, ChessMoveValidationProvider>();
+            services.AddTransient<IMoveValidationProvider<ChessPieceEntity>, ChessMoveValidationProvider>();
 
             services.AddTransient<IBoardEngineProvider<ChessPieceEntity>,ChessBoardEngineProvider>();
-            services.AddTransient<IBoardActionFactory<ChessPieceEntity>,ChessBoardActionProvider>();
+            services.AddTransient<IBoardActionProvider<ChessPieceEntity>,ChessBoardActionProvider>();
             services.AddTransient<IBoardEntityFactory<ChessPieceEntity>,ChessPieceEntityFactory>();
             services.AddTransient<IChessGameStateService,ChessGameStateService>();
 

@@ -10,15 +10,15 @@ namespace board.engine.Movement
 
         public BoardLocation From { get; }
         public BoardLocation To { get; }
-        public int ChessMoveTypes { get; }
+        public int MoveType { get; }
 
         public object ExtraData { get; private set; }
 
-        public BoardMove(BoardLocation from, BoardLocation to, int chessMoveTypes, object extraData = null)
+        public BoardMove(BoardLocation from, BoardLocation to, int moveType, object extraData = null)
         {
             From = from;
             To = to;
-            ChessMoveTypes = chessMoveTypes;
+            MoveType = moveType;
             ExtraData = extraData;
         }
 
@@ -32,7 +32,7 @@ namespace board.engine.Movement
 //                       MoveType != MoveType.PawnPromotion 
 //                       || Equals(ExtraData, other.ExtraData)
 //                       )
-                   && ChessMoveTypes.Equals(other.ChessMoveTypes);
+                   && MoveType.Equals(other.MoveType);
         }
 
         public override bool Equals(object obj)
@@ -54,12 +54,12 @@ namespace board.engine.Movement
 
         public override string ToString()
         {
-            return $"{From}{To}{ChessMoveTypes}";
+            return $"{From}{To}{MoveType}";
         }
 
         public object Clone()
         {
-            var boardMove = new BoardMove(From, To, ChessMoveTypes);
+            var boardMove = new BoardMove(From, To, MoveType);
             boardMove.ExtraData = ExtraData;
             return boardMove;
         }

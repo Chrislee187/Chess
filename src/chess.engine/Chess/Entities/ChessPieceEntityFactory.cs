@@ -40,7 +40,7 @@ namespace chess.engine.Chess.Entities
             public ChessPieceName PieceName { get; set; }
             public Colours Owner { get; set; }
         }
-//        public static ChessPieceEntity Create(ChessPieceName chessPiece, Colours player) => ActionFactory[chessPiece](player);
+//        public static ChessPieceEntity Create(ChessPieceName chessPiece, Colours player) => ActionProvider[chessPiece](player);
 //        public static ChessPieceEntity CreatePawn(Colours player)   => Create(ChessPieceName.Pawn,player);
 //        public static ChessPieceEntity CreateBishop(Colours player)  => Create(ChessPieceName.Bishop, player);
 //        public static ChessPieceEntity CreateKing(Colours player)   => Create(ChessPieceName.King, player);

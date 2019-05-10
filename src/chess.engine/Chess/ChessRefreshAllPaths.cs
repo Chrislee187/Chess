@@ -23,18 +23,18 @@ namespace chess.engine.Chess
     {
         private readonly ILogger _logger;
 
-        private readonly IBoardActionFactory<ChessPieceEntity> _actionFactory;
+        private readonly IBoardActionProvider<ChessPieceEntity> _actionProvider;
         // TODO: Sort of logger
         private readonly IChessGameStateService _chessGameStateService;
 
         public ChessRefreshAllPaths(
             ILogger<ChessRefreshAllPaths> logger,
-            IBoardActionFactory<ChessPieceEntity> actionFactory,
+            IBoardActionProvider<ChessPieceEntity> actionProvider,
                 IChessGameStateService chessGameStateService
             )
         {
             _logger = logger;
-            _actionFactory = actionFactory;
+            _actionProvider = actionProvider;
             _chessGameStateService = chessGameStateService;
         }
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
@@ -81,7 +81,7 @@ namespace chess.engine.Chess
         private bool DoeMoveLeaveUsInCheck(ICloneable boardState, BoardMove move, Colours pieceColour)
         {
             var clonedBoardState = (IBoardState<ChessPieceEntity>) boardState.Clone();
-            var action = _actionFactory.Create(move.ChessMoveTypes, clonedBoardState);
+            var action = _actionProvider.Create(move.MoveType, clonedBoardState);
             action.Execute(move);
 
             clonedBoardState.RegeneratePaths((int)pieceColour.Enemy());

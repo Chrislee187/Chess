@@ -17,7 +17,7 @@ namespace chess.engine.tests.Chess.Movement
     [TestFixture]
     public class ChessPathValidatorTests : PathGeneratorTestsBase
     {
-        private Mock<IMoveValidationFactory<ChessPieceEntity>> _factoryMock;
+        private Mock<IMoveValidationProvider<ChessPieceEntity>> _factoryMock;
         private IEnumerable<BoardMovePredicate<ChessPieceEntity>> _moveTests;
 
 
@@ -25,7 +25,7 @@ namespace chess.engine.tests.Chess.Movement
         public new void SetUp()
         {
             base.SetUp();
-            _factoryMock = new Mock<IMoveValidationFactory<ChessPieceEntity>>();
+            _factoryMock = new Mock<IMoveValidationProvider<ChessPieceEntity>>();
 
             _moveTests = new List<BoardMovePredicate<ChessPieceEntity>>
             {

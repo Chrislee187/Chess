@@ -8,8 +8,8 @@ namespace chess.engine.Chess.Actions
 {
     public class CastleAction<TEntity> : BoardAction<TEntity> where TEntity : class, IBoardEntity
     {
-        public CastleAction(IBoardActionFactory<TEntity> actionFactory, IBoardState<TEntity> boardState) 
-            : base(actionFactory, boardState)
+        public CastleAction(IBoardActionProvider<TEntity> actionProvider, IBoardState<TEntity> boardState) 
+            : base(actionProvider, boardState)
         {
         }
 
@@ -27,7 +27,7 @@ namespace chess.engine.Chess.Actions
                 rookMove = new BoardMove($"A{move.From.Y}".ToBoardLocation(), $"D{move.From.Y}".ToBoardLocation(), (int)DefaultActions.MoveOnly);
             }
 
-            var moveOnly = ActionFactory.Create((int) DefaultActions.MoveOnly, BoardState);
+            var moveOnly = ActionProvider.Create((int) DefaultActions.MoveOnly, BoardState);
             moveOnly.Execute(kingMove);
             moveOnly.Execute(rookMove);
         }

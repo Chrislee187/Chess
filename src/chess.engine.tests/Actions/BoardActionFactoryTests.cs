@@ -12,12 +12,12 @@ namespace chess.engine.tests.Actions
     [TestFixture]
     public class BoardActionFactoryTests
     {
-        private BoardActionFactory<ChessPieceEntity> _factory;
+        private BoardActionProvider<ChessPieceEntity> _provider;
 
         [SetUp]
         public void SetUp()
         {
-            _factory = new ChessBoardActionProvider(
+            _provider = new ChessBoardActionProvider(
                 new Mock<IBoardEntityFactory<ChessPieceEntity>>().Object
                 );
         }
@@ -26,7 +26,7 @@ namespace chess.engine.tests.Actions
         {
             foreach (var type in Enum.GetValues(typeof(DefaultActions)))
             {
-                Assert.DoesNotThrow(() => _factory.Create((int) type, null), $"{type} is not support");
+                Assert.DoesNotThrow(() => _provider.Create((int) type, null), $"{type} is not support");
             }
         }
         [Test]
@@ -34,7 +34,7 @@ namespace chess.engine.tests.Actions
         {
             foreach (var type in Enum.GetValues(typeof(ChessMoveTypes)))
             {
-                Assert.DoesNotThrow(() => _factory.Create((int)type, null), $"{type} is not support");
+                Assert.DoesNotThrow(() => _provider.Create((int)type, null), $"{type} is not support");
             }
         }
     }
