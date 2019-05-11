@@ -1,7 +1,7 @@
 ﻿# Overview
 A simple RESTlike web-api wrapping the core functionality of the [chess.engine][link.ChessEngine].
 
-Swagger has been implemented using [NSwag][link.NSwag], a live example should be available at [link.Swagger.live][link.Swagger.live].
+Swagger has been implemented using [NSwag][link.NSwag], a live example should be available via it's [Swagger UI][link.swaggerui] or it's simple templated "player" page a [templated "player"][link.chess.webapi.index.live]
 
 A simple wrapper around the webapi calls can be seen at [link.rest-wrapper.live][link.rest-wrapper.live] which uses [handlebars][link.handlebars] to render the JSON api results in to the simplest of boards and interactions for a game chess.
 
@@ -19,7 +19,7 @@ There are currently no tests around the Controller or the Service. They are pret
 
 
 
-[link.BoardEngine]: http:todo
-[link.ChessEngine]: http:todo
-[link.Swagger.live]: link.Swagger.live
-[link.rest-wrapper.live]: link.rest-wrapper.live
+[link.BoardEngine]: ../board.engine
+[link.ChessEngine]: ../chess.engine
+[link.swaggerui]: https://chess-web-api.azurewebsites.net/swagger/index.html
+[link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net/staticfiles/index.html
