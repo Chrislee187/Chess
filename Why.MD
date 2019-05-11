@@ -17,6 +17,9 @@ Skip ahead to now, and I'm on the fourth iteration, a complete ground-up rewrite
 
 This code is to what I call "enterprise" standard, in that it largely uses the same practices, processes and techniques as I have and do use on real-world, team based, enterprise level projects. This includes fully tested/integrated and clean code as well as an automated CI/CD pipeline (I run TeamCity, amongst other things, on a homebrew NAS).
 
-Other `.MD` files exist that go in to more technical detail on the code itself, please see the root [README.MD][link.RootReadme] for more details.
+Other `.MD` files exist that go in to more technical detail on the code itself, please see the root [README.MD][link.RootReadme] for more details or you can dive straight in with the [Swagger UI][link.swaggerui] or my simple [handlebars template][link.chess.webapi.index.live] sitting on top of the web api.
 
-[link.RootReadme]: http:todo
+[link.swaggerui]: https://chess-web-api.azurewebsites.net/swagger/index.html
+[link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net/staticfiles/index.html
+
+[link.RootReadme]: /src/readme.md
