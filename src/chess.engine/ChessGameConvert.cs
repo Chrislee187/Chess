@@ -51,8 +51,8 @@ namespace chess.engine
                 sb.Append(CanCastle(ChessMoveTypes.CastleKingSide) ? "1" : "0");
             }
 
-            AddCastleEligibility(GetKing(Colours.White).Paths.FlattenMoves().ToList());
-            AddCastleEligibility(GetKing(Colours.Black).Paths.FlattenMoves().ToList());
+            AddCastleEligibility(GetKing(Colours.White)?.Paths.FlattenMoves().ToList() ?? new List<BoardMove>());
+            AddCastleEligibility(GetKing(Colours.Black)?.Paths.FlattenMoves().ToList() ?? new List<BoardMove>());
         }
 
         private static char AsChar(LocatedItem<ChessPieceEntity> item)

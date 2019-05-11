@@ -1,4 +1,6 @@
-﻿using board.engine.Movement;
+﻿using System;
+using board.engine.Movement;
+using chess.engine.Chess;
 using chess.engine.Chess.Movement.ChessPieces.King;
 using chess.engine.Extensions;
 using chess.engine.tests.Builders;
@@ -91,5 +93,35 @@ namespace chess.engine.tests.Chess.Movement.King
 
             Assert.False(_validator.ValidateMove(_whiteKingSideCastle, boardState), "Invalid king side castle move allowed");
         }
+
+        [Test]
+        public void ValidateMove_king_side_castle_bug()
+        {
+            var board = new ChessBoardBuilder()
+                    .Board(".rbqkbnr" +
+                           "pppppppp" +
+                           "n......." +
+                           "........" +
+                           "........" +
+                           ".....NPB" +
+                           "PPPPPP.P" +
+                           "RNBQK..R"
+                    );
+
+            var buildGame = new ChessGameBuilder().BuildGame(board.ToGameSetup());
+            var boardState = buildGame.BoardState;
+
+            var msg = buildGame.Move(_whiteKingSideCastle.ToChessCoords());
+            Assert.IsEmpty(msg, msg);
+
+            Assert.False(boardState.IsEmpty("G1".ToBoardLocation()), $"No item at G1");
+            var king = boardState.GetItem("G1".ToBoardLocation());
+            Assert.That(king.Item.EntityType, Is.EqualTo((int) ChessPieceName.King), "king not moved correctly");
+
+            Assert.NotNull(boardState.GetItem("F1".ToBoardLocation()), $"No item at F1");
+            var rook = boardState.GetItem("F1".ToBoardLocation());
+            Assert.That(rook.Item.EntityType, Is.EqualTo((int) ChessPieceName.Rook), "castle not moved correctly");
+        }
+
     }
 }

@@ -10,42 +10,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
     
 </head>
-<body>
 <script id="chess-template" type="text/x-handlebars-template">
-        <div class="entry">
-            <table class="body">
-                <tr>
-                    <td width="100px">
-                        <pre>
+    <div class="entry">
+        <table class="body">
+            <tr>
+                <td width="100px">
+                    <pre>
 {{boardText}}
         </pre>
-                    </td>
-                    <td width="400px">
-                        {{whoseTurn}} to move<br />
-                        {{#each availableMoves}}
-                        <button onclick="update('/api/chessgame/{{../board}}/{{this}}')">{{this}}</button>
-                        {{/each}}
-                    </td>
-                </tr>
-                <ul></ul>
-                <h2>{{message}}</h2>
-            </table>
-        </div>
-    </script>
+                </td>
+                <td width="400px">
+                    {{whoseTurn}} to move<br />
+                    {{#each availableMoves}}
+                    <button onclick="update('/api/chessgame/{{../board}}/{{this}}')">{{this}}</button>
+                    {{/each}}
+                </td>
+            </tr>
+            <ul></ul>
+            <h2>{{message}}</h2>
+        </table>
+    </div>
+</script>
+<body>
+<H1>CHESS.WEBAPI</H1>
+<p>A simple web-api for validating and calculating moves on a chess board.</p>
 
-    <H1>CHESS.WEBAPI</H1>
-    <p>A simple web-api for validating and calculating moves on a chess board.</p>
-
-    <p>The swagger UI for it can be found at <a href="/swagger">/swagger</a></p>
+<p>The swagger UI for it can be found at <a href="/swagger">/swagger</a>.</p>
 <p>The rest of this page contains a very simple web player that uses jquery & handlebars 
-    to render a very basic chess board.
-   
-    
-    the exposed API to show a very (very) 
-    simple chessboard with buttons for each available move</p>
+    to render a very basic chess board utilizing a couple of methods exposed on the API.</p>
 
-    <div id="chessAnchor">Retrieving...</div>
+<div id="chessAnchor">Retrieving...</div>
 </body>
+</html>
 <script language="javascript">
     var source = document.getElementById("chess-template").innerHTML;
     var template = Handlebars.compile(source);
@@ -59,5 +55,4 @@
             });
     }
 </script>
-</html>
 

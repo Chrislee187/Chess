@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "board.engine", "board.engine\board.engine.csproj", "{2170319A-ED97-4C14-8A81-4C641185552A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "board.engine", "src\board.engine\board.engine.csproj", "{2170319A-ED97-4C14-8A81-4C641185552A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine", "chess.engine\chess.engine.csproj", "{D8954B12-FD49-41CA-A428-7BBA911E8501}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine", "src\chess.engine\chess.engine.csproj", "{D8954B12-FD49-41CA-A428-7BBA911E8501}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{70BA6ADB-8EE8-4D80-B52B-B31C76AD6209}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,11 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Why.MD = Why.MD
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine.tests", "chess.engine.tests\chess.engine.tests.csproj", "{8B251D3F-A1F2-446F-99FB-9611E8808087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine.tests", "src\chess.engine.tests\chess.engine.tests.csproj", "{8B251D3F-A1F2-446F-99FB-9611E8808087}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.webapi", "chess.webapi\chess.webapi.csproj", "{57DC1D3B-DC4D-4C47-9D6C-223E5A0FF408}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.webapi", "src\chess.webapi\chess.webapi.csproj", "{57DC1D3B-DC4D-4C47-9D6C-223E5A0FF408}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spiker", "spiker\spiker.csproj", "{7E7E9C0A-088D-4CAF-9D2F-76BCEA4D1CE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spiker", "src\spiker\spiker.csproj", "{7E7E9C0A-088D-4CAF-9D2F-76BCEA4D1CE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
