@@ -38,7 +38,7 @@ In chess this typically means that the move locations are adjacent, the engine d
 
 Default implementations are supplied for basic validations (location is empty etc] and movement actions (basic moves, takes). Custom validations and actions can be added to the relevant providers as required to implement more complex rules and behaviors. See [`chess.engine`][link.ChessEngine] for a complete implementation of this.
 
-[link.IBoardEntity]: /IBoardEntity.cs
+[link.IBoardEntity]: IBoardEntity.cs
 [link.IBoardSetup]: /IBoardSetup.cs
 [link.IPathGenerator]: /Movement/IPathGenerator.cs
 [link.IMoveValidationProvider]: /Movement/MoveValidationProvider.cs
