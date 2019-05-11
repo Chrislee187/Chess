@@ -39,13 +39,13 @@ In chess this typically means that the move locations are adjacent, the engine d
 Default implementations are supplied for basic validations (location is empty etc] and movement actions (basic moves, takes). Custom validations and actions can be added to the relevant providers as required to implement more complex rules and behaviors. See [`chess.engine`][link.ChessEngine] for a complete implementation of this.
 
 [link.IBoardEntity]: IBoardEntity.cs
-[link.IBoardSetup]: /IBoardSetup.cs
-[link.IPathGenerator]: /Movement/IPathGenerator.cs
-[link.IMoveValidationProvider]: /Movement/MoveValidationProvider.cs
-[link.BoardMovePredicate]: /Movement/BoardMovePredicate.cs
-[link.Paths]: /Movement/Paths.cs
-[link.RefreshAllPaths]: /IRefreshAllPaths.cs
+[link.IBoardSetup]: IBoardSetup.cs
+[link.IPathGenerator]: Movement/IPathGenerator.cs
+[link.IMoveValidationProvider]: Movement/MoveValidationProvider.cs
+[link.BoardMovePredicate]: Movement/BoardMovePredicate.cs
+[link.Paths]: Movement/Paths.cs
+[link.RefreshAllPaths]: IRefreshAllPaths.cs
 [link.ChessEngine]: ../chess.engine
-[link.LocatedItem]: /Board/LocatedItem.cs
-[link.BoardMove]: /Movement/BoardMove.cs
-[link.IBoardAction]: /Actions/BoardAction.cs
+[link.LocatedItem]: Board/LocatedItem.cs
+[link.BoardMove]: Movement/BoardMove.cs
+[link.IBoardAction]: Actions/BoardAction.cs
