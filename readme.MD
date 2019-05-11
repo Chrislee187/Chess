@@ -12,9 +12,10 @@ The "engine" current consists of the following components;
 # General Comments/Notes/Thoughts/Conclusions/Observations
 
 
-* .NET Core is finally starting to get up-to-speed with XP approaches. I've lost count of how many times I've had to implement my owner logger and config implementations so I can test properly. `ILogger` and `IConfig` hopefully mean I won't ever had to write another one!
+* .NET Core is finally starting to get up-to-speed with XP approaches. I've lost count of how many times I've had to develop my owner logger and config implementations so I can test properly. `ILogger` and `IConfig` hopefully mean I won't ever had to write another one!
 * .NET Core makes the TeamCity etc. setup much simpler, no more manually crafted `build.sh/.cmd/.ps1` for the most part
 * I still can't bring myself to move out of Visual Studio with R# as my IDE of choice, I think I've just been using them to long now. One day maybe:)
+* Azure publish. One click, very nice:) 
 
 [link.swaggerui]: https://chess-web-api.azurewebsites.net/swagger/index.html
 [link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net/staticfiles/index.html
