@@ -53,6 +53,7 @@ namespace chess.engine.Chess
 
             var canBlock = enemiesAttackingKing.All(enemy =>
             {
+                // BUG: What if this returns more than one? Test this properly
                 var attackingPath = enemy.Paths
                     .Single(attackPath => attackPath.Any(p => p.To.Equals(king.Location)));
 

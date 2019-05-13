@@ -3,7 +3,7 @@
 * Integration test library for the webapi
 * Split board.engine tests from chess.engine.tests
 * Fix up team-city to use dotnet better not the existing msbuild/nunit etc. tasks
- 
+* RESTplayer doesn't show promotions properly and the moves don't work because of this
 ## Azure Deployment
 * Couldn't get the CI/CD stuff working, Publish from VS works a treat though
 
