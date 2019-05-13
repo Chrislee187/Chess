@@ -19,7 +19,7 @@ The "engine" currently consists of the following components;
 * Azure publish. One click, very nice:) 
 
 [link.swaggerui]: https://chess-web-api.azurewebsites.net/swagger/index.html
-[link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net/staticfiles/index.html
+[link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net
 [link.Spiker]: /src/spiker
 
 [link.board.engine]: /src/board.engine
