@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
 using board.engine.Board;
 
 namespace board.engine.Movement
 {
+    [DebuggerDisplay("{DebuggerDisplay, nq}")]
     public class BoardMove : ICloneable
     {
+        private string DebuggerDisplay => $"{From},{To}";
+
         public static BoardMove Create(BoardLocation from, BoardLocation to, int moveType)
             => new BoardMove(from, to, moveType);
 

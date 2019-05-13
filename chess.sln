@@ -9,7 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine", "src\chess.e
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{70BA6ADB-8EE8-4D80-B52B-B31C76AD6209}"
 	ProjectSection(SolutionItems) = preProject
-		PgnQuery.MD = PgnQuery.MD
 		readme.MD = readme.MD
 		todo.md = todo.md
 		Why.MD = Why.MD

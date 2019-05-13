@@ -50,22 +50,22 @@ namespace chess.webapi
             
             app.UseHttpsRedirection();
             app.UseDefaultFiles(
-                new DefaultFilesOptions
-            {
-//                FileProvider = new PhysicalFileProvider(
-//                    Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles")),
-//                DefaultFileNames = new [] { "index.html" },
-//                RequestPath = "/StaticFiles"
-            }
-        );
+//                new DefaultFilesOptions
+//                {
+//                    FileProvider = new PhysicalFileProvider(
+//                        Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles")),
+//                    DefaultFileNames = new [] { "index.html" },
+//                    RequestPath = "/StaticFiles"
+//                }
+            );
 
             app.UseStaticFiles(
-                new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles")),
-                RequestPath = "/StaticFiles"
-            }
+//                new StaticFileOptions
+//            {
+//                FileProvider = new PhysicalFileProvider(
+//                    Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles")),
+//                RequestPath = "/StaticFiles"
+//            }
                 );
             app.UseSwagger();
             app.UseSwaggerUi3();

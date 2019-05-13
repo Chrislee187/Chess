@@ -34,6 +34,7 @@ namespace chess.webapi.Controllers
         {
             return Json(_chessService.PlayMove(board, move));
         }
+
         [HttpGet("{board}")]
         [HttpGet("{board}/moves")]
         public ActionResult<string> GetMoves(string board)

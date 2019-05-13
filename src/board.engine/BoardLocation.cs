@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace board.engine
 {
     // TODO: Refactor 'Colours' out of here
+    [DebuggerDisplay("{DebuggerDisplay, nq}")]
     public class BoardLocation : ICloneable
     {
+        private string DebuggerDisplay => $"{X},{Y}";
+
         public int X { get; }
         public int Y { get; }
 
