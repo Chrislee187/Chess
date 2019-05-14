@@ -26,6 +26,9 @@ namespace chess.engine.Chess.Entities
             Piece = piece;
         }
 
+        public bool Is(Colours owner, ChessPieceName piece) => owner == Player && piece == Piece;
+        public bool Is(ChessPieceName piece) => piece == Piece;
+        public bool Is(Colours owner) => owner == Player;
         public abstract object Clone();
 
         public override string ToString()

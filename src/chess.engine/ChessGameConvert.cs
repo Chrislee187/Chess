@@ -120,7 +120,7 @@ namespace chess.engine
             // TODO: Enpassant pawn check
             var chessPieceName = PieceNameMapper.FromChar(piece);
             var colour = char.IsUpper(piece) ? Colours.White : Colours.Black;
-            var newPiece = ChessFactory.ChessPieceEntityFactory().Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            var newPiece = ChessFactory.ChessPieceEntityFactory().Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 PieceName = chessPieceName, Owner = colour
             });

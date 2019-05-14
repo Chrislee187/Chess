@@ -25,13 +25,10 @@ namespace chess.engine.Chess.Movement.ChessPieces.King
 
         private static BoardLocation SafeCreate(int x, int y)
         {
-            if (OutOfBounds(y)) return null;
-            if (OutOfBounds(x)) return null;
+            if (ChessGame.OutOfBounds(y)) return null;
+            if (ChessGame.OutOfBounds(x)) return null;
 
             return BoardLocation.At(x, y);
         }
-
-        private static bool OutOfBounds(int value) => value < 1 || value > 8;
-
     }
 }

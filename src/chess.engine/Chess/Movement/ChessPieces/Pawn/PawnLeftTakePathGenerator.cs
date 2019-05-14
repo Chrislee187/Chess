@@ -34,7 +34,7 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
                 foreach (var promotionPieces in new[] { ChessPieceName.Queen, ChessPieceName.Rook, ChessPieceName.Bishop, ChessPieceName.Knight })
                 {
                     var move = new BoardMove(location, takeLocation, (int) DefaultActions.UpdatePiece,
-                        new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+                        new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
                         {
                             Owner = playerIdx,
                             PieceName = promotionPieces

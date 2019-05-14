@@ -21,10 +21,10 @@ namespace chess.engine.Chess.Entities
 
         public ChessPieceEntity Create(object typeData)
         {
-            var data = typeData as ChessPieceEntityFactoryTypeData;
+            var data = typeData as ChessPieceEntityFactoryTypeExtraData;
             if (data == null)
             {
-                throw new ArgumentException($"{nameof(typeData)} is not of type {nameof(ChessPieceEntityFactoryTypeData)}");
+                throw new ArgumentException($"{nameof(typeData)} is not of type {nameof(ChessPieceEntityFactoryTypeExtraData)}");
 
             }
             return Create(data.PieceName, data.Owner);
@@ -35,7 +35,7 @@ namespace chess.engine.Chess.Entities
 
             return Factory[pieceName](colour);
         }
-        public class ChessPieceEntityFactoryTypeData
+        public class ChessPieceEntityFactoryTypeExtraData
         {
             public ChessPieceName PieceName { get; set; }
             public Colours Owner { get; set; }

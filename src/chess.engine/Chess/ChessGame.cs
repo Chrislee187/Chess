@@ -15,6 +15,8 @@ namespace chess.engine.Chess
 {
     public class ChessGame
     {
+        public static bool OutOfBounds(int value) => value < 1 || value > 8;
+
         private readonly BoardEngine<ChessPieceEntity> _engine;
 
         public Colours CurrentPlayer { get; private set; }
@@ -100,7 +102,7 @@ namespace chess.engine.Chess
 
                 if (extra[0] == '+')
                 {
-                    var extraData = new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+                    var extraData = new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
                     {
                         Owner = pieceColour,
                         PieceName = PieceNameMapper.FromChar(extra[1])

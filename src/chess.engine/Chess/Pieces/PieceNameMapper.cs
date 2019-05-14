@@ -21,19 +21,24 @@ namespace chess.engine.Chess.Pieces
             {'q', ChessPieceName.Queen },
             {'Q', ChessPieceName.Queen },
         };
+
+        public static bool ContainsPiece(char p)
+        {
+            return PieceNames.ContainsKey(p);
+        }
         public static ChessPieceName FromChar(char c)
         {
             return PieceNames[c];
         }
-        public static Colours ColourFromChar(char c)
+        public static Colours ToOwner(char c)
         {
             return char.IsUpper(c) ? Colours.White : Colours.Black;
         }
-        public static char ToChar(ChessPieceName piece, Colours colour)
+        public static char ToChar(ChessPieceName piece, Colours owner)
         {
             var c = PieceNames.FirstOrDefault(n => n.Value == piece).Key;
 
-            return colour == Colours.White ? char.ToUpper(c) : char.ToLower(c);
+            return owner == Colours.White ? char.ToUpper(c) : char.ToLower(c);
         }
     }
 }

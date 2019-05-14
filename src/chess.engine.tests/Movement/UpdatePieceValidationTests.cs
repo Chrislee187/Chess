@@ -40,7 +40,7 @@ namespace chess.engine.tests.Movement
             var validator = new UpdatePieceValidator<ChessPieceEntity>();
 
             BoardLocation to = "A8".ToBoardLocation();
-            var promote = new BoardMove("A7".ToBoardLocation(), to, (int)DefaultActions.UpdatePiece, new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            var promote = new BoardMove("A7".ToBoardLocation(), to, (int)DefaultActions.UpdatePiece, new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 Owner = 0,
                 PieceName = ChessPieceName.Queen

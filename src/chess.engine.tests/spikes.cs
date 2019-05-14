@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using board.engine.Actions;
+using board.engine.Movement;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Extensions;
@@ -12,6 +14,7 @@ namespace chess.engine.tests
     [TestFixture]
     public class spikes
     {
+
         // TODO: Smoke tests, for example: 
         // https://localhost:5001/api/ChessGame
         // should return newboard, inprogress, white turn, valid moves etc.
@@ -139,6 +142,8 @@ namespace chess.engine.tests
 
             Console.WriteLine("GAME OVER!");
         }
+
+
 
         // Manually parsed to co-ordinate notation from
         // https://en.wikipedia.org/wiki/Portable_Game_Notation

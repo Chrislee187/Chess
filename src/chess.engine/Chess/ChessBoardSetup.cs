@@ -50,42 +50,42 @@ namespace chess.engine.Chess
 
 
         private ChessPieceEntity CreatePawn(Colours colour) =>
-            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 Owner = colour,
                 PieceName = ChessPieceName.Pawn
             });
 
         private ChessPieceEntity CreateRook(Colours colour) =>
-            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 Owner = colour,
                 PieceName = ChessPieceName.Rook
             });
 
         private ChessPieceEntity CreateKnight(Colours colour) =>
-            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 Owner = colour,
                 PieceName = ChessPieceName.Knight
             });
 
         private ChessPieceEntity CreateBishop(Colours colour) =>
-            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 Owner = colour,
                 PieceName = ChessPieceName.Bishop
             });
 
         private ChessPieceEntity CreateQueen(Colours colour) =>
-            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 Owner = colour,
                 PieceName = ChessPieceName.Queen
             });
 
         private ChessPieceEntity CreateKing(Colours colour) =>
-            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeData
+            _entityFactory.Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 Owner = colour,
                 PieceName = ChessPieceName.King
