@@ -3,6 +3,7 @@ using System.Linq;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine;
+using chess.engine.Algebraic;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Extensions;
@@ -17,7 +18,7 @@ namespace chess.webapi.Services
         public string Message { get; }
         public string Board { get; set; }
         public string BoardText { get; set; }
-        public string[] AvailableMoves { get; }
+        public Move[] AvailableMoves { get; }
         public string WhoseTurn { get; }
         [JsonIgnore]
         public ChessGame Game { get; }
@@ -49,10 +50,22 @@ namespace chess.webapi.Services
             Message = message;
         }
 
-        public string[] ToMoveList(params LocatedItem<ChessPieceEntity>[] locatedItems)
+        public Move[] ToMoveList(params LocatedItem<ChessPieceEntity>[] locatedItems)
         {
             return locatedItems.SelectMany(i => i.Paths.FlattenMoves()
-                .Select(m => $"{m.ToChessCoords()}")).ToArray();
+                .Select(m => new Move($"{m.ToChessCoords()}", StandardAlgebraicNotation.ParseFromGameMove(Game.BoardState, m).ToNotation() ))).ToArray();
+        }
+
+        public class Move
+        {
+            public string SAN { get; }
+            public string Coord { get; }
+
+            public Move(string coord, string san = "")
+            {
+                Coord = coord;
+                SAN = san;
+            }
         }
     }
 }

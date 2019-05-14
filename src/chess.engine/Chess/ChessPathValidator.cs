@@ -10,7 +10,7 @@ namespace chess.engine.Chess
     public class ChessPathValidator : IPathValidator<ChessPieceEntity>
     {
         private readonly IMoveValidationProvider<ChessPieceEntity> _validationProvider;
-        private ILogger<ChessPathValidator> _logger;
+        private readonly ILogger<ChessPathValidator> _logger;
 
         public ChessPathValidator(
             ILogger<ChessPathValidator> logger,

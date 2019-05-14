@@ -10,7 +10,6 @@
 
 ## PGN Parsing
 * Implement PGN Parsing, base on old version
-  * Support algbraic notation in the chess.engine
   * Create a simple console app to convert PGN to a similar JSON format
 * Need to this to do more comprehensive testing against a larger database of games, think there are still some edge cases around castling that need resolving, need to get PGN parsing up and running to parse a ton (10000's) of games.
 

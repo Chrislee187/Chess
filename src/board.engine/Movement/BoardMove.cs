@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using board.engine.Board;
 
 namespace board.engine.Movement
 {
@@ -32,17 +31,19 @@ namespace board.engine.Movement
         {
             return Equals(From, other.From)
                    && Equals(To, other.To)
+                   && MoveType.Equals(other.MoveType)
 //                   && (
 //                       MoveType != MoveType.PawnPromotion 
 //                       || Equals(ExtraData, other.ExtraData)
 //                       )
-                   && MoveType.Equals(other.MoveType);
+                ;
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
+            // ReSharper disable once ArrangeThisQualifier
             if (obj.GetType() != this.GetType()) return false;
             return Equals((BoardMove)obj);
         }
