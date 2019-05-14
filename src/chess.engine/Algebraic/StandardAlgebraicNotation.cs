@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using chess.engine.Chess;
 using chess.engine.Chess.Pieces;
@@ -18,109 +19,26 @@ namespace chess.engine.Algebraic
         public int? FromFile { get; }
         public int? FromRank { get; }
 
+        public static StandardAlgebraicNotation Parse(string notation)
+        {
+            return new SanBuilder().BuildFromNotation(notation);
+        }
+
         public static bool TryParse(string notation, out StandardAlgebraicNotation an)
         {
             an = null;
             if (string.IsNullOrEmpty(notation)) return false;
 
-            ChessPieceName? piece = null;
-            ChessPieceName? promotionPiece = null;
-            int? firstFile = null;
-            int? firstRank = null;
-            int? secondFile = null;
-            int? secondRank = null;
-            var moveType = SanMoveTypes.Move;
-
-            var tokens = notation;
-            var firstChar = notation[0];
-            var firstCharTokenType = TokenParser.GetTokenType(firstChar);
-            if (firstCharTokenType == SanTokenTypes.Piece)
+            try
             {
-                piece = PieceNameMapper.FromChar(firstChar);
-                tokens = notation.Substring(1);
-            } else if (firstCharTokenType != SanTokenTypes.File &&
-                       firstCharTokenType != SanTokenTypes.Rank)
-            {
-                throw new ArgumentOutOfRangeException($"Unexpected token in first character '{firstChar}'");
+                an = new SanBuilder().BuildFromNotation(notation);
             }
-
-            foreach (var c in tokens)
+            catch
             {
-                var t = TokenParser.GetTokenType(c);
-
-                // TODO: Refactor this into something a little nicer, methods using a builder perhaps?
-                switch (t)
-                {
-                    case SanTokenTypes.Piece:
-                        if (!promotionPiece.HasValue)
-                        {
-                            promotionPiece = PieceNameMapper.FromChar(c);
-                        }
-                        else
-                        {
-                            throw new ArgumentOutOfRangeException($"Unexpected {nameof(SanTokenTypes.Piece)} token '{c}'");
-                        }
-                        break;
-                    case SanTokenTypes.File:
-                        if (!firstFile.HasValue)
-                        {
-                            firstFile = ParseFileToken(c); 
-                        }
-                        else if (!secondFile.HasValue)
-                        {
-                            secondFile = ParseFileToken(c);
-                        }
-                        else
-                        {
-                            throw new ArgumentOutOfRangeException($"Unexpected {nameof(SanTokenTypes.File)} token '{c}'");
-                        }
-                        break;
-                    case SanTokenTypes.Rank:
-                        if (secondFile.HasValue)
-                        {
-                            secondRank = ParseRankToken(c);
-                        }
-                        else if (!firstRank.HasValue)
-                        {
-                            firstRank = ParseRankToken(c);
-                        }
-                        else
-                        {
-                            throw new ArgumentOutOfRangeException($"Unexpected {nameof(SanTokenTypes.Rank)} token '{c}'");
-                        }
-                        break;
-                    case SanTokenTypes.Take:
-                        moveType = SanMoveTypes.Take;
-                        break;
-                    case SanTokenTypes.PromoteDelimiter:
-                        // Ignore
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                return false;
             }
-
-            int? fromFile = null, fromRank = null, toFile, toRank;
-            if (secondFile.HasValue && secondRank.HasValue)
-            {
-                fromFile = firstFile;
-                fromRank = firstRank;
-                toFile = secondFile;
-                toRank = secondRank;
-            }
-            else
-            {
-                toFile = firstFile;
-                toRank = firstRank;
-            }
-
-            an = new StandardAlgebraicNotation(piece ?? ChessPieceName.Pawn, fromFile, fromRank, toFile, toRank, moveType, promotionPiece);
             return true;
         }
-
-        private static int ParseRankToken(char c) => int.Parse(c.ToString());
-
-        private static int ParseFileToken(char c) => c - 96; // TODO: assuming ascii 'a' is 97
 
         public StandardAlgebraicNotation(
             ChessPieceName piece,
@@ -162,6 +80,190 @@ namespace chess.engine.Algebraic
             Piece, Rank, File, Take, PromoteDelimiter
         }
         #endregion
+
+
+        private class SanBuilder
+        {
+            private ChessPieceName? _piece;
+            private ChessPieceName? _promotionPiece;
+            private int? _firstFile;
+            private int? _firstRank;
+            private int? _secondFile;
+            private int? _secondRank;
+            private SanMoveTypes _moveType = SanMoveTypes.Move;
+
+            public StandardAlgebraicNotation BuildFromNotation(string notation)
+            {
+                var tokens = ParseFirstToken(notation);
+
+                ParseRemainingTokens(tokens);
+
+                return Build();
+            }
+
+            private IEnumerable<char> ParseFirstToken(string notation)
+            {
+                var tokens = notation;
+                var firstChar = notation[0];
+                var firstCharTokenType = TokenParser.GetTokenType(firstChar);
+                if (firstCharTokenType == SanTokenTypes.Piece)
+                {
+                    WithPiece(PieceNameMapper.FromChar(firstChar));
+                    tokens = notation.Substring(1);
+                }
+                else if (firstCharTokenType != SanTokenTypes.File &&
+                         firstCharTokenType != SanTokenTypes.Rank)
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected token in first character '{firstChar}'");
+                }
+
+                return tokens;
+            }
+
+            private void ParseRemainingTokens(IEnumerable<char> tokens)
+            {
+                foreach (var c in tokens)
+                {
+                    var t = TokenParser.GetTokenType(c);
+
+                    switch (t)
+                    {
+                        case SanTokenTypes.Piece:
+                            WithPieceToken(c);
+                            break;
+                        case SanTokenTypes.File:
+                            WithFileToken(c);
+                            break;
+                        case SanTokenTypes.Rank:
+                            WithRankToken(c);
+                            break;
+                        case SanTokenTypes.Take:
+                            WithTakeMove();
+                            break;
+                        case SanTokenTypes.PromoteDelimiter:
+                            // Ignore
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+            }
+
+            private StandardAlgebraicNotation Build()
+            {
+                int? fromFile = null, fromRank = null, toFile, toRank;
+                if (_secondFile.HasValue && _secondRank.HasValue)
+                {
+                    fromFile = _firstFile;
+                    fromRank = _firstRank;
+                    toFile = _secondFile;
+                    toRank = _secondRank;
+                }
+                else
+                {
+                    toFile = _firstFile;
+                    toRank = _firstRank;
+                }
+                return new StandardAlgebraicNotation(_piece ?? ChessPieceName.Pawn, fromFile, fromRank, toFile, toRank, _moveType, _promotionPiece);
+            }
+
+            private SanBuilder WithFileToken(char c)
+            {
+                if (!_firstFile.HasValue)
+                {
+                    WithFirstFile(ParseFileToken(c));
+                }
+                else if (!_secondFile.HasValue)
+                {
+                    WithSecondFile(ParseFileToken(c));
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected {nameof(SanTokenTypes.File)} token '{c}'");
+                }
+
+                return this;
+            }
+
+            private SanBuilder WithRankToken(char c)
+            {
+                if (_secondFile.HasValue)
+                {
+                    WithSecondRank(ParseRankToken(c));
+                }
+                else if (!_firstRank.HasValue)
+                {
+                    WithFirstRank(ParseRankToken(c));
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected {nameof(SanTokenTypes.Rank)} token '{c}'");
+                }
+
+                return this;
+            }
+
+            private SanBuilder WithPieceToken(char c)
+            {
+                if (!_promotionPiece.HasValue)
+                {
+                    WithPromotionPiece(c);
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected {nameof(SanTokenTypes.Piece)} token '{c}'");
+                }
+
+                return this;
+            }
+
+            private SanBuilder WithTakeMove()
+            {
+                _moveType = SanMoveTypes.Take;
+                return this;
+            }
+
+            private SanBuilder WithPiece(ChessPieceName c)
+            {
+                _piece = c;
+                return this;
+            }
+
+            private SanBuilder WithPromotionPiece(char c)
+            {
+                _promotionPiece = PieceNameMapper.FromChar(c);
+                return this;
+            }
+
+            private SanBuilder WithFirstFile(int tokenValue)
+            {
+                _firstFile = tokenValue;
+                return this;
+            }
+
+            private SanBuilder WithFirstRank(int tokenValue)
+            {
+                _firstRank = tokenValue;
+                return this;
+            }
+
+            private SanBuilder WithSecondFile(int tokenValue)
+            {
+                _secondFile = tokenValue;
+                return this;
+            }
+
+            private SanBuilder WithSecondRank(int tokenValue)
+            {
+                _secondRank = tokenValue;
+                return this;
+            }
+
+            private static int ParseRankToken(char c) => int.Parse(c.ToString());
+
+            private static int ParseFileToken(char c) => c - 96; // TODO: assuming ascii 'a' is 97
+
+        }
     }
 
 }
