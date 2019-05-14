@@ -4,6 +4,11 @@
 * Split board.engine tests from chess.engine.tests
 * Fix up team-city to use dotnet better not the existing msbuild/nunit etc. tasks
 * RESTplayer doesn't show promotions properly and the moves don't work because of this
+* Add SAN move support to ChessGame.Move()
+* PGN File Parser
+* setup tests to parse LOTS of PGN files.
+* Create command parser to detect between SAN move and Coord moves
+
 ## Azure Deployment
 * Couldn't get the CI/CD stuff working, Publish from VS works a treat though
 
@@ -26,10 +31,7 @@
 	* Enhance castline move validation to ensure king and castle haven't moved and king doesn't move through check
 	* Stalemate detection
 	* PGN output (optional)
-* PGN Move support
-	* Dependent on the PGNParser/PGN2JSON
-	* Already have the list of moves to query now so just need the parsed text to match against
-
+* SAN Move support
 * Still need to seperate out NextPlayer logic from the Board
 
 * Performance tests
@@ -40,10 +42,14 @@
 
 ## Chess.WebAPI
 * better error handling in ChessGame
-* Sort out getting the default root `index.html` to work, having to go to /StaticFiles is pants
 * Sort out where the deployment goes when using the Azure CI/CD that currently deploys but isn't where I expected!
 * Document the deployment stuff, the two version (VS Publish/Azure CI)
 
+## Chess.DB
+* Database of games
+* Database of board states and available moves? 
+  * For first x moves in game? At what point does retrieval become slower/faster than calculation
+  * How quickly would such a DB grow?
 
 
 # CONSOLE STUFF SUPPORT

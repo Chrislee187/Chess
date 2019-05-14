@@ -20,6 +20,6 @@ This code is to what I call "enterprise" standard, in that it largely uses the s
 Other `.MD` files exist that go in to more technical detail on the code itself, please see the root [README.MD][link.RootReadme] for more details or you can dive straight in with the [Swagger UI][link.swaggerui] or my simple [handlebars template][link.chess.webapi.index.live] sitting on top of the web api.
 
 [link.swaggerui]: https://chess-web-api.azurewebsites.net/swagger/index.html
-[link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net/staticfiles/index.html
+[link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net/index.html
 
 [link.RootReadme]: /src/readme.md

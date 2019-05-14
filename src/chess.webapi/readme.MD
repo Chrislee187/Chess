@@ -22,4 +22,4 @@ There are currently no tests around the Controller or the Service. They are pret
 [link.BoardEngine]: ../board.engine
 [link.ChessEngine]: ../chess.engine
 [link.swaggerui]: https://chess-web-api.azurewebsites.net/swagger/index.html
-[link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net/staticfiles/index.html
+[link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net/index.html
