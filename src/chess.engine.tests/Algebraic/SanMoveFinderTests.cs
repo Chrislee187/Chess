@@ -1,12 +1,7 @@
-﻿using System;
-using System.Runtime.Serialization;
-using board.engine.Actions;
-using board.engine.Movement;
-using chess.engine.Algebraic;
+﻿using chess.engine.Algebraic;
 using chess.engine.Extensions;
 using chess.engine.Game;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace chess.engine.tests.Algebraic
 {
@@ -16,6 +11,19 @@ namespace chess.engine.tests.Algebraic
         [TestCase("d4", "d2d4")]
         [TestCase("Na3", "b1a3")]
         public void Should_find_moves(string sanText, string expectedMoveText)
+        {
+            var game = ChessFactory.NewChessGame();
+
+            var move = new SanMoveFinder(game.BoardState)
+                .Find(sanText.ToSan(), Colours.White);
+
+            Assert.NotNull(move, "No move found!");
+            Assert.That(move.ToChessCoords(), Is.EqualTo(expectedMoveText));
+        }
+
+        [TestCase("d2d4", "d2d4")]
+        [TestCase("b1a3", "b1a3")]
+        public void Should_find_coord_moves(string sanText, string expectedMoveText)
         {
             var game = ChessFactory.NewChessGame();
 

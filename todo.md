@@ -1,4 +1,5 @@
 # TODOS
+* PGN file reader to validate game engine against LOTS of games
 * proper error responses for invalid boards, moves etc. Just see a useless page on production boxes, drive out with the integration tests I still need to do.
 * Integration test library for the webapi
 * Split board.engine tests from chess.engine.tests
@@ -28,11 +29,8 @@
 * better error handling in ChessGame
 * Move history
 	* Enhance enpassant rule to ensure enemy pawn did it's double step the previous turn
-	* Enhance castline move validation to ensure king and castle haven't moved and king doesn't move through check
 	* Stalemate detection
 	* PGN output (optional)
-* SAN Move support
-* Still need to seperate out NextPlayer logic from the Board
 * Make characters used to display chess pieces (RKNBQP) configurable, other languages use different characters
 * Performance tests
 	* Add some multithreading where approriate around the path regeneration mechanisms

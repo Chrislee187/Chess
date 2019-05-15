@@ -16,12 +16,12 @@ namespace chess.engine.Algebraic
     [DebuggerDisplay("{DebuggerDisplayText}")]
     public class StandardAlgebraicNotation
     {
+        private string DebuggerDisplayText => ToNotation();
         public enum CastleSide { None, King, Queen }
 
         public CastleSide CastleMove = CastleSide.None;
         public static StandardAlgebraicNotation KingSideCastle => new StandardAlgebraicNotation(CastleSide.King);
         public static StandardAlgebraicNotation QueenSideCastle => new StandardAlgebraicNotation(CastleSide.Queen);
-        private string DebuggerDisplayText => ToNotation();
         private string _originalNotation;
         public SanMoveTypes MoveType { get; }
         public ChessPieceName? PromotionPiece { get; }

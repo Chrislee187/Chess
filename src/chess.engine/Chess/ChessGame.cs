@@ -1,15 +1,10 @@
-﻿using System;
-using System.Linq;
-using board.engine;
+﻿using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Algebraic;
 using chess.engine.Chess.Entities;
-using chess.engine.Chess.Pieces;
-using chess.engine.Extensions;
 using chess.engine.Game;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 
 namespace chess.engine.Chess
@@ -88,26 +83,6 @@ namespace chess.engine.Chess
 
         }
 
-
-        public string MoveCoord(string input)
-        {
-            _logger?.LogDebug($"Attempting move {input}");
-            // TODO: Unit test this
-            var validated = ValidateInput(input);
-
-            if (!String.IsNullOrEmpty(validated.errorMessage))
-            {
-                var from = input.Substring(0, 2).ToBoardLocation();
-                var items = BoardState.GetItem(from);
-                var moves = items.Paths.FlattenMoves().Select(m => m.ToString()).ToList();
-                var debug = $"{this.ToText()}\nValid move list for piece at {from};\n" + String.Join(", ", moves);
-
-                return validated.errorMessage + $"\n\nDEBUG INFO\n{debug}";
-            }
-
-            return PlayValidMove(validated.move);
-        }
-
         private string PlayValidMove(BoardMove move)
         {
             _engine.Move(move);
@@ -120,56 +95,7 @@ namespace chess.engine.Chess
                 : "";
 
         }
-        private (BoardMove move, string errorMessage) ValidateInput(string input)
-        {
-            var from = input.Substring(0, 2).ToBoardLocation();
-            var to = input.Substring(2, 2).ToBoardLocation();
-            ChessPieceEntity promotionPiece = null;
-            var piece = _engine.PieceAt(from);
-            var pieceColour = piece.Item.Player;
-
-            if (input.Length == 6)
-            {
-                var extra = input.Substring(4, 2).ToList();
-
-                if (extra[0] == '+')
-                {
-                    var extraData = new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
-                    {
-                        Owner = pieceColour,
-                        PieceName = PieceNameMapper.FromChar(extra[1])
-                    };
-                    promotionPiece = _entityFactory.Create(extraData);
-                }
-                else
-                {
-                    return (null, $"'{extra}' is not a valid promotion");
-                }
-
-            }
-
-            if (pieceColour != CurrentPlayer)
-            {
-                return (null, $"It is not {pieceColour}'s turn.");
-            }
-
-            var validMove = piece.Paths.FindValidMove(from, to, promotionPiece);
-
-            if (validMove == null)
-            {
-                return (null, $"{input} is not a valid move!");
-            }
-
-            if (_engine.PieceAt(validMove.To)?.Item.Piece == ChessPieceName.King)
-            {
-                return (null, $"Cannot take the king");
-            }
-
-            return (validMove, String.Empty);
-        }
-
-
-
+ 
         #region Meta Info
 
         public static int DirectionModifierFor(Colours player) => player == Colours.White ? +1 : -1;
