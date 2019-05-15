@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
-using chess.engine.Chess.Movement.ChessPieces.King;
 using chess.engine.Chess.Pieces;
 using chess.engine.Extensions;
 using chess.engine.Game;
@@ -23,12 +21,16 @@ namespace chess.engine.Algebraic
         public SanMoveTypes MoveType { get; }
         public ChessPieceName? PromotionPiece { get; }
         public ChessPieceName Piece { get; }
-        public int? ToFile { get; }
-        public int? ToRank { get; }
 
-        public int? FromFile { get; }
-        public int? FromRank { get; }
+        // NOTE: Added X/Y because I still keep getting them the wrong way round, I blame the
+        // phrase "rank and file" for it! :)
+        public int ToFileX { get; }
+        public int ToRankY { get; }
 
+        public int? FromFileX { get; }
+        public int? FromRankY { get; }
+
+        public bool HaveFrom => FromFileX.HasValue && FromRankY.HasValue;
         public static StandardAlgebraicNotation Parse(string notation)
         {
             var an = new SanBuilder().BuildFrom(notation);
@@ -61,17 +63,17 @@ namespace chess.engine.Algebraic
             return new SanBuilder().BuildFrom(boardState, move);
         }
         public StandardAlgebraicNotation(ChessPieceName piece,
-            int? fromFile, int? fromRank, int? toFile, int? toRank,
+            int? fromFileX, int? fromRankY, int toFileX, int toRankY,
             string originalNotation,
             SanMoveTypes moveType = SanMoveTypes.Move,
             ChessPieceName? promotionPiece = null)
         {
             _originalNotation = originalNotation;
             Piece = piece;
-            FromFile = fromFile;
-            FromRank = fromRank;
-            ToFile = toFile;
-            ToRank = toRank;
+            FromFileX = fromFileX;
+            FromRankY = fromRankY;
+            ToFileX = toFileX;
+            ToRankY = toRankY;
             MoveType = moveType;
             PromotionPiece = promotionPiece;
         }
@@ -80,9 +82,9 @@ namespace chess.engine.Algebraic
         {
             var piece = SanTokenParser.ToSanToken(Piece);
 
-            var from = buildChessLocation(FromFile, FromRank);
+            var from = buildChessLocation(FromFileX, FromRankY);
             var move = MoveType == SanMoveTypes.Take ? "x" : "";
-            var to = buildChessLocation(ToFile, ToRank);
+            var to = buildChessLocation(ToFileX, ToRankY);
             var extra = buildExtra(PromotionPiece);
 
             return $"{piece}{from}{move}{to}{extra}".Trim();
@@ -180,8 +182,8 @@ namespace chess.engine.Algebraic
                 var piece = fromItem.Item.Piece;
                 int? fromFile = null;
                 int? fromRank = null;
-                int? toFile = move.To.X;
-                int? toRank = move.To.Y;
+                int toFile = move.To.X;
+                int toRank = move.To.Y;
                 var moveType = boardState.IsEmpty(move.To) ? SanMoveTypes.Move : SanMoveTypes.Take;
                 var extra = "";
 
@@ -191,13 +193,13 @@ namespace chess.engine.Algebraic
                 var otherPieces = boardState.GetAllItems()
                     .Where(i => !i.Location.Equals(move.From))
                     .Where(i => i.Item.Is(fromItem.Item.Player, fromItem.Item.Piece))
-                    .Where(i => i.Paths.FlattenMoves().Any(m => m.To.Equals(move.To)));
+                    .Where(i => i.Paths.ContainsMoveTo(move.To));
 
                 if (otherPieces.Any())
                 {
                     fromFile = move.From.X;
                     otherPieces = otherPieces
-                        .Where(i => i.Paths.FlattenMoves().Any(m => m.From.Y != fromFile));
+                        .Where(i => i.Location.X == fromFile);
                 }
                 if (otherPieces.Any())
                 {
@@ -266,18 +268,19 @@ namespace chess.engine.Algebraic
 
             private StandardAlgebraicNotation Build()
             {
-                int? fromFile = null, fromRank = null, toFile, toRank;
+                int? fromFile = null, fromRank = null;
+                int toFile, toRank;
                 if (_secondFile.HasValue && _secondRank.HasValue)
                 {
                     fromFile = _firstFile;
                     fromRank = _firstRank;
-                    toFile = _secondFile;
-                    toRank = _secondRank;
+                    toFile = _secondFile.Value;
+                    toRank = _secondRank.Value;
                 }
                 else
                 {
-                    toFile = _firstFile;
-                    toRank = _firstRank;
+                    toFile = _firstFile.Value;
+                    toRank = _firstRank.Value;
                 }
                 return new StandardAlgebraicNotation(_piece ?? ChessPieceName.Pawn, fromFile, fromRank, toFile, toRank, _originalNotation, _moveType, _promotionPiece);
             }

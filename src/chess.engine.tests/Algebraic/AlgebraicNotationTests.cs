@@ -48,8 +48,7 @@ namespace chess.engine.tests.Algebraic
         {
             Assert.That(StandardAlgebraicNotation.TryParse(notation, out var an));
 
-            Assert.True(an.ToFile.HasValue);
-            Assert.That(an.ToFile.Value, Is.EqualTo(file));
+            Assert.That(an.ToFileX, Is.EqualTo(file));
         }
 
         [TestCase("Re6", 6)]
@@ -60,8 +59,7 @@ namespace chess.engine.tests.Algebraic
         {
             Assert.That(StandardAlgebraicNotation.TryParse(notation, out var an));
 
-            Assert.True(an.ToFile.HasValue);
-            Assert.That(an.ToRank.Value, Is.EqualTo(rank));
+            Assert.That(an.ToRankY, Is.EqualTo(rank));
         }
 
         [TestCase("Rae6", 1)]
@@ -71,8 +69,8 @@ namespace chess.engine.tests.Algebraic
             StandardAlgebraicNotation.Parse(notation);
             Assert.That(StandardAlgebraicNotation.TryParse(notation, out var an));
 
-            Assert.True(an.FromFile.HasValue);
-            Assert.That(an.FromFile.Value, Is.EqualTo(file));
+            Assert.True(an.FromFileX.HasValue);
+            Assert.That(an.FromFileX.Value, Is.EqualTo(file));
         }
 
         [TestCase("Ra6e6", 1)]
@@ -81,8 +79,8 @@ namespace chess.engine.tests.Algebraic
         {
             Assert.That(StandardAlgebraicNotation.TryParse(notation, out var an));
 
-            Assert.True(an.FromFile.HasValue);
-            Assert.That(an.FromFile.Value, Is.EqualTo(rank));
+            Assert.True(an.FromFileX.HasValue);
+            Assert.That(an.FromFileX.Value, Is.EqualTo(rank));
         }
         [TestCase("e8+Q", ChessPieceName.Queen)]
         [TestCase("dxe8+Q", ChessPieceName.Queen)]

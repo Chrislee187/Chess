@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using board.engine;
+using chess.engine.Algebraic;
 using chess.engine.Game;
 
 namespace chess.engine.Extensions
@@ -27,6 +28,11 @@ namespace chess.engine.Extensions
             if (!int.TryParse(s[1].ToString(), out var y)) throw new ArgumentException($"Invalid BoardLocation {s}");
 
             return BoardLocation.At((int)x, y);
+        }
+
+        public static StandardAlgebraicNotation ToSan(this string s)
+        {
+            return StandardAlgebraicNotation.Parse(s);
         }
 
     }

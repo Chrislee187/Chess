@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
 using board.engine.Movement;
 
 namespace board.engine.Board
 {
+    [DebuggerDisplayAttribute("{DebuggerDisplayText}")]
     public class LocatedItem<TEntity> : ICloneable where TEntity : class, ICloneable, IBoardEntity
     {
+        private string DebuggerDisplayText => $"{Location} {Item.EntityName} ({Item.Owner})";
         public LocatedItem(BoardLocation location, TEntity item, Paths paths)
         {
             Location = location;
