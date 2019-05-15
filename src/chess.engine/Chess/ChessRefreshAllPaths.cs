@@ -39,7 +39,7 @@ namespace chess.engine.Chess
         }
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
         {
-            _logger.LogDebug("Beginning RefreshAllPaths process...");
+            _logger?.LogDebug("Beginning RefreshAllPaths process...");
             boardState.RegenerateAllPaths();
 
             var boardStateGetAllItemLocations = boardState.GetAllItemLocations.ToList();
@@ -49,7 +49,7 @@ namespace chess.engine.Chess
                 RemovePathsThatContainMovesThatLeaveUsInCheck(boardState, loc);
             }
 
-            _logger.LogDebug($"RefreshAllPaths process finished... {boardStateGetAllItemLocations.Count()} paths refreshed");
+            _logger?.LogDebug($"RefreshAllPaths process finished... {boardStateGetAllItemLocations.Count()} paths refreshed");
         }
 
         private void RemovePathsThatContainMovesThatLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardLocation loc)

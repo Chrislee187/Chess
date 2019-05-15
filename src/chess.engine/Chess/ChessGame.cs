@@ -53,7 +53,7 @@ namespace chess.engine.Chess
         {
 
             _logger = logger;
-            _logger.LogDebug("Initialising new chess game");
+            _logger?.LogInformation("Initialising new chess game");
 
             _engine = boardEngineProvider.Provide(setup);
             _entityFactory = entityFactory;
@@ -64,7 +64,7 @@ namespace chess.engine.Chess
 
         public string Move(string input)
         {
-            _logger.LogDebug($"Attempting move {input}");
+            _logger?.LogDebug($"Attempting move {input}");
             // TODO: Unit test this?
             var validated = ValidateInput(input);
 

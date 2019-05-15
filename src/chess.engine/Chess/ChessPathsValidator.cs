@@ -23,7 +23,7 @@ namespace chess.engine.Chess
 
         public Paths GeneratePossiblePaths(IBoardState<ChessPieceEntity> boardState, ChessPieceEntity entity, BoardLocation boardLocation)
         {
-            _logger.LogDebug($"Generating possible paths for {entity} at {boardLocation}.");
+            _logger?.LogDebug($"Generating possible paths for {entity} at {boardLocation}.");
             var paths = new Paths();
             paths.AddRange(
                 entity.PathGenerators
@@ -31,14 +31,14 @@ namespace chess.engine.Chess
             );
 
             var validPaths = RemoveInvalidMoves(boardState, paths);
-            _logger.LogDebug($"Valid paths for {entity} at {boardLocation}. {validPaths}");
+            _logger?.LogDebug($"Valid paths for {entity} at {boardLocation}. {validPaths}");
 
             return validPaths;
         }
 
         private Paths RemoveInvalidMoves(IBoardState<ChessPieceEntity> boardState, Paths possiblePaths)
         {
-            _logger.LogDebug($"Removing invalid moves from {possiblePaths} paths.");
+            _logger?.LogDebug($"Removing invalid moves from {possiblePaths} paths.");
             var validPaths = new Paths();
 
             foreach (var possiblePath in possiblePaths)
@@ -51,7 +51,7 @@ namespace chess.engine.Chess
                 }
                 else
                 {
-                    _logger.LogDebug($"Removed {possiblePath}.");
+                    _logger?.LogDebug($"Removed {possiblePath}.");
                 }
             }
 

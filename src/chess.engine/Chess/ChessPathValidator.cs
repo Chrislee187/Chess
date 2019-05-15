@@ -23,7 +23,7 @@ namespace chess.engine.Chess
 
         public Path ValidatePath(IBoardState<ChessPieceEntity> boardState, Path possiblePath)
         {
-            _logger.LogDebug($"Validating path: {possiblePath}");
+            _logger?.LogDebug($"Validating path: {possiblePath}");
             var validPath = new Path();
             foreach (var move in possiblePath)
             {
@@ -44,7 +44,7 @@ namespace chess.engine.Chess
 
             if (validPath.Any())
             {
-                _logger.LogDebug($"Path validated as: {validPath}");
+                _logger?.LogDebug($"Path validated as: {validPath}");
             }
 
             return validPath;
