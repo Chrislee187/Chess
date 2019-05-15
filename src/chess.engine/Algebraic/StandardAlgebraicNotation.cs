@@ -248,8 +248,22 @@ namespace chess.engine.Algebraic
                 {
                     fromFile = fromItem.Location.X;
                 }
+
+                ChessPieceName? promotionPiece = null;
+                if (move.ExtraData is ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData)
+                {
+                    var data = move.ExtraData as ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData;
+                    promotionPiece = data.PieceName;
+                }
+
+                // TODO: Whether the move puts the enemy in check
                 
-                return new StandardAlgebraicNotation(piece, fromFile, fromRank, toFile, toRank, move.ToChessCoords(), moveType );
+                // Pullout DoeMoveLeaveUsInCheck() from ChessRefershAllPaths as seperate service and reuse here
+                var inCheck = false;
+
+
+
+                return new StandardAlgebraicNotation(piece, fromFile, fromRank, toFile, toRank, move.ToChessCoords(), moveType, promotionPiece, inCheck );
             }
 
             public StandardAlgebraicNotation BuildFrom(string notation)

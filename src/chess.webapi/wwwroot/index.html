@@ -20,7 +20,7 @@
                 <td width="400px" style="vertical-align:top">
                     {{whoseTurn}} to move<br />
                     {{#each availableMoves}}
-                    <button style="display: inline-block; width: 50px" onclick="update('/api/chessgame/{{../board}}/{{this.coord}}')" title="{{tooltip this}}">{{label this}}</button>
+                    <button style="display: inline-block; width: 50px" onclick="update('/api/chessgame/{{../board}}/{{apiMove this}}')" title="{{tooltip this}}">{{label this}}</button>
                     {{/each}}
                 </td>
             </tr>
@@ -48,6 +48,9 @@
     var template = Handlebars.compile(source);
 
     update('/api/chessgame');
+    Handlebars.registerHelper("apiMove", function (item) {
+        return item.san;
+    });
 
     Handlebars.registerHelper("label", function (item) {
         return item.san;

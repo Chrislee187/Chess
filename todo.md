@@ -33,7 +33,7 @@
 	* PGN output (optional)
 * SAN Move support
 * Still need to seperate out NextPlayer logic from the Board
-
+* Make characters used to display chess pieces (RKNBQP) configurable, other languages use different characters
 * Performance tests
 	* Add some multithreading where approriate around the path regeneration mechanisms
 * Invalid board state detection (should be able to be turned off) to allow custom boards without kings
