@@ -4,6 +4,7 @@ using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Chess.Entities;
+using chess.engine.Chess.Pieces;
 using chess.engine.Exceptions;
 using chess.engine.Game;
 
@@ -20,6 +21,11 @@ namespace chess.engine.Algebraic
 
         public BoardMove Find(StandardAlgebraicNotation san, Colours forPlayer)
         {
+            if (san.CastleMove != StandardAlgebraicNotation.CastleSide.None)
+            {
+                return FindCastleMove(san, forPlayer);
+            }
+
             var destination = BoardLocation.At(san.ToFileX, san.ToRankY);
 
             if (san.HaveFrom)
@@ -52,6 +58,25 @@ namespace chess.engine.Algebraic
 
 
             throw new MoveFinderException("Couldn't disambiguate move");
+        }
+
+        private BoardMove FindCastleMove(StandardAlgebraicNotation san, Colours forPlayer)
+        {
+            var king = _boardState.GetItem(King.StartPositionFor(forPlayer));
+
+            if (king == null)
+            {
+                throw new MoveFinderException($"King not found: {san.ToNotation()}");
+            }
+            var y = forPlayer == Colours.White ? 1 : 8;
+
+            var from = BoardLocation.At(san.FromFileX.Value, y);
+            var to = BoardLocation.At(san.ToFileX, y);
+            var move = king.Paths.FindValidMove(@from, to);
+
+            if(move == null) throw new MoveFinderException($"No valid castle move found: {from}{to}");
+
+            return move;
         }
 
         private BoardMove FindExactMove(StandardAlgebraicNotation san, BoardLocation destination)

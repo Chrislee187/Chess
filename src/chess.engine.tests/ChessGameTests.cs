@@ -36,8 +36,8 @@ namespace chess.engine.tests
         {
             var game = new ChessGame(NullLogger<ChessGame>.Instance, _engineProvider, _chessPieceEntityFactory, _chessGameStateService);
 
-            game.Move("D2D4");
-            Assert.That(game.CurrentPlayer, Is.EqualTo(Colours.Black));
+            var msg = game.Move("d2d4");
+            Assert.That(game.CurrentPlayer, Is.EqualTo(Colours.Black), msg);
         }
 
         [TestCase(Colours.White, 8)]

@@ -3,6 +3,7 @@ using System.Linq;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
+using chess.engine.Algebraic;
 using chess.engine.Chess.Entities;
 using chess.engine.Chess.Pieces;
 using chess.engine.Extensions;
@@ -32,6 +33,7 @@ namespace chess.engine.Chess
         private readonly ILogger<ChessGame> _logger;
         private readonly IBoardEntityFactory<ChessPieceEntity> _entityFactory;
         private readonly IChessGameStateService _gameStateService;
+        private SanMoveFinder _sanMoveFinder;
 
         public ChessGame(
             ILogger<ChessGame> logger,
@@ -65,7 +67,32 @@ namespace chess.engine.Chess
         public string Move(string input)
         {
             _logger?.LogDebug($"Attempting move {input}");
-            // TODO: Unit test this?
+
+            if (!StandardAlgebraicNotation.TryParse(input, out var san))
+            {
+                // TODO: More detailed error
+                return $"Error: invalid move {input}, are you using upper-case for Files?";
+            }
+
+
+            _sanMoveFinder = new SanMoveFinder(_engine.BoardState);
+
+            var move = _sanMoveFinder.Find(san, CurrentPlayer);
+
+            if (move == null)
+            {
+                return $"Error: No matching move found: {input}";
+            }
+
+            return PlayValidMove(move);
+
+        }
+
+
+        public string MoveCoord(string input)
+        {
+            _logger?.LogDebug($"Attempting move {input}");
+            // TODO: Unit test this
             var validated = ValidateInput(input);
 
             if (!String.IsNullOrEmpty(validated.errorMessage))
@@ -78,7 +105,12 @@ namespace chess.engine.Chess
                 return validated.errorMessage + $"\n\nDEBUG INFO\n{debug}";
             }
 
-            _engine.Move(validated.move);
+            return PlayValidMove(validated.move);
+        }
+
+        private string PlayValidMove(BoardMove move)
+        {
+            _engine.Move(move);
 
             CurrentPlayer = NextPlayer();
             GameState = _gameStateService.CurrentGameState(BoardState, CurrentPlayer);
@@ -86,8 +118,8 @@ namespace chess.engine.Chess
             return GameState == GameState.Check || GameState == GameState.Checkmate
                 ? GameState.ToString()
                 : "";
-        }
 
+        }
         private (BoardMove move, string errorMessage) ValidateInput(string input)
         {
             var from = input.Substring(0, 2).ToBoardLocation();

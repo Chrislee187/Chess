@@ -16,6 +16,11 @@ namespace chess.engine.Algebraic
     [DebuggerDisplay("{DebuggerDisplayText}")]
     public class StandardAlgebraicNotation
     {
+        public enum CastleSide { None, King, Queen }
+
+        public CastleSide CastleMove = CastleSide.None;
+        public static StandardAlgebraicNotation KingSideCastle => new StandardAlgebraicNotation(CastleSide.King);
+        public static StandardAlgebraicNotation QueenSideCastle => new StandardAlgebraicNotation(CastleSide.Queen);
         private string DebuggerDisplayText => ToNotation();
         private string _originalNotation;
         public SanMoveTypes MoveType { get; }
@@ -31,11 +36,15 @@ namespace chess.engine.Algebraic
         public int? FromRankY { get; }
 
         public bool HaveFrom => FromFileX.HasValue && FromRankY.HasValue;
+
+        public bool InCheck { get; }
+
+
         public static StandardAlgebraicNotation Parse(string notation)
         {
             var an = new SanBuilder().BuildFrom(notation);
 
-            if (an.ToNotation() != notation)
+            if (an.CastleMove == CastleSide.None && an.ToNotation() != notation)
             {
                 throw new Exception($"Notation parse mismatch: {notation} != {an.ToNotation()}");
             }
@@ -66,7 +75,7 @@ namespace chess.engine.Algebraic
             int? fromFileX, int? fromRankY, int toFileX, int toRankY,
             string originalNotation,
             SanMoveTypes moveType = SanMoveTypes.Move,
-            ChessPieceName? promotionPiece = null)
+            ChessPieceName? promotionPiece = null, bool inCheck = false)
         {
             _originalNotation = originalNotation;
             Piece = piece;
@@ -76,25 +85,43 @@ namespace chess.engine.Algebraic
             ToRankY = toRankY;
             MoveType = moveType;
             PromotionPiece = promotionPiece;
+            InCheck = inCheck;
+        }
+
+        private StandardAlgebraicNotation(CastleSide side)
+        {
+            Piece = ChessPieceName.King;
+            CastleMove = side;
+            FromFileX = King.StartPositionFor(Colours.White).X;
+
+            ToFileX = side == CastleSide.Queen
+                ? 3
+                : 7;
         }
 
         public string ToNotation()
         {
+            if (CastleMove != CastleSide.None)
+            {
+                return CastleMove == CastleSide.King
+                    ? "O-O"
+                    : "O-O-O";
+            }
             var piece = SanTokenParser.ToSanToken(Piece);
 
             var from = buildChessLocation(FromFileX, FromRankY);
-            var move = MoveType == SanMoveTypes.Take ? "x" : "";
+            var move = MoveType == SanMoveTypes.Take ? SanTokenParser.TakeNotator.ToString() : "";
             var to = buildChessLocation(ToFileX, ToRankY);
             var extra = buildExtra(PromotionPiece);
-
-            return $"{piece}{from}{move}{to}{extra}".Trim();
+            var inCheck = InCheck ? SanTokenParser.CheckNotator.ToString() : "";
+            return $"{piece}{from}{move}{to}{extra}{inCheck}".Trim();
         }
 
         private string buildExtra(ChessPieceName? promotionPiece)
         {
             if (promotionPiece.HasValue)
             {
-                return $"+{PieceNameMapper.ToChar(promotionPiece.Value, Colours.White)}";
+                return $"{SanTokenParser.PromoteNotator.ToString()}{PieceNameMapper.ToChar(promotionPiece.Value, Colours.White)}";
             }
 
             return string.Empty;
@@ -123,6 +150,9 @@ namespace chess.engine.Algebraic
         #region Token Parsing
         private class SanTokenParser
         {
+            public const char PromoteNotator = '=';
+            public const char CheckNotator = '+';
+            public const char TakeNotator = 'x';
 
             private const string SanCharacters = "RNBQK";
             private const string FileCharacters = "abcdefgh";
@@ -142,8 +172,9 @@ namespace chess.engine.Algebraic
                 if (SanCharacters.Contains(c)) return SanTokenTypes.Piece;
                 if (FileCharacters.Contains(c)) return SanTokenTypes.File;
                 if (RankCharacters.Contains(c)) return SanTokenTypes.Rank;
-                if (c == 'x') return SanTokenTypes.Take;
-                if (c == '+') return SanTokenTypes.PromoteDelimiter;
+                if (c == TakeNotator) return SanTokenTypes.Take;
+                if (c == PromoteNotator) return SanTokenTypes.PromoteDelimiter;
+                if (c == CheckNotator) return SanTokenTypes.Check;
 
                 throw new ArgumentOutOfRangeException($"Unknown token: '{c}'");
             }
@@ -156,7 +187,8 @@ namespace chess.engine.Algebraic
 
         private enum SanTokenTypes
         {
-            Piece, Rank, File, Take, PromoteDelimiter
+            Piece, Rank, File, Take, PromoteDelimiter,
+            Check
         }
         #endregion
 
@@ -174,7 +206,7 @@ namespace chess.engine.Algebraic
             private SanMoveTypes _moveType = SanMoveTypes.Move;
 
             private string _originalNotation;
-
+            private bool _inCheck;
             public StandardAlgebraicNotation BuildFrom(IBoardState<ChessPieceEntity> boardState, BoardMove move)
             {
                 var fromItem = boardState.GetItem(move.From);
@@ -222,6 +254,21 @@ namespace chess.engine.Algebraic
 
             public StandardAlgebraicNotation BuildFrom(string notation)
             {
+                if (notation.StartsWith("O") || notation.StartsWith("0"))
+                {
+                    // TODO: Cheating here should parse it properly
+                    if (notation.Length == 3)
+                    {
+                        return StandardAlgebraicNotation.KingSideCastle;
+                    }
+
+                    if (notation.Length == 5)
+                    {
+                        return StandardAlgebraicNotation.QueenSideCastle;
+                    }
+
+                    throw new ArgumentException($"{notation} is not a valid castle notation");
+                }
                 _originalNotation = notation;
                 var tokens = ParseFirstToken(notation);
 
@@ -235,6 +282,7 @@ namespace chess.engine.Algebraic
                 var tokens = notation;
                 var firstChar = notation[0];
                 var firstCharTokenType = _tokenParser.GetTokenType(firstChar);
+
                 if (firstCharTokenType == SanTokenTypes.Piece)
                 {
                     WithPiece(PieceNameMapper.FromChar(firstChar));
@@ -282,7 +330,7 @@ namespace chess.engine.Algebraic
                     toFile = _firstFile.Value;
                     toRank = _firstRank.Value;
                 }
-                return new StandardAlgebraicNotation(_piece ?? ChessPieceName.Pawn, fromFile, fromRank, toFile, toRank, _originalNotation, _moveType, _promotionPiece);
+                return new StandardAlgebraicNotation(_piece ?? ChessPieceName.Pawn, fromFile, fromRank, toFile, toRank, _originalNotation, _moveType, _promotionPiece, _inCheck);
             }
 
             private readonly IDictionary<SanTokenTypes, Action<SanBuilder, char>> _tokenActionFactory = new Dictionary<SanTokenTypes, Action<SanBuilder, char>>
@@ -291,8 +339,14 @@ namespace chess.engine.Algebraic
                 {SanTokenTypes.File, (b,c) => b.WithFileToken(c) },
                 {SanTokenTypes.Rank, (b,c) => b.WithRankToken(c) },
                 {SanTokenTypes.Take, (b,c) => b.WithTakeMove(c) },
-                {SanTokenTypes.PromoteDelimiter, (b, c) => { } }
+                {SanTokenTypes.PromoteDelimiter, (b, c) => { } },
+                {SanTokenTypes.Check, (b, c) => b.WithCheck(c)  }
             };
+
+            private void WithCheck(char c)
+            {
+                _inCheck = true;
+            }
 
             private void WithFileToken(char c)
             {

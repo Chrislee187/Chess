@@ -1,4 +1,5 @@
 ﻿using board.engine;
+using board.engine.Movement;
 using chess.engine.Extensions;
 using chess.engine.Game;
 

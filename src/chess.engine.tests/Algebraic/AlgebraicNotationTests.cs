@@ -17,6 +17,10 @@ namespace chess.engine.tests.Algebraic
         [TestCase("Qe6", ChessPieceName.Queen)]
         [TestCase("Ke6", ChessPieceName.King)]
         [TestCase("e1", ChessPieceName.Pawn)]
+        [TestCase("O-O", ChessPieceName.King)]
+        [TestCase("O-O-O", ChessPieceName.King)]
+        [TestCase("0-0", ChessPieceName.King)]
+        [TestCase("0-0-0", ChessPieceName.King)]
         public void ShouldParsePieceName(string notation, ChessPieceName piece)
         {
             StandardAlgebraicNotation.Parse(notation);
@@ -82,9 +86,9 @@ namespace chess.engine.tests.Algebraic
             Assert.True(an.FromFileX.HasValue);
             Assert.That(an.FromFileX.Value, Is.EqualTo(rank));
         }
-        [TestCase("e8+Q", ChessPieceName.Queen)]
-        [TestCase("dxe8+Q", ChessPieceName.Queen)]
-        [TestCase("d7xe8+Q", ChessPieceName.Queen)]
+        [TestCase("e8=Q", ChessPieceName.Queen)]
+        [TestCase("dxe8=Q", ChessPieceName.Queen)]
+        [TestCase("d7xe8=Q", ChessPieceName.Queen)]
         public void ShouldParsePromotion(string notation, ChessPieceName piece)
         {
             Assert.That(StandardAlgebraicNotation.TryParse(notation, out var an));
@@ -93,7 +97,7 @@ namespace chess.engine.tests.Algebraic
             Assert.That(an.PromotionPiece.Value, Is.EqualTo(piece));
         }
 
-        [TestCase("x8+Q")]
+        [TestCase("x8=Q")]
         [TestCase("DD4xe8")]
         [TestCase("e8+Z")]
         public void ShouldFailParsing(string notation)
