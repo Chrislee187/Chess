@@ -84,9 +84,9 @@ namespace chess.engine
 
             // TODO: King eligibility stuff
             return new ChessGame(
-                ChessFactory.CreateLogger<ChessGame>(),
+                ChessFactory.Logger<ChessGame>(),
                 ChessFactory.ChessBoardEngineProvider(),
-                ChessFactory.ChessPieceEntityFactory(),
+                ChessFactory.ChessPieceEntityProvider(),
                 ChessFactory.ChessGameStateService(),
                 setup,
                 whoseTurn
@@ -120,7 +120,7 @@ namespace chess.engine
             // TODO: Enpassant pawn check
             var chessPieceName = PieceNameMapper.FromChar(piece);
             var colour = char.IsUpper(piece) ? Colours.White : Colours.Black;
-            var newPiece = ChessFactory.ChessPieceEntityFactory().Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
+            var newPiece = ChessFactory.ChessPieceEntityProvider().Create(new ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData
             {
                 PieceName = chessPieceName, Owner = colour
             });

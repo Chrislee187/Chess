@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using board.engine;
 using board.engine.Actions;
 using board.engine.Board;
@@ -26,20 +25,23 @@ namespace chess.engine.Chess
         private readonly IBoardActionProvider<ChessPieceEntity> _actionProvider;
         // TODO: Sort of logger
         private readonly IChessGameStateService _chessGameStateService;
+        private readonly ICheckDetectionService _checkDetectionService;
 
         public ChessRefreshAllPaths(
             ILogger<ChessRefreshAllPaths> logger,
             IBoardActionProvider<ChessPieceEntity> actionProvider,
-                IChessGameStateService chessGameStateService
+            IChessGameStateService chessGameStateService,
+            ICheckDetectionService checkDetectionService
             )
         {
             _logger = logger;
             _actionProvider = actionProvider;
             _chessGameStateService = chessGameStateService;
+            _checkDetectionService = checkDetectionService;
         }
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
         {
-            _logger?.LogDebug("Beginning RefreshAllPaths process...");
+            _logger?.LogDebug("Beginning ChessRefreshAllPaths process...");
             boardState.RegenerateAllPaths();
 
             var boardStateGetAllItemLocations = boardState.GetAllItemLocations.ToList();
@@ -49,7 +51,7 @@ namespace chess.engine.Chess
                 RemovePathsThatContainMovesThatLeaveUsInCheck(boardState, loc);
             }
 
-            _logger?.LogDebug($"RefreshAllPaths process finished... {boardStateGetAllItemLocations.Count()} paths refreshed");
+            _logger?.LogDebug($"ChessRefreshAllPaths process finished... {boardStateGetAllItemLocations.Count()} paths refreshed");
         }
 
         private void RemovePathsThatContainMovesThatLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardLocation loc)
@@ -70,7 +72,7 @@ namespace chess.engine.Chess
             var pieceColour = boardState.GetItem(path.First().From).Item.Player;
             foreach (var move in path)
             {
-                var inCheck = DoeMoveLeaveUsInCheck(boardState, move, pieceColour);
+                var inCheck = _checkDetectionService.DoeMoveLeaveUsInCheck(boardState, move, pieceColour);
 
                 if (!inCheck) validPath.Add(move);
             }
@@ -78,17 +80,5 @@ namespace chess.engine.Chess
             return !validPath.Any() ? null : validPath;
         }
 
-        private bool DoeMoveLeaveUsInCheck(ICloneable boardState, BoardMove move, Colours pieceColour)
-        {
-            var clonedBoardState = (IBoardState<ChessPieceEntity>) boardState.Clone();
-            var action = _actionProvider.Create(move.MoveType, clonedBoardState);
-            action.Execute(move);
-
-            clonedBoardState.RegeneratePaths((int)pieceColour.Enemy());
-
-            var inCheck = _chessGameStateService.CurrentGameState(clonedBoardState, pieceColour)
-                          != GameState.InProgress;
-            return inCheck;
-        }
     }
 }

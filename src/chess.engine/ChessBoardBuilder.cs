@@ -145,7 +145,7 @@ namespace chess.engine
         private class EasyBoardBuilderCustomBoardSetup : IBoardSetup<ChessPieceEntity>
         {
             private char[,] _board;
-            private readonly ChessPieceEntityFactory _chessPieceEntityFactory = ChessFactory.ChessPieceEntityFactory();
+            private readonly ChessPieceEntityProvider _chessPieceEntityProvider = ChessFactory.ChessPieceEntityProvider();
 
             public EasyBoardBuilderCustomBoardSetup(char[,] board)
             {
@@ -159,9 +159,9 @@ namespace chess.engine
                     {
                         var chr = _board[file, rank];
 
-                        if (_chessPieceEntityFactory.ValidPieces.Contains(chr.ToString().ToUpper()))
+                        if (_chessPieceEntityProvider.ValidPieces.Contains(chr.ToString().ToUpper()))
                         {
-                            var entity = _chessPieceEntityFactory.Create(
+                            var entity = _chessPieceEntityProvider.Create(
                                 PieceNameMapper.FromChar(chr),
                                 char.IsUpper(chr) ? Colours.White : Colours.Black
                             );

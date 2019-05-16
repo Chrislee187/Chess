@@ -250,9 +250,9 @@ namespace chess.engine.Algebraic
                 }
 
                 ChessPieceName? promotionPiece = null;
-                if (move.ExtraData is ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData)
+                if (move.ExtraData is ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData)
                 {
-                    var data = move.ExtraData as ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData;
+                    var data = move.ExtraData as ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData;
                     promotionPiece = data.PieceName;
                 }
 

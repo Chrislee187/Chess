@@ -2,6 +2,7 @@
 using board.engine.Board;
 using board.engine.Movement;
 using board.engine.Movement.Validators;
+using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Extensions;
 using chess.engine.tests.Builders;
@@ -29,7 +30,7 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "R   K  R"
                 );
-            var game = new ChessGameBuilder().BuildGame();
+            var game = ChessFactory.NewChessGame();
             _boardState = game.BoardState;
         }
 

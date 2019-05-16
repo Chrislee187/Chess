@@ -5,7 +5,7 @@ using chess.engine.Game;
 
 namespace chess.engine.Chess.Entities
 {
-    public class ChessPieceEntityFactory : IBoardEntityFactory<ChessPieceEntity>
+    public class ChessPieceEntityProvider : IBoardEntityFactory<ChessPieceEntity>
     {
         public string ValidPieces { get; }= "PRNBKQ";
         private static readonly IDictionary<ChessPieceName, Func<Colours, ChessPieceEntity>> Factory 

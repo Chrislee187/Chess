@@ -12,7 +12,7 @@ namespace chess.engine.tests
         [Test]
         public void Should_play_the_wiki_game_with_coord_moves()
         {
-            var game = new ChessGameBuilder().BuildGame();
+            var game = ChessFactory.NewChessGame();
             var moveIdx = 0;
             foreach (var move in TestGameMoveLists.WikiGameCoords)
             {
@@ -32,7 +32,7 @@ namespace chess.engine.tests
         [Test]
         public void Should_play_the_wiki_game_with_san_moves()
         {
-            var game = new ChessGameBuilder().BuildGame();
+            var game = ChessFactory.NewChessGame();
             var moveIdx = 0;
             foreach (var move in TestGameMoveLists.WikiGameSan)
             {

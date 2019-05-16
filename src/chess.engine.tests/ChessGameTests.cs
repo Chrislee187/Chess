@@ -11,14 +11,14 @@ namespace chess.engine.tests
     public class ChessGameTests
     {
         private ChessBoardEngineProvider _engineProvider;
-        private ChessPieceEntityFactory _chessPieceEntityFactory;
+        private ChessPieceEntityProvider _chessPieceEntityProvider;
         private IChessGameStateService _chessGameStateService;
 
         [SetUp]
         public void Setup()
         {
-            _chessPieceEntityFactory = new ChessGameBuilder().BuildEntityFactory();
-            _engineProvider = new ChessGameBuilder().BuildEngineProvider();
+            _chessPieceEntityProvider = ChessFactory.ChessPieceEntityProvider();
+            _engineProvider = ChessFactory.ChessBoardEngineProvider();
             _chessGameStateService = ChessFactory.ChessGameStateService(ChessFactory.LoggerType.Null);
         }
         [Test]
@@ -27,14 +27,14 @@ namespace chess.engine.tests
             var game = new ChessGame(
                 NullLogger<ChessGame>.Instance, 
                 _engineProvider, 
-                _chessPieceEntityFactory, _chessGameStateService);
+                _chessPieceEntityProvider, _chessGameStateService);
             Assert.That(game.CurrentPlayer, Is.EqualTo(Colours.White));
         }
 
         [Test]
         public void Move_should_update_current_player_when_valid()
         {
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, _engineProvider, _chessPieceEntityFactory, _chessGameStateService);
+            var game = new ChessGame(NullLogger<ChessGame>.Instance, _engineProvider, _chessPieceEntityProvider, _chessGameStateService);
 
             var msg = game.Move("d2d4");
             Assert.That(game.CurrentPlayer, Is.EqualTo(Colours.Black), msg);

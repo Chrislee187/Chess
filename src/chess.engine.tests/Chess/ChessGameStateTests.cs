@@ -1,7 +1,5 @@
 ﻿using chess.engine.Chess;
 using chess.engine.Game;
-using chess.engine.tests.Builders;
-using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Chess

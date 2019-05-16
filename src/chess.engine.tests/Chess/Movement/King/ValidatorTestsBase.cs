@@ -7,7 +7,7 @@ namespace chess.engine.tests.Chess.Movement.King
     {
         protected readonly ChessBoardEngineProvider ChessBoardEngineProvider = ChessFactory.ChessBoardEngineProvider();
 
-        protected readonly ChessPieceEntityFactory ChessBoardEntityFactory = ChessFactory.ChessPieceEntityFactory();
+        protected readonly ChessPieceEntityProvider ChessBoardEntityProvider = ChessFactory.ChessPieceEntityProvider();
         protected readonly IChessGameStateService ChessGameStateService = ChessFactory.ChessGameStateService();
     }
 }

@@ -7,6 +7,7 @@ using chess.engine.Chess.Entities;
 using chess.engine.Chess.Movement;
 using chess.engine.Chess.Movement.ChessPieces.Pawn;
 using chess.engine.Extensions;
+using chess.engine.Game;
 using chess.engine.tests.Builders;
 using chess.engine.tests.Chess.Movement.King;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -33,7 +34,7 @@ namespace chess.engine.tests.Chess.Movement.Pawn
                        "        " +
                        "    K  R"
                 );
-            _boardState = new ChessGameBuilder().BuildGame(board.ToGameSetup()).BoardState;
+            _boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
             _validator = new EnPassantTakeValidator();
         }
 

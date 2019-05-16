@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using board.engine;
 using board.engine.Actions;
 using board.engine.Movement;
 using chess.engine.Chess;
@@ -29,13 +30,13 @@ namespace chess.engine.tests
         [SetUp]
         public void Setup()
         {
-            _chessBoardSetup = new ChessBoardSetup(new ChessPieceEntityFactory());
+            _chessBoardSetup = new ChessBoardSetup(new ChessPieceEntityProvider());
 
         }
         [Test]
         public void Should()
         {
-            var engine = new ChessGameBuilder().BuildEngineProvider().Provide(_chessBoardSetup);
+            var engine = ChessFactory.ChessBoardEngineProvider().Provide(_chessBoardSetup);
 
             var startLocation = "B2".ToBoardLocation();
 
@@ -63,7 +64,7 @@ namespace chess.engine.tests
                     .ToGameSetup()
                 ;
 
-            var game = new ChessGameBuilder().BuildGame(setup);
+            var game = ChessFactory.CustomChessGame(setup, Colours.White);
 
             var board = new ChessBoardBuilder().FromChessGame(game).ToString();
             Console.WriteLine(board);
@@ -89,7 +90,7 @@ namespace chess.engine.tests
                 ;
 
 
-            var game = new ChessGameBuilder().BuildGame(setup);
+            var game = ChessFactory.CustomChessGame(setup, Colours.White);
 
             var board = new ChessBoardBuilder().FromChessGame(game).ToString();
             Console.WriteLine(board);
@@ -113,7 +114,7 @@ namespace chess.engine.tests
                            "RNBQR.K.")
                 ;
 
-            var game = new ChessGameBuilder().BuildGame(board.ToGameSetup());
+            var game = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White);
 //            var game = new ChessGame(NullLogger<ChessGame>.Instance, _chessBoardEngineProvider, board.ToGameSetup(), Colours.White);
 
             // TODO: Fix this bug, pawn can't take pawn, something to do with

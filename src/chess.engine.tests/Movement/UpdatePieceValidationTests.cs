@@ -30,7 +30,7 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "    K  R"
                 );
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityFactory, ChessGameStateService, board.ToGameSetup());
+            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityProvider, ChessGameStateService, board.ToGameSetup());
             _boardState = game.BoardState;
         }
 
@@ -40,7 +40,7 @@ namespace chess.engine.tests.Movement
             var validator = new UpdatePieceValidator<ChessPieceEntity>();
 
             BoardLocation to = "A8".ToBoardLocation();
-            var promote = new BoardMove("A7".ToBoardLocation(), to, (int)DefaultActions.UpdatePiece, new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
+            var promote = new BoardMove("A7".ToBoardLocation(), to, (int)DefaultActions.UpdatePiece, new ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData
             {
                 Owner = 0,
                 PieceName = ChessPieceName.Queen

@@ -1,8 +1,11 @@
 ﻿using System;
+using board.engine;
 using board.engine.Movement;
 using chess.engine.Chess;
+using chess.engine.Chess.Entities;
 using chess.engine.Chess.Movement.ChessPieces.King;
 using chess.engine.Extensions;
+using chess.engine.Game;
 using chess.engine.tests.Builders;
 using NUnit.Framework;
 
@@ -36,7 +39,7 @@ namespace chess.engine.tests.Chess.Movement.King
                        "   K   R"
                 );
 
-            var boardState = new ChessGameBuilder().BuildGame(board.ToGameSetup()).BoardState;
+            var boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
             Assert.True(_validator.ValidateMove(_whiteInvalidKingCastle, boardState), "Invalid castle move allowed");
             Assert.True(_validator.ValidateMove(_whiteInvalidQueenCastle, boardState), "Invalid castle move allowed");
         }
@@ -54,7 +57,7 @@ namespace chess.engine.tests.Chess.Movement.King
                        "    K R "
                 );
 
-            var boardState = new ChessGameBuilder().BuildGame(board.ToGameSetup()).BoardState;
+            var boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
             Assert.False(_validator.ValidateMove(_whiteQueenSideCastle, boardState), "Invalid queen side castle move allowed");
             Assert.False(_validator.ValidateMove(_whiteKingSideCastle, boardState), "Invalid king side castle move allowed");
         }
@@ -72,7 +75,7 @@ namespace chess.engine.tests.Chess.Movement.King
                        "    K NR"
                 );
 
-            var boardState = new ChessGameBuilder().BuildGame(board.ToGameSetup()).BoardState;
+            var boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
             Assert.False(_validator.ValidateMove(_whiteKingSideCastle, boardState), "Invalid king side castle move allowed");
         }
         [Test]
@@ -89,7 +92,7 @@ namespace chess.engine.tests.Chess.Movement.King
                        "    K  R"
                 );
 
-            var boardState = new ChessGameBuilder().BuildGame(board.ToGameSetup()).BoardState;
+            var boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
 
             Assert.False(_validator.ValidateMove(_whiteKingSideCastle, boardState), "Invalid king side castle move allowed");
         }
@@ -108,7 +111,7 @@ namespace chess.engine.tests.Chess.Movement.King
                            "RNBQK..R"
                     );
 
-            var buildGame = new ChessGameBuilder().BuildGame(board.ToGameSetup());
+            var buildGame = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White);
             var boardState = buildGame.BoardState;
 
             var msg = buildGame.Move(_whiteKingSideCastle.ToChessCoords());
