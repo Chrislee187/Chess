@@ -11,27 +11,31 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class UpdatePieceActionTests : ActionTestsBase<UpdatePieceAction<ChessPieceEntity>, ChessPieceEntity>
+    public class UpdatePieceActionTests : ActionTestsBase<UpdatePieceAction<TestBoardEntity>, TestBoardEntity>
     {
-        private const ChessPieceName PromotionPiece = ChessPieceName.Queen;
-        private static readonly BoardMove PawnPromotionMove 
-            = new BoardMove("B7".ToBoardLocation(), "B8".ToBoardLocation(), (int)DefaultActions.UpdatePiece, new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
-            {
-                Owner = Colours.White,
-                PieceName = PromotionPiece
-            });
+        private static TestBoardEntity TestUpdateEntity = new TestBoardEntity();
+
+        private static readonly BoardMove PawnPromotionMove
+            = new BoardMove("B7".ToBoardLocation(), "B8".ToBoardLocation(), (int)DefaultActions.UpdatePiece,
+                TestUpdateEntity);
+
+
         [SetUp]
         public void Setup()
         {
             SetUp();
-            Action = new UpdatePieceAction<ChessPieceEntity>(EntityFactoryMock.Object, ActionFactoryMock.Object, StateMock.Object);
+            Action = new UpdatePieceAction<TestBoardEntity>(
+                EntityFactoryMock.Object, 
+                ActionFactoryMock.Object, 
+                StateMock.Object);
         }
 
         [Test]
         public void Execute_moves_and_upgrades_piece()
         {
-            var piece = new PawnEntity(Colours.White);
-            var promotedPiece = new QueenEntity(Colours.White);
+            var piece = new TestBoardEntity();
+            var promotedPiece = TestUpdateEntity;
+            EntityFactoryMock.Setup(f => f.Create(It.IsAny<object>())).Returns(promotedPiece);
             SetupLocationReturn(PawnPromotionMove.From, piece);
             SetupPromotionPiece(promotedPiece);
             Action.Execute(PawnPromotionMove);

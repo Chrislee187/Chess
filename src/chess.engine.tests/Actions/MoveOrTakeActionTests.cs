@@ -9,22 +9,22 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class MoveOrTakeActionTests : ActionTestsBase<MoveOrTakeAction<ChessPieceEntity>, ChessPieceEntity>
+    public class MoveOrTakeActionTests : ActionTestsBase<MoveOrTakeAction<TestBoardEntity>, TestBoardEntity>
     {
         [SetUp]
         public void Setup()
         {
-            StateMock = new Mock<IBoardState<ChessPieceEntity>>();
-            ActionFactoryMock = new Mock<IBoardActionProvider<ChessPieceEntity>>();
+            StateMock = new Mock<IBoardState<TestBoardEntity>>();
+            ActionFactoryMock = new Mock<IBoardActionProvider<TestBoardEntity>>();
             BoardActionMock = new Mock<IBoardAction>();
 
-            Action = new MoveOrTakeAction<ChessPieceEntity>(ActionFactoryMock.Object, StateMock.Object);
+            Action = new MoveOrTakeAction<TestBoardEntity>(ActionFactoryMock.Object, StateMock.Object);
         }
 
         [Test]
         public void Execute_uses_MoveOnlyAction_for_normal_moves()
         {
-            var piece = new RookEntity(Colours.White);
+            var piece = new TestBoardEntity();
 
             SetupLocationReturn(AnyMove.From, piece);
             SetupLocationReturn(AnyMove.To, null);
@@ -41,8 +41,8 @@ namespace chess.engine.tests.Actions
         [Test]
         public void Execute_uses_TakeOnlyAction_for_take_moves()
         {
-            var piece = new RookEntity(Colours.White);
-            var takePiece = new RookEntity(Colours.Black);
+            var piece = new TestBoardEntity();
+            var takePiece = new TestBoardEntity();
 
             SetupLocationReturn(AnyTake.From, piece);
             SetupLocationReturn(AnyTake.To, takePiece);

@@ -61,10 +61,10 @@ namespace chess.engine.tests.Actions
             => StateMock.Verify(m => m.PlaceEntity(loc, piece), Times.Once);
         protected void VerifyNewEntityWasPlaced(BoardLocation loc, TEntity piece)
             => StateMock.Verify(m => m.PlaceEntity(loc,
-                It.Is<TEntity>(cpe => cpe.EntityName.Equals(piece.EntityName) && cpe.Owner.Equals(piece.Owner))), Times.Once);
+                It.Is<TEntity>(cpe => cpe.Equals(piece))), Times.Once);
         protected void VerifyNewEntityWasNOTPlaced(BoardLocation loc, TEntity piece)
             => StateMock.Verify(m => m.PlaceEntity(loc,
-                It.Is<TEntity>(cpe => cpe.EntityName.Equals(piece.EntityName) && cpe.Owner.Equals(piece.Owner))), Times.Never);
+                It.Is<TEntity>(cpe => cpe.Equals(piece))), Times.Never);
 
         protected void SetupStateIsEmpty(BoardLocation at, bool isEmpty) 
             => StateMock.Setup(s => s.IsEmpty(It.Is<BoardLocation>(bl => bl.Equals(at)))).Returns(isEmpty);

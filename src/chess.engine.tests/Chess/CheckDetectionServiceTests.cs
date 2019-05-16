@@ -20,11 +20,11 @@ namespace chess.engine.tests.Chess
         [SetUp]
         public void Setup()
         {
-            _actionProviderMock = ChessTestFactory.ChessBoardActionProvider();
-            _playerStateServiceMock = ChessTestFactory.ChessGameStateService();
+            _actionProviderMock = ChessTestFactory.BoardActionProviderMock();
+            _playerStateServiceMock = ChessTestFactory.ChessGameStateServiceMock();
             _boardStateMock = new Mock<IBoardState<ChessPieceEntity>>();
             _boardStateMock.Setup(mb => mb.Clone()).Returns(_boardStateMock.Object);
-            _moveServiceMock = ChessTestFactory.BoardMoveService();
+            _moveServiceMock = ChessTestFactory.BoardMoveServiceMock();
         }
 
         [TestCase(PlayerState.InProgress, PlayerState.InProgress, GameCheckState.None)]

@@ -8,22 +8,22 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class TakeOnlyActionTests : ActionTestsBase<TakeOnlyAction<ChessPieceEntity>, ChessPieceEntity>
+    public class TakeOnlyActionTests : ActionTestsBase<TakeOnlyAction<TestBoardEntity>, TestBoardEntity>
     {
         [SetUp]
         public void Setup()
         {
-            StateMock = new Mock<IBoardState<ChessPieceEntity>>();
-            ActionFactoryMock = new Mock<IBoardActionProvider<ChessPieceEntity>>();
+            StateMock = new Mock<IBoardState<TestBoardEntity>>();
+            ActionFactoryMock = new Mock<IBoardActionProvider<TestBoardEntity>>();
             BoardActionMock = new Mock<IBoardAction>();
-            Action = new TakeOnlyAction<ChessPieceEntity>(ActionFactoryMock.Object, StateMock.Object);
+            Action = new TakeOnlyAction<TestBoardEntity>(ActionFactoryMock.Object, StateMock.Object);
         }
 
         [Test]
         public void Execute_clears_location_before_using_MoveOnlyAction_for_take_moves()
         {
-            var piece = new RookEntity(Colours.White);
-            var takePiece = new RookEntity(Colours.Black);
+            var piece = new TestBoardEntity();
+            var takePiece = new TestBoardEntity();
 
             SetupLocationReturn(AnyTake.From, piece);
             SetupLocationReturn(AnyTake.To, takePiece);

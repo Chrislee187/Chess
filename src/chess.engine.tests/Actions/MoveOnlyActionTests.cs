@@ -8,19 +8,19 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class MoveOnlyActionTests : ActionTestsBase<MoveOnlyAction<ChessPieceEntity>, ChessPieceEntity>
+    public class MoveOnlyActionTests : ActionTestsBase<MoveOnlyAction<TestBoardEntity>, TestBoardEntity>
     {
         [SetUp]
         public void Setup()
         {
             base.SetUp();
-            Action = new MoveOnlyAction<ChessPieceEntity>(ActionFactoryMock.Object, StateMock.Object);
+            Action = new MoveOnlyAction<TestBoardEntity>(ActionFactoryMock.Object, StateMock.Object);
         }
 
         [Test]
         public void Execute_clears_from_location_and_replaces_to()
         {
-            var piece = new PawnEntity(Colours.White);
+            var piece = new TestBoardEntity();
             SetupLocationReturn(AnyMove.From, piece);
 
             Action.Execute(AnyMove);
@@ -29,8 +29,6 @@ namespace chess.engine.tests.Actions
             VerifyLocationWasCleared(AnyMove.From);
             VerifyEntityWasPlaced(AnyMove.To, piece);
         }
-
-
 
         [Test]
         public void Execute_empty_from_does_nothing()
@@ -43,6 +41,7 @@ namespace chess.engine.tests.Actions
             VerifyEntityWasNOTRetrieved(AnyMove.From);
 
         }
+
 
     }
 }

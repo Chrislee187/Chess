@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class BoardActionFactoryTests
+    public class BoardActionProviderTests
     {
         private BoardActionProvider<ChessPieceEntity> _provider;
 

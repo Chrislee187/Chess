@@ -41,12 +41,12 @@ namespace chess.engine.tests
         }
 
 
-        public static Mock<IBoardActionProvider<ChessPieceEntity>> ChessBoardActionProvider(LoggerType logger = LoggerType.Null)
+        public static Mock<IBoardActionProvider<ChessPieceEntity>> BoardActionProviderMock(LoggerType logger = LoggerType.Null)
             => new Mock<IBoardActionProvider<ChessPieceEntity>>();
-        public static Mock<IPlayerStateService> ChessGameStateService(LoggerType logger = LoggerType.Null)
+        public static Mock<IPlayerStateService> ChessGameStateServiceMock(LoggerType logger = LoggerType.Null)
             => new Mock<IPlayerStateService>();
 
-        public static Mock<IBoardMoveService<ChessPieceEntity>> BoardMoveService(LoggerType logger = LoggerType.Null)
+        public static Mock<IBoardMoveService<ChessPieceEntity>> BoardMoveServiceMock(LoggerType logger = LoggerType.Null)
             => new Mock<IBoardMoveService<ChessPieceEntity>>();
 
 
@@ -75,7 +75,7 @@ namespace chess.engine.tests
 //        public static ChessRefreshAllPaths ChessRefreshAllPaths(LoggerType logger = LoggerType.Injected)
 //            => new ChessRefreshAllPaths(
 //                Logger<ChessRefreshAllPaths>(logger),
-//                ChessBoardActionProvider(logger),
+//                BoardActionProviderMock(logger),
 //                PlayerStateService(logger),
 //                CheckDetectionService(logger)
 //                );
@@ -83,7 +83,7 @@ namespace chess.engine.tests
 //        public static ICheckDetectionService CheckDetectionService(LoggerType logger = LoggerType.Injected)
 //            => new CheckDetectionService(
 //                Logger<CheckDetectionService>(),
-//                ChessBoardActionProvider(logger),
+//                BoardActionProviderMock(logger),
 //                PlayerStateService(logger)
 //                );
 //
@@ -110,7 +110,7 @@ namespace chess.engine.tests
 //                Logger<BoardEngine<ChessPieceEntity>>(),
 //                ChessRefreshAllPaths(type),
 //                PathsValidator(type),
-//                ChessBoardActionProvider(type)
+//                BoardActionProviderMock(type)
 //            );
     }
 }
