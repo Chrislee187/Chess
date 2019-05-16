@@ -14,12 +14,10 @@ namespace board.engine.Board
         IEnumerable<LocatedItem<TEntity>> GetItems(params BoardLocation[] locations);
         IEnumerable<LocatedItem<TEntity>> GetItems(int owner);
         IEnumerable<LocatedItem<TEntity>> GetItems(int owner, int entityType);
-        IEnumerable<LocatedItem<TEntity>> GetAllItems();
+        IEnumerable<LocatedItem<TEntity>> GetItems();
 
         void Clear();
         void Remove(BoardLocation loc);
-
-        IEnumerable<BoardLocation> GetAllMoveDestinations(int forPlayer);
         IEnumerable<BoardLocation> GetAllItemLocations { get; }
 
         void RegenerateAllPaths();

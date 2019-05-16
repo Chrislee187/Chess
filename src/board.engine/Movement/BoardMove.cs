@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace board.engine.Movement
 {
@@ -71,4 +73,19 @@ namespace board.engine.Movement
 
         #endregion
     }
+
+    public static class BoardMoveExtensions
+    {
+
+        // TODO: extraData should be IEquatable<>?
+        public static BoardMove FindMove(this IEnumerable<BoardMove> moves, BoardLocation from, BoardLocation to, object extraData = null)
+        {
+            return moves.SingleOrDefault(mv => mv.From.Equals(from)
+                                               && mv.To.Equals(to)
+                                               && (extraData == null
+                                                   || mv.ExtraData.Equals(extraData))
+            );
+        }
+    }
+
 }

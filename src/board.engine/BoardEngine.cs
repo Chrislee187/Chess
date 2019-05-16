@@ -6,17 +6,13 @@ using Microsoft.Extensions.Logging;
 
 namespace board.engine
 {
-    // TODO: This almost fully generic for any kind of "entity" we want to put on a chess-like board
-    // * refactor to not be Colours
-    // * refactor next player logic to be external
-
     public class BoardEngine<TEntity> where TEntity : class, IBoardEntity
     {
         public readonly IBoardState<TEntity> BoardState;
         private readonly IBoardActionProvider<TEntity> _boardActionProvider;
 
         private readonly IBoardSetup<TEntity> _boardSetup;
-        private readonly IRefreshAllPaths<TEntity> _allPathCalculator;
+        private readonly IRefreshAllPaths<TEntity> _refreshAllPaths;
         private ILogger<BoardEngine<TEntity>> _logger;
         private IBoardActionProvider<TEntity> _actionProvider;
 
@@ -41,7 +37,7 @@ namespace board.engine
             IBoardSetup<TEntity> boardSetup,
             IPathsValidator<TEntity> pathsValidator,
             IBoardActionProvider<TEntity> actionProvider,
-            IRefreshAllPaths<TEntity> allPathCalculator)
+            IRefreshAllPaths<TEntity> refreshAllPaths)
         {
             _actionProvider = actionProvider;
             _logger = logger;
@@ -52,15 +48,15 @@ namespace board.engine
             _boardSetup = boardSetup;
             _boardSetup.SetupPieces(this);
 
-            _allPathCalculator = allPathCalculator;
-            _allPathCalculator.RefreshAllPaths(BoardState);
+            _refreshAllPaths = refreshAllPaths;
+            _refreshAllPaths.RefreshAllPaths(BoardState);
         }
 
         public void ResetBoard()
         {
             ClearBoard();
             _boardSetup.SetupPieces(this);
-            _allPathCalculator.RefreshAllPaths(BoardState);
+            _refreshAllPaths.RefreshAllPaths(BoardState);
         }
 
         public void ClearBoard() => BoardState.Clear();
@@ -107,21 +103,20 @@ namespace board.engine
             }
         }
 
-        //TODO: Need an abstraction around MoveType's and Actions, to not be Chess specific
-        // so will need some default types (move entity, remove entity) but can be extended with custom ones, (enpassant, castle)
         public void Move(BoardMove move)
         {
             var action = _boardActionProvider.Create((int) move.MoveType, BoardState);
 
             action.Execute(move);
 
-            _allPathCalculator.RefreshAllPaths(BoardState);
+            _refreshAllPaths.RefreshAllPaths(BoardState);
         }
 
         private class DefaultRefreshAllPaths : IRefreshAllPaths<TEntity>
         {
             public void RefreshAllPaths(IBoardState<TEntity> boardState) 
-                => boardState.GetAllItemLocations.ToList().ForEach(boardState.RegeneratePaths);
+                => boardState.GetAllItemLocations.ToList()
+                    .ForEach(boardState.RegeneratePaths);
         }
     }
 }

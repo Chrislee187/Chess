@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace board.engine.Movement
 {
@@ -21,6 +22,9 @@ namespace board.engine.Movement
             clone.AddRange(_moves.Select(m => m.Clone() as BoardMove));
             return clone;
         }
+
+        public bool CanMoveTo(BoardLocation destination) 
+            => this.Any(m => m.To.Equals(destination));
 
         #region Equality, Enumerator and Overrides
 

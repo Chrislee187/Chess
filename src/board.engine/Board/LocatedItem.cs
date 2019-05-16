@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using board.engine.Movement;
 
 namespace board.engine.Board
@@ -31,5 +33,46 @@ namespace board.engine.Board
                 Item.Clone() as TEntity, 
                 Paths.Clone() as Paths);
         }
+    }
+
+    public static class LocatedItemExtensions {
+
+        public static BoardMove FindMoveTo<TEntity>(this LocatedItem<TEntity> item, BoardLocation destination)
+            where TEntity : class, IBoardEntity
+        {
+            return item.Paths.FlattenMoves()
+                .SingleOrDefault(m => m.To.Equals(destination));
+        }
+
+
+        public static IEnumerable<LocatedItem<TEntity>>
+            ThatCanMoveTo<TEntity>(
+                this IEnumerable<LocatedItem<TEntity>> items, 
+                BoardLocation location)
+            where TEntity : class, IBoardEntity
+        {
+            return items.Where(itm
+                => itm.Paths.ContainsMoveTo(location));
+        }
+
+        public static IEnumerable<LocatedItem<TEntity>>
+            ForOwner<TEntity>(
+                this IEnumerable<LocatedItem<TEntity>> items,
+                int owner)
+            where TEntity : class, IBoardEntity
+        {
+            return items.Where(itm => itm.Item.Owner == owner);
+        }
+
+        public static IEnumerable<BoardLocation>
+            AllDestinations<TEntity>(
+                this IEnumerable<LocatedItem<TEntity>> items)
+            where TEntity : class, IBoardEntity
+        {
+            return items
+                .SelectMany(fi => fi.Paths.FlattenMoves())
+                .Select(m => m.To);
+        }
+
     }
 }

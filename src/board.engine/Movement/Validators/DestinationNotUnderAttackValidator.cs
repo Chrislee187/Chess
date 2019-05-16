@@ -12,7 +12,7 @@ namespace board.engine.Movement.Validators
 
             var owner = piece.Item.Owner;
 
-            var enemyLocations = boardState.GetAllItems().Where(i => i.Item.Owner != owner).Select(i => i.Location);
+            var enemyLocations = boardState.GetItems().Where(i => i.Item.Owner != owner).Select(i => i.Location);
 
             var enemyPaths = new Paths();
             var enemyItems = boardState.GetItems(enemyLocations.ToArray());

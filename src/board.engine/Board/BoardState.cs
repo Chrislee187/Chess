@@ -25,7 +25,6 @@ namespace board.engine.Board
             _actionProvider = actionProvider;
         }
 
-
         public void PlaceEntity(BoardLocation loc, TEntity entity)
             => _items[loc] = new LocatedItem<TEntity>(loc, entity, null);
 
@@ -38,14 +37,14 @@ namespace board.engine.Board
             => _items.Where(itm => locations.Contains(itm.Key)).Select(kvp => kvp.Value);
 
         public IEnumerable<LocatedItem<TEntity>> GetItems(int owner)
-            => _items.Where(itm => itm.Value.Item.Owner.Equals(owner)).Select(kvp => kvp.Value);
+            => _items.Values.ForOwner(owner);
 
         public IEnumerable<LocatedItem<TEntity>> GetItems(int owner, int entityType) =>
             _items.Where(itm => itm.Value.Item.Owner.Equals(owner)
                                 && itm.Value.Item.EntityType == entityType
             ).Select(kvp => kvp.Value);
 
-        public IEnumerable<LocatedItem<TEntity>> GetAllItems()
+        public IEnumerable<LocatedItem<TEntity>> GetItems()
             => _items.Values;
 
         public void Remove(BoardLocation loc) => _items.Remove(loc);
@@ -86,14 +85,6 @@ namespace board.engine.Board
             {
                 RegeneratePaths(enemyPiece.Location);
             }
-        }
-        
-        public IEnumerable<BoardLocation> GetAllMoveDestinations(int owner)
-        {
-            var friendlyItems = GetItems(owner)
-                .Where(i => !i.Item.EntityType.Equals(owner));
-            var friendlyDestinations = friendlyItems.SelectMany(fi => fi.Paths.FlattenMoves()).Select(m => m.To);
-            return friendlyDestinations;
         }
     }
 }

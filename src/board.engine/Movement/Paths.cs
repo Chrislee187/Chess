@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using board.engine.Board;
 
 namespace board.engine.Movement
 {
@@ -10,24 +9,20 @@ namespace board.engine.Movement
     {
         private readonly List<Path> _paths = new List<Path>();
         
-        public void Add(Path path) => _paths.Add(path);
+        public void Add(Path path) 
+            => _paths.Add(path);
 
-        public void AddRange(IEnumerable<Path> paths) => _paths.AddRange(paths);
+        public void AddRange(IEnumerable<Path> paths) 
+            => _paths.AddRange(paths);
 
-        public IEnumerable<BoardMove> FlattenMoves() => _paths.SelectMany(ps => ps);
+        public IEnumerable<BoardMove> FlattenMoves() 
+            => _paths.SelectMany(ps => ps);
 
         public bool ContainsMoveTo(BoardLocation location)
             => FlattenMoves().Any(m => m.To.Equals(location));
 
-        public BoardMove FindValidMove(BoardLocation from, BoardLocation destination, object promotionPiece = null)
-        {
-            return FlattenMoves()
-                .SingleOrDefault(mv => mv.From.Equals(from)
-                                       && mv.To.Equals(destination)
-                                       && (promotionPiece == null
-                                           || mv.ExtraData.Equals(promotionPiece))
-                );
-        }
+        public BoardMove FindMove(BoardLocation from, BoardLocation destination, object extraData = null) 
+            => FlattenMoves().FindMove(@from, destination, extraData);
 
         public object Clone()
         {
@@ -35,9 +30,7 @@ namespace board.engine.Movement
             clone.AddRange(_paths.Select(ps => ps.Clone() as Path));
             return clone;
         }
-
-
-
+        
         #region Equality, Enumerator and Overrides
 
         protected bool Equals(Paths other) => _paths.All(other.Contains);
@@ -59,6 +52,5 @@ namespace board.engine.Movement
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
-
     }
 }

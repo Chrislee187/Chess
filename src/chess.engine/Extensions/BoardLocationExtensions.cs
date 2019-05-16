@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using board.engine;
 using board.engine.Actions;
 using board.engine.Movement;
@@ -32,5 +33,6 @@ namespace chess.engine.Extensions
             }
             return $"{move.From.ToChessCoord()}{move.To.ToChessCoord()}{promote}";
         }
+
     }
 }

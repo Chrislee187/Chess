@@ -32,18 +32,18 @@ namespace chess.engine.Algebraic
             {
                 var exact = FindExactMove(san, destination);
 
-                if(exact == null) throw new MoveFinderException($"Move not found: {san.ToNotation()}");
+                if (exact == null) throw new MoveFinderException($"Move not found: {san.ToNotation()}");
 
                 return exact;
             }
 
             var items = _boardState
-                    .GetItems((int)forPlayer, (int)san.Piece)
-                    .Where(i => i.Paths.ContainsMoveTo(destination))
-                ;
+                .GetItems((int) forPlayer, (int) san.Piece)
+                .ThatCanMoveTo(destination);
+            ;
 
             if (TryFindMove(items, destination, out var move)) return move;
-            
+
             if (san.FromFileX.HasValue)
             {
                 items = items.Where(i => i.Paths.FlattenMoves().Any(m => m.From.X == san.FromFileX.Value));
@@ -68,13 +68,14 @@ namespace chess.engine.Algebraic
             {
                 throw new MoveFinderException($"King not found: {san.ToNotation()}");
             }
+
             var y = forPlayer == Colours.White ? 1 : 8;
 
             var from = BoardLocation.At(san.FromFileX.Value, y);
             var to = BoardLocation.At(san.ToFileX, y);
-            var move = king.Paths.FindValidMove(@from, to);
+            var move = king.Paths.FindMove(@from, to);
 
-            if(move == null) throw new MoveFinderException($"No valid castle move found: {from}{to}");
+            if (move == null) throw new MoveFinderException($"No valid castle move found: {from}{to}");
 
             return move;
         }
@@ -84,7 +85,7 @@ namespace chess.engine.Algebraic
             var from = BoardLocation.At(san.FromFileX.Value, san.FromRankY.Value);
             var item = _boardState.GetItem(@from);
 
-            var mv = item.Paths.FindValidMove(@from, destination);
+            var mv = item.Paths.FindMove(@from, destination);
 
             if (mv == null)
             {
@@ -94,7 +95,8 @@ namespace chess.engine.Algebraic
             return mv;
         }
 
-        private static bool TryFindMove(IEnumerable<LocatedItem<ChessPieceEntity>> items, BoardLocation destination, out BoardMove findMoveTo)
+        private static bool TryFindMove(IEnumerable<LocatedItem<ChessPieceEntity>> items, BoardLocation destination,
+            out BoardMove findMoveTo)
         {
             findMoveTo = null;
             var locatedItems = items as LocatedItem<ChessPieceEntity>[] ?? items.ToArray();
@@ -105,14 +107,11 @@ namespace chess.engine.Algebraic
 
             if (locatedItems.Count() == 1)
             {
-                findMoveTo = FindMoveTo(locatedItems.Single(), destination);
+                findMoveTo = locatedItems.Single().FindMoveTo(destination);
                 return true;
             }
 
             return false;
         }
-
-        private static BoardMove FindMoveTo(LocatedItem<ChessPieceEntity> item, BoardLocation destination) 
-            => item.Paths.FlattenMoves().SingleOrDefault(m => m.To.Equals(destination));
     }
 }

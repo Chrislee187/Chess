@@ -6,7 +6,7 @@ namespace chess.engine.tests.Chess
 {
 
     [TestFixture]
-    public class ChessGameStateTests
+    public class PlayerGameStateTests
     {
         [Test]
         public void Should_find_simple_check_condition()

@@ -73,7 +73,7 @@ namespace chess.engine.tests
 //            => new ChessRefreshAllPaths(
 //                Logger<ChessRefreshAllPaths>(logger),
 //                ChessBoardActionProvider(logger),
-//                ChessGameStateService(logger),
+//                PlayerStateService(logger),
 //                CheckDetectionService(logger)
 //                );
 //
@@ -81,7 +81,7 @@ namespace chess.engine.tests
 //            => new CheckDetectionService(
 //                Logger<CheckDetectionService>(),
 //                ChessBoardActionProvider(logger),
-//                ChessGameStateService(logger)
+//                PlayerStateService(logger)
 //                );
 //
 //        public static ChessGame NewChessGame(LoggerType logger = LoggerType.Injected)
@@ -89,14 +89,14 @@ namespace chess.engine.tests
 //                Logger<ChessGame>(logger),
 //                ChessBoardEngineProvider(logger),
 //                ChessPieceEntityProvider(logger),
-//                ChessGameStateService(logger));
+//                PlayerStateService(logger));
 //
 //        public static ChessGame CustomChessGame(IBoardSetup<ChessPieceEntity> setup, Colours toPlay = Colours.White, LoggerType logger = LoggerType.Injected) 
 //            => new ChessGame(
 //                Logger<ChessGame>(logger),
 //                ChessBoardEngineProvider(logger),
 //                ChessPieceEntityProvider(logger),
-//                ChessGameStateService(logger),
+//                PlayerStateService(logger),
 //                setup,
 //                toPlay
 //                );

@@ -47,8 +47,8 @@ namespace chess.engine
                 PathValidator(logger)
                 );
 
-        public static ChessGameStateService ChessGameStateService(LoggerType logger = LoggerType.Injected)
-            => new ChessGameStateService(Logger<ChessGameStateService>(logger));
+        public static PlayerStateService ChessGameStateService(LoggerType logger = LoggerType.Injected)
+            => new PlayerStateService(Logger<PlayerStateService>(logger));
         public static ChessRefreshAllPaths ChessRefreshAllPaths(LoggerType logger = LoggerType.Injected)
             => new ChessRefreshAllPaths(
                 Logger<ChessRefreshAllPaths>(logger),

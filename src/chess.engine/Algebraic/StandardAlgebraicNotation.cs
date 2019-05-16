@@ -222,10 +222,10 @@ namespace chess.engine.Algebraic
                 // Are they any other pieces, 
                 //      of same type as the from item
                 //      how can also move to the same location
-                var otherPieces = boardState.GetAllItems()
+                var otherPieces = boardState.GetItems()
                     .Where(i => !i.Location.Equals(move.From))
                     .Where(i => i.Item.Is(fromItem.Item.Player, fromItem.Item.Piece))
-                    .Where(i => i.Paths.ContainsMoveTo(move.To));
+                    .ThatCanMoveTo(move.To);
 
                 if (otherPieces.Any())
                 {
