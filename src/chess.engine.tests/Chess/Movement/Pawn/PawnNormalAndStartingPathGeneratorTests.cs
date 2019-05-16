@@ -29,7 +29,7 @@ namespace chess.engine.tests.Chess.Movement.Pawn
 
             Assert.That(whitePaths.Count(), Is.EqualTo(1));
             
-            var ep = new PathBuilder().From("A2")
+            var ep = new ChessPathBuilder().From("A2")
                 .To("A3")
                 .To("A4")
                 .Build();
@@ -44,7 +44,7 @@ namespace chess.engine.tests.Chess.Movement.Pawn
             var whitePaths = _gen.PathsFrom(startLocation, (int)Colours.White).ToList();
             Assert.That(whitePaths.Count(), Is.EqualTo(1));
 
-            var ep = new PathBuilder().From(startLocation)
+            var ep = new ChessPathBuilder().From(startLocation)
                 .To("A4")
                 .Build();
 
@@ -59,16 +59,16 @@ namespace chess.engine.tests.Chess.Movement.Pawn
             var whitePaths = _gen.PathsFrom(startLocation, (int) Colours.White).ToList();
             Assert.That(whitePaths.Count(), Is.EqualTo(4));
 
-            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
                 .ToUpdatePiece("A8", ChessPieceName.Queen)
                 .Build(), Colours.White);
-            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
                 .ToUpdatePiece("A8", ChessPieceName.Rook)
                 .Build(), Colours.White);
-            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
                 .ToUpdatePiece("A8", ChessPieceName.Bishop)
                 .Build(), Colours.White);
-            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
                 .ToUpdatePiece("A8", ChessPieceName.Knight)
                 .Build(), Colours.White);
         }

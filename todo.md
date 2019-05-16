@@ -1,5 +1,6 @@
 # TODOS
 * Basic web integration test, ensure index.html exists and contains a chessboard and moves
+* Create a board.engine.tests.utils project contain for stuff like the builders.
 * PGN file reader to validate game engine against LOTS of games
 * Was hoping to avoid it but looks like will need Facade patterns around BoardState object acces to allow better testing, i.e. Check detection code is currently using full boards to test small units of logic.
 * proper error responses for invalid boards, moves etc. Just see a useless page on production boxes, drive out with the integration tests I still need to do.

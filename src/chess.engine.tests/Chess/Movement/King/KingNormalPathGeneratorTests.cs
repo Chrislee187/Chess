@@ -29,21 +29,21 @@ namespace chess.engine.tests.Chess.Movement.King
             Assert.That(whitePaths.Count(), Is.EqualTo(8));
 
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("E3", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
+                new ChessPathBuilder().From("E2").To("E3", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("F3", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
+                new ChessPathBuilder().From("E2").To("F3", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("F2", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
+                new ChessPathBuilder().From("E2").To("F2", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("F1", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
+                new ChessPathBuilder().From("E2").To("F1", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("E1", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
+                new ChessPathBuilder().From("E2").To("E1", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("D1", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
+                new ChessPathBuilder().From("E2").To("D1", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("D2", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
+                new ChessPathBuilder().From("E2").To("D2", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E2").To("D3", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
+                new ChessPathBuilder().From("E2").To("D3", (int)ChessMoveTypes.KingMove).Build(), Colours.White);
         }
     }
 }

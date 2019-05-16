@@ -29,7 +29,7 @@ namespace chess.engine.tests.Chess.Movement.Rook
             Assert.That(whitePaths.Count(), Is.EqualTo(4));
 
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4")
+                new ChessPathBuilder().From("E4")
                     .To("E5", (int) DefaultActions.MoveOrTake)
                     .To("E6", (int) DefaultActions.MoveOrTake)
                     .To("E7", (int) DefaultActions.MoveOrTake)
@@ -37,21 +37,21 @@ namespace chess.engine.tests.Chess.Movement.Rook
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4")
+                new ChessPathBuilder().From("E4")
                     .To("E3", (int) DefaultActions.MoveOrTake)
                     .To("E2", (int) DefaultActions.MoveOrTake)
                     .To("E1", (int) DefaultActions.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4")
+                new ChessPathBuilder().From("E4")
                     .To("F4", (int) DefaultActions.MoveOrTake)
                     .To("G4", (int) DefaultActions.MoveOrTake)
                     .To("H4", (int) DefaultActions.MoveOrTake)
                     .Build(), Colours.White);
 
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4")
+                new ChessPathBuilder().From("E4")
                     .To("D4", (int) DefaultActions.MoveOrTake)
                     .To("C4", (int) DefaultActions.MoveOrTake)
                     .To("B4", (int) DefaultActions.MoveOrTake)

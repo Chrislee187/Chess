@@ -6,7 +6,6 @@ using chess.engine.Chess.Entities;
 using chess.engine.Chess.Movement.ChessPieces.King;
 using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.tests.Builders;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Chess.Movement.King

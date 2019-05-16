@@ -34,7 +34,7 @@ namespace chess.engine.tests.Chess.Movement.Pawn
             var pieceLocation = "B2".ToBoardLocation();
             var paths = _gen.PathsFrom(pieceLocation, (int)Colours.White).ToList();
 
-            var ep = new PathBuilder().From(pieceLocation)
+            var ep = new ChessPathBuilder().From(pieceLocation)
                 .To("C3", (int)DefaultActions.TakeOnly)
                 .Build();
 
@@ -50,16 +50,16 @@ namespace chess.engine.tests.Chess.Movement.Pawn
             var whitePaths = _gen.PathsFrom(startLocation, (int)Colours.White).ToList();
             Assert.That(whitePaths.Count(), Is.EqualTo(4));
 
-            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
                 .ToUpdatePiece("C8", ChessPieceName.Queen)
                 .Build(), Colours.White);
-            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
                 .ToUpdatePiece("C8", ChessPieceName.Rook)
                 .Build(), Colours.White);
-            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
                 .ToUpdatePiece("C8", ChessPieceName.Bishop)
                 .Build(), Colours.White);
-            AssertPathContains(whitePaths, new PathBuilder().From(startLocation)
+            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
                 .ToUpdatePiece("C8", ChessPieceName.Knight)
                 .Build(), Colours.White);
         }

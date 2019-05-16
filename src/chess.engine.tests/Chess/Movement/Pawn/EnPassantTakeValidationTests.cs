@@ -8,7 +8,6 @@ using chess.engine.Chess.Movement;
 using chess.engine.Chess.Movement.ChessPieces.Pawn;
 using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.tests.Builders;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 

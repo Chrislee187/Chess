@@ -31,9 +31,9 @@ namespace chess.engine.tests.Chess.Movement.King
             Assert.That(paths.Count(), Is.EqualTo(2));
 
             AssertPathContains(paths,
-                new PathBuilder().From($"E{rank}").To($"G{rank}", (int)ChessMoveTypes.CastleKingSide).Build(), Colours.White);
+                new ChessPathBuilder().From($"E{rank}").To($"G{rank}", (int)ChessMoveTypes.CastleKingSide).Build(), Colours.White);
             AssertPathContains(paths,
-                new PathBuilder().From($"E{rank}").To($"C{rank}", (int)ChessMoveTypes.CastleQueenSide).Build(), Colours.White);
+                new ChessPathBuilder().From($"E{rank}").To($"C{rank}", (int)ChessMoveTypes.CastleQueenSide).Build(), Colours.White);
         }
     }
 }

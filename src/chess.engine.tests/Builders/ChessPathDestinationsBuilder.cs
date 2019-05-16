@@ -7,29 +7,29 @@ using chess.engine.Extensions;
 
 namespace chess.engine.tests.Builders
 {
-    public class PathDestinationsBuilder
+    public class ChessPathDestinationsBuilder
     {
         private readonly BoardLocation _start;
 
         private readonly List<(BoardLocation, int)> _destinations = new List<(BoardLocation, int)>();
-        public PathDestinationsBuilder(BoardLocation start)
+        public ChessPathDestinationsBuilder(BoardLocation start)
         {
             _start = start;
         }
 
-        public PathDestinationsBuilder To(BoardLocation at, int chessMoveTypes)
+        public ChessPathDestinationsBuilder To(BoardLocation at, int chessMoveTypes)
         {
             _destinations.Add((at, chessMoveTypes));
             return this;
         }
-        public PathDestinationsBuilder To(string at, int chessMoveTypes = (int) DefaultActions.MoveOnly)
+        public ChessPathDestinationsBuilder To(string at, int chessMoveTypes = (int) DefaultActions.MoveOnly)
         {
-            return To(at.ToBoardLocation(), chessMoveTypes);
+            return To((BoardLocation) at.ToBoardLocation(), chessMoveTypes);
         }
 
-        public PathDestinationsBuilder ToUpdatePiece(string at, ChessPieceName promotionPiece)
+        public ChessPathDestinationsBuilder ToUpdatePiece(string at, ChessPieceName promotionPiece)
         {
-            return To(at.ToBoardLocation(), (int) DefaultActions.UpdatePiece);
+            return To((BoardLocation) at.ToBoardLocation(), (int) DefaultActions.UpdatePiece);
         }
 
         public Path Build()

@@ -7,7 +7,6 @@ using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.tests.Builders;
 using NUnit.Framework;
 
 namespace chess.engine.tests

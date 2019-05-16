@@ -29,21 +29,21 @@ namespace chess.engine.tests.Chess.Movement.Knight
             Assert.That(whitePaths.Count(), Is.EqualTo(8));
 
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("F6", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
+                new ChessPathBuilder().From("E4").To("F6", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("D6", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
+                new ChessPathBuilder().From("E4").To("D6", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("F2", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
+                new ChessPathBuilder().From("E4").To("F2", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("D2", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
+                new ChessPathBuilder().From("E4").To("D2", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("G5", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
+                new ChessPathBuilder().From("E4").To("G5", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("G3", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
+                new ChessPathBuilder().From("E4").To("G3", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("C5", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
+                new ChessPathBuilder().From("E4").To("C5", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
             AssertPathContains(whitePaths,
-                new PathBuilder().From("E4").To("C3", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
+                new ChessPathBuilder().From("E4").To("C3", (int) DefaultActions.MoveOrTake).Build(), Colours.White);
         }
     }
 
