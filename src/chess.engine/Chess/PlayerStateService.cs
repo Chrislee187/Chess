@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using board.engine;
 using board.engine.Board;
 using chess.engine.Chess.Entities;
 using chess.engine.Game;

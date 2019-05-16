@@ -1,6 +1,5 @@
 ﻿using System;
 using board.engine;
-using board.engine.Actions;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Chess.Entities;
@@ -12,20 +11,17 @@ namespace chess.engine.Chess
     public class CheckDetectionService : ICheckDetectionService
     {
         private readonly ILogger<CheckDetectionService> _logger;
-        private readonly IBoardActionProvider<ChessPieceEntity> _actionProvider;
         private readonly IPlayerStateService _playerStateService;
-        private IBoardMoveService<ChessPieceEntity> _moveService;
+        private readonly IBoardMoveService<ChessPieceEntity> _moveService;
 
         public CheckDetectionService(
-            ILogger<CheckDetectionService> logger,
-            IBoardActionProvider<ChessPieceEntity> actionProvider, 
+            ILogger<CheckDetectionService> logger, 
             IPlayerStateService playerStateService,
             IBoardMoveService<ChessPieceEntity> moveService
         )
         {
-            _moveService = moveService;
             _logger = logger;
-            _actionProvider = actionProvider;
+            _moveService = moveService;
             _playerStateService = playerStateService;
         }
 

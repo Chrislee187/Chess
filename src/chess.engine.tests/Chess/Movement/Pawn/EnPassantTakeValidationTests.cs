@@ -9,14 +9,13 @@ using chess.engine.Chess.Movement.ChessPieces.Pawn;
 using chess.engine.Extensions;
 using chess.engine.Game;
 using chess.engine.tests.Builders;
-using chess.engine.tests.Chess.Movement.King;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Chess.Movement.Pawn
 {
     [TestFixture]
-    public class EnPassantTakeValidationTests : ValidatorTestsBase
+    public class EnPassantTakeValidationTests
     {
         private IBoardState<ChessPieceEntity> _boardState;
         private EnPassantTakeValidator _validator;

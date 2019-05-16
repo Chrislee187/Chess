@@ -54,8 +54,8 @@ namespace chess.engine.tests
 
 //
 //
-//        public static ChessPieceEntityProvider ChessPieceEntityProvider(LoggerType logger = LoggerType.Injected)
-//            => new ChessPieceEntityProvider();
+//        public static ChessPieceEntityFactory ChessPieceEntityFactory(LoggerType logger = LoggerType.Injected)
+//            => new ChessPieceEntityFactory();
 //
 //        public static ChessMoveValidationProvider MoveValidationProvider(LoggerType logger = LoggerType.Injected)
 //            => new ChessMoveValidationProvider();
@@ -91,14 +91,14 @@ namespace chess.engine.tests
 //            => new ChessGame(
 //                Logger<ChessGame>(logger),
 //                ChessBoardEngineProvider(logger),
-//                ChessPieceEntityProvider(logger),
+//                ChessPieceEntityFactory(logger),
 //                PlayerStateService(logger));
 //
 //        public static ChessGame CustomChessGame(IBoardSetup<ChessPieceEntity> setup, Colours toPlay = Colours.White, LoggerType logger = LoggerType.Injected) 
 //            => new ChessGame(
 //                Logger<ChessGame>(logger),
 //                ChessBoardEngineProvider(logger),
-//                ChessPieceEntityProvider(logger),
+//                ChessPieceEntityFactory(logger),
 //                PlayerStateService(logger),
 //                setup,
 //                toPlay

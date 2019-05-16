@@ -6,13 +6,12 @@ using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Extensions;
 using chess.engine.tests.Builders;
-using chess.engine.tests.Chess.Movement.King;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
 {
     [TestFixture]
-    public class DestinationContainsEnemyValidationTests :ValidatorTestsBase
+    public class DestinationContainsEnemyValidationTests
     {
         private ChessBoardBuilder _board;
         private IBoardState<ChessPieceEntity> _boardState;

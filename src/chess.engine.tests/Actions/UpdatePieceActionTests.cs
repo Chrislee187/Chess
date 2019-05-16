@@ -15,7 +15,7 @@ namespace chess.engine.tests.Actions
     {
         private const ChessPieceName PromotionPiece = ChessPieceName.Queen;
         private static readonly BoardMove PawnPromotionMove 
-            = new BoardMove("B7".ToBoardLocation(), "B8".ToBoardLocation(), (int)DefaultActions.UpdatePiece, new ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData
+            = new BoardMove("B7".ToBoardLocation(), "B8".ToBoardLocation(), (int)DefaultActions.UpdatePiece, new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 Owner = Colours.White,
                 PieceName = PromotionPiece

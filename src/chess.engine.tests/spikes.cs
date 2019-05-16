@@ -30,7 +30,7 @@ namespace chess.engine.tests
         [SetUp]
         public void Setup()
         {
-            _chessBoardSetup = new ChessBoardSetup(new ChessPieceEntityProvider());
+            _chessBoardSetup = new ChessBoardSetup(new ChessPieceEntityFactory());
 
         }
         [Test]

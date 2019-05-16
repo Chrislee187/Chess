@@ -1,10 +1,8 @@
 ﻿using System.Linq;
 using board.engine;
-using board.engine.Actions;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Chess.Entities;
-using chess.engine.Game;
 using Microsoft.Extensions.Logging;
 
 namespace chess.engine.Chess
@@ -21,22 +19,14 @@ namespace chess.engine.Chess
     public class ChessRefreshAllPaths : IRefreshAllPaths<ChessPieceEntity>
     {
         private readonly ILogger _logger;
-
-        private readonly IBoardActionProvider<ChessPieceEntity> _actionProvider;
-        // TODO: Sort of logger
-        private readonly IPlayerStateService _playerStateService;
         private readonly ICheckDetectionService _checkDetectionService;
 
         public ChessRefreshAllPaths(
             ILogger<ChessRefreshAllPaths> logger,
-            IBoardActionProvider<ChessPieceEntity> actionProvider,
-            IPlayerStateService playerStateService,
             ICheckDetectionService checkDetectionService
             )
         {
             _logger = logger;
-            _actionProvider = actionProvider;
-            _playerStateService = playerStateService;
             _checkDetectionService = checkDetectionService;
         }
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)

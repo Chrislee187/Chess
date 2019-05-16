@@ -1,28 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using board.engine.Actions;
 
 namespace board.engine.Board
 {
     public class BoardState<TEntity> : IBoardState<TEntity> where TEntity : class, IBoardEntity
     {
         private readonly IDictionary<BoardLocation, LocatedItem<TEntity>> _items;
-        private readonly IBoardActionProvider<TEntity> _actionProvider;
         private readonly IPathsValidator<TEntity> _pathsValidator;
 
-        public BoardState(IPathsValidator<TEntity> pathsValidator, 
-            IBoardActionProvider<TEntity> actionProvider) : this(pathsValidator, actionProvider, null)
+        public BoardState(IPathsValidator<TEntity> pathsValidator
+            ) : this(pathsValidator, null)
         {
         }
 
         private BoardState(IPathsValidator<TEntity> pathsValidator, 
-            IBoardActionProvider<TEntity> actionProvider, 
             IEnumerable<LocatedItem<TEntity>> clonedItems) 
         {
             _items = clonedItems?.ToDictionary(k => k.Location, k => k) 
                      ?? new Dictionary<BoardLocation, LocatedItem<TEntity>>();
             _pathsValidator = pathsValidator;
-            _actionProvider = actionProvider;
         }
 
         public void PlaceEntity(BoardLocation loc, TEntity entity)
@@ -54,7 +50,7 @@ namespace board.engine.Board
         {
             var clonedItems = _items.Values.Select(e => e.Clone() as LocatedItem<TEntity>);
 
-            var clonedState = new BoardState<TEntity>(_pathsValidator, _actionProvider, clonedItems);
+            var clonedState = new BoardState<TEntity>(_pathsValidator, clonedItems);
 
             return clonedState;
         }

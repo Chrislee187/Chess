@@ -4,14 +4,13 @@ using board.engine.Movement.Validators;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Extensions;
-using chess.engine.tests.Chess.Movement.King;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
 {
     [TestFixture]
-    public class DestinationIsEmptyValidationTests : ValidatorTestsBase
+    public class DestinationIsEmptyValidationTests
     {
 
         private IBoardState<ChessPieceEntity> _boardState;
@@ -30,7 +29,7 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "R   K  R"
                 );
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityProvider, PlayerStateService, board.ToGameSetup());
+            var game = ChessFactory.CustomChessGame(board.ToGameSetup());
             _boardState = game.BoardState;
             _validator = new DestinationIsEmptyValidator<ChessPieceEntity>();
         }

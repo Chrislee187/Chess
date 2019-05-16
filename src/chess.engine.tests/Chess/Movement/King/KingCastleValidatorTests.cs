@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Chess.Movement.King
 {
     [TestFixture]
-    public class KingCastleValidatorTests : ValidatorTestsBase
+    public class KingCastleValidatorTests
     {
         private KingCastleValidator _validator;
         private readonly BoardMove _whiteInvalidKingCastle = new BoardMove("D1".ToBoardLocation(), "G1".ToBoardLocation(), (int)ChessMoveTypes.CastleKingSide);

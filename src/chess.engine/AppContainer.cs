@@ -3,6 +3,7 @@ using board.engine;
 using board.engine.Actions;
 using board.engine.Board;
 using board.engine.Movement;
+using chess.engine.Algebraic;
 using chess.engine.Chess;
 using chess.engine.Chess.Actions;
 using chess.engine.Chess.Entities;
@@ -65,11 +66,12 @@ namespace chess.engine
 
             services.AddTransient<IBoardEngineProvider<ChessPieceEntity>,ChessBoardEngineProvider>();
             services.AddTransient<IBoardActionProvider<ChessPieceEntity>,ChessBoardActionProvider>();
-            services.AddTransient<IBoardEntityFactory<ChessPieceEntity>,ChessPieceEntityProvider>();
+            services.AddTransient<IBoardEntityFactory<ChessPieceEntity>,ChessPieceEntityFactory>();
             services.AddTransient<IPlayerStateService,PlayerStateService>();
             services.AddTransient<ICheckDetectionService,CheckDetectionService>();
             services.AddTransient<IBoardMoveService<ChessPieceEntity>,BoardMoveService<ChessPieceEntity>>();
-
+            services.AddTransient<ISanTokenParser, SanTokenParser>();
+            services.AddTransient<ISanBuilder, SanBuilder>();
         }
     }
 }

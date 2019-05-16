@@ -28,7 +28,7 @@ namespace chess.engine.Extensions
             string promote = string.Empty;
             if (move.MoveType == (int) DefaultActions.UpdatePiece)
             {
-                var d = (ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData) move.ExtraData;
+                var d = (ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData) move.ExtraData;
                 promote = $"+{d.PieceName.ToString().First()}";
             }
             return $"{move.From.ToChessCoord()}{move.To.ToChessCoord()}{promote}";

@@ -69,16 +69,16 @@ namespace chess.engine
             return textRepresentation;
         }
 
-        public static ChessGame Deserialise(string boardformat69char)
+        public static ChessGame Deserialise(string boardformat69Char)
         {
-            if (boardformat69char.Length != 69) throw new ArgumentException($"Invalid serialised board, must be 69 characters long (yours was {boardformat69char.Length})", nameof(boardformat69char));
+            if (boardformat69Char.Length != 69) throw new ArgumentException($"Invalid serialised board, must be 69 characters long (yours was {boardformat69Char.Length})", nameof(boardformat69Char));
 
             // TODO: Handling of invalid formats
             int idx = 1;
 
-            var setup = CreatePieceEntitiesSetupActions(boardformat69char.Substring(0, 64), idx);
+            var setup = CreatePieceEntitiesSetupActions(boardformat69Char.Substring(0, 64), idx);
 
-            var whoseTurn = boardformat69char[64] == 'W'
+            var whoseTurn = boardformat69Char[64] == 'W'
                 ? Colours.White
                 : Colours.Black;
 
@@ -86,7 +86,7 @@ namespace chess.engine
             return new ChessGame(
                 ChessFactory.Logger<ChessGame>(),
                 ChessFactory.ChessBoardEngineProvider(),
-                ChessFactory.ChessPieceEntityProvider(),
+                ChessFactory.ChessPieceEntityFactory(),
                 ChessFactory.PlayerStateService(),
                 setup,
                 whoseTurn
@@ -120,7 +120,7 @@ namespace chess.engine
             // TODO: Enpassant pawn check
             var chessPieceName = PieceNameMapper.FromChar(piece);
             var colour = char.IsUpper(piece) ? Colours.White : Colours.Black;
-            var newPiece = ChessFactory.ChessPieceEntityProvider().Create(new ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData
+            var newPiece = ChessFactory.ChessPieceEntityFactory().Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 PieceName = chessPieceName, Owner = colour
             });

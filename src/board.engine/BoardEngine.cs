@@ -19,8 +19,6 @@ namespace board.engine
         public int Width { get; private set; } = 8;
         public int Height { get; private set; } = 8;
 
-
-
         public BoardEngine(
             ILogger<BoardEngine<TEntity>> logger,
             IBoardSetup<TEntity> boardSetup, 
@@ -29,8 +27,7 @@ namespace board.engine
             )
 
             : this(logger, boardSetup, pathsValidator, boardMoveService, new DefaultRefreshAllPaths())
-        {
-        }
+        { }
 
         public BoardEngine(
             ILogger<BoardEngine<TEntity>> logger, 
@@ -42,7 +39,7 @@ namespace board.engine
             _boardMoveService = boardMoveService;
             _logger = logger;
 
-            BoardState = new BoardState<TEntity>(pathsValidator, _boardActionProvider);
+            BoardState = new BoardState<TEntity>(pathsValidator);
 
             _boardSetup = boardSetup;
             _boardSetup.SetupPieces(this);
@@ -64,15 +61,6 @@ namespace board.engine
         {
             BoardState.PlaceEntity(startingLocation, create);
             return this;
-        }
-
-        public LocatedItem<TEntity> PieceAt(BoardLocation location)
-        {
-            if (BoardState.IsEmpty(location)) return null;
-            
-            var piece = BoardState.GetItem(location);
-
-            return piece;
         }
 
         public LocatedItem<TEntity>[,] Board

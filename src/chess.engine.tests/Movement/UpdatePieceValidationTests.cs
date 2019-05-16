@@ -6,14 +6,13 @@ using board.engine.Movement.Validators;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Extensions;
-using chess.engine.tests.Chess.Movement.King;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
 {
     [TestFixture]
-    public class UpdatePieceValidationTests : ValidatorTestsBase
+    public class UpdatePieceValidationTests
     {
         private IBoardState<ChessPieceEntity> _boardState;
 
@@ -30,7 +29,7 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "    K  R"
                 );
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityProvider, PlayerStateService, board.ToGameSetup());
+            var game = ChessFactory.CustomChessGame(board.ToGameSetup());
             _boardState = game.BoardState;
         }
 
@@ -40,7 +39,7 @@ namespace chess.engine.tests.Movement
             var validator = new UpdatePieceValidator<ChessPieceEntity>();
 
             BoardLocation to = "A8".ToBoardLocation();
-            var promote = new BoardMove("A7".ToBoardLocation(), to, (int)DefaultActions.UpdatePiece, new ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData
+            var promote = new BoardMove("A7".ToBoardLocation(), to, (int)DefaultActions.UpdatePiece, new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 Owner = 0,
                 PieceName = ChessPieceName.Queen

@@ -36,7 +36,6 @@ namespace chess.engine.tests.Chess
         {
             var service = new CheckDetectionService(
                 ChessFactory.Logger<CheckDetectionService>(),
-                _actionProviderMock.Object,
                 _playerStateServiceMock.Object,
                 ChessFactory.BoardMoveService(ChessFactory.ChessBoardActionProvider())
             );
@@ -52,7 +51,6 @@ namespace chess.engine.tests.Chess
         {
             var service = new CheckDetectionService(
                 ChessFactory.Logger<CheckDetectionService>(),
-                _actionProviderMock.Object,
                 _playerStateServiceMock.Object,
                 _moveServiceMock.Object
             );

@@ -1,13 +1,10 @@
-﻿using chess.engine.Chess;
-using chess.engine.Extensions;
-using chess.engine.tests.Chess.Movement.King;
-using Microsoft.Extensions.Logging.Abstractions;
+﻿using chess.engine.Extensions;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
 {
     [TestFixture]
-    public class ChessPathsValidatorTests : ValidatorTestsBase
+    public class ChessPathsValidatorTests
     {
 
         [Test]
@@ -23,7 +20,7 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "    K   "
                 );
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityProvider, PlayerStateService, board.ToGameSetup());
+            var game = ChessFactory.CustomChessGame(board.ToGameSetup());
 
             var blockedPieceLocation = "E5".ToBoardLocation();
 

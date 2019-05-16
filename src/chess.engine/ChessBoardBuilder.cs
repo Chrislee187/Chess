@@ -1,16 +1,12 @@
 ﻿using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using board.engine;
 using board.engine.Board;
 using chess.engine.Chess;
-using chess.engine.Chess.Actions;
 using chess.engine.Chess.Entities;
-using chess.engine.Chess.Movement;
 using chess.engine.Chess.Pieces;
 using chess.engine.Extensions;
 using chess.engine.Game;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace chess.engine
 {
@@ -145,7 +141,7 @@ namespace chess.engine
         private class EasyBoardBuilderCustomBoardSetup : IBoardSetup<ChessPieceEntity>
         {
             private char[,] _board;
-            private readonly ChessPieceEntityProvider _chessPieceEntityProvider = ChessFactory.ChessPieceEntityProvider();
+            private readonly ChessPieceEntityFactory _chessPieceEntityFactory = ChessFactory.ChessPieceEntityFactory();
 
             public EasyBoardBuilderCustomBoardSetup(char[,] board)
             {
@@ -159,9 +155,9 @@ namespace chess.engine
                     {
                         var chr = _board[file, rank];
 
-                        if (_chessPieceEntityProvider.ValidPieces.Contains(chr.ToString().ToUpper()))
+                        if (_chessPieceEntityFactory.ValidPieces.Contains(chr.ToString().ToUpper()))
                         {
-                            var entity = _chessPieceEntityProvider.Create(
+                            var entity = _chessPieceEntityFactory.Create(
                                 PieceNameMapper.FromChar(chr),
                                 char.IsUpper(chr) ? Colours.White : Colours.Black
                             );

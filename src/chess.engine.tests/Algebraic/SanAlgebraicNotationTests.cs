@@ -3,7 +3,6 @@ using board.engine.Movement;
 using chess.engine.Algebraic;
 using chess.engine.Chess;
 using chess.engine.Extensions;
-using chess.engine.Game;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Algebraic
@@ -103,6 +102,7 @@ namespace chess.engine.tests.Algebraic
         public void ShouldFailParsing(string notation)
         {
             Assert.False(StandardAlgebraicNotation.TryParse(notation, out var an));
+            Assert.That(() => StandardAlgebraicNotation.Parse(notation), Throws.Exception);
         }
 
         [TestCase("a2", "a3", DefaultActions.MoveOnly, "a3")]
@@ -131,7 +131,7 @@ namespace chess.engine.tests.Algebraic
                        "B B K  R"
                 );
 
-            var game = ChessFactory.CustomChessGame(builder.ToGameSetup(), Colours.White);
+            var game = ChessFactory.CustomChessGame(builder.ToGameSetup());
             var move = BoardMove.Create(from.ToBoardLocation(), to.ToBoardLocation(), moveType);
 
             Assert.That(StandardAlgebraicNotation.ParseFromGameMove(game.BoardState, move).ToNotation(), Is.EqualTo(expectedNotation));
@@ -152,7 +152,7 @@ namespace chess.engine.tests.Algebraic
                        "R..QR.K."
                 );
 
-            var game = ChessFactory.CustomChessGame(builder.ToGameSetup(), Colours.White);
+            var game = ChessFactory.CustomChessGame(builder.ToGameSetup());
             var from = "C4".ToBoardLocation();
             var piece = game.BoardState.GetItem(from);
             var boardMove = piece.Paths.FindMove(from, "f7".ToBoardLocation());

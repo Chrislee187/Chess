@@ -9,8 +9,8 @@ namespace chess.webapi.Controllers
     [ApiController]
     public class ChessGameController : Controller
     {
-        private readonly IChessService _chessService;
         private ILogger<ChessGameController> _logger;
+        private readonly IChessService _chessService;
 
         public ChessGameController(
             ILogger<ChessGameController> logger,
