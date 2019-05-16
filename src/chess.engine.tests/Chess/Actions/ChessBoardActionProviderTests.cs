@@ -7,12 +7,12 @@ using chess.engine.Chess.Entities;
 using Moq;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Actions
+namespace chess.engine.tests.Chess.Actions
 {
     [TestFixture]
-    public class BoardActionProviderTests
+    public class ChessBoardActionProviderTests
     {
-        private BoardActionProvider<ChessPieceEntity> _provider;
+        private IBoardActionProvider<ChessPieceEntity> _provider;
 
         [SetUp]
         public void SetUp()

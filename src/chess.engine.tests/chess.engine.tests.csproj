@@ -18,6 +18,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\board.engine.tests\board.engine.tests.csproj" />
     <ProjectReference Include="..\chess.engine\chess.engine.csproj" />
   </ItemGroup>
   <ItemGroup>

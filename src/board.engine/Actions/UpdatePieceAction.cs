@@ -21,7 +21,7 @@ namespace board.engine.Actions
         {
             if (BoardState.IsEmpty(move.From)) return;
 
-            var piece = BoardState.GetItem(move.From).Item;
+//            var piece = BoardState.GetItem(move.From).Item;
 
             BoardState.Remove(move.From);
 

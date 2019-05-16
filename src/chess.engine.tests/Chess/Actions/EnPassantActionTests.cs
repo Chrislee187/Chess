@@ -1,12 +1,12 @@
 ﻿using board.engine;
 using board.engine.Actions;
 using board.engine.Movement;
+using board.engine.tests.Actions;
 using chess.engine.Chess.Actions;
 using chess.engine.Chess.Entities;
 using chess.engine.Chess.Movement.ChessPieces.King;
 using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.tests.Actions;
 using Moq;
 using NUnit.Framework;
 

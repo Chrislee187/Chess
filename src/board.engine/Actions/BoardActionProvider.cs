@@ -9,7 +9,7 @@ namespace board.engine.Actions
         IBoardAction Create(int action, IBoardState<TEntity> boardState);
     }
 
-    public class BoardActionProvider<TEntity> : IBoardActionProvider<TEntity> where TEntity : class, IBoardEntity
+    public abstract class BoardActionProvider<TEntity> : IBoardActionProvider<TEntity> where TEntity : class, IBoardEntity
 
     {
         protected readonly Dictionary<int, Func<IBoardState<TEntity>, IBoardAction>> Actions;

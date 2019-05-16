@@ -1,22 +1,17 @@
-﻿using board.engine;
-using board.engine.Actions;
+﻿using board.engine.Actions;
 using board.engine.Movement;
-using chess.engine.Chess;
-using chess.engine.Chess.Entities;
-using chess.engine.Extensions;
-using chess.engine.Game;
 using Moq;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Actions
+namespace board.engine.tests.Actions
 {
     [TestFixture]
     public class UpdatePieceActionTests : ActionTestsBase<UpdatePieceAction<TestBoardEntity>, TestBoardEntity>
     {
-        private static TestBoardEntity TestUpdateEntity = new TestBoardEntity();
+        private static readonly TestBoardEntity TestUpdateEntity = new TestBoardEntity();
 
         private static readonly BoardMove PawnPromotionMove
-            = new BoardMove("B7".ToBoardLocation(), "B8".ToBoardLocation(), (int)DefaultActions.UpdatePiece,
+            = new BoardMove(BoardLocation.At(2,7), BoardLocation.At(2, 8), (int)DefaultActions.UpdatePiece,
                 TestUpdateEntity);
 
 

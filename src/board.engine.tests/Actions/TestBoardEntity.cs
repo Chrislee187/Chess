@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using board.engine;
 using board.engine.Movement;
 
-namespace chess.engine.tests.Actions
+namespace board.engine.tests.Actions
 {
     public class TestBoardEntity : IBoardEntity
     {

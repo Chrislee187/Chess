@@ -1,11 +1,8 @@
-﻿using board.engine;
-using board.engine.Actions;
-using chess.engine.Chess.Entities;
-using chess.engine.Game;
+﻿using board.engine.Actions;
 using Moq;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Actions
+namespace board.engine.tests.Actions
 {
     [TestFixture]
     public class MoveOnlyActionTests : ActionTestsBase<MoveOnlyAction<TestBoardEntity>, TestBoardEntity>
