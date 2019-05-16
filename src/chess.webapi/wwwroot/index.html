@@ -49,7 +49,7 @@
 
     update('/api/chessgame');
     Handlebars.registerHelper("apiMove", function (item) {
-        return item.san;
+        return item.san.replace('+','');
     });
 
     Handlebars.registerHelper("label", function (item) {
@@ -59,7 +59,7 @@
         return item.coord;
     });
     function update(url) {
-        $.getJSON(url,
+        $.getJSON( url,
             (data) => {
                 $('#chessAnchor').html(template(data));
             });

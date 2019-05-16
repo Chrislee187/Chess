@@ -78,19 +78,33 @@ namespace chess.engine.Chess
         public bool DoesMoveCauseCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move)
         {
             var checkColour = boardState.GetItem(move.From).Item.Player;
+            if (CheckThatWeAreNotAboutToTakeAKing(boardState, move, checkColour)) return true;
+
             var clonedBoardState = CreateCloneAndMove(boardState, move);
 
-            var inCheck = _playerStateService.CurrentPlayerState(clonedBoardState, checkColour.Enemy())
-                          != PlayerState.InProgress;
+            var inCheck = _playerStateService.CurrentPlayerState(clonedBoardState, checkColour.Enemy())!= PlayerState.InProgress;
             return inCheck;
+        }
+
+        private static bool CheckThatWeAreNotAboutToTakeAKing(IBoardState<ChessPieceEntity> boardState, BoardMove move, Colours checkColour)
+        {
+                // NOTE: We have to short-circuit here to avoid actually taking the king as we may be using a move before it's been validated
+            // to remove takes on kings
+            if (!boardState.IsEmpty(move.To))
+            {
+                if (boardState.GetItem(move.To).Item.Is(checkColour.Enemy(), ChessPieceName.King))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private IBoardState<ChessPieceEntity> CreateCloneAndMove(IBoardState<ChessPieceEntity> boardState, BoardMove move, Colours? refreshPathsColour = null)
         {
             var clonedBoardState = (IBoardState<ChessPieceEntity>) boardState.Clone();
 
-            // NOTE: It is important not to refresh the paths through Move mechanism when cloning
-            // as this will cause infinite recursion when it clones the boardstate to tries to generate the paths
             _moveService.Move(clonedBoardState, move);
 
             if (refreshPathsColour.HasValue)
