@@ -22,4 +22,4 @@ Other `.MD` files exist that go in to more technical detail on the code itself, 
 [link.swaggerui]: https://chess-web-api.azurewebsites.net/swagger/index.html
 [link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net/index.html
 
-[link.RootReadme]: /src/readme.md
+[link.RootReadme]: readme.MD
