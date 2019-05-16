@@ -42,7 +42,7 @@ namespace chess.engine.Algebraic
 
         public static StandardAlgebraicNotation Parse(string notation)
         {
-            var an = new SanBuilder(ChessFactory.PlayerStateService(),ChessFactory.CheckDetectionService()).BuildFrom(notation);
+            var an = new SanBuilder(ChessFactory.CheckDetectionService()).BuildFrom(notation);
 
             if (an.CastleMove == CastleSide.None && an.ToNotation() != notation)
             {
@@ -69,7 +69,7 @@ namespace chess.engine.Algebraic
 
         public static StandardAlgebraicNotation ParseFromGameMove(IBoardState<ChessPieceEntity> boardState, BoardMove move)
         {
-            return new SanBuilder(ChessFactory.PlayerStateService(), ChessFactory.CheckDetectionService()).BuildFrom(boardState, move);
+            return new SanBuilder(ChessFactory.CheckDetectionService()).BuildFrom(boardState, move);
         }
         public StandardAlgebraicNotation(ChessPieceName piece,
             int? fromFileX, int? fromRankY, int toFileX, int toRankY,
@@ -194,12 +194,10 @@ namespace chess.engine.Algebraic
         private class SanBuilder
         {
             private readonly SanTokenParser _tokenParser = new SanTokenParser();
-            private readonly IPlayerStateService _playerStateService;
             private readonly ICheckDetectionService _checkDetectionService;
 
-            public SanBuilder(IPlayerStateService playerStateService, ICheckDetectionService checkDetectionService)
+            public SanBuilder(ICheckDetectionService checkDetectionService)
             {
-                _playerStateService = playerStateService;
                 _checkDetectionService = checkDetectionService;
             }
 

@@ -47,21 +47,14 @@ namespace chess.engine
                 PathValidator(logger)
                 );
 
-        public static PlayerStateService ChessGameStateService(LoggerType logger = LoggerType.Injected)
-            => new PlayerStateService(Logger<PlayerStateService>(logger));
-        public static ChessRefreshAllPaths ChessRefreshAllPaths(LoggerType logger = LoggerType.Injected)
+        public static ChessRefreshAllPaths ChessRefreshAllPaths(
+            ChessBoardActionProvider chessBoardActionProvider = null,
+            LoggerType logger = LoggerType.Injected)
             => new ChessRefreshAllPaths(
                 Logger<ChessRefreshAllPaths>(logger),
-                ChessBoardActionProvider(logger),
-                ChessGameStateService(logger),
+                chessBoardActionProvider ?? ChessBoardActionProvider(logger),
+                PlayerStateService(),
                 CheckDetectionService(logger)
-                );
-
-        public static ICheckDetectionService CheckDetectionService(LoggerType logger = LoggerType.Injected)
-            => new CheckDetectionService(
-                Logger<CheckDetectionService>(),
-                ChessBoardActionProvider(logger),
-                ChessGameStateService(logger)
                 );
 
         public static IPlayerStateService PlayerStateService() 
@@ -76,25 +69,43 @@ namespace chess.engine
                 Logger<ChessGame>(logger),
                 ChessBoardEngineProvider(logger),
                 ChessPieceEntityProvider(logger),
-                ChessGameStateService(logger));
+                PlayerStateService()
+                );
 
         public static ChessGame CustomChessGame(IBoardSetup<ChessPieceEntity> setup, Colours toPlay = Colours.White, LoggerType logger = LoggerType.Injected) 
             => new ChessGame(
                 Logger<ChessGame>(logger),
                 ChessBoardEngineProvider(logger),
                 ChessPieceEntityProvider(logger),
-                ChessGameStateService(logger),
+                PlayerStateService(),
                 setup,
                 toPlay
                 );
 
+        public static IBoardMoveService<ChessPieceEntity> BoardMoveService(ChessBoardActionProvider boardActionProvider = null)
+        {
+            var chessBoardActionProvider = boardActionProvider ?? ChessBoardActionProvider();
+            return new BoardMoveService<ChessPieceEntity>(
+                chessBoardActionProvider);
+        }
 
         public static ChessBoardEngineProvider ChessBoardEngineProvider(LoggerType type = LoggerType.Injected) =>
             new ChessBoardEngineProvider(
                 Logger<BoardEngine<ChessPieceEntity>>(),
-                ChessRefreshAllPaths(type),
-                PathsValidator(type),
-                ChessBoardActionProvider(type)
+                ChessRefreshAllPaths(null, type),
+                PathsValidator(),
+                BoardMoveService());
+
+        public static ICheckDetectionService CheckDetectionService(LoggerType logger = LoggerType.Injected)
+        {
+            var chessBoardActionProvider = ChessBoardActionProvider(logger);
+            return new CheckDetectionService(
+                Logger<CheckDetectionService>(),
+                chessBoardActionProvider,
+                PlayerStateService(),
+                BoardMoveService(chessBoardActionProvider)
             );
+        }
+
     }
 }

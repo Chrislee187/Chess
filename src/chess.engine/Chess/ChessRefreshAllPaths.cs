@@ -69,7 +69,6 @@ namespace chess.engine.Chess
         private Path ValidatePathForDiscoveredCheck(IBoardState<ChessPieceEntity> boardState, Path path)
         {
             var validPath = new Path();
-            var pieceColour = boardState.GetItem(path.First().From).Item.Player;
             foreach (var move in path)
             {
                 var inCheck = _checkDetectionService.DoesMoveLeaveUsInCheck(boardState, move);

@@ -1,5 +1,4 @@
 ﻿using board.engine;
-using board.engine.Actions;
 using board.engine.Board;
 using chess.engine.Chess.Entities;
 using Microsoft.Extensions.Logging;
@@ -11,16 +10,16 @@ namespace chess.engine.Chess
         private readonly ILogger<BoardEngine<ChessPieceEntity>> _boardEngineLogger;
         private readonly IRefreshAllPaths<ChessPieceEntity> _refreshAllPaths;
         private readonly IPathsValidator<ChessPieceEntity> _chessPathsValidator;
-        private readonly IBoardActionProvider<ChessPieceEntity> _actionProvider;
+        private readonly IBoardMoveService<ChessPieceEntity> _boardMoveService;
 
         public ChessBoardEngineProvider(
             ILogger<BoardEngine<ChessPieceEntity>> boardEngineLogger,
             IRefreshAllPaths<ChessPieceEntity> refreshAllPaths,
             IPathsValidator<ChessPieceEntity> chessPathsValidator,
-            IBoardActionProvider<ChessPieceEntity> actionProvider
+            IBoardMoveService<ChessPieceEntity> boardMoveService
         )
         {
-            _actionProvider = actionProvider;
+            _boardMoveService = boardMoveService;
             _chessPathsValidator = chessPathsValidator;
             _refreshAllPaths = refreshAllPaths;
             _boardEngineLogger = boardEngineLogger;
@@ -30,7 +29,7 @@ namespace chess.engine.Chess
             return new BoardEngine<ChessPieceEntity>(_boardEngineLogger,
                 boardSetup,
                 _chessPathsValidator,
-                _actionProvider,
+                _boardMoveService,
                 _refreshAllPaths);
         }
     }

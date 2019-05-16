@@ -19,7 +19,7 @@ namespace chess.engine.tests
         {
             _chessPieceEntityProvider = ChessFactory.ChessPieceEntityProvider();
             _engineProvider = ChessFactory.ChessBoardEngineProvider();
-            _playerStateService = ChessFactory.ChessGameStateService(ChessFactory.LoggerType.Null);
+            _playerStateService = ChessFactory.PlayerStateService();
         }
         [Test]
         public void New_game_should_have_white_as_first_played()

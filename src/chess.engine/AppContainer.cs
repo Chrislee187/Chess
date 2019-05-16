@@ -67,6 +67,8 @@ namespace chess.engine
             services.AddTransient<IBoardActionProvider<ChessPieceEntity>,ChessBoardActionProvider>();
             services.AddTransient<IBoardEntityFactory<ChessPieceEntity>,ChessPieceEntityProvider>();
             services.AddTransient<IPlayerStateService,PlayerStateService>();
+            services.AddTransient<ICheckDetectionService,CheckDetectionService>();
+            services.AddTransient<IBoardMoveService<ChessPieceEntity>,BoardMoveService<ChessPieceEntity>>();
 
         }
     }

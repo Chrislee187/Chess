@@ -1,4 +1,5 @@
-﻿using board.engine.Actions;
+﻿using board.engine;
+using board.engine.Actions;
 using board.engine.Board;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
@@ -11,17 +12,19 @@ namespace chess.engine.tests.Chess
     [TestFixture]
     public class CheckDetectionServiceTests
     {
-        private Mock<IBoardActionProvider<ChessPieceEntity>> _chessBoardActionProvider;
-        private Mock<IPlayerStateService> _chessGameStateService;
-        private Mock<IBoardState<ChessPieceEntity>> _mockedBoard;
+        private Mock<IBoardActionProvider<ChessPieceEntity>> _actionProviderMock;
+        private Mock<IPlayerStateService> _playerStateServiceMock;
+        private Mock<IBoardState<ChessPieceEntity>> _boardStateMock;
+        private Mock<IBoardMoveService<ChessPieceEntity>> _moveServiceMock;
 
         [SetUp]
         public void Setup()
         {
-            _chessBoardActionProvider = ChessTestFactory.ChessBoardActionProvider();
-            _chessGameStateService = ChessTestFactory.ChessGameStateService();
-            _mockedBoard = new Mock<IBoardState<ChessPieceEntity>>();
-            _mockedBoard.Setup(mb => mb.Clone()).Returns(_mockedBoard.Object);
+            _actionProviderMock = ChessTestFactory.ChessBoardActionProvider();
+            _playerStateServiceMock = ChessTestFactory.ChessGameStateService();
+            _boardStateMock = new Mock<IBoardState<ChessPieceEntity>>();
+            _boardStateMock.Setup(mb => mb.Clone()).Returns(_boardStateMock.Object);
+            _moveServiceMock = ChessTestFactory.BoardMoveService();
         }
 
         [TestCase(PlayerState.InProgress, PlayerState.InProgress, GameCheckState.None)]
@@ -33,14 +36,15 @@ namespace chess.engine.tests.Chess
         {
             var service = new CheckDetectionService(
                 ChessFactory.Logger<CheckDetectionService>(),
-                _chessBoardActionProvider.Object,
-                _chessGameStateService.Object
+                _actionProviderMock.Object,
+                _playerStateServiceMock.Object,
+                ChessFactory.BoardMoveService(ChessFactory.ChessBoardActionProvider())
             );
 
             SetupCheckState(whiteState, Colours.White);
             SetupCheckState(blackState, Colours.Black);
 
-            Assert.That(service.Check(_mockedBoard.Object), Is.EqualTo(expectedGameState));
+            Assert.That(service.Check(_boardStateMock.Object), Is.EqualTo(expectedGameState));
         }
 
         [Test]
@@ -48,18 +52,19 @@ namespace chess.engine.tests.Chess
         {
             var service = new CheckDetectionService(
                 ChessFactory.Logger<CheckDetectionService>(),
-                _chessBoardActionProvider.Object,
-                _chessGameStateService.Object
+                _actionProviderMock.Object,
+                _playerStateServiceMock.Object,
+                _moveServiceMock.Object
             );
 
             SetupCheckState(PlayerState.Check, Colours.White);
             SetupCheckState(PlayerState.Checkmate, Colours.Black);
 
-            Assert.That(() => service.Check(_mockedBoard.Object), Throws.Exception);
+            Assert.That(() => service.Check(_boardStateMock.Object), Throws.Exception);
         }
         private void SetupCheckState(PlayerState inProgress, Colours colours)
         {
-            _chessGameStateService.Setup(s
+            _playerStateServiceMock.Setup(s
                     => s.CurrentPlayerState(
                         It.IsAny<IBoardState<ChessPieceEntity>>(),
                         It.Is<Colours>(c => c == colours)))

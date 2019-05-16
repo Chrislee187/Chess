@@ -8,13 +8,13 @@ namespace board.engine
 {
     public class BoardEngine<TEntity> where TEntity : class, IBoardEntity
     {
+        private readonly IBoardMoveService<TEntity> _boardMoveService;
         public readonly IBoardState<TEntity> BoardState;
         private readonly IBoardActionProvider<TEntity> _boardActionProvider;
 
         private readonly IBoardSetup<TEntity> _boardSetup;
         private readonly IRefreshAllPaths<TEntity> _refreshAllPaths;
         private ILogger<BoardEngine<TEntity>> _logger;
-        private IBoardActionProvider<TEntity> _actionProvider;
 
         public int Width { get; private set; } = 8;
         public int Height { get; private set; } = 8;
@@ -25,10 +25,10 @@ namespace board.engine
             ILogger<BoardEngine<TEntity>> logger,
             IBoardSetup<TEntity> boardSetup, 
             IPathsValidator<TEntity> pathsValidator,
-            IBoardActionProvider<TEntity> actionProvider
+            IBoardMoveService<TEntity> boardMoveService
             )
 
-            : this(logger, boardSetup, pathsValidator, actionProvider, new DefaultRefreshAllPaths())
+            : this(logger, boardSetup, pathsValidator, boardMoveService, new DefaultRefreshAllPaths())
         {
         }
 
@@ -36,12 +36,11 @@ namespace board.engine
             ILogger<BoardEngine<TEntity>> logger, 
             IBoardSetup<TEntity> boardSetup,
             IPathsValidator<TEntity> pathsValidator,
-            IBoardActionProvider<TEntity> actionProvider,
+            IBoardMoveService<TEntity> boardMoveService,
             IRefreshAllPaths<TEntity> refreshAllPaths)
         {
-            _actionProvider = actionProvider;
+            _boardMoveService = boardMoveService;
             _logger = logger;
-            _boardActionProvider = actionProvider;
 
             BoardState = new BoardState<TEntity>(pathsValidator, _boardActionProvider);
 
@@ -105,10 +104,7 @@ namespace board.engine
 
         public void Move(BoardMove move)
         {
-            var action = _boardActionProvider.Create((int) move.MoveType, BoardState);
-
-            action.Execute(move);
-
+            _boardMoveService.Move(BoardState, move);
             _refreshAllPaths.RefreshAllPaths(BoardState);
         }
 

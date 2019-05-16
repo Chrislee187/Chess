@@ -1,4 +1,5 @@
 ﻿using System;
+using board.engine;
 using board.engine.Actions;
 using board.engine.Board;
 using board.engine.Movement;
@@ -13,13 +14,16 @@ namespace chess.engine.Chess
         private readonly ILogger<CheckDetectionService> _logger;
         private readonly IBoardActionProvider<ChessPieceEntity> _actionProvider;
         private readonly IPlayerStateService _playerStateService;
+        private IBoardMoveService<ChessPieceEntity> _moveService;
 
         public CheckDetectionService(
             ILogger<CheckDetectionService> logger,
             IBoardActionProvider<ChessPieceEntity> actionProvider, 
-            IPlayerStateService playerStateService
+            IPlayerStateService playerStateService,
+            IBoardMoveService<ChessPieceEntity> moveService
         )
         {
+            _moveService = moveService;
             _logger = logger;
             _actionProvider = actionProvider;
             _playerStateService = playerStateService;
@@ -84,8 +88,10 @@ namespace chess.engine.Chess
         private IBoardState<ChessPieceEntity> CreateCloneAndMove(IBoardState<ChessPieceEntity> boardState, BoardMove move, Colours? refreshPathsColour = null)
         {
             var clonedBoardState = (IBoardState<ChessPieceEntity>) boardState.Clone();
-            var action = _actionProvider.Create(move.MoveType, clonedBoardState);
-            action.Execute(move);
+
+            // NOTE: It is important not to refresh the paths through Move mechanism when cloning
+            // as this will cause infinite recursion when it clones the boardstate to tries to generate the paths
+            _moveService.Move(clonedBoardState, move);
 
             if (refreshPathsColour.HasValue)
             {

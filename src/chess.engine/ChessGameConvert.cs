@@ -87,7 +87,7 @@ namespace chess.engine
                 ChessFactory.Logger<ChessGame>(),
                 ChessFactory.ChessBoardEngineProvider(),
                 ChessFactory.ChessPieceEntityProvider(),
-                ChessFactory.ChessGameStateService(),
+                ChessFactory.PlayerStateService(),
                 setup,
                 whoseTurn
             );

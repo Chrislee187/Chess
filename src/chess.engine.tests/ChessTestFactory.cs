@@ -46,6 +46,9 @@ namespace chess.engine.tests
         public static Mock<IPlayerStateService> ChessGameStateService(LoggerType logger = LoggerType.Null)
             => new Mock<IPlayerStateService>();
 
+        public static Mock<IBoardMoveService<ChessPieceEntity>> BoardMoveService(LoggerType logger = LoggerType.Null)
+            => new Mock<IBoardMoveService<ChessPieceEntity>>();
+
 
 
 
