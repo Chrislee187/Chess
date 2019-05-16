@@ -12,7 +12,7 @@ namespace chess.engine.tests.Chess
     public class CheckDetectionServiceTests
     {
         private Mock<IBoardActionProvider<ChessPieceEntity>> _chessBoardActionProvider;
-        private Mock<IChessGameStateService> _chessGameStateService;
+        private Mock<IPlayerStateService> _chessGameStateService;
         private Mock<IBoardState<ChessPieceEntity>> _mockedBoard;
 
         [SetUp]
@@ -24,12 +24,12 @@ namespace chess.engine.tests.Chess
             _mockedBoard.Setup(mb => mb.Clone()).Returns(_mockedBoard.Object);
         }
 
-        [TestCase(GameState.InProgress, GameState.InProgress, GameCheckState.None)]
-        [TestCase(GameState.Check, GameState.InProgress, GameCheckState.WhiteInCheck)]
-        [TestCase(GameState.Checkmate, GameState.InProgress, GameCheckState.WhiteCheckmated)]
-        [TestCase(GameState.InProgress, GameState.Check, GameCheckState.BlackInCheck)]
-        [TestCase(GameState.InProgress, GameState.Checkmate, GameCheckState.BlackCheckmated)]
-        public void Check_returns_valid_check_states(GameState whiteState, GameState blackState, GameCheckState expectedGameState)
+        [TestCase(PlayerState.InProgress, PlayerState.InProgress, GameCheckState.None)]
+        [TestCase(PlayerState.Check, PlayerState.InProgress, GameCheckState.WhiteInCheck)]
+        [TestCase(PlayerState.Checkmate, PlayerState.InProgress, GameCheckState.WhiteCheckmated)]
+        [TestCase(PlayerState.InProgress, PlayerState.Check, GameCheckState.BlackInCheck)]
+        [TestCase(PlayerState.InProgress, PlayerState.Checkmate, GameCheckState.BlackCheckmated)]
+        public void Check_returns_valid_check_states(PlayerState whiteState, PlayerState blackState, GameCheckState expectedGameState)
         {
             var service = new CheckDetectionService(
                 ChessFactory.Logger<CheckDetectionService>(),
@@ -52,15 +52,15 @@ namespace chess.engine.tests.Chess
                 _chessGameStateService.Object
             );
 
-            SetupCheckState(GameState.Check, Colours.White);
-            SetupCheckState(GameState.Checkmate, Colours.Black);
+            SetupCheckState(PlayerState.Check, Colours.White);
+            SetupCheckState(PlayerState.Checkmate, Colours.Black);
 
             Assert.That(() => service.Check(_mockedBoard.Object), Throws.Exception);
         }
-        private void SetupCheckState(GameState inProgress, Colours colours)
+        private void SetupCheckState(PlayerState inProgress, Colours colours)
         {
             _chessGameStateService.Setup(s
-                    => s.CurrentGameState(
+                    => s.CurrentPlayerState(
                         It.IsAny<IBoardState<ChessPieceEntity>>(),
                         It.Is<Colours>(c => c == colours)))
                 .Returns(inProgress);

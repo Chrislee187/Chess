@@ -64,6 +64,9 @@ namespace chess.engine
                 ChessGameStateService(logger)
                 );
 
+        public static IPlayerStateService PlayerStateService() 
+        => new PlayerStateService(Logger<IPlayerStateService>());
+
         public static ChessBoardActionProvider ChessBoardActionProvider(LoggerType logger = LoggerType.Injected)
             => new ChessBoardActionProvider(ChessPieceEntityProvider(logger));
 

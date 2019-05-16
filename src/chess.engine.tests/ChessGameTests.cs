@@ -12,14 +12,14 @@ namespace chess.engine.tests
     {
         private ChessBoardEngineProvider _engineProvider;
         private ChessPieceEntityProvider _chessPieceEntityProvider;
-        private IChessGameStateService _chessGameStateService;
+        private IPlayerStateService _playerStateService;
 
         [SetUp]
         public void Setup()
         {
             _chessPieceEntityProvider = ChessFactory.ChessPieceEntityProvider();
             _engineProvider = ChessFactory.ChessBoardEngineProvider();
-            _chessGameStateService = ChessFactory.ChessGameStateService(ChessFactory.LoggerType.Null);
+            _playerStateService = ChessFactory.ChessGameStateService(ChessFactory.LoggerType.Null);
         }
         [Test]
         public void New_game_should_have_white_as_first_played()
@@ -27,14 +27,14 @@ namespace chess.engine.tests
             var game = new ChessGame(
                 NullLogger<ChessGame>.Instance, 
                 _engineProvider, 
-                _chessPieceEntityProvider, _chessGameStateService);
+                _chessPieceEntityProvider, _playerStateService);
             Assert.That(game.CurrentPlayer, Is.EqualTo(Colours.White));
         }
 
         [Test]
         public void Move_should_update_current_player_when_valid()
         {
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, _engineProvider, _chessPieceEntityProvider, _chessGameStateService);
+            var game = new ChessGame(NullLogger<ChessGame>.Instance, _engineProvider, _chessPieceEntityProvider, _playerStateService);
 
             var msg = game.Move("d2d4");
             Assert.That(game.CurrentPlayer, Is.EqualTo(Colours.Black), msg);

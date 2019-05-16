@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Algebraic
 {
     [TestFixture]
-    public class AlgebraicNotationTests
+    public class SanAlgebraicNotationTests
     {
         [TestCase("Re6", ChessPieceName.Rook)]
         [TestCase("Ne6", ChessPieceName.Knight)]
@@ -99,7 +99,7 @@ namespace chess.engine.tests.Algebraic
 
         [TestCase("x8=Q")]
         [TestCase("DD4xe8")]
-        [TestCase("e8+Z")]
+        [TestCase("e8=Z")]
         public void ShouldFailParsing(string notation)
         {
             Assert.False(StandardAlgebraicNotation.TryParse(notation, out var an));
@@ -135,6 +135,29 @@ namespace chess.engine.tests.Algebraic
             var move = BoardMove.Create(from.ToBoardLocation(), to.ToBoardLocation(), moveType);
 
             Assert.That(StandardAlgebraicNotation.ParseFromGameMove(game.BoardState, move).ToNotation(), Is.EqualTo(expectedNotation));
+        }
+
+        [Test]
+        public void Should_put_plus_on_end_of_moves_that_cause_check()
+        {
+            // TODO: Better way to check this, than using a full board.
+            var builder = new ChessBoardBuilder()
+                .Board("....rrk." +
+                       ".b...pp." +
+                       ".n...q.p" +
+                       "..p.N..." +
+                       ".pB....." +
+                       ".......P" +
+                       "PP...PP." +
+                       "R..QR.K."
+                );
+
+            var game = ChessFactory.CustomChessGame(builder.ToGameSetup(), Colours.White);
+            var from = "C4".ToBoardLocation();
+            var piece = game.BoardState.GetItem(from);
+            var boardMove = piece.Paths.FindMove(from, "f7".ToBoardLocation());
+            var san = StandardAlgebraicNotation.ParseFromGameMove(game.BoardState, boardMove);
+            Assert.That(san.ToNotation(), Is.EqualTo("Bxf7+"));
         }
 
 

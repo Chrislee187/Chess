@@ -18,7 +18,7 @@ namespace chess.engine.tests
             {
                 Console.WriteLine($"Move #{++moveIdx}: {move}");
                 var msg = game.Move(move);
-                Console.WriteLine(game.GameState + " - " + game.CurrentPlayer + " to move.");
+                Console.WriteLine(game.PlayerState + " - " + game.CurrentPlayer + " to move.");
                 Console.WriteLine(game.ToText());
                 if (!string.IsNullOrEmpty(msg))
                 {
@@ -38,7 +38,7 @@ namespace chess.engine.tests
             {
                 Console.WriteLine($"Move #{++moveIdx}: {move}");
                 var msg = game.Move(move);
-                Console.WriteLine(game.GameState + " - " + game.CurrentPlayer + " to move.");
+                Console.WriteLine(game.PlayerState + " - " + game.CurrentPlayer + " to move.");
                 Console.WriteLine(game.ToText());
                 if (!string.IsNullOrEmpty(msg))
                 {

@@ -8,22 +8,22 @@ using Microsoft.Extensions.Logging;
 
 namespace chess.engine.Chess
 {
-    public interface IChessGameStateService
+    public interface IPlayerStateService
     {
-        GameState CurrentGameState(IBoardState<ChessPieceEntity> boardState, Colours currentPlayer);
+        PlayerState CurrentPlayerState(IBoardState<ChessPieceEntity> boardState, Colours currentPlayer);
     }
 
-    public class PlayerStateService : IChessGameStateService
+    public class PlayerStateService : IPlayerStateService
     {
-        private ILogger<PlayerStateService> _logger;
+        private ILogger<IPlayerStateService> _logger;
 
-        public PlayerStateService(ILogger<PlayerStateService> logger)
+        public PlayerStateService(ILogger<IPlayerStateService> logger)
         {
             _logger = logger;
         }
 
         // TODO: Needs tests
-        public GameState CurrentGameState(
+        public PlayerState CurrentPlayerState(
             IBoardState<ChessPieceEntity> boardState, 
             Colours currentPlayer
             )
@@ -35,15 +35,15 @@ namespace chess.engine.Chess
 
             return enemies.Any()
                 ? CheckForCheckMate(boardState, enemies, king)
-                : GameState.InProgress;
+                : PlayerState.InProgress;
         }
 
-        private GameState CheckForCheckMate(
+        private PlayerState CheckForCheckMate(
             IBoardState<ChessPieceEntity> boardState,
             IEnumerable<LocatedItem<ChessPieceEntity>> enemiesAttackingKing, 
             LocatedItem<ChessPieceEntity> king)
         {
-            var state = GameState.Check;
+            var state = PlayerState.Check;
             var kingCannotMove = !king.Paths.Any(); // Move validator will ensure we can't move into check
 
             var friendlyDestinations = boardState.GetItems(king.Item.Owner)
@@ -63,7 +63,7 @@ namespace chess.engine.Chess
 
             if (kingCannotMove && !canBlock)
             {
-                state = GameState.Checkmate;
+                state = PlayerState.Checkmate;
             }
 
             return state;

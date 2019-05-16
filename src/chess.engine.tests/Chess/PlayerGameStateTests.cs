@@ -23,7 +23,7 @@ namespace chess.engine.tests.Chess
                 );
             var result = ChessFactory.CustomChessGame(builder.ToGameSetup(), Colours.Black);
 
-            Assert.That(result.GameState, Is.EqualTo(GameState.Check));
+            Assert.That(result.PlayerState, Is.EqualTo(PlayerState.Check));
         }
         [Test]
         public void Should_find_simple_checkmate_condition()
@@ -37,9 +37,9 @@ namespace chess.engine.tests.Chess
                        "        " +
                        "        " +
                        "    K   "
-                ).ToGameSetup(), Colours.Black).GameState;
+                ).ToGameSetup(), Colours.Black).PlayerState;
 
-            Assert.That(result, Is.EqualTo(GameState.Checkmate));
+            Assert.That(result, Is.EqualTo(PlayerState.Checkmate));
         }
     }
 }

@@ -24,19 +24,19 @@ namespace chess.engine.Chess
 
         private readonly IBoardActionProvider<ChessPieceEntity> _actionProvider;
         // TODO: Sort of logger
-        private readonly IChessGameStateService _chessGameStateService;
+        private readonly IPlayerStateService _playerStateService;
         private readonly ICheckDetectionService _checkDetectionService;
 
         public ChessRefreshAllPaths(
             ILogger<ChessRefreshAllPaths> logger,
             IBoardActionProvider<ChessPieceEntity> actionProvider,
-            IChessGameStateService chessGameStateService,
+            IPlayerStateService playerStateService,
             ICheckDetectionService checkDetectionService
             )
         {
             _logger = logger;
             _actionProvider = actionProvider;
-            _chessGameStateService = chessGameStateService;
+            _playerStateService = playerStateService;
             _checkDetectionService = checkDetectionService;
         }
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
@@ -72,7 +72,7 @@ namespace chess.engine.Chess
             var pieceColour = boardState.GetItem(path.First().From).Item.Player;
             foreach (var move in path)
             {
-                var inCheck = _checkDetectionService.DoeMoveLeaveUsInCheck(boardState, move, pieceColour);
+                var inCheck = _checkDetectionService.DoesMoveLeaveUsInCheck(boardState, move);
 
                 if (!inCheck) validPath.Add(move);
             }

@@ -18,8 +18,8 @@ namespace chess.engine.Chess
         public Colours CurrentPlayer { get; private set; }
         private Colours NextPlayer() => CurrentPlayer == Colours.White ? Colours.Black : Colours.White;
 
-        public GameState GameState { get; private set; }
-        public bool InProgress => GameState == GameState.InProgress;
+        public PlayerState PlayerState { get; private set; }
+        public bool InProgress => PlayerState == PlayerState.InProgress;
 
         public LocatedItem<ChessPieceEntity>[,] Board => _engine.Board;
 
@@ -27,14 +27,14 @@ namespace chess.engine.Chess
 
         private readonly ILogger<ChessGame> _logger;
         private readonly IBoardEntityFactory<ChessPieceEntity> _entityFactory;
-        private readonly IChessGameStateService _gameStateService;
+        private readonly IPlayerStateService _gameStateService;
         private SanMoveFinder _sanMoveFinder;
 
         public ChessGame(
             ILogger<ChessGame> logger,
             IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
             IBoardEntityFactory<ChessPieceEntity> entityFactory,
-            IChessGameStateService gameStateService
+            IPlayerStateService gameStateService
         )
             : this(logger, boardEngineProvider, entityFactory, gameStateService, new ChessBoardSetup(entityFactory))
         {
@@ -44,7 +44,7 @@ namespace chess.engine.Chess
             ILogger<ChessGame> logger,
             IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
             IBoardEntityFactory<ChessPieceEntity> entityFactory,
-            IChessGameStateService gameStateService,
+            IPlayerStateService gameStateService,
             IBoardSetup<ChessPieceEntity> setup,
             Colours whoseTurn = Colours.White)
         {
@@ -56,7 +56,7 @@ namespace chess.engine.Chess
             _entityFactory = entityFactory;
             _gameStateService = gameStateService;
             CurrentPlayer = whoseTurn;
-            GameState = _gameStateService.CurrentGameState(BoardState, CurrentPlayer);
+            PlayerState = _gameStateService.CurrentPlayerState(BoardState, CurrentPlayer);
         }
 
         public string Move(string input)
@@ -88,10 +88,10 @@ namespace chess.engine.Chess
             _engine.Move(move);
 
             CurrentPlayer = NextPlayer();
-            GameState = _gameStateService.CurrentGameState(BoardState, CurrentPlayer);
+            PlayerState = _gameStateService.CurrentPlayerState(BoardState, CurrentPlayer);
 
-            return GameState == GameState.Check || GameState == GameState.Checkmate
-                ? GameState.ToString()
+            return PlayerState == PlayerState.Check || PlayerState == PlayerState.Checkmate
+                ? PlayerState.ToString()
                 : "";
 
         }
@@ -104,7 +104,7 @@ namespace chess.engine.Chess
         #endregion
     }
 
-    public enum GameState
+    public enum PlayerState
     {
         InProgress,
         Check,

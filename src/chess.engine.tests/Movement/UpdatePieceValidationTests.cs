@@ -30,7 +30,7 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "    K  R"
                 );
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityProvider, ChessGameStateService, board.ToGameSetup());
+            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityProvider, PlayerStateService, board.ToGameSetup());
             _boardState = game.BoardState;
         }
 

@@ -12,46 +12,46 @@ namespace chess.engine.Chess
     {
         private readonly ILogger<CheckDetectionService> _logger;
         private readonly IBoardActionProvider<ChessPieceEntity> _actionProvider;
-        private readonly IChessGameStateService _chessGameStateService;
+        private readonly IPlayerStateService _playerStateService;
 
         public CheckDetectionService(
             ILogger<CheckDetectionService> logger,
             IBoardActionProvider<ChessPieceEntity> actionProvider, 
-            IChessGameStateService chessGameStateService
+            IPlayerStateService playerStateService
         )
         {
             _logger = logger;
             _actionProvider = actionProvider;
-            _chessGameStateService = chessGameStateService;
+            _playerStateService = playerStateService;
         }
 
         public GameCheckState Check(IBoardState<ChessPieceEntity> boardState)
         {
             var clonedBoardState = (IBoardState<ChessPieceEntity>)boardState.Clone();
 
-            var whiteState = _chessGameStateService.CurrentGameState(clonedBoardState, Colours.White);
-            var blackState = _chessGameStateService.CurrentGameState(clonedBoardState, Colours.Black);
+            var whiteState = _playerStateService.CurrentPlayerState(clonedBoardState, Colours.White);
+            var blackState = _playerStateService.CurrentPlayerState(clonedBoardState, Colours.Black);
 
-            if (whiteState == GameState.InProgress && blackState == GameState.InProgress)
+            if (whiteState == PlayerState.InProgress && blackState == PlayerState.InProgress)
             {
                 return GameCheckState.None;
             }
 
-            if (whiteState != GameState.InProgress && blackState != GameState.InProgress)
+            if (whiteState != PlayerState.InProgress && blackState != PlayerState.InProgress)
             {
                 throw new Exception($"Invalid game states white/black {whiteState}/{blackState}");
             }
 
-            if (whiteState != GameState.InProgress)
+            if (whiteState != PlayerState.InProgress)
             {
-                return whiteState == GameState.Check
+                return whiteState == PlayerState.Check
                     ? GameCheckState.WhiteInCheck
                     : GameCheckState.WhiteCheckmated;
             }
 
-            if (blackState != GameState.InProgress)
+            if (blackState != PlayerState.InProgress)
             {
-                return blackState == GameState.Check
+                return blackState == PlayerState.Check
                     ? GameCheckState.BlackInCheck
                     : GameCheckState.BlackCheckmated;
             }
@@ -60,29 +60,51 @@ namespace chess.engine.Chess
             return GameCheckState.None; 
         }
 
-        public bool DoeMoveLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move, Colours pieceColour)
+        public bool DoesMoveLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move)
         {
-            var clonedBoardState = CreateClone(boardState, move, pieceColour);
+            var checkColour = boardState.GetItem(move.From).Item.Player;
+            var clonedBoardState = CreateCloneAndMove(boardState, move);
 
-            var inCheck = _chessGameStateService.CurrentGameState(clonedBoardState, pieceColour)
-                          != GameState.InProgress;
+            var inCheck = _playerStateService.CurrentPlayerState(clonedBoardState, checkColour)
+                          != PlayerState.InProgress;
             return inCheck;
         }
 
-        private IBoardState<ChessPieceEntity> CreateClone(IBoardState<ChessPieceEntity> boardState, BoardMove move, Colours pieceColour)
+
+        public bool DoesMoveCauseCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move)
+        {
+            var checkColour = boardState.GetItem(move.From).Item.Player;
+            var clonedBoardState = CreateCloneAndMove(boardState, move);
+
+            var inCheck = _playerStateService.CurrentPlayerState(clonedBoardState, checkColour.Enemy())
+                          != PlayerState.InProgress;
+            return inCheck;
+        }
+
+        private IBoardState<ChessPieceEntity> CreateCloneAndMove(IBoardState<ChessPieceEntity> boardState, BoardMove move, Colours? refreshPathsColour = null)
         {
             var clonedBoardState = (IBoardState<ChessPieceEntity>) boardState.Clone();
             var action = _actionProvider.Create(move.MoveType, clonedBoardState);
             action.Execute(move);
 
-            clonedBoardState.RegeneratePaths((int) pieceColour.Enemy());
+            if (refreshPathsColour.HasValue)
+            {
+                clonedBoardState.RegeneratePaths((int)refreshPathsColour.Value);
+            }
+            else
+            {
+                clonedBoardState.RegenerateAllPaths();
+
+            }
             return clonedBoardState;
         }
     }
 
     public interface ICheckDetectionService
     {
-        bool DoeMoveLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move, Colours pieceColour);
+        bool DoesMoveLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move);
+        GameCheckState Check(IBoardState<ChessPieceEntity> boardState);
+        bool DoesMoveCauseCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move);
     }
 
     public enum GameCheckState

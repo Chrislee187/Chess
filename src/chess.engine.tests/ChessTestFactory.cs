@@ -43,8 +43,8 @@ namespace chess.engine.tests
 
         public static Mock<IBoardActionProvider<ChessPieceEntity>> ChessBoardActionProvider(LoggerType logger = LoggerType.Null)
             => new Mock<IBoardActionProvider<ChessPieceEntity>>();
-        public static Mock<IChessGameStateService> ChessGameStateService(LoggerType logger = LoggerType.Null)
-            => new Mock<IChessGameStateService>();
+        public static Mock<IPlayerStateService> ChessGameStateService(LoggerType logger = LoggerType.Null)
+            => new Mock<IPlayerStateService>();
 
 
 

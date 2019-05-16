@@ -23,7 +23,7 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "    K   "
                 );
-            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityProvider, ChessGameStateService, board.ToGameSetup());
+            var game = new ChessGame(NullLogger<ChessGame>.Instance, ChessBoardEngineProvider, ChessBoardEntityProvider, PlayerStateService, board.ToGameSetup());
 
             var blockedPieceLocation = "E5".ToBoardLocation();
 

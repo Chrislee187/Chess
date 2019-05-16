@@ -42,7 +42,7 @@ namespace chess.engine.Algebraic
 
         public static StandardAlgebraicNotation Parse(string notation)
         {
-            var an = new SanBuilder().BuildFrom(notation);
+            var an = new SanBuilder(ChessFactory.PlayerStateService(),ChessFactory.CheckDetectionService()).BuildFrom(notation);
 
             if (an.CastleMove == CastleSide.None && an.ToNotation() != notation)
             {
@@ -69,7 +69,7 @@ namespace chess.engine.Algebraic
 
         public static StandardAlgebraicNotation ParseFromGameMove(IBoardState<ChessPieceEntity> boardState, BoardMove move)
         {
-            return new SanBuilder().BuildFrom(boardState, move);
+            return new SanBuilder(ChessFactory.PlayerStateService(), ChessFactory.CheckDetectionService()).BuildFrom(boardState, move);
         }
         public StandardAlgebraicNotation(ChessPieceName piece,
             int? fromFileX, int? fromRankY, int toFileX, int toRankY,
@@ -86,6 +86,7 @@ namespace chess.engine.Algebraic
             MoveType = moveType;
             PromotionPiece = promotionPiece;
             InCheck = inCheck;
+            CastleMove = CastleSide.None;
         }
 
         private StandardAlgebraicNotation(CastleSide side)
@@ -93,10 +94,7 @@ namespace chess.engine.Algebraic
             Piece = ChessPieceName.King;
             CastleMove = side;
             FromFileX = King.StartPositionFor(Colours.White).X;
-
-            ToFileX = side == CastleSide.Queen
-                ? 3
-                : 7;
+            ToFileX = side == CastleSide.Queen ? 3 : 7;
         }
 
         public string ToNotation()
@@ -196,6 +194,14 @@ namespace chess.engine.Algebraic
         private class SanBuilder
         {
             private readonly SanTokenParser _tokenParser = new SanTokenParser();
+            private readonly IPlayerStateService _playerStateService;
+            private readonly ICheckDetectionService _checkDetectionService;
+
+            public SanBuilder(IPlayerStateService playerStateService, ICheckDetectionService checkDetectionService)
+            {
+                _playerStateService = playerStateService;
+                _checkDetectionService = checkDetectionService;
+            }
 
             private ChessPieceName? _piece;
             private ChessPieceName? _promotionPiece;
@@ -250,18 +256,14 @@ namespace chess.engine.Algebraic
                 }
 
                 ChessPieceName? promotionPiece = null;
-                if (move.ExtraData is ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData)
+                if (move.ExtraData is ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData data)
                 {
-                    var data = move.ExtraData as ChessPieceEntityProvider.ChessPieceEntityFactoryTypeExtraData;
                     promotionPiece = data.PieceName;
                 }
 
-                // TODO: Whether the move puts the enemy in check
-                
-                // Pullout DoeMoveLeaveUsInCheck() from ChessRefershAllPaths as seperate service and reuse here
-                var inCheck = false;
-
-
+                //NOTE: This seemingly innocuous line, just to add a '+' to the end of a string,
+                // causes the move to be played on a cloned board and all paths to be refreshed.
+                var inCheck = _checkDetectionService.DoesMoveCauseCheck(boardState, move);
 
                 return new StandardAlgebraicNotation(piece, fromFile, fromRank, toFile, toRank, move.ToChessCoords(), moveType, promotionPiece, inCheck );
             }
@@ -356,7 +358,7 @@ namespace chess.engine.Algebraic
                 {SanTokenTypes.PromoteDelimiter, (b, c) => { } },
                 {SanTokenTypes.Check, (b, c) => b.WithCheck(c)  }
             };
-
+            
             private void WithCheck(char c)
             {
                 _inCheck = true;
@@ -407,22 +409,14 @@ namespace chess.engine.Algebraic
             }
 
             private void WithTakeMove(char c) => _moveType = SanMoveTypes.Take;
-
             private void WithPiece(ChessPieceName c) => _piece = c;
-
             private void WithPromotionPiece(char c) => _promotionPiece = PieceNameMapper.FromChar(c);
-
             private void WithFirstFile(int tokenValue) => _firstFile = tokenValue;
-
             private void WithFirstRank(int tokenValue) => _firstRank = tokenValue;
-
             private void WithSecondFile(int tokenValue) => _secondFile = tokenValue;
-
             private void WithSecondRank(int tokenValue) => _secondRank = tokenValue;
-
             private static int ParseRankToken(char c) => int.Parse(c.ToString());
-
-            private static int ParseFileToken(char c) => c - 96; // TODO: assuming ascii 'a' is 97
+            private static int ParseFileToken(char c) => c - 96; // TODO: assuming ascii 'a' is (and always will be) 97, also assumes UK SAN for pieces identifiers
         }
     }
 
