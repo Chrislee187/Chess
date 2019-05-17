@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using board.engine;
+using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Algebraic;
 using chess.engine.Chess;
@@ -120,5 +122,8 @@ namespace chess.engine
         {
             return new SanTokenParser();
         }
+
+        public static LocatedItem<ChessPieceEntity> LocatedItem(BoardLocation at, ChessPieceName piece, Colours owner, Paths paths = null)
+        => new LocatedItem<ChessPieceEntity>(at, ChessPieceEntityFactory().Create(piece, owner), paths ?? new Paths());
     }
 }

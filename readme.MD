@@ -17,6 +17,7 @@ The "engine" currently consists of the following components;
 * .NET Core makes the TeamCity etc. setup much simpler, no more manually crafted `build.sh/.cmd/.ps1` for the most part
 * I still can't bring myself to move out of Visual Studio with R# as my IDE of choice, I think I've just been using them to long now. One day maybe:)
 * Azure publish. One click, very nice:) 
+* So... I've used and loved Linq for years, but it does create quite the rabbit hole sometimes.
 
 [link.swaggerui]: https://chess-web-api.azurewebsites.net/swagger/index.html
 [link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net
