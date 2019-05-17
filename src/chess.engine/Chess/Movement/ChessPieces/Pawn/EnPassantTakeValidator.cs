@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using board.engine;
+﻿using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
 using board.engine.Movement.Validators;
@@ -10,28 +8,9 @@ using chess.engine.Game;
 
 namespace chess.engine.Chess.Movement.ChessPieces.Pawn
 {
-    public class EnPassantTakeValidator : IMoveValidator<ChessPieceEntity, EnPassantTakeValidator.IBoardStateWrapper> 
+    public class EnPassantTakeValidator : IMoveValidator<EnPassantTakeValidator.IBoardStateWrapper> 
     {
         public static IBoardStateWrapper Wrap(IBoardState<ChessPieceEntity> boardState) => new BoardStateWrapper(boardState);
-
-
-        public bool ValidateMove(BoardMove move, IBoardState<ChessPieceEntity> boardState)
-        {
-            var normalTakeOk = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>()
-                .ValidateMove(move, boardState);
-            if (normalTakeOk) return true;
-
-            var piece = boardState.GetItems(move.From).Single().Item;
-
-            var passingPieceLocation = move.To.MoveBack(piece.Player);
-
-            if (boardState.IsEmpty(passingPieceLocation)) return false;
-            var passingPiece = boardState.GetItems(passingPieceLocation).Single().Item;
-            if (passingPiece.Player.Equals(piece.Player)) return false;
-            if (!passingPiece.Piece.Equals(ChessPieceName.Pawn)) return false;
-
-            return CheckPawnUsedDoubleMove(move.To);
-        }
 
         public bool ValidateMove(BoardMove move, IBoardStateWrapper wrapper)
         {
@@ -42,8 +21,6 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
             var entity = wrapper.GetFromEntity(move);
             if (entity == null) return false;
             var piece = entity.Item;
-
-            var passingLocation = move.To.MoveBack(piece.Player);
 
             var passedEntity = wrapper.GetPassedEntity(move, piece.Player);
             if (passedEntity == null) return false;

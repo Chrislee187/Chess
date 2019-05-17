@@ -1,24 +1,12 @@
-﻿using System;
-using System.Net.NetworkInformation;
-using board.engine.Board;
+﻿using board.engine.Board;
 
 namespace board.engine.Movement.Validators
 {
-    public class UpdatePieceValidator<TEntity> : IMoveValidator<TEntity, UpdatePieceValidator<TEntity>.IBoardStateWrapper> where TEntity : class, IBoardEntity
+    public class UpdatePieceValidator<TEntity>
+        : IMoveValidator<UpdatePieceValidator<TEntity>.IBoardStateWrapper>
+        where TEntity : class, IBoardEntity
     {
         public static IBoardStateWrapper Wrap(IBoardState<TEntity> boardState) => new BoardStateWrapper(boardState);
-
-        public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
-        {
-            throw new NotImplementedException();
-//            var piece = boardState.GetItem(move.From).Item;
-//
-//            var destinationIsValid = new DestinationIsEmptyOrContainsEnemyValidator<TEntity>().ValidateMove(move, boardState);
-//            
-//            return destinationIsValid;
-        }
-
-
 
         public bool ValidateMove(BoardMove move, IBoardStateWrapper wrapper)
         {
@@ -39,9 +27,12 @@ namespace board.engine.Movement.Validators
             DestinationIsEmptyOrContainsEnemyValidator<TEntity>.IBoardStateWrapper
                 GetDestinationIsEmptyOrContainsEnemyWrapper();
         }
+
         public class BoardStateWrapper : DefaultBoardStateWrapper<TEntity>, IBoardStateWrapper
         {
-            public BoardStateWrapper(IBoardState<TEntity> boardState) : base(boardState) { }
+            public BoardStateWrapper(IBoardState<TEntity> boardState) : base(boardState)
+            {
+            }
         }
     }
 }

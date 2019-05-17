@@ -1,10 +1,9 @@
-﻿using System;
-using board.engine.Board;
+﻿using board.engine.Board;
 
 namespace board.engine.Movement.Validators
 {
     public class DestinationContainsEnemyMoveValidator<TEntity>
-        : IMoveValidator<TEntity, DestinationContainsEnemyMoveValidator<TEntity>.IBoardStateWrapper>
+        : IMoveValidator<DestinationContainsEnemyMoveValidator<TEntity>.IBoardStateWrapper>
         where TEntity : class, IBoardEntity
     {
         public static IBoardStateWrapper Wrap(IBoardState<TEntity> boardState) => new BoardStateWrapper(boardState);
@@ -18,24 +17,6 @@ namespace board.engine.Movement.Validators
             if (destinationPiece == null) return false;
 
             return sourcePiece.Item.Owner != destinationPiece.Item.Owner;
-        }
-
-        public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
-        {
-            throw new NotImplementedException();
-//            IBoardStateWrapper wrapper = new BoardStateWrapper(boardState);
-//
-//            if (boardState.IsEmpty(move.From))
-//                return false; //throw new SystemException($"Piece missing at {move.From}");
-//            var sourcePiece = wrapper.GetFromEntity(move);
-//
-//            if (!boardState.IsEmpty(move.To))
-//            {
-//                var destinationPiece = wrapper.GetToEntity(move);
-//                return sourcePiece.Item.Owner != destinationPiece.Item.Owner;
-//            }
-//
-//            return false;
         }
 
         public interface IBoardStateWrapper

@@ -9,6 +9,7 @@ namespace chess.engine.tests
     public class FullGameParsingTests
     {
         [Test]
+        [Explicit("These are slow at the moment, only run the san one for smoke test purposes")]
         public void Should_play_the_wiki_game_with_coord_moves()
         {
             var game = ChessFactory.NewChessGame();
