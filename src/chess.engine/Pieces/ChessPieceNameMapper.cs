@@ -4,7 +4,7 @@ using chess.engine.Game;
 
 namespace chess.engine.Pieces
 {
-    public static class PieceNameMapper
+    public static class ChessPieceNameMapper
     {
         private static readonly IDictionary<char, ChessPieceName> PieceNames = new Dictionary<char, ChessPieceName>
         {

@@ -125,7 +125,7 @@ namespace chess.engine.SAN
             if (promotionPiece.HasValue)
             {
                 return
-                    $"{SanTokenParser.PromoteNotator.ToString()}{PieceNameMapper.ToChar(promotionPiece.Value, Colours.White)}";
+                    $"{SanTokenParser.PromoteNotator.ToString()}{ChessPieceNameMapper.ToChar(promotionPiece.Value, Colours.White)}";
             }
 
             return string.Empty;

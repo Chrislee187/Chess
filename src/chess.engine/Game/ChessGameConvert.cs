@@ -62,7 +62,7 @@ namespace chess.engine.Game
                 // TODO: Enpassant eligibility check and flag
             }
 
-            var textRepresentation = PieceNameMapper.ToChar(item.Item.Piece, item.Item.Player);
+            var textRepresentation = ChessPieceNameMapper.ToChar(item.Item.Piece, item.Item.Player);
             // TODO: Add enpassant check
             return textRepresentation;
         }
@@ -116,7 +116,7 @@ namespace chess.engine.Game
         private static ChessPieceEntity BuildEntity(char piece)
         {
             // TODO: Enpassant pawn check
-            var chessPieceName = PieceNameMapper.FromChar(piece);
+            var chessPieceName = ChessPieceNameMapper.FromChar(piece);
             var colour = char.IsUpper(piece) ? Colours.White : Colours.Black;
             var newPiece = ChessFactory.ChessPieceEntityFactory().Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {

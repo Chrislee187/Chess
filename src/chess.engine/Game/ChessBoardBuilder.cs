@@ -156,7 +156,7 @@ namespace chess.engine.Game
                         if (_chessPieceEntityFactory.ValidPieces.Contains(chr.ToString().ToUpper()))
                         {
                             var entity = _chessPieceEntityFactory.Create(
-                                PieceNameMapper.FromChar(chr),
+                                ChessPieceNameMapper.FromChar(chr),
                                 char.IsUpper(chr) ? Colours.White : Colours.Black
                             );
 

@@ -121,7 +121,7 @@ namespace chess.engine.SAN
 
             if (firstCharTokenType == SanTokenTypes.Piece)
             {
-                WithPiece(PieceNameMapper.FromChar(firstChar));
+                WithPiece(ChessPieceNameMapper.FromChar(firstChar));
                 tokens = notation.Substring(1);
             }
             else if (firstCharTokenType != SanTokenTypes.File &&
@@ -230,7 +230,7 @@ namespace chess.engine.SAN
 
         private void WithTakeMove(char c) => _moveType = SanMoveTypes.Take;
         private void WithPiece(ChessPieceName c) => _piece = c;
-        private void WithPromotionPiece(char c) => _promotionPiece = PieceNameMapper.FromChar(c);
+        private void WithPromotionPiece(char c) => _promotionPiece = ChessPieceNameMapper.FromChar(c);
         private void WithFirstFile(int tokenValue) => _firstFile = tokenValue;
         private void WithFirstRank(int tokenValue) => _firstRank = tokenValue;
         private void WithSecondFile(int tokenValue) => _secondFile = tokenValue;
