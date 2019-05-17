@@ -2,7 +2,7 @@
 using chess.engine.Game;
 using NUnit.Framework;
 
-namespace chess.engine.tests
+namespace chess.engine.tests.Game
 {
     [TestFixture]
     public class FullGameParsingTests

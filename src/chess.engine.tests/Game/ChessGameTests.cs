@@ -1,8 +1,7 @@
 ﻿using chess.engine.Game;
-using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
-namespace chess.engine.tests
+namespace chess.engine.tests.Game
 {
     [TestFixture]
     public class ChessGameTests

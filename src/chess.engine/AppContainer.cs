@@ -16,16 +16,17 @@ namespace chess.engine
 {
     public static class AppContainer
     {
-        private static ServiceProvider ServiceProvider { get; }
+        public static readonly ServiceCollection ServiceCollection;
+        public static ServiceProvider ServiceProvider { get; }
 
         static AppContainer()
         {
-            var serviceCollection = new ServiceCollection();
-            var config = ConfigureConfig(serviceCollection);
-            ConfigureLogging(serviceCollection, config);
-            AddChessDependencies(serviceCollection);
+            ServiceCollection = new ServiceCollection();
+            var config = ConfigureConfig(ServiceCollection);
+            ConfigureLogging(ServiceCollection, config);
+            AddChessDependencies(ServiceCollection);
 
-            ServiceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = ServiceCollection.BuildServiceProvider();
         }
 
         public static T GetService<T>()
@@ -63,15 +64,13 @@ namespace chess.engine
             services.AddTransient<IPathsValidator<ChessPieceEntity>, ChessPathsValidator>();
             services.AddTransient<IPathValidator<ChessPieceEntity>,ChessPathValidator>();
             services.AddTransient<IMoveValidationProvider<ChessPieceEntity>, ChessMoveValidationProvider>();
-
-            services.AddTransient<IBoardEngineProvider<ChessPieceEntity>,ChessBoardEngineProvider>();
             services.AddTransient<IBoardActionProvider<ChessPieceEntity>,ChessBoardActionProvider>();
             services.AddTransient<IBoardEntityFactory<ChessPieceEntity>,ChessPieceEntityFactory>();
             services.AddTransient<IPlayerStateService,PlayerStateService>();
             services.AddTransient<ICheckDetectionService,CheckDetectionService>();
             services.AddTransient<IBoardMoveService<ChessPieceEntity>,BoardMoveService<ChessPieceEntity>>();
-            services.AddTransient<ISanTokenParser, SanTokenParser>();
-            services.AddTransient<ISanBuilder, SanBuilder>();
+
+            services.AddTransient<IBoardEngineProvider<ChessPieceEntity>,ChessBoardEngineProvider>();
         }
     }
 }

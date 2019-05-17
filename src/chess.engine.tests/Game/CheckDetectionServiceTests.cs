@@ -6,7 +6,7 @@ using chess.engine.Game;
 using Moq;
 using NUnit.Framework;
 
-namespace chess.engine.tests
+namespace chess.engine.tests.Game
 {
     [TestFixture]
     public class CheckDetectionServiceTests
