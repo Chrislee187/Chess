@@ -3,11 +3,10 @@ using System.Linq;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine;
-using chess.engine.Algebraic;
-using chess.engine.Chess;
-using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
+using chess.engine.SAN;
 using Newtonsoft.Json;
 // ReSharper disable MemberCanBePrivate.Global
 

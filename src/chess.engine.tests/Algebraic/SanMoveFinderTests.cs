@@ -1,6 +1,6 @@
-﻿using chess.engine.Algebraic;
-using chess.engine.Extensions;
+﻿using chess.engine.Extensions;
 using chess.engine.Game;
+using chess.engine.SAN;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Algebraic

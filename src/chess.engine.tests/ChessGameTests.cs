@@ -1,6 +1,4 @@
-﻿using chess.engine.Chess;
-using chess.engine.Chess.Entities;
-using chess.engine.Game;
+﻿using chess.engine.Game;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 

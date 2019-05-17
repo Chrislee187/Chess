@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using board.engine;
-using chess.engine.Algebraic;
 using chess.engine.Game;
+using chess.engine.SAN;
 
 namespace chess.engine.Extensions
 {

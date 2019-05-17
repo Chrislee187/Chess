@@ -1,6 +1,4 @@
-﻿using chess.engine.Chess;
-
-namespace chess.engine.Game
+﻿namespace chess.engine.Game
 {
     public static class ChessGameExtensions
     {

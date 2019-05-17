@@ -1,7 +1,7 @@
 ﻿using System;
 using board.engine.Actions;
 using board.engine.Movement;
-using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement

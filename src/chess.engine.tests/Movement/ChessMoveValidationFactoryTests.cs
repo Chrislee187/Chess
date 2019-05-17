@@ -1,6 +1,6 @@
 ﻿using System;
 using board.engine.Movement;
-using chess.engine.Chess.Movement;
+using chess.engine.Movement;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement

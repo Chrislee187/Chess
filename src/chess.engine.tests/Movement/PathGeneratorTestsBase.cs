@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using board.engine.Board;
 using board.engine.Movement;
-using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using Microsoft.Extensions.Logging;
 using Moq;

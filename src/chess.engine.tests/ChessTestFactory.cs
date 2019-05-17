@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using board.engine;
 using board.engine.Actions;
-using chess.engine.Chess;
-using chess.engine.Chess.Actions;
-using chess.engine.Chess.Entities;
-using chess.engine.Chess.Movement;
+using chess.engine.Entities;
 using chess.engine.Game;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;

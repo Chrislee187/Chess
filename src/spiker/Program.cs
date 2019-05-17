@@ -4,8 +4,7 @@ using System.Text;
 using board.engine;
 using board.engine.Board;
 using chess.engine;
-using chess.engine.Chess;
-using chess.engine.Chess.Entities;
+using chess.engine.Entities;
 using chess.engine.Game;
 using Microsoft.Extensions.Logging;
 

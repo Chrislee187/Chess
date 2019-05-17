@@ -1,4 +1,5 @@
 ﻿using System;
+using chess.engine.Game;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Serialisation

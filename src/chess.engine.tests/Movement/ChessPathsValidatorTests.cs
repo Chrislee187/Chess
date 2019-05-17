@@ -1,4 +1,5 @@
 ﻿using chess.engine.Extensions;
+using chess.engine.Game;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
