@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using board.engine;
 using board.engine.Actions;
@@ -11,43 +12,45 @@ using chess.engine.Game;
 
 namespace chess.engine.Chess.Movement.ChessPieces.King
 {
-    public class KingCastleValidator : IMoveValidator<ChessPieceEntity> 
+    public class KingCastleValidator : IMoveValidator<ChessPieceEntity, KingCastleValidator.IBoardStateWrapper> 
     {
+        public static IBoardStateWrapper Wrap(IBoardState<ChessPieceEntity> boardState) => new BoardStateWrapper(boardState);
 
         public bool ValidateMove(BoardMove move, IBoardState<ChessPieceEntity> boardState)
         {
-            var king = boardState.GetItem(move.From).Item;
-            var kingIsValid = king.Piece.Equals(ChessPieceName.King); // && !king.MoveHistory.Any()
-            if (!kingIsValid) return false;
-
-            var rookLoc = move.MoveType == (int) ChessMoveTypes.CastleKingSide
-                ? $"H{move.From.Y}".ToBoardLocation()
-                : $"A{move.From.Y}".ToBoardLocation();
-
-            var rook = boardState.GetItem(rookLoc);
-
-            if (rook == null) return false;
-
-            var rookIsValid = rook.Item.Piece.Equals(ChessPieceName.Rook)
-                              && rook.Item.Player == king.Player; // && !rook.MoveHistory.Any()
-
-            if (!rookIsValid) return false;
-
-            var pathBetween = CalcPathBetweenKingAndCastle(move, king);
-
-            var destinationIsEmptyValidator = new DestinationIsEmptyValidator<ChessPieceEntity>();
-            var pathIsEmpty = pathBetween.All(loc 
-                => destinationIsEmptyValidator.ValidateMove(
-                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly), 
-                    boardState));
-
-            var destinationNotUnderAttackValidator = new DestinationNotUnderAttackValidator<ChessPieceEntity>();
-            var pathNotUnderAttack = pathBetween.All(loc 
-                => destinationNotUnderAttackValidator.ValidateMove(
-                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly),
-                    boardState));
-            
-            return pathIsEmpty && pathNotUnderAttack;
+            throw new NotImplementedException();
+//            var king = boardState.GetItem(move.From).Item;
+//            var kingIsValid = king.Piece.Equals(ChessPieceName.King); // && !king.MoveHistory.Any()
+//            if (!kingIsValid) return false;
+//
+//            var rookLoc = move.MoveType == (int) ChessMoveTypes.CastleKingSide
+//                ? $"H{move.From.Y}".ToBoardLocation()
+//                : $"A{move.From.Y}".ToBoardLocation();
+//
+//            var rook = boardState.GetItem(rookLoc);
+//
+//            if (rook == null) return false;
+//
+//            var rookIsValid = rook.Item.Piece.Equals(ChessPieceName.Rook)
+//                              && rook.Item.Player == king.Player; // && !rook.MoveHistory.Any()
+//
+//            if (!rookIsValid) return false;
+//
+//            var pathBetween = CalcPathBetweenKingAndCastle(move, king);
+//
+//            var destinationIsEmptyValidator = new DestinationIsEmptyValidator<ChessPieceEntity>();
+//            var pathIsEmpty = pathBetween.All(loc 
+//                => destinationIsEmptyValidator.ValidateMove(
+//                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly), 
+//                    boardState));
+//
+//            var destinationNotUnderAttackValidator = new DestinationNotUnderAttackValidator<ChessPieceEntity>();
+//            var pathNotUnderAttack = pathBetween.All(loc 
+//                => destinationNotUnderAttackValidator.ValidateMove(
+//                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly),
+//                    boardState));
+//            
+//            return pathIsEmpty && pathNotUnderAttack;
         }
 
         private static List<BoardLocation> CalcPathBetweenKingAndCastle(BoardMove move, ChessPieceEntity king)
@@ -90,6 +93,70 @@ namespace chess.engine.Chess.Movement.ChessPieces.King
             // TODO: Need to check move count/history to confirm that the pawn we passed did it's double move last turn
             // ************************
             return true;
+        }
+
+
+
+        public bool ValidateMove(BoardMove move, IBoardStateWrapper wrapper)
+        {
+            var kingEntity = wrapper.GetFromEntity(move);
+            if (kingEntity == null) return false;
+
+            var king = kingEntity.Item;
+            var kingIsValid = king.Piece.Equals(ChessPieceName.King); // && !king.MoveHistory.Any()
+            if (!kingIsValid) return false;
+
+            var rookLoc = move.MoveType == (int)ChessMoveTypes.CastleKingSide
+                ? $"H{move.From.Y}".ToBoardLocation()
+                : $"A{move.From.Y}".ToBoardLocation();
+
+            var rook = wrapper.GetRook(move);
+            if (rook == null) return false;
+
+            var rookIsValid = rook.Item.Is(king.Player, ChessPieceName.Rook); // && !rook.MoveHistory.Any()
+
+            if (!rookIsValid) return false;
+
+            var pathBetween = CalcPathBetweenKingAndCastle(move, king);
+
+            var destinationIsEmptyValidator = new DestinationIsEmptyValidator<ChessPieceEntity>();
+            var pathIsEmpty = pathBetween.All(loc
+                => destinationIsEmptyValidator.ValidateMove(
+                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly),
+                    wrapper.GetDestinationIsEmptyWrapper()));
+
+            var destinationNotUnderAttackValidator = new DestinationNotUnderAttackValidator<ChessPieceEntity>();
+            var pathNotUnderAttack = pathBetween.All(loc
+                => destinationNotUnderAttackValidator.ValidateMove(
+                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly),
+                    wrapper.GetDestinationNotUnderAttackWrapper()));
+
+            return pathIsEmpty && pathNotUnderAttack;
+        }
+
+        public interface IBoardStateWrapper
+        {
+            LocatedItem<ChessPieceEntity> GetFromEntity(BoardMove move);
+            LocatedItem<ChessPieceEntity> GetRook(BoardMove location);
+
+            DestinationIsEmptyValidator<ChessPieceEntity>.IBoardStateWrapper GetDestinationIsEmptyWrapper();
+            DestinationNotUnderAttackValidator<ChessPieceEntity>.IBoardStateWrapper GetDestinationNotUnderAttackWrapper();
+        }
+
+        public class BoardStateWrapper : DefaultBoardStateWrapper<ChessPieceEntity>, IBoardStateWrapper
+        {
+            public BoardStateWrapper(IBoardState<ChessPieceEntity> boardState) : base(boardState)
+            {
+
+            }
+
+            public LocatedItem<ChessPieceEntity> GetRook(BoardMove move)
+            {
+                var rookLoc = move.MoveType == (int)ChessMoveTypes.CastleKingSide
+                    ? $"H{move.From.Y}".ToBoardLocation()
+                    : $"A{move.From.Y}".ToBoardLocation();
+                return BoardState.GetItem(rookLoc);
+            }
         }
     }
 }

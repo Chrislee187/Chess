@@ -41,7 +41,7 @@ namespace chess.engine.tests.Chess.Movement.Pawn
         {
             BoardLocation to = "B7".ToBoardLocation();
             var promote = new BoardMove("A6".ToBoardLocation(), to, (int)DefaultActions.TakeOnly);
-            Assert.True(_validator.ValidateMove(promote, _boardState));
+            Assert.True(_validator.ValidateMove(promote, EnPassantTakeValidator.Wrap(_boardState)));
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace chess.engine.tests.Chess.Movement.Pawn
             _boardState.Remove("B6".ToBoardLocation());
             BoardLocation to = "B7".ToBoardLocation();
             var promote = new BoardMove("A6".ToBoardLocation(), to, (int) DefaultActions.TakeOnly);
-            Assert.False(_validator.ValidateMove(promote, _boardState));
+            Assert.False(_validator.ValidateMove(promote, EnPassantTakeValidator.Wrap(_boardState)));
         }
 
         [TestCase("D6", "E7")]
@@ -59,7 +59,7 @@ namespace chess.engine.tests.Chess.Movement.Pawn
         {
             BoardLocation to1 = to.ToBoardLocation();
             var promote = new BoardMove(@from.ToBoardLocation(), to1, (int) DefaultActions.TakeOnly);
-            Assert.False(_validator.ValidateMove(promote, _boardState));
+            Assert.False(_validator.ValidateMove(promote, EnPassantTakeValidator.Wrap(_boardState)));
         }
 
 

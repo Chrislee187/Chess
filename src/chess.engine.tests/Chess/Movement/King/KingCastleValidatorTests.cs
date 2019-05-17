@@ -1,11 +1,13 @@
 ﻿using System;
 using board.engine;
+using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Chess;
 using chess.engine.Chess.Entities;
 using chess.engine.Chess.Movement.ChessPieces.King;
 using chess.engine.Extensions;
 using chess.engine.Game;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Chess.Movement.King
@@ -24,6 +26,7 @@ namespace chess.engine.tests.Chess.Movement.King
         {
             _validator = new KingCastleValidator();
         }
+        public KingCastleValidator.IBoardStateWrapper Wrap(IBoardState<ChessPieceEntity> boardState) => new KingCastleValidator.BoardStateWrapper(boardState);
         [Test]
         public void ValidateMove_fails_unless_king_is_in_starting_position()
         {
@@ -39,8 +42,9 @@ namespace chess.engine.tests.Chess.Movement.King
                 );
 
             var boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
-            Assert.True(_validator.ValidateMove(_whiteInvalidKingCastle, boardState), "Invalid castle move allowed");
-            Assert.True(_validator.ValidateMove(_whiteInvalidQueenCastle, boardState), "Invalid castle move allowed");
+            var wrap = Wrap(boardState);
+            Assert.True(_validator.ValidateMove(_whiteInvalidKingCastle, wrap), "Invalid castle move allowed");
+            Assert.True(_validator.ValidateMove(_whiteInvalidQueenCastle, wrap), "Invalid castle move allowed");
         }
         [Test]
         public void ValidateMove_fails_unless_rook_is_in_starting_position()
@@ -57,8 +61,9 @@ namespace chess.engine.tests.Chess.Movement.King
                 );
 
             var boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
-            Assert.False(_validator.ValidateMove(_whiteQueenSideCastle, boardState), "Invalid queen side castle move allowed");
-            Assert.False(_validator.ValidateMove(_whiteKingSideCastle, boardState), "Invalid king side castle move allowed");
+            var wrap = Wrap(boardState);
+            Assert.False(_validator.ValidateMove(_whiteQueenSideCastle, wrap), "Invalid queen side castle move allowed");
+            Assert.False(_validator.ValidateMove(_whiteKingSideCastle, wrap), "Invalid king side castle move allowed");
         }
         [Test]
         public void ValidateMove_fails_if_no_clear_path()
@@ -75,7 +80,8 @@ namespace chess.engine.tests.Chess.Movement.King
                 );
 
             var boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
-            Assert.False(_validator.ValidateMove(_whiteKingSideCastle, boardState), "Invalid king side castle move allowed");
+            var wrap = Wrap(boardState);
+            Assert.False(_validator.ValidateMove(_whiteKingSideCastle, wrap), "Invalid king side castle move allowed");
         }
         [Test]
         public void ValidateMove_fails_if_path_under_attack()
@@ -92,8 +98,8 @@ namespace chess.engine.tests.Chess.Movement.King
                 );
 
             var boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
-
-            Assert.False(_validator.ValidateMove(_whiteKingSideCastle, boardState), "Invalid king side castle move allowed");
+            var wrap = Wrap(boardState);
+            Assert.False(_validator.ValidateMove(_whiteKingSideCastle, wrap), "Invalid king side castle move allowed");
         }
 
         [Test]

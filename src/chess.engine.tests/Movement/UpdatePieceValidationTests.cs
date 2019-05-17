@@ -44,7 +44,7 @@ namespace chess.engine.tests.Movement
                 Owner = 0,
                 PieceName = ChessPieceName.Queen
             });
-            Assert.True(validator.ValidateMove(promote, _boardState));
+            Assert.True(validator.ValidateMove(promote, UpdatePieceValidator<ChessPieceEntity>.Wrap(_boardState)));
         }
     }
 }

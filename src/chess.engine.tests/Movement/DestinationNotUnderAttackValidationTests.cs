@@ -38,21 +38,21 @@ namespace chess.engine.tests.Movement
         public void Should_return_false_for_square_under_enemy_attack()
         {
             var containsEnemy = BoardMove.Create("E1".ToBoardLocation(), "D1".ToBoardLocation(), (int) DefaultActions.MoveOrTake);
-            Assert.False(_validator.ValidateMove(containsEnemy, _boardState));
+            Assert.False(_validator.ValidateMove(containsEnemy, DestinationNotUnderAttackValidator<ChessPieceEntity>.Wrap(_boardState)));
 
         }
         [Test]
         public void Should_return_true_for_square_under_friendly_attack()
         {
             var noEnemy = BoardMove.Create("E1".ToBoardLocation(), "F1".ToBoardLocation(), (int) DefaultActions.MoveOrTake);
-            Assert.True(_validator.ValidateMove(noEnemy, _boardState));
+            Assert.True(_validator.ValidateMove(noEnemy, DestinationNotUnderAttackValidator<ChessPieceEntity>.Wrap(_boardState)));
 
         }
         [Test]
         public void Should_return_true_for_square_under_no_attack()
         {
             var noEnemy = BoardMove.Create("E1".ToBoardLocation(), "E2".ToBoardLocation(), (int) DefaultActions.MoveOrTake);
-            Assert.True(_validator.ValidateMove(noEnemy, _boardState));
+            Assert.True(_validator.ValidateMove(noEnemy, DestinationNotUnderAttackValidator<ChessPieceEntity>.Wrap(_boardState)));
 
         }
     }

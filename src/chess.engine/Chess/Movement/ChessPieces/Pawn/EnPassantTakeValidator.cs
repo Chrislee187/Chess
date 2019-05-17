@@ -1,19 +1,24 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
 using board.engine.Movement.Validators;
 using chess.engine.Chess.Entities;
 using chess.engine.Chess.Movement.ChessPieces.King;
+using chess.engine.Game;
 
 namespace chess.engine.Chess.Movement.ChessPieces.Pawn
 {
-    public class EnPassantTakeValidator : IMoveValidator<ChessPieceEntity> 
+    public class EnPassantTakeValidator : IMoveValidator<ChessPieceEntity, EnPassantTakeValidator.IBoardStateWrapper> 
     {
+        public static IBoardStateWrapper Wrap(IBoardState<ChessPieceEntity> boardState) => new BoardStateWrapper(boardState);
+
 
         public bool ValidateMove(BoardMove move, IBoardState<ChessPieceEntity> boardState)
         {
-            var normalTakeOk = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>().ValidateMove(move, boardState);
+            var normalTakeOk = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>()
+                .ValidateMove(move, boardState);
             if (normalTakeOk) return true;
 
             var piece = boardState.GetItems(move.From).Single().Item;
@@ -28,6 +33,26 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
             return CheckPawnUsedDoubleMove(move.To);
         }
 
+        public bool ValidateMove(BoardMove move, IBoardStateWrapper wrapper)
+        {
+            var normalTakeOk = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>()
+                .ValidateMove(move, wrapper.GetDestinationContainsEnemyMoveWrapper());
+            if (normalTakeOk) return true;
+
+            var entity = wrapper.GetFromEntity(move);
+            if (entity == null) return false;
+            var piece = entity.Item;
+
+            var passingLocation = move.To.MoveBack(piece.Player);
+
+            var passedEntity = wrapper.GetPassedEntity(move, piece.Player);
+            if (passedEntity == null) return false;
+            
+            if (passedEntity.Item.Is(piece.Player)) return false;
+            if (!passedEntity.Item.Is(ChessPieceName.Pawn)) return false;
+
+            return CheckPawnUsedDoubleMove(move.To);
+        }
 
         private bool CheckPawnUsedDoubleMove(BoardLocation moveTo)
         {
@@ -36,39 +61,32 @@ namespace chess.engine.Chess.Movement.ChessPieces.Pawn
             // ************************
             return true;
         }
-    }
 
-    public class ChessMoveValidators : MoveValidationProvider<ChessPieceEntity>
-    {
-        public ChessMoveValidators()
+
+        public interface IBoardStateWrapper
         {
-            Validators.Add((int) ChessMoveTypes.KingMove, new BoardMovePredicate<ChessPieceEntity>[]
-            {
-                (move, boardState) =>
-                    new DestinationIsEmptyOrContainsEnemyValidator<ChessPieceEntity>().ValidateMove(move, boardState),
-                (move, boardState) =>
-                    new DestinationNotUnderAttackValidator<ChessPieceEntity>().ValidateMove(move, boardState)
-            });
+            DestinationContainsEnemyMoveValidator<ChessPieceEntity>.IBoardStateWrapper
+                GetDestinationContainsEnemyMoveWrapper();
 
-            Validators.Add(
-                (int) ChessMoveTypes.TakeEnPassant, new BoardMovePredicate<ChessPieceEntity>[]
-                {
-                    (move, boardState)
-                        => new EnPassantTakeValidator().ValidateMove(move, boardState)
-                });
-            Validators.Add(
-                (int) ChessMoveTypes.CastleKingSide, new BoardMovePredicate<ChessPieceEntity>[]
-                {
-                    (move, boardState)
-                        => new KingCastleValidator().ValidateMove(move, boardState)
-                });
-            Validators.Add(
-                (int) ChessMoveTypes.CastleQueenSide, new BoardMovePredicate<ChessPieceEntity>[]
-                {
-                    (move, boardState)
-                        => new KingCastleValidator().ValidateMove(move, boardState)
-                });
+            LocatedItem<ChessPieceEntity> GetFromEntity(BoardMove move);
+
+            LocatedItem<ChessPieceEntity> GetPassedEntity(BoardMove move, Colours colour);
+        }
+
+        public class BoardStateWrapper : DefaultBoardStateWrapper<ChessPieceEntity>, IBoardStateWrapper
+        {
+            public BoardStateWrapper(IBoardState<ChessPieceEntity> boardState) : base(boardState)
+            {
+            }
+
+            public LocatedItem<ChessPieceEntity> GetPassedEntity(BoardMove move, Colours colour)
+            {
+                var passingPieceLocation = move.To.MoveBack(colour);
+
+                return passingPieceLocation == null 
+                    ? null 
+                    : BoardState.GetItem(passingPieceLocation);
+            }
         }
     }
-
 }

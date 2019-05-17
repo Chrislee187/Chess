@@ -1,12 +1,43 @@
-﻿using board.engine.Board;
+﻿using System;
+using board.engine.Board;
 
 namespace board.engine.Movement.Validators
 {
-    public class DestinationIsEmptyOrContainsEnemyValidator<TEntity> : IMoveValidator<TEntity> where TEntity : class, IBoardEntity
+    public class DestinationIsEmptyOrContainsEnemyValidator<TEntity> 
+        : IMoveValidator<TEntity, DestinationIsEmptyOrContainsEnemyValidator<TEntity>.IBoardStateWrapper> 
+        where TEntity : class, IBoardEntity
     {
-        public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
-            => new DestinationIsEmptyValidator<TEntity>().ValidateMove(move, boardState) 
-               || new DestinationContainsEnemyMoveValidator<TEntity>().ValidateMove(move, boardState);
+        public static IBoardStateWrapper Wrap(IBoardState<TEntity> boardState) => new BoardStateWrapper(boardState);
 
+        public bool ValidateMove(BoardMove move, IBoardState<TEntity> boardState)
+        {
+            throw new NotImplementedException();
+//            var wrap1 = DestinationIsEmptyValidator<TEntity>.Wrap(boardState);
+//            var wrap2 = DestinationContainsEnemyMoveValidator<TEntity>.Wrap(boardState);
+//
+//            return new DestinationIsEmptyValidator<TEntity>().ValidateMove(move, wrap1)
+//                   || new DestinationContainsEnemyMoveValidator<TEntity>().ValidateMove(move, wrap2);
+        }
+
+        public bool ValidateMove(BoardMove move, IBoardStateWrapper wrapper)
+        {
+            return new DestinationIsEmptyValidator<TEntity>().ValidateMove(move, wrapper.GetDestinationIsEmptyWrapper())
+                   || new DestinationContainsEnemyMoveValidator<TEntity>().ValidateMove(move, wrapper.GetDestinationContainsEnemyMoveWrapper());
+        }
+
+        public interface IBoardStateWrapper
+        {
+            DestinationIsEmptyValidator<TEntity>.IBoardStateWrapper
+                GetDestinationIsEmptyWrapper();
+            DestinationContainsEnemyMoveValidator<TEntity>.IBoardStateWrapper
+                GetDestinationContainsEnemyMoveWrapper();
+        }
+
+        public class BoardStateWrapper : DefaultBoardStateWrapper<TEntity>, IBoardStateWrapper
+        {
+            public BoardStateWrapper(IBoardState<TEntity> boardState) : base(boardState)
+            {
+            }
+        }
     }
 }

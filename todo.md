@@ -1,8 +1,9 @@
 # TODOS
 * Basic web integration test, ensure index.html exists and contains a chessboard and moves
-* Create a board.engine.tests.utils project contain for stuff like the builders.
+* Create a chess.engine.tests.utils project contain for stuff like the builders. Will be need by the other high-level tests that are planned (.integration.tests for the API and .feature.tests for the web pages)
+* Create feature and integration tests assemblies
 * PGN file reader to validate game engine against LOTS of games
-* Was hoping to avoid it but looks like will need Facade patterns around BoardState object acces to allow better testing, i.e. Check detection code is currently using full boards to test small units of logic.
+* Was hoping to avoid it but looks like will need some sort of simple facade wrappers around the BoardState object for its interactions with validators and actions to allow better testing, they currently need a full create boardstate to test with.
 * proper error responses for invalid boards, moves etc. Just see a useless page on production boxes, drive out with the integration tests I still need to do.
 * Integration test library for the webapi
 * Split board.engine tests from chess.engine.tests

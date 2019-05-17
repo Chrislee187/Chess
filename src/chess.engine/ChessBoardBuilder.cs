@@ -131,19 +131,19 @@ namespace chess.engine
 
         public IBoardSetup<ChessPieceEntity> ToGameSetup()
         {
-            return new EasyBoardBuilderCustomBoardSetup(_board);
+            return new CustomChessBoardSetup(_board);
         }
 
         public IBoardState<ChessPieceEntity> ToBoardState()
         {
             return ChessFactory.CustomChessGame(ToGameSetup()).BoardState;
         }
-        private class EasyBoardBuilderCustomBoardSetup : IBoardSetup<ChessPieceEntity>
+        private class CustomChessBoardSetup : IBoardSetup<ChessPieceEntity>
         {
-            private char[,] _board;
+            private readonly char[,] _board;
             private readonly ChessPieceEntityFactory _chessPieceEntityFactory = ChessFactory.ChessPieceEntityFactory();
 
-            public EasyBoardBuilderCustomBoardSetup(char[,] board)
+            public CustomChessBoardSetup(char[,] board)
             {
                 _board = board;
             }

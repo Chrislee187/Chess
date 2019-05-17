@@ -10,7 +10,6 @@ namespace board.engine
     {
         private readonly IBoardMoveService<TEntity> _boardMoveService;
         public readonly IBoardState<TEntity> BoardState;
-        private readonly IBoardActionProvider<TEntity> _boardActionProvider;
 
         private readonly IBoardSetup<TEntity> _boardSetup;
         private readonly IRefreshAllPaths<TEntity> _refreshAllPaths;

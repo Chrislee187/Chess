@@ -8,6 +8,9 @@ using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
 {
+
+    // TODO: Refactory Chess specific references out of this, this is default validation
+    // Tidy up naming around default actions/validations to better indicate the connection.
     [TestFixture]
     public class DestinationContainsEnemyValidationTests
     {
@@ -35,10 +38,10 @@ namespace chess.engine.tests.Movement
         public void Should_return_true_for_valid_take()
         {
             var validator = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>();
-
+            
             var containsEnemy = BoardMove.Create("A1".ToBoardLocation(), "A8".ToBoardLocation(),
                 (int) DefaultActions.MoveOrTake);
-            Assert.True(validator.ValidateMove(containsEnemy, _boardState));
+            Assert.True(validator.ValidateMove(containsEnemy, DestinationContainsEnemyMoveValidator<ChessPieceEntity>.Wrap(_boardState)));
         }
 
         [Test]
@@ -48,7 +51,7 @@ namespace chess.engine.tests.Movement
 
             var noEnemy = BoardMove.Create("E8".ToBoardLocation(), "G8".ToBoardLocation(),
                 (int) DefaultActions.MoveOrTake);
-            Assert.False(validator.ValidateMove(noEnemy, _boardState));
+            Assert.False(validator.ValidateMove(noEnemy, DestinationContainsEnemyMoveValidator<ChessPieceEntity>.Wrap(_boardState)));
         }
     }
 }
