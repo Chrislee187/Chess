@@ -5,8 +5,9 @@ My "Chess Engine" has been through several iterations since I first started thin
 The "engine" currently consists of the following components;
 
 * The [board.engine][link.board.engine] which contains core mechanics required to manage pieces on a chess board.
+* The [board.engine.tests][link.board.engine.tests] tests for core board mechanics.
 * The [chess.engine][link.chess.engine] which contains the mechanics specific to the game of chess.
-* The [chess.engine.tests][link.chess.engine.tests] which contains all the tests, needs to be split up a bit.
+* The [chess.engine.tests][link.chess.engine.tests] tests for chess specific mechanics
 * The [chess.webapi][link.chess.webapi] a simple, REST like inteface which can be used to generate boards, move pieces, and indeed play a simple game of chess (against another human)
 * [Spiker][link.Spiker] a simple console application which I use to quickly test out ideas that don't really work via spike tests, a proper console chess player application will be coming shortly.
 
@@ -28,4 +29,5 @@ The "engine" currently consists of the following components;
 [link.chess.engine]: /src/chess.engine
 [link.chess.webapi]: /src/chess.webapi
 [link.chess.engine.tests]: /src/chess.engine.tests
+[link.board.engine.tests]: /src/board.engine.tests
 

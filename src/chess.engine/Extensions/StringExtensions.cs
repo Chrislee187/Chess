@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using board.engine;
 using chess.engine.Game;
 using chess.engine.SAN;
@@ -34,6 +35,22 @@ namespace chess.engine.Extensions
         {
             return StandardAlgebraicNotation.Parse(s);
         }
+        public static Stream ToStream(this string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+                writer.Write(s);
+                writer.Flush();
+                stream.Position = 0;
+            return stream;
+        }
 
+
+        public static int ToInt(this string text)
+        {
+            int temp;
+            int.TryParse(text, out temp);
+            return temp;
+        }
     }
 }
