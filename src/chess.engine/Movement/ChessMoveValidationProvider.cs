@@ -1,8 +1,8 @@
 ﻿using board.engine.Movement;
 using board.engine.Movement.Validators;
 using chess.engine.Entities;
-using chess.engine.Movement.ChessPieces.King;
-using chess.engine.Movement.ChessPieces.Pawn;
+using chess.engine.Movement.King;
+using chess.engine.Movement.Pawn;
 
 namespace chess.engine.Movement
 {

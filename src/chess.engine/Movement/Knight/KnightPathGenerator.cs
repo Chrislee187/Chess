@@ -3,7 +3,7 @@ using board.engine.Actions;
 using board.engine.Movement;
 using chess.engine.Game;
 
-namespace chess.engine.Movement.ChessPieces.Knight
+namespace chess.engine.Movement.Knight
 {
     public class KnightPathGenerator : IPathGenerator
     {

@@ -4,7 +4,7 @@ using board.engine.Movement;
 using chess.engine.Entities;
 using chess.engine.Game;
 
-namespace chess.engine.Movement.ChessPieces.Pawn
+namespace chess.engine.Movement.Pawn
 {
     public class PawnRightTakePathGenerator : IPathGenerator
     {

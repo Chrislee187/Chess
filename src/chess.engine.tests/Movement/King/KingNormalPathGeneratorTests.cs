@@ -2,7 +2,7 @@ using System.Linq;
 using board.engine.Movement;
 using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement.ChessPieces.King;
+using chess.engine.Movement.King;
 using chess.engine.tests.Builders;
 using NUnit.Framework;
 

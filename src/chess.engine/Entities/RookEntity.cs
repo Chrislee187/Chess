@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using board.engine.Movement;
 using chess.engine.Game;
-using chess.engine.Movement.ChessPieces.Rook;
+using chess.engine.Movement.Rook;
 
 namespace chess.engine.Entities
 {

@@ -2,7 +2,7 @@ using System.Linq;
 using board.engine.Actions;
 using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement.ChessPieces.Bishop;
+using chess.engine.Movement.Bishop;
 using chess.engine.tests.Builders;
 using NUnit.Framework;
 

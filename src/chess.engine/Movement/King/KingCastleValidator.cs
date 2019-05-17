@@ -9,7 +9,7 @@ using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
 
-namespace chess.engine.Movement.ChessPieces.King
+namespace chess.engine.Movement.King
 {
     public class KingCastleValidator : IMoveValidator<KingCastleValidator.IBoardStateWrapper> 
     {

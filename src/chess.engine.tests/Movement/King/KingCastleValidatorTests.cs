@@ -3,7 +3,7 @@ using board.engine.Movement;
 using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement.ChessPieces.King;
+using chess.engine.Movement.King;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement.King

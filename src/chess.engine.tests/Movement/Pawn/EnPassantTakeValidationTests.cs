@@ -5,7 +5,7 @@ using board.engine.Movement;
 using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
-using chess.engine.Movement.ChessPieces.Pawn;
+using chess.engine.Movement.Pawn;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement.Pawn

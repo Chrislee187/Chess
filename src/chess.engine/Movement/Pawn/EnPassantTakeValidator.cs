@@ -5,7 +5,7 @@ using board.engine.Movement.Validators;
 using chess.engine.Entities;
 using chess.engine.Game;
 
-namespace chess.engine.Movement.ChessPieces.Pawn
+namespace chess.engine.Movement.Pawn
 {
     public class EnPassantTakeValidator : IMoveValidator<EnPassantTakeValidator.IBoardStateWrapper> 
     {

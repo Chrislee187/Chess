@@ -2,7 +2,7 @@
 using board.engine.Movement;
 using chess.engine.Game;
 
-namespace chess.engine.Movement.ChessPieces.King
+namespace chess.engine.Movement.King
 {
     public class KingCastlePathGenerator : IPathGenerator
     {

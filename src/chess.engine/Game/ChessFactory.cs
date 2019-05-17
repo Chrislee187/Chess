@@ -69,7 +69,6 @@ namespace chess.engine.Game
                 entityFactory ?? ChessPieceEntityFactory(logger)
                 );
 
-
         public static ChessGame NewChessGame(LoggerType logger = LoggerType.Injected)
             => new ChessGame(
                 Logger<ChessGame>(logger),

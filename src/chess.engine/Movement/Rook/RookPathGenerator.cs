@@ -2,7 +2,7 @@
 using board.engine.Movement;
 using chess.engine.Game;
 
-namespace chess.engine.Movement.ChessPieces.Rook
+namespace chess.engine.Movement.Rook
 {
     public class RookPathGenerator : StraightLinePathExtender, IPathGenerator
     {
