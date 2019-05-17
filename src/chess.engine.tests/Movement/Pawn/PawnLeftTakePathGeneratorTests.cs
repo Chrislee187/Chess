@@ -10,7 +10,7 @@ namespace chess.engine.tests.Movement.Pawn
 {
     // TODO: Combine with Right Take tests
     [TestFixture]
-    public class PawnLeftTakePathGeneratorTests : PathGeneratorTestsBase
+    public class PawnLeftTakePathGeneratorTests : ChessPathGeneratorTestsBase
     {
         private PawnLeftTakePathGenerator _gen;
 

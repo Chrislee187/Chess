@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Movement.Rook
 {
     [TestFixture]
-    public class RookPathGeneratorTests : PathGeneratorTestsBase
+    public class RookPathGeneratorTests : ChessPathGeneratorTestsBase
     {
         private RookPathGenerator _gen;
 

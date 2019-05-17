@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Movement.Bishop
 {
     [TestFixture]
-    public class BishopPathGeneratorTests : PathGeneratorTestsBase
+    public class BishopPathGeneratorTests : ChessPathGeneratorTestsBase
     {
         private BishopPathGenerator _gen;
 

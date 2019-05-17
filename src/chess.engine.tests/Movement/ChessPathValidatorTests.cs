@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Movement
 {
     [TestFixture]
-    public class ChessPathValidatorTests : PathGeneratorTestsBase
+    public class ChessPathValidatorTests : ChessPathGeneratorTestsBase
     {
         private Mock<IMoveValidationProvider<ChessPieceEntity>> _factoryMock;
         private IEnumerable<BoardMovePredicate<ChessPieceEntity>> _moveTests;

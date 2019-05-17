@@ -1,20 +1,20 @@
 ﻿using System;
 using board.engine.Actions;
 using board.engine.Movement;
-using chess.engine.Entities;
+using board.engine.tests.Actions;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Movement
+namespace board.engine.tests.Movement
 {
     [TestFixture]
-    public class MoveValidationFactoryTests
+    public class MoveValidationProviderTests
     {
-        private MoveValidationProvider<ChessPieceEntity> _provider;
+        private MoveValidationProvider<TestBoardEntity> _provider;
 
         [SetUp]
         public void SetUp()
         {
-            _provider = new MoveValidationProvider<ChessPieceEntity>();
+            _provider = new MoveValidationProvider<TestBoardEntity>();
         }
         [Test]
         public void FactorySupportsAllMoveTypes()

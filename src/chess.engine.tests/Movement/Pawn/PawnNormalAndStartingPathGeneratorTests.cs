@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Movement.Pawn
 {
     [TestFixture]
-    public class PawnNormalAndStartingPathGeneratorTests : PathGeneratorTestsBase
+    public class PawnNormalAndStartingPathGeneratorTests : ChessPathGeneratorTestsBase
     {
         private PawnNormalAndStartingPathGenerator _gen;
 

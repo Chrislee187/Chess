@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Movement.King
 {
     [TestFixture]
-    public class KingCastlePathGeneratorTests : PathGeneratorTestsBase
+    public class KingCastlePathGeneratorTests : ChessPathGeneratorTestsBase
     {
         private KingCastlePathGenerator _gen;
 

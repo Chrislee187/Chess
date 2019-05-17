@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
 {
-    public abstract class PathGeneratorTestsBase
+    public abstract class ChessPathGeneratorTestsBase
     {
         protected Mock<IBoardState<ChessPieceEntity>> BoardStateMock;
         protected Mock<ILogger> LoggerMock;
