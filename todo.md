@@ -6,10 +6,10 @@
 * Was hoping to avoid it but looks like will need some sort of simple facade wrappers around the BoardState object for its interactions with validators and actions to allow better testing, they currently need a full create boardstate to test with.
 * proper error responses for invalid boards, moves etc. Just see a useless page on production boxes, drive out with the integration tests I still need to do.
 * Integration test library for the webapi
-* Split board.engine tests from chess.engine.tests
+* ~~Split board.engine tests from chess.engine.tests~~
 * Fix up team-city to use dotnet better not the existing msbuild/nunit etc. tasks
 * RESTplayer doesn't show promotions properly and the moves don't work because of this
-* Add SAN move support to ChessGame.Move()
+* ~~Add SAN move support to ChessGame.Move()~~
 * PGN File Parser
 * setup tests to parse LOTS of PGN files.
 * Create command parser to detect between SAN move and Coord moves
@@ -34,7 +34,7 @@
 * Move history
 	* Enhance enpassant rule to ensure enemy pawn did it's double step the previous turn
 	* Stalemate detection
-	* PGN output (optional)
+	* ~~SAN output~~
 * Make characters used to display chess pieces (RKNBQP) configurable, other languages use different characters
 * Performance tests
 	* Add some multithreading where approriate around the path regeneration mechanisms
