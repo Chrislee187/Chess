@@ -154,17 +154,22 @@ namespace chess.engine.SAN
         {
             int? fromFile = null, fromRank = null;
             int toFile, toRank;
-            if (_secondFile.HasValue && _secondRank.HasValue)
+            if (!_secondFile.HasValue && !_secondRank.HasValue)
             {
-                fromFile = _firstFile;
-                fromRank = _firstRank;
-                toFile = _secondFile.Value;
-                toRank = _secondRank.Value;
-            }
-            else
-            {
-                toFile = _firstFile.Value;
+                if(!_firstRank.HasValue || !_firstFile.HasValue) throw new ArgumentOutOfRangeException($"Rank or File is missing");
+
                 toRank = _firstRank.Value;
+                toFile = _firstFile.Value;
+
+            } else 
+            {
+
+                fromFile = _firstFile;
+                fromRank= _firstRank;
+                // ReSharper disable once PossibleInvalidOperationException
+                toFile = _secondFile.Value;
+                // ReSharper disable once PossibleInvalidOperationException
+                toRank = _secondRank.Value;
             }
             return new StandardAlgebraicNotation(_piece ?? ChessPieceName.Pawn, fromFile, fromRank, toFile, toRank, _moveType, _promotionPiece, _inCheck);
         }
@@ -186,7 +191,7 @@ namespace chess.engine.SAN
 
         private void WithFileToken(char c)
         {
-            if (!_firstFile.HasValue)
+            if (!_firstFile.HasValue && !_firstRank.HasValue)
             {
                 WithFirstFile(ParseFileToken(c));
             }
@@ -202,13 +207,13 @@ namespace chess.engine.SAN
 
         private void WithRankToken(char c)
         {
-            if (_secondFile.HasValue)
-            {
-                WithSecondRank(ParseRankToken(c));
-            }
-            else if (!_firstRank.HasValue)
+            if (!_firstRank.HasValue && !_secondFile.HasValue)
             {
                 WithFirstRank(ParseRankToken(c));
+            }
+            else if (!_secondRank.HasValue)
+            {
+                WithSecondRank(ParseRankToken(c));
             }
             else
             {

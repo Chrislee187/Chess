@@ -36,7 +36,7 @@ namespace chess.engine
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", false)
+                .AddJsonFile("appsettings.json", true)
                 .Build();
             serviceCollection.AddSingleton(config);
             return config;

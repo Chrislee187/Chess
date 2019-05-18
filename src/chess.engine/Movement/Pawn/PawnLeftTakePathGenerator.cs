@@ -33,11 +33,7 @@ namespace chess.engine.Movement.Pawn
                 foreach (var promotionPieces in new[] { ChessPieceName.Queen, ChessPieceName.Rook, ChessPieceName.Bishop, ChessPieceName.Knight })
                 {
                     var move = new BoardMove(location, takeLocation, (int) DefaultActions.UpdatePiece,
-                        new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
-                        {
-                            Owner = playerIdx,
-                            PieceName = promotionPieces
-                        });
+                        ChessFactory.MoveExtraData(playerIdx,promotionPieces));
                     paths.Add(new Path { move });
                 }
             }

@@ -20,11 +20,14 @@ namespace chess.pgn
         private PgnReader(string pgnString) => 
             _reader = new StreamReader(pgnString.ToStream());
 
+        public string LastGameText { get; private set; }
+
         public PgnGame ReadGame()
         {
             if (_reader.EndOfStream) return null;
 
             var text = ReadSingleGame();
+            LastGameText = text;
             return PgnGame.Parse(text);
         }
 
@@ -39,7 +42,7 @@ namespace chess.pgn
             remainder = ReadNextNonEmptyLine();
             if (remainder == null) throw new InvalidDataException($"No move text found.");
 
-            var moveText = $"{remainder}\n{ReadUntilNextEmptyLine()}"; 
+            var moveText = $"{remainder}\n{ReadMoves()}"; 
 
             return tagPairText + Environment.NewLine + moveText;
         }
@@ -48,8 +51,19 @@ namespace chess.pgn
         {
             var line = ReadLine();
             var sb = new StringBuilder();
-
             while (!string.IsNullOrEmpty(line))
+            {
+                sb.AppendLine(line);
+                line = ReadLine();
+            }
+
+            return sb.ToString();
+        }
+        private string ReadMoves()
+        {
+            var line = ReadLine();
+            var sb = new StringBuilder();
+            while (!string.IsNullOrEmpty(line) && !line.StartsWith("["))
             {
                 sb.AppendLine(line);
                 line = ReadLine();
@@ -60,12 +74,14 @@ namespace chess.pgn
 
         private string ReadNextNonEmptyLine()
         {
-            var line = ReadLine();
             if (_reader.EndOfStream) return null;
+
+            var line = ReadLine();
 
             while (line == string.Empty)
             {
                 line = ReadLine();
+                if (_reader.EndOfStream) return null;
             }
 
             return line;

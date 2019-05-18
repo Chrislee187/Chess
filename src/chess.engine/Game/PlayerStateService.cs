@@ -49,9 +49,10 @@ namespace chess.engine.Game
 
             var canBlock = enemiesAttackingKing.All(enemy =>
             {
-                // BUG: What if this returns more than one? Test this properly
+                // NOTE: Edge case here, a pawn has multiple attack paths to the same location for
+                // each promotion piece when applicable, we only care about one of them here.
                 var attackingPath = enemy.Paths
-                    .Single(attackPath => attackPath.CanMoveTo(king.Location));
+                    .First(attackPath => attackPath.CanMoveTo(king.Location));
 
                 // Check if any friendly pieces can move to the path or take the item
                 return friendlyDestinations.Any(fd => fd.Equals(enemy.Location)

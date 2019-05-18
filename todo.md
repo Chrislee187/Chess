@@ -1,8 +1,9 @@
 # TODOS
+* Performamce tests becoming more important, game parsing is slow which is affecting my ability to run 400k games through the engine for test purposes
 * Basic web integration test, ensure index.html exists and contains a chessboard and moves
 * Create a chess.engine.tests.utils project contain for stuff like the builders. Will be need by the other high-level tests that are planned (.integration.tests for the API and .feature.tests for the web pages)
 * Create feature and integration tests assemblies
-* validate game engine against LOTS of PGN games
+* **IN PROGRESS** validate game engine against LOTS of PGN games
 * proper error responses for invalid boards, moves etc. Just see a useless page on production boxes, drive out with the integration tests I still need to do.
 * Integration test library for the webapi
 * Fix up team-city to use dotnet better not the existing msbuild/nunit etc. tasks
@@ -13,9 +14,17 @@
 * ~~Add SAN move support to ChessGame.Move()~~
 * ~~Done (BoardStateWrapper's)- Was hoping to avoid it but looks like will need some sort of simple facade wrappers around the BoardState object for its interactions with validators and actions to allow better testing, they currently need a full create boardstate to test with.~~
 
+## Performance
+### Measurements
+* Counters - get some counters and timers in the frequently used stuff
+
+### Paralleise opportunities
+* Path refreshing
+* Board cloning
+* Path validation
+
 ## Azure Deployment
 * Couldn't get the CI/CD stuff working, Publish from VS works a treat though
-
 
 ## PGN Parsing
 * Create a simple console app to convert PGN to a similar JSON format

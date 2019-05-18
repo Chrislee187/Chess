@@ -39,6 +39,36 @@ namespace chess.engine.Entities
         {
             public ChessPieceName PieceName { get; set; }
             public Colours Owner { get; set; }
+
+            public ChessPieceEntityFactoryTypeExtraData()
+            {
+                
+            }
+            public ChessPieceEntityFactoryTypeExtraData(Colours owner, ChessPieceName piece)
+            {
+                Owner = owner;
+                PieceName = piece;
+            }
+            protected bool Equals(ChessPieceEntityFactoryTypeExtraData other)
+            {
+                return PieceName == other.PieceName && Owner == other.Owner;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((ChessPieceEntityFactoryTypeExtraData) obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return ((int) PieceName * 397) ^ (int) Owner;
+                }
+            }
         }
 //        public static ChessPieceEntity Create(ChessPieceName chessPiece, Colours player) => ActionProvider[chessPiece](player);
 //        public static ChessPieceEntity CreatePawn(Colours player)   => Create(ChessPieceName.Pawn,player);

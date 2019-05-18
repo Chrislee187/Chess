@@ -21,6 +21,7 @@ namespace chess.engine.SAN
 
         public BoardMove Find(StandardAlgebraicNotation san, Colours forPlayer)
         {
+            var t = san.ToNotation();
             if (san.CastleMove != StandardAlgebraicNotation.CastleSide.None)
             {
                 return FindCastleMove(san, forPlayer);
@@ -42,22 +43,22 @@ namespace chess.engine.SAN
                 .ThatCanMoveTo(destination);
             ;
 
-            if (TryFindMove(items, destination, out var move)) return move;
+            if (TryFindMove(items, destination, san, out var move)) return move;
 
             if (san.FromFileX.HasValue)
             {
                 items = items.Where(i => i.Paths.FlattenMoves().Any(m => m.From.X == san.FromFileX.Value));
-                if (TryFindMove(items, destination, out move)) return move;
+                if (TryFindMove(items, destination, san, out move)) return move;
             }
 
             if (san.FromRankY.HasValue)
             {
                 items = items.Where(i => i.Paths.FlattenMoves().Any(m => m.From.Y == san.FromRankY.Value));
-                if (TryFindMove(items, destination, out move)) return move;
+                if (TryFindMove(items, destination, san, out move)) return move;
             }
 
 
-            throw new MoveFinderException("Couldn't disambiguate move");
+            throw new MoveFinderException($"Couldn't disambiguate move: {san.ToNotation()}");
         }
 
         private BoardMove FindCastleMove(StandardAlgebraicNotation san, Colours forPlayer)
@@ -96,6 +97,7 @@ namespace chess.engine.SAN
         }
 
         private static bool TryFindMove(IEnumerable<LocatedItem<ChessPieceEntity>> items, BoardLocation destination,
+            StandardAlgebraicNotation san,
             out BoardMove findMoveTo)
         {
             findMoveTo = null;
@@ -107,8 +109,17 @@ namespace chess.engine.SAN
 
             if (locatedItems.Count() == 1)
             {
-                findMoveTo = locatedItems.Single().FindMoveTo(destination);
-                return true;
+                var item = locatedItems.Single();
+                if (san.PromotionPiece.HasValue)
+                {
+                    findMoveTo = item.Paths.FlattenMoves().FindMove(item.Location, destination,
+                        ChessFactory.MoveExtraData(item.Item.Player, san.PromotionPiece.Value));
+                }
+                else
+                {
+                    findMoveTo = item.FindMoveTo(destination);
+                }
+                return findMoveTo != null;
             }
 
             return false;

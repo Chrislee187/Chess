@@ -5,7 +5,7 @@ namespace chess.pgn
     [DebuggerDisplay("{DebuggerDisplayText}")]
     public class PgnTurn
     {
-        private string DebuggerDisplayText => $"{Turn}. {White?.San} {Black?.San}";
+        private string DebuggerDisplayText => $"{Turn}. {White?.San ?? "..."} {Black?.San ?? "..."}";
         public int Turn { get; }
         public PgnMove White { get; }
         public PgnMove Black { get; }
@@ -15,6 +15,11 @@ namespace chess.pgn
             Turn = turn;
             White = white;
             Black = black;
+        }
+
+        public override string ToString()
+        {
+            return DebuggerDisplayText;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using chess.pgn.tests.TestData;
+using chess.tests.utils.TestData;
 using NUnit.Framework;
 
 namespace chess.pgn.tests
@@ -7,17 +7,17 @@ namespace chess.pgn.tests
     public class PgnReaderTests
     {
         [Test]
-        public void FromString_works()
+        public void Wiki_games_FromString_works()
         {
             var reader = PgnReader.FromString(
-                Pgn.WikiGameText + "\n" +
-                Pgn.WikiGameText);
+                WikiGame.PgnText + "\n" +
+                WikiGame.PgnText);
 
             AssertWikiGame(reader);
         }
         
         [Test]
-        public void FromFile_works()
+        public void Wiki_games_FromFile_works()
         {
             var reader = PgnReader.FromFile(@".\TestData\wikigame.pgn");
 
@@ -43,7 +43,7 @@ namespace chess.pgn.tests
             Assert.That(pgnGame.Event, Is.EqualTo($"F/S Return Match"), $"Event:{gameIdx}");
             Assert.That(pgnGame.Site, Is.EqualTo("Belgrade, Serbia JUG"), $"Site:{gameIdx}");
             Assert.That(pgnGame.Date.ToString(), Is.EqualTo("1992.11.04"), $"Date:{gameIdx}");
-            Assert.That(pgnGame.Round, Is.EqualTo(29), $"Round:{gameIdx}");
+            Assert.That(pgnGame.Round, Is.EqualTo("29"), $"Round:{gameIdx}");
             Assert.That(pgnGame.White, Is.EqualTo("Fischer, Robert J."), $"White:{gameIdx}");
             Assert.That(pgnGame.Black, Is.EqualTo("Spassky, Boris V."), $"Black:{gameIdx}");
             Assert.That(pgnGame.Result, Is.EqualTo(PgnGameResult.Draw), $"Result:{gameIdx}");

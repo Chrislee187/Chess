@@ -121,5 +121,9 @@ namespace chess.engine.Game
 
         public static LocatedItem<ChessPieceEntity> LocatedItem(BoardLocation at, ChessPieceName piece, Colours owner, Paths paths = null)
         => new LocatedItem<ChessPieceEntity>(at, ChessPieceEntityFactory().Create(piece, owner), paths ?? new Paths());
+
+        public static ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData MoveExtraData(Colours owner,
+            ChessPieceName piece)
+            => new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData(owner, piece);
     }
 }

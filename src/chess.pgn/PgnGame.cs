@@ -11,15 +11,23 @@ namespace chess.pgn
         public IReadOnlyDictionary<string, string> TagPairs { get; }
         public IEnumerable<PgnTurn> Turns { get; }
 
+        private string SafePairValue(string key)
+        {
+            if (TagPairs.ContainsKey(key))
+                return TagPairs[key];
+
+            return "";
+        }
+
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public string PgnText { get; }
 
-        public string Event => TagPairs["Event"];
-        public string Site => TagPairs["Site"];
-        public PgnDate Date => PgnDate.Parse(TagPairs["Date"]);
-        public int Round => TagPairs["Round"].ToInt();
-        public string White => TagPairs["White"];
-        public string Black => TagPairs["Black"];
+        public string Event => SafePairValue("Event");
+        public string Site => SafePairValue("Site");
+        public PgnDate Date => PgnDate.Parse(SafePairValue("Date"));
+        public string Round => SafePairValue("Round");
+        public string White => SafePairValue("White");
+        public string Black => SafePairValue("Black");
         public PgnGameResult Result { get; }
     
 
