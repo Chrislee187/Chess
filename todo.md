@@ -2,26 +2,23 @@
 * Basic web integration test, ensure index.html exists and contains a chessboard and moves
 * Create a chess.engine.tests.utils project contain for stuff like the builders. Will be need by the other high-level tests that are planned (.integration.tests for the API and .feature.tests for the web pages)
 * Create feature and integration tests assemblies
-* PGN file reader to validate game engine against LOTS of games
-* Was hoping to avoid it but looks like will need some sort of simple facade wrappers around the BoardState object for its interactions with validators and actions to allow better testing, they currently need a full create boardstate to test with.
+* validate game engine against LOTS of PGN games
 * proper error responses for invalid boards, moves etc. Just see a useless page on production boxes, drive out with the integration tests I still need to do.
 * Integration test library for the webapi
-* ~~Split board.engine tests from chess.engine.tests~~
 * Fix up team-city to use dotnet better not the existing msbuild/nunit etc. tasks
 * RESTplayer doesn't show promotions properly and the moves don't work because of this
+* ~~not required, Coord moves are valid SAN moves, Create command parser to detect between SAN move and Coord moves~~
+* ~~PGN file reader~~
+* ~~Split board.engine tests from chess.engine.tests~~
 * ~~Add SAN move support to ChessGame.Move()~~
-* PGN File Parser
-* setup tests to parse LOTS of PGN files.
-* Create command parser to detect between SAN move and Coord moves
+* ~~Done (BoardStateWrapper's)- Was hoping to avoid it but looks like will need some sort of simple facade wrappers around the BoardState object for its interactions with validators and actions to allow better testing, they currently need a full create boardstate to test with.~~
 
 ## Azure Deployment
 * Couldn't get the CI/CD stuff working, Publish from VS works a treat though
 
 
 ## PGN Parsing
-* Implement PGN Parsing, base on old version
-  * Create a simple console app to convert PGN to a similar JSON format
-* Need to this to do more comprehensive testing against a larger database of games, think there are still some edge cases around castling that need resolving, need to get PGN parsing up and running to parse a ton (10000's) of games.
+* Create a simple console app to convert PGN to a similar JSON format
 
 ## SPIKER/Console Player
 * Can I reuse anything from the old consoleplayer? Do I want to?

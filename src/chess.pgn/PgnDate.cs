@@ -13,24 +13,24 @@ namespace chess.pgn
             Day = day;
         }
 
-        public static PgnDate Parse(string value)
+        public static PgnDate Parse(string pgnDateString)
         {
-            var bits = value.Split('.');
+            var dateParts = pgnDateString.Split('.');
             int? year = null, month = null, day = null;
 
-            if (bits.Length >= 1)
+            if (dateParts.Length >= 1)
             {
-                year = bits[0].ToInt();
+                year = dateParts[0].ToInt();
             }
 
-            if (bits.Length >= 2)
+            if (dateParts.Length >= 2)
             {
-                month = bits[1].ToInt();
+                month = dateParts[1].ToInt();
             }
 
-            if (bits.Length >= 3)
+            if (dateParts.Length >= 3)
             {
-                day = bits[2].ToInt();
+                day = dateParts[2].ToInt();
             }
 
             return new PgnDate(year, month, day);

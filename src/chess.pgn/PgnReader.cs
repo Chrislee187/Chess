@@ -11,6 +11,9 @@ namespace chess.pgn
         public static PgnReader FromString(string pgnString) 
             => new PgnReader(pgnString);
 
+        public static PgnReader FromFile(string filename)
+            => new PgnReader(File.Open(filename, FileMode.Open, FileAccess.Read));
+
         private PgnReader(Stream stream) 
             => _reader = new StreamReader(stream);
 
@@ -21,31 +24,31 @@ namespace chess.pgn
         {
             if (_reader.EndOfStream) return null;
 
-            var text = ReadGameText();
+            var text = ReadSingleGame();
             return PgnGame.Parse(text);
         }
 
-        private string ReadGameText()
+        private string ReadSingleGame()
         {
-            var nextLine = ReadUntilNonEmptyLine();
-            if (nextLine == null) return null;
+            var remainder = ReadNextNonEmptyLine();
+            if (remainder == null) return null;
 
-            var tagPairText = ReadUntilEmptyLine(nextLine);
+            var tagPairText = $"{remainder}\n{ReadUntilNextEmptyLine()}";
             if (tagPairText == null) throw new InvalidDataException($"Expected Tag Pair text, found EOF!");
 
-            nextLine = ReadUntilNonEmptyLine();
-            if (nextLine == null) throw new InvalidDataException($"No move text found.");
+            remainder = ReadNextNonEmptyLine();
+            if (remainder == null) throw new InvalidDataException($"No move text found.");
 
-            var moveText = ReadUntilEmptyLine(nextLine);
+            var moveText = $"{remainder}\n{ReadUntilNextEmptyLine()}"; 
 
             return tagPairText + Environment.NewLine + moveText;
         }
 
-        private string ReadUntilEmptyLine(string nextLine)
+        private string ReadUntilNextEmptyLine()
         {
             var line = ReadLine();
             var sb = new StringBuilder();
-            sb.AppendLine(nextLine);
+
             while (!string.IsNullOrEmpty(line))
             {
                 sb.AppendLine(line);
@@ -55,7 +58,7 @@ namespace chess.pgn
             return sb.ToString();
         }
 
-        private string ReadUntilNonEmptyLine()
+        private string ReadNextNonEmptyLine()
         {
             var line = ReadLine();
             if (_reader.EndOfStream) return null;

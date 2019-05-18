@@ -19,12 +19,18 @@ namespace chess.pgn
             var trimmed = pair.Trim();
             if (trimmed.First() != '[') throw new ArgumentException($"Expected '{trimmed}' to start with '['");
 
+            trimmed = trimmed.Substring(1).Trim();
+
             // ReSharper disable once StringIndexOfIsCultureSpecific.1
             var delim = trimmed.IndexOf(" ");
 
-            var name = trimmed.Substring(1, delim - 1).Trim();
+            var name = trimmed.Substring(0, delim).Trim();
             var value = trimmed.Substring(delim).Replace("\"", "").Trim();
 
+            if (value.EndsWith("]"))
+            {
+                value = value.Substring(0, value.Length - 1).Trim();
+            }
             return new PgnTagPair(name, value);
         }
 

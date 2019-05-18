@@ -10,7 +10,6 @@ namespace chess.pgn
         private string DebuggerDisplayText => ToString();
         public IReadOnlyDictionary<string, string> TagPairs { get; }
         public IEnumerable<PgnTurn> Turns { get; }
-        public PgnGameResult PgnResult { get; }
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public string PgnText { get; }
@@ -64,8 +63,9 @@ namespace chess.pgn
                         ? token 
                         : $"{comment} {token}";
                 }
-                else if (token == "{")
+                else if (token.StartsWith("{"))
                 {
+                    if(token.Length > 1) tokens.Push(token.Substring(1));
                     commentToken = true;
                 }
                 else if (token.ToInt() > 0)
