@@ -62,6 +62,7 @@ namespace chess.engine.Game
         public bool DoesMoveLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move)
         {
             var checkColour = boardState.GetItem(move.From).Item.Player;
+            
             var clonedBoardState = CreateCloneAndMove(boardState, move);
 
             var inCheck = _playerStateService.CurrentPlayerState(clonedBoardState, checkColour)
@@ -73,8 +74,7 @@ namespace chess.engine.Game
         public bool DoesMoveCauseCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move)
         {
             var checkColour = boardState.GetItem(move.From).Item.Player;
-            if (CheckThatWeAreNotAboutToTakeAKing(boardState, move, checkColour)) return true;
-
+            
             var clonedBoardState = CreateCloneAndMove(boardState, move);
 
             var inCheck = _playerStateService.CurrentPlayerState(clonedBoardState, checkColour.Enemy()) !=
@@ -82,21 +82,6 @@ namespace chess.engine.Game
             return inCheck;
         }
 
-        private static bool CheckThatWeAreNotAboutToTakeAKing(IBoardState<ChessPieceEntity> boardState, BoardMove move,
-            Colours checkColour)
-        {
-            // NOTE: We have to short-circuit here to avoid actually taking the king as we may be using a move before it's been validated
-            // to remove takes on kings
-            if (!boardState.IsEmpty(move.To))
-            {
-                if (boardState.GetItem(move.To).Item.Is(checkColour.Enemy(), ChessPieceName.King))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
         private IBoardState<ChessPieceEntity> CreateCloneAndMove(IBoardState<ChessPieceEntity> boardState,
             BoardMove move, Colours? refreshPathsColour = null)

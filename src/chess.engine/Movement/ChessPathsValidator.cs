@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using board.engine;
@@ -26,6 +27,9 @@ namespace chess.engine.Movement
         public Paths GeneratePossiblePaths(IBoardState<ChessPieceEntity> boardState, ChessPieceEntity entity, BoardLocation boardLocation)
         {
             _logger?.LogDebug($"Generating possible paths for {entity} at {boardLocation}.");
+
+//            if (boardLocation.ToString().StartsWith("(7,4)")) Debugger.Break();
+
             var paths = new Paths();
             paths.AddRange(
                 entity.PathGenerators

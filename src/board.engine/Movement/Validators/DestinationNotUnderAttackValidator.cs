@@ -22,7 +22,7 @@ namespace board.engine.Movement.Validators
             var enemyItems = wrapper.GetNonOwnerEntities(owner);
             enemyPaths.AddRange(enemyItems.SelectMany(li => li.Paths));
 
-            var attackMoveTypes = new []{ (int) DefaultActions.MoveOrTake, (int) DefaultActions.TakeOnly };
+            var attackMoveTypes = new []{ (int) DefaultActions.MoveOrTake, (int) DefaultActions.TakeOnly, (int) ChessMoveTypes.KingMove };
             return !enemyPaths.ContainsMoveTypeTo(move.To, attackMoveTypes);
         }
 

@@ -1,5 +1,4 @@
 ﻿using board.engine;
-using board.engine.Actions;
 using board.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Game;
@@ -11,7 +10,6 @@ namespace chess.engine.tests.Game
     [TestFixture]
     public class CheckDetectionServiceTests
     {
-        private Mock<IBoardActionProvider<ChessPieceEntity>> _actionProviderMock;
         private Mock<IPlayerStateService> _playerStateServiceMock;
         private Mock<IBoardState<ChessPieceEntity>> _boardStateMock;
         private Mock<IBoardMoveService<ChessPieceEntity>> _moveServiceMock;
@@ -19,7 +17,6 @@ namespace chess.engine.tests.Game
         [SetUp]
         public void Setup()
         {
-            _actionProviderMock = ChessTestFactory.BoardActionProviderMock();
             _playerStateServiceMock = ChessTestFactory.ChessGameStateServiceMock();
             _boardStateMock = new Mock<IBoardState<ChessPieceEntity>>();
             _boardStateMock.Setup(mb => mb.Clone()).Returns(_boardStateMock.Object);

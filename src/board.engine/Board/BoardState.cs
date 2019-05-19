@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace board.engine.Board
 {
@@ -63,8 +61,6 @@ namespace board.engine.Board
 
         public void RegeneratePaths(BoardLocation at)
         {
-            if(at.ToString() == "(8,2)") Debugger.Break();
-
             var item = GetItem(at);
 
             Guard.NotNull(item, $"Null item found at {at}!");
@@ -120,10 +116,8 @@ namespace board.engine.Board
 
         public void RegeneratePaths(int owner)
         {
-            foreach (var enemyPiece in GetItems(owner))
-            {
-                RegeneratePaths(enemyPiece.Location);
-            }
+            GetItems(owner).AsParallel()
+                .ForAll(i => RegeneratePaths(i.Location));
         }
     }
 }

@@ -13,7 +13,8 @@
 * ~~Split board.engine tests from chess.engine.tests~~
 * ~~Add SAN move support to ChessGame.Move()~~
 * ~~Done (BoardStateWrapper's)- Was hoping to avoid it but looks like will need some sort of simple facade wrappers around the BoardState object for its interactions with validators and actions to allow better testing, they currently need a full create boardstate to test with.~~
-
+* Proper feature flag mechanism NOT static flags
+* 
 ## Performance
 ### Measurements
 * Counters - get some counters and timers in the frequently used stuff

@@ -63,12 +63,11 @@ namespace chess.engine.Movement
             foreach (var move in path)
             {
                 var inCheck = _checkDetectionService.DoesMoveLeaveUsInCheck(boardState, move);
-
+               
                 if (!inCheck) validPath.Add(move);
             }
 
             return !validPath.Any() ? null : validPath;
         }
-
     }
 }

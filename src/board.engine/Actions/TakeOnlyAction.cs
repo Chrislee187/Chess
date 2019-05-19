@@ -1,4 +1,5 @@
-﻿using board.engine.Board;
+﻿using System;
+using board.engine.Board;
 using board.engine.Movement;
 
 namespace board.engine.Actions
@@ -11,6 +12,10 @@ namespace board.engine.Actions
         }
         public override void Execute(BoardMove move)
         {
+            var takenItem = BoardState.GetItem(move.To);
+
+            if(takenItem == null) throw new Exception("No piece found for TakeOnly action");
+
             BoardState.Remove(move.To);
 
             ActionProvider.Create((int)DefaultActions.MoveOnly, BoardState).Execute(move);

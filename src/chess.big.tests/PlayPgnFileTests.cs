@@ -1,15 +1,12 @@
 using System;
-using System.Diagnostics;
 using System.IO;
-using board.engine;
 using chess.engine.Game;
 using chess.pgn;
-using chess.tests.utils.TestData;
 using NUnit.Framework;
 
 namespace chess.big.tests
 {
-    [TestFixture, Explicit]
+    [TestFixture]
     public class PlayPgnFileTests
     {
         [SetUp]
@@ -40,6 +37,7 @@ namespace chess.big.tests
         }
 
         [TestCase(@"D:\Src\PGNArchive\PGN\Adams\Adams.pgn")]
+        [Explicit("WARNING: Could take a long time.")]
         public void Play_single_file(string filename)
         {
             PlaySingleGame(PgnReader.FromFile(filename));
@@ -57,7 +55,7 @@ namespace chess.big.tests
                 while (game != null)
                 {
                     gameIdx++;
-
+                    TestContext.Progress.WriteAsync(".");
                     chessGame = ChessFactory.NewChessGame();
                     PlayTurns(game, chessGame);
 
@@ -66,9 +64,10 @@ namespace chess.big.tests
             }
             catch
             {
-                Console.WriteLine($"Game: #{gameIdx} / {game?.ToString() ?? ""}");
-                Console.WriteLine($"Board:\n{chessGame.ToText()}");
-                Console.WriteLine($"Full PGN Text:\n{reader.LastGameText}");
+                TestContext.Out.WriteLine($"FAILED");
+                TestContext.Out.WriteLine($"Game: #{gameIdx} / {game?.ToString() ?? ""}");
+                TestContext.Out.WriteLine($"Board:\n{chessGame.ToText()}");
+                TestContext.Out.WriteLine($"Full PGN Text:\n{reader.LastGameText}");
                 throw;
             }
         }

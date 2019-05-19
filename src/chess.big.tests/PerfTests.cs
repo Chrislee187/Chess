@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using board.engine;
 using chess.engine.Game;
@@ -16,16 +15,19 @@ namespace chess.big.tests
     {
         private Dictionary<string, List<TimeSpan>> _timings;
 
-        private string Key_Sequential = $"{nameof(Perf_RefreshAllPaths)}.sequential";
-        private string Key_Parallel = $"{nameof(Perf_RefreshAllPaths)}.parallel";
+        private readonly string _keySequential = $"{nameof(Perf_RefreshAllPaths)}.sequential";
+        private readonly string _keyParallel = $"{nameof(Perf_RefreshAllPaths)}.parallel";
+
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _timings = new Dictionary<string, List<TimeSpan>>();
-            _timings.Add(Key_Sequential, new List<TimeSpan>());
-            _timings.Add(Key_Parallel, new List<TimeSpan>());
-            
-            // Ensure we are as warmed up as we can be
+            _timings = new Dictionary<string, List<TimeSpan>>
+            {
+                {_keySequential, new List<TimeSpan>()},
+                {_keyParallel, new List<TimeSpan>()}
+            };
+
+            // Ensure we are as warmed up
             var warmupSeq = Play(false);
             var warmupPar = Play(true);
 
@@ -33,36 +35,35 @@ namespace chess.big.tests
             // dotnet test from the command line will show it
             TestContext.Progress.WriteLine("Warmups");
             OutputComparison(warmupPar, warmupSeq);
-            
-            TestContext.Progress.WriteLine("Tests");
 
+            TestContext.Progress.WriteLine("Tests");
         }
 
         [Test]
-//        [Repeat(10)]
+        [Repeat(100)]
+        [Explicit(
+            "Comment out this attribute and using 'dotnet test --filter chess.big.tests.PerfTests.Perf_RefreshAllPaths' to see the proper output (NUnit Test Runner issues with console output and threads)")]
         public void Perf_RefreshAllPaths()
         {
-            string Key(string k) => $"{nameof(Perf_RefreshAllPaths)}.{k}";
-
             var sequential = Play(false);
-            _timings[Key_Sequential].Add(sequential);
+            _timings[_keySequential].Add(sequential);
 
             var parallel = Play(true);
-            _timings[Key_Parallel].Add(parallel);
+            _timings[_keyParallel].Add(parallel);
 
             TestContext.Progress.WriteLine($"{nameof(Perf_RefreshAllPaths)}");
             OutputComparison(parallel, sequential);
-                                                          
+
             // Times based on initial observations rounded up to the nearest 1/4 second
             // Use a simple check to ensure we don't do something silly that radically 
             // decreases performance
-            Assert.That(sequential, Is.LessThan(TimeSpan.FromSeconds(3.6)));
+            Assert.That(sequential, Is.LessThan(TimeSpan.FromSeconds(4)));
             Assert.That(parallel, Is.LessThan(TimeSpan.FromSeconds(1.75)));
         }
 
         private TimeSpan Play(bool parallelise)
         {
-            var previousFF = FeatureFlags.ParalleliseRefreshAllPaths;
+            var previousFf = FeatureFlags.ParalleliseRefreshAllPaths;
             FeatureFlags.ParalleliseRefreshAllPaths = parallelise;
             TimeSpan elapsed;
             var stopwatch = Stopwatch.StartNew();
@@ -78,7 +79,7 @@ namespace chess.big.tests
             finally
             {
                 elapsed = stopwatch.Elapsed;
-               FeatureFlags.ParalleliseRefreshAllPaths = previousFF;
+                FeatureFlags.ParalleliseRefreshAllPaths = previousFf;
             }
 
             return elapsed;
@@ -88,7 +89,6 @@ namespace chess.big.tests
         {
             PgnGame game = null;
             ChessGame chessGame = null;
-            PgnTurn lastTurn = null;
             var gameIdx = 0;
             try
             {
@@ -137,7 +137,7 @@ namespace chess.big.tests
         public void OneTimeTearDown()
         {
             TestContext.Progress.WriteLine("Averages");
-            OutputAverages(nameof(Perf_RefreshAllPaths), Key_Sequential, Key_Parallel);
+            OutputAverages(nameof(Perf_RefreshAllPaths), _keySequential, _keyParallel);
         }
 
         private void OutputAverages(string testMethodName, string keySequential, string keyParallel)
