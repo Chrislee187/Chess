@@ -47,12 +47,23 @@ namespace board.engine.Board
 
         public static IEnumerable<LocatedItem<TEntity>>
             ThatCanMoveTo<TEntity>(
-                this IEnumerable<LocatedItem<TEntity>> items, 
+                this IEnumerable<LocatedItem<TEntity>> items,
                 BoardLocation location)
             where TEntity : class, IBoardEntity
         {
             return items.Where(itm
                 => itm.Paths.ContainsMoveTo(location));
+        }
+
+        public static IEnumerable<LocatedItem<TEntity>>
+            ThatCanMoveTypeTo<TEntity>(
+                this IEnumerable<LocatedItem<TEntity>> items,
+                BoardLocation location,
+                params int[] moveTypesAndActions)
+            where TEntity : class, IBoardEntity
+        {
+            return items.Where(itm
+                => itm.Paths.ContainsMoveTypeTo(location, moveTypesAndActions));
         }
 
         public static IEnumerable<LocatedItem<TEntity>>

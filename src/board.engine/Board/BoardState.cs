@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace board.engine.Board
 {
     public class BoardState<TEntity> : IBoardState<TEntity> where TEntity : class, IBoardEntity
     {
+        public static bool ParalleiseRefreshAllPaths => FeatureFlags.ParalleliseRefreshAllPaths;
+
         private readonly IDictionary<BoardLocation, LocatedItem<TEntity>> _items;
         private readonly IPathsValidator<TEntity> _pathsValidator;
 
@@ -59,6 +63,8 @@ namespace board.engine.Board
 
         public void RegeneratePaths(BoardLocation at)
         {
+            if(at.ToString() == "(8,2)") Debugger.Break();
+
             var item = GetItem(at);
 
             Guard.NotNull(item, $"Null item found at {at}!");
@@ -70,11 +76,48 @@ namespace board.engine.Board
 
         public void RegenerateAllPaths()
         {
+            if (ParalleiseRefreshAllPaths)
+            {
+                RegenerateAllPathsParallel();
+            }
+            else
+            {
+                RegenerateAllPathsSequential();
+            }
+        }
+
+        private void RegenerateAllPathsSequential()
+        {
             foreach (var loc in GetAllItemLocations)
             {
                 RegeneratePaths(loc);
             }
         }
+
+        public void RegenerateAllPathsParallel()
+        {
+            // new ways - this one is abit slower not sure why
+            // 175-190% first observed values | 250% (avg 5 runs)
+            // Parallel.ForEach(GetAllItemLocations, RegeneratePaths);
+
+            // 215-221% first observed values | 275% (avg 5 runs)
+            GetAllItemLocations.AsParallel()
+                .WithExecutionMode(ParallelExecutionMode.ForceParallelism) // This seems to give small improvement, bigger test sample needed
+                .ForAll(RegeneratePaths);
+
+            // Old way
+            // 220% first observed values | 280% (avg 5 runs)
+            // var tasks = new List<Task>();
+            // foreach (var loc in GetAllItemLocations)
+            // {
+            //     tasks.Add(Task.Run(() => {
+            //         RegeneratePaths(loc);
+            //     }));
+            // 
+            // }
+            // Task.WaitAll(tasks.ToArray());
+        }
+
         public void RegeneratePaths(int owner)
         {
             foreach (var enemyPiece in GetItems(owner))

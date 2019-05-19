@@ -1,8 +1,10 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using board.engine;
 using chess.engine.Game;
 using chess.pgn;
+using chess.tests.utils.TestData;
 using NUnit.Framework;
 
 namespace chess.big.tests
@@ -29,7 +31,7 @@ namespace chess.big.tests
                 fileCount++;
                 if (file.Contains("FAILED")) continue;
 
-                PlaySingleFile(file);
+                PlaySingleGame(PgnReader.FromFile(file));
             }
 
             Console.WriteLine($"Files #: {fileCount}, Total Games #: {gamesCount}");
@@ -38,43 +40,38 @@ namespace chess.big.tests
         }
 
         [TestCase(@"D:\Src\PGNArchive\PGN\Adams\Adams.pgn")]
-//        [TestCase(@"D:\Src\PGNArchive\PGN\Nielsen\Nielsen.pgn")]
         public void Play_single_file(string filename)
         {
-            PlaySingleFile(filename);
+            PlaySingleGame(PgnReader.FromFile(filename));
         }
 
-        private void PlaySingleFile(string filename)
+        private void PlaySingleGame(PgnReader reader)
         {
             PgnGame game = null;
             ChessGame chessGame = null;
             PgnTurn lastTurn = null;
             var gameIdx = 0;
-            var pgnReader = PgnReader.FromFile(filename);
             try
             {
-                game = pgnReader.ReadGame();
+                game = reader.ReadGame();
                 while (game != null)
                 {
                     gameIdx++;
 
                     chessGame = ChessFactory.NewChessGame();
-                    Debug.WriteLine($"{gameIdx}, ");
                     PlayTurns(game, chessGame);
 
-                    game = pgnReader.ReadGame();
+                    game = reader.ReadGame();
                 }
             }
-            catch 
+            catch
             {
-                Console.WriteLine($"File: {filename}");
                 Console.WriteLine($"Game: #{gameIdx} / {game?.ToString() ?? ""}");
                 Console.WriteLine($"Board:\n{chessGame.ToText()}");
-                Console.WriteLine($"Full PGN Text:\n{pgnReader.LastGameText}");
+                Console.WriteLine($"Full PGN Text:\n{reader.LastGameText}");
                 throw;
             }
         }
-
 
         private static void PlayTurns(PgnGame game, ChessGame chessGame)
         {
@@ -96,6 +93,5 @@ namespace chess.big.tests
                 throw new Exception($"Problem with: {lastTurn}", e);
             }
         }
-
     }
 }

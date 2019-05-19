@@ -66,11 +66,12 @@ namespace chess.engine
             services.AddTransient<IMoveValidationProvider<ChessPieceEntity>, ChessMoveValidationProvider>();
             services.AddTransient<IBoardActionProvider<ChessPieceEntity>,ChessBoardActionProvider>();
             services.AddTransient<IBoardEntityFactory<ChessPieceEntity>,ChessPieceEntityFactory>();
-            services.AddTransient<IPlayerStateService,PlayerStateService>();
-            services.AddTransient<ICheckDetectionService,CheckDetectionService>();
             services.AddTransient<IBoardMoveService<ChessPieceEntity>,BoardMoveService<ChessPieceEntity>>();
-
             services.AddTransient<IBoardEngineProvider<ChessPieceEntity>,ChessBoardEngineProvider>();
+
+            services.AddTransient<IPlayerStateService, PlayerStateService>();
+            services.AddTransient<ICheckDetectionService, CheckDetectionService>();
+
         }
     }
 }

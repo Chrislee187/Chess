@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using board.engine;
+using board.engine.Actions;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Entities;
@@ -41,7 +42,6 @@ namespace chess.engine.SAN
             var items = _boardState
                 .GetItems((int) forPlayer, (int) san.Piece)
                 .ThatCanMoveTo(destination);
-            ;
 
             if (TryFindMove(items, destination, san, out var move)) return move;
 

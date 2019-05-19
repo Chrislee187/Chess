@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using board.engine.Actions;
 using board.engine.Board;
 
 namespace board.engine.Movement.Validators
@@ -21,7 +22,8 @@ namespace board.engine.Movement.Validators
             var enemyItems = wrapper.GetNonOwnerEntities(owner);
             enemyPaths.AddRange(enemyItems.SelectMany(li => li.Paths));
 
-            return !enemyPaths.ContainsMoveTo(move.To);
+            var attackMoveTypes = new []{ (int) DefaultActions.MoveOrTake, (int) DefaultActions.TakeOnly };
+            return !enemyPaths.ContainsMoveTypeTo(move.To, attackMoveTypes);
         }
 
         public interface IBoardStateWrapper

@@ -5,7 +5,7 @@ namespace chess.engine.tests
     public class AppContainerTests
     {
         [Test]
-        public void Should_resolve_all_services()
+        public void Should_resolve_all_chess_dependencies()
         {
             var x = AppContainer.ServiceProvider;
             var count = 0;

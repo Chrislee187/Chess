@@ -71,7 +71,7 @@ namespace board.engine.tests.Movement
                 {
                     new Path
                     {
-                        new BoardMove(null, move.To, 0)
+                        new BoardMove(null, move.To, (int) DefaultActions.MoveOrTake)
                     }
                 });
             _wrapperMock.Setup(m => m.GetNonOwnerEntities(It.Is<int>(i => i != owner)))

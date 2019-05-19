@@ -126,27 +126,14 @@ namespace chess.engine.tests.Algebraic
 
         }
 
-        [TestCase("A1", "B2", DefaultActions.MoveOrTake, "Bab2")]
-        [TestCase("H8", "G7", DefaultActions.MoveOrTake, "Bhxg7")]
-        [TestCase("A3", "B4", DefaultActions.TakeOnly, "axb4")]
-        public void ShouldDisambiguateFile(string from, string to, int moveType, string expectedNotation)
+        [TestCase("Rxf6")]
+        [TestCase("R4h2")]
+        [TestCase("Bab2")]
+        [TestCase("Bhxg7")]
+        [TestCase("axb4")]
+        public void Should_parse_san_notation(string san)
         {
-            var builder = new ChessBoardBuilder()
-                .Board("r   kb b" +
-                       "      P " +
-                       "        " +
-                       "        " +
-                       " p      " +
-                       "P       " +
-                       "        " +
-                       "B B K  R"
-                );
-
-            Assert.That(StandardAlgebraicNotation.Parse(expectedNotation).ToNotation(), Is.EqualTo(expectedNotation));
-//            var game = ChessFactory.CustomChessGame(builder.ToGameSetup());
-//            var move = BoardMove.Create(from.ToBoardLocation(), to.ToBoardLocation(), moveType);
-//
-//            Assert.That(StandardAlgebraicNotation.ParseFromGameMove(game.BoardState, move).ToNotation(), Is.EqualTo(expectedNotation));
+            Assert.That(StandardAlgebraicNotation.Parse(san).ToNotation(), Is.EqualTo(san));
         }
 
         [Test]

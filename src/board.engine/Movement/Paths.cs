@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using board.engine.Actions;
 
 namespace board.engine.Movement
 {
@@ -20,6 +21,9 @@ namespace board.engine.Movement
 
         public bool ContainsMoveTo(BoardLocation location)
             => FlattenMoves().Any(m => m.To.Equals(location));
+
+        public bool ContainsMoveTypeTo(BoardLocation location, params int[] moveTypesAndActions)
+            => FlattenMoves().Any(m => m.To.Equals(location) && moveTypesAndActions.Any(mt => mt == m.MoveType));
 
         public BoardMove FindMove(BoardLocation from, BoardLocation destination, object extraData = null) 
             => FlattenMoves().FindMove(@from, destination, extraData);

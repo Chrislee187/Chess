@@ -9,5 +9,7 @@
 
         public static Colours Enemy(this Colours colour) 
             => ConvertTo(colour, Colours.Black, Colours.White);
+
+
     }
 }
