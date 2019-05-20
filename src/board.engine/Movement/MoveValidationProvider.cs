@@ -16,32 +16,20 @@ namespace board.engine.Movement
             Validators = new Dictionary<int, IEnumerable<BoardMovePredicate<TEntity>>>
             {
                 // Generic move types
-                { (int) DefaultActions.MoveOnly, new BoardMovePredicate<TEntity>[] {(move, boardState) =>
-                    {
-                        return new DestinationIsEmptyValidator<TEntity>().ValidateMove(move, boardState);
-                    }
-                }},
-                { (int) DefaultActions.MoveOrTake, new BoardMovePredicate<TEntity>[] {(move, boardState) =>
-                    {
-                        return new DestinationIsEmptyOrContainsEnemyValidator<TEntity>().ValidateMove(move, boardState);
-                    }
-                }},
-                { (int) DefaultActions.TakeOnly, new BoardMovePredicate<TEntity>[] {(move, boardState) =>
-                    {
-                        return new DestinationContainsEnemyMoveValidator<TEntity>().ValidateMove(move, boardState);
+                { (int) DefaultActions.MoveOnly, new BoardMovePredicate<TEntity>[] {(move, boardState) 
+                    => new DestinationIsEmptyValidator<TEntity>().ValidateMove(move, boardState)}},
 
-                    }
-                }},
-                { (int) DefaultActions.UpdatePiece, new BoardMovePredicate<TEntity>[] { (move, boardState) =>
-                    {
-                        return new UpdatePieceValidator<TEntity>().ValidateMove(move, boardState);
-                    }
-                }},
-                { (int) DefaultActions.UpdatePieceWithTake, new BoardMovePredicate<TEntity>[] { (move, boardState) =>
-                    {
-                        return new UpdatePieceValidator<TEntity>().ValidateMove(move, boardState);
-                    }
-                }},
+                { (int) DefaultActions.MoveOrTake, new BoardMovePredicate<TEntity>[] {(move, boardState) 
+                    => new DestinationIsEmptyOrContainsEnemyValidator<TEntity>().ValidateMove(move, boardState)}},
+
+                { (int) DefaultActions.TakeOnly, new BoardMovePredicate<TEntity>[] {(move, boardState) 
+                    => new DestinationContainsEnemyMoveValidator<TEntity>().ValidateMove(move, boardState)}},
+
+                { (int) DefaultActions.UpdatePiece, new BoardMovePredicate<TEntity>[] { (move, boardState) 
+                    => new UpdatePieceValidator<TEntity>().ValidateMove(move, boardState)}},
+
+                { (int) DefaultActions.UpdatePieceWithTake, new BoardMovePredicate<TEntity>[] { (move, boardState)
+                    => new UpdatePieceValidator<TEntity>().ValidateMove(move, boardState)}},
             };
         }
 

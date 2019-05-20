@@ -69,11 +69,14 @@ namespace chess.engine.Movement.King
 
             var pathBetween = CalcPathBetweenKingAndCastle(move, king);
 
-            var destinationIsEmptyValidator = new DestinationIsEmptyValidator<ChessPieceEntity>();
+//            var destinationIsEmptyValidator = new DestinationIsEmptyValidator<ChessPieceEntity>();
+            //            var pathIsEmpty = pathBetween.All(loc
+            //                =>  destinationIsEmptyValidator.ValidateMove(
+            //                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly),
+            //                    roBoardState));
+
             var pathIsEmpty = pathBetween.All(loc
-                => destinationIsEmptyValidator.ValidateMove(
-                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly),
-                    roBoardState));
+                => roBoardState.GetItem(loc) == null);
 
             var destinationNotUnderAttackValidator = new DestinationNotUnderAttackValidator<ChessPieceEntity>();
             var pathNotUnderAttack = pathBetween.All(loc

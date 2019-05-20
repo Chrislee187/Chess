@@ -43,17 +43,21 @@ namespace chess.big.tests
         [Explicit("WARNING: Could take a long time.")]
         public void Should_play_all_games_in_a_single_file()
         {
-            var filename = @"D:\Src\PGNArchive\PGN\Adams\Adams.pgn";
+
+            //var filename = @"D:\Src\PGNArchive\PGN\Adams\Adams.pgn";          //  58.7377 Minutes - 3081 games    Average playtime (00:00:01.1312775) (DEBUG)
+            //var filename = @"D:\Src\PGNArchive\PGN\Akobian\Akobian.pgn";      //  24.0282 Minutes - 1250 games    Average playtime (00:00:01.1436758) (DEBUG)
+            // var filename = @"D:\Src\PGNArchive\PGN\Akopian\Akopian.pgn";        //  29.0058 Minutes - 1880 games    Average playtime (00:00:00.9179160)(RELEASE)
+            var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";        //  (RELEASE)
             TestContext.Progress.WriteLine($"Playing all games from;");
             TestContext.Progress.WriteLine($"  {filename}");
             PlaySingleGame(PgnReader.FromFile(filename));
+            TestContext.Progress.WriteLine($"  {filename} complete!");
         }
 
         private void PlaySingleGame(PgnReader reader)
         {
             PgnGame game = null;
             ChessGame chessGame = null;
-            PgnTurn lastTurn = null;
             var gameIdx = 0;
             try
             {
@@ -66,7 +70,8 @@ namespace chess.big.tests
                     var sw = Stopwatch.StartNew();
                     PlayTurns(game, chessGame);
                     var elapsed = sw.Elapsed;
-                    TestContext.Progress.WriteAsync($"{gameIdx} : {game} ({elapsed})");
+                    var desc = $"{game.Event} {game.Round} {game.White} vs {game.Black} {game.Result}";
+                    TestContext.Progress.WriteAsync($"{gameIdx} : {desc} ({elapsed})");
                     timings.Add(elapsed);
                     game = reader.ReadGame();
                 }
@@ -82,6 +87,8 @@ namespace chess.big.tests
                 TestContext.Out.WriteLine($"Full PGN Text:\n{reader.LastGameText}");
                 throw;
             }
+
+            TestContext.WriteLine("Finished");
         }
 
         private static void PlayTurns(PgnGame game, ChessGame chessGame)

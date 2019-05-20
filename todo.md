@@ -1,5 +1,4 @@
 # TODOS
-* Performamce tests becoming more important, game parsing is slow which is affecting my ability to run 400k games through the engine for test purposes
 * Basic web integration test, ensure index.html exists and contains a chessboard and moves
 * Create a chess.engine.tests.utils project contain for stuff like the builders. Will be need by the other high-level tests that are planned (.integration.tests for the API and .feature.tests for the web pages)
 * Create feature and integration tests assemblies
@@ -14,8 +13,13 @@
 * ~~Add SAN move support to ChessGame.Move()~~
 * ~~Done (BoardStateWrapper's)- NOTE: Refactored to use a ReadOnlyBoardState approach Was hoping to avoid it but looks like will need some sort of simple facade wrappers around the BoardState object for its interactions with validators and actions to allow better testing, they currently need a full create boardstate to test with.~~
 * Proper feature flag mechanism NOT static flags
-* 
+* Feature level test that plays a full game through the API
+* Detailed feature level tests, Pawn_can_move_two_squares_at_start(), Pawn_cannot_move_two_squares_after_start()
+  * How to handle these need to be easy to implement and setup the required states, want to be able to create the rules of chess in feature tests
+
 ## Performance
+* did some simple analysis with R# profile, found some good improvements avg game parse time currently around 1.14ms
+* seperate performance test assembly, appends results to a file that can be graphed (and asserted against?)
 ### Measurements
 * Counters - get some counters and timers in the frequently used stuff
 

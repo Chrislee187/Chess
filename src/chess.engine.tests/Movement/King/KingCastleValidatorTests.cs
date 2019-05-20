@@ -11,6 +11,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Movement.King
 {
     [TestFixture]
+
     public class KingCastleValidatorTests : ValidationTestsBase
     {
         // TODO: Refactor to remove board builder

@@ -58,5 +58,12 @@ namespace board.engine.Movement
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
+
+#if DEBUG
+        public override string ToString()
+        {
+            return DebuggerDisplay;
+        }
+#endif
     }
 }

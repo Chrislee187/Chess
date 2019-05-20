@@ -8,7 +8,7 @@ namespace board.engine.Movement
     [DebuggerDisplay("{DebuggerDisplay, nq}")]
     public class BoardMove : ICloneable
     {
-        private string DebuggerDisplay => $"{From}{To}{MoveType}";
+        private string DebuggerDisplay => $"{From}{To} {MoveType}";
 
         public static BoardMove Create(BoardLocation from, BoardLocation to, int moveType)
             => new BoardMove(from, to, moveType);
@@ -65,6 +65,13 @@ namespace board.engine.Movement
             boardMove.ExtraData = ExtraData;
             return boardMove;
         }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return DebuggerDisplay;
+        }
+#endif
 
         #endregion
     }

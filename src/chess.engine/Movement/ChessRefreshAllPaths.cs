@@ -33,9 +33,17 @@ namespace chess.engine.Movement
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
         {
             _logger?.LogDebug("Beginning ChessRefreshAllPaths process...");
-            boardState.RegenerateAllPaths();
 
-            var boardStateGetAllItemLocations = boardState.GetAllItemLocations.ToList();
+            // TODO: Some sort of simple cache hooked in to the App scope,
+            // one average sample game calls this 156000 times!!!!!
+            
+            boardState.RegeneratePossiblePaths();
+
+            // NOTE: IMPORTANT: Kings must be evaluated last to ensure that moves
+            // from other pieces that would cause check are generated first!
+            var boardStateGetAllItemLocations = boardState.GetItems()
+                .OrderBy(i => i.Item.EntityType)
+                .Select(i => i.Location).ToList();
             
             foreach (var loc in boardStateGetAllItemLocations)
             {

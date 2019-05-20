@@ -51,5 +51,11 @@ namespace board.engine.Movement
 
         #endregion
 
+#if DEBUG
+        public override string ToString()
+        {
+            return DebuggerDisplay;
+        }
+#endif
     }
 }

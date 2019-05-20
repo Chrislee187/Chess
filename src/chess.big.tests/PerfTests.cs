@@ -41,7 +41,7 @@ namespace chess.big.tests
 
         [Test]
         [Repeat(10)]
-//        [Explicit("Comment out this attribute and using 'dotnet test --filter chess.big.tests.PerfTests.Perf_RefreshAllPaths' to see the proper output (NUnit Test Runner issues with console output and threads)")]
+        [Explicit("Comment out this attribute and using 'dotnet test --filter chess.big.tests.PerfTests.Perf_RefreshAllPaths' to see the proper output (NUnit Test Runner issues with console output and threads)")]
         public void Perf_RefreshAllPaths()
         {
             var sequential = Play(false);

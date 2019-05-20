@@ -147,6 +147,5 @@ namespace chess.pgn
             tagPairs = tps;
             return pairs.Last();
         }
-
     }
 }

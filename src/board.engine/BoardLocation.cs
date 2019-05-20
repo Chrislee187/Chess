@@ -52,5 +52,13 @@ namespace board.engine
         }
 
         #endregion
+
+#if DEBUG
+        public override string ToString()
+        {
+            return DebuggerDisplay;
+        }
+#endif
+
     }
 }

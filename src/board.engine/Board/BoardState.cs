@@ -6,7 +6,7 @@ namespace board.engine.Board
 {
     public class BoardState<TEntity> : IBoardState<TEntity> where TEntity : class, IBoardEntity
     {
-        public static bool ParalleiseRefreshAllPaths => FeatureFlags.ParalleliseRefreshAllPaths;
+        public static bool ParalleiseRefreshPaths => FeatureFlags.ParalleliseRefreshAllPaths;
 
         private readonly IDictionary<BoardLocation, LocatedItem<TEntity>> _items;
         private readonly IPathsValidator<TEntity> _pathsValidator;
@@ -26,8 +26,6 @@ namespace board.engine.Board
 
         public void PlaceEntity(BoardLocation loc, TEntity entity)
             => _items[loc] = new LocatedItem<TEntity>(loc, entity, null);
-
-        public IEnumerable<BoardLocation> GetAllItemLocations => _items.Keys;
 
         public LocatedItem<TEntity> GetItem(BoardLocation loc)
         {
@@ -65,66 +63,47 @@ namespace board.engine.Board
 
         public bool IsEmpty(BoardLocation location) => !_items.ContainsKey(location);
 
-        public void RegeneratePaths(BoardLocation at)
+        private IOrderedEnumerable<LocatedItem<TEntity>> ChessOrdering(IEnumerable<LocatedItem<TEntity>> items)
         {
-            var item = GetItem(at);
+            return items.OrderBy(i => i.Item.EntityType);
+        }
+        private IEnumerable<LocatedItem<TEntity>> AllItems()
+            => ChessOrdering(_items.Values);
 
-            Guard.NotNull(item, $"Null item found at {at}!");
+        private IEnumerable<LocatedItem<TEntity>> AllItems(int owner)
+            => ChessOrdering(_items.Values.Where(i => i.Item.Owner == owner));
 
-            var paths = _pathsValidator.GeneratePossiblePaths(this, item.Item, at);
+        public void RegeneratePossiblePaths(LocatedItem<TEntity> locatedItem)
+        {
+            var item = locatedItem;
+
+            Guard.NotNull(item, $"Null item found!");
+
+            var paths = _pathsValidator.GeneratePossiblePaths(this, item.Item, locatedItem.Location);
 
             item.UpdatePaths(paths);
         }
 
-        public void RegenerateAllPaths()
+
+        private void RefreshPathsFor(IOrderedEnumerable<LocatedItem<TEntity>> items)
         {
-            if (ParalleiseRefreshAllPaths)
+            if (ParalleiseRefreshPaths)
             {
-                RegenerateAllPathsParallel();
+                items.AsParallel()
+                    .ForAll(RegeneratePossiblePaths);
             }
             else
             {
-                RegenerateAllPathsSequential();
+                items.ToList()
+                    .ForEach(RegeneratePossiblePaths);
             }
         }
 
-        private void RegenerateAllPathsSequential()
-        {
-            foreach (var loc in GetAllItemLocations)
-            {
-                RegeneratePaths(loc);
-            }
-        }
+        public void RegeneratePossiblePaths(int owner)
+            => RefreshPathsFor(ChessOrdering(AllItems(owner)));
 
-        public void RegenerateAllPathsParallel()
-        {
-            // new ways - this one is abit slower not sure why
-            // 175-190% first observed values | 250% (avg 5 runs)
-            // Parallel.ForEach(GetAllItemLocations, RegeneratePaths);
-
-            // 215-221% first observed values | 275% (avg 5 runs)
-            GetAllItemLocations.AsParallel()
-                .WithExecutionMode(ParallelExecutionMode.ForceParallelism) // This seems to give small improvement, bigger test sample needed
-                .ForAll(RegeneratePaths);
-
-            // Old way
-            // 220% first observed values | 280% (avg 5 runs)
-            // var tasks = new List<Task>();
-            // foreach (var loc in GetAllItemLocations)
-            // {
-            //     tasks.Add(Task.Run(() => {
-            //         RegeneratePaths(loc);
-            //     }));
-            // 
-            // }
-            // Task.WaitAll(tasks.ToArray());
-        }
-
-        public void RegeneratePaths(int owner)
-        {
-            GetItems(owner).AsParallel()
-                .ForAll(i => RegeneratePaths(i.Location));
-        }
+        public void RegeneratePossiblePaths() 
+            => RefreshPathsFor(ChessOrdering(AllItems()));
 
         #region For DEBUGGING use, remove in due course
 

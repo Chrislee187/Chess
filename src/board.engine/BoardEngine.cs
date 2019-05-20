@@ -100,8 +100,8 @@ namespace board.engine
         private class DefaultRefreshAllPaths : IRefreshAllPaths<TEntity>
         {
             public void RefreshAllPaths(IBoardState<TEntity> boardState) 
-                => boardState.GetAllItemLocations.ToList()
-                    .ForEach(boardState.RegeneratePaths);
+                => boardState.GetItems().ToList()
+                    .ForEach(boardState.RegeneratePossiblePaths);
         }
     }
 }

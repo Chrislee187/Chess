@@ -40,5 +40,7 @@ namespace chess.pgn
 
             return new PgnDate(year, month, day);
         }
-   }
+
+        public override string ToString() => DebuggerDisplay;
+    }
 }

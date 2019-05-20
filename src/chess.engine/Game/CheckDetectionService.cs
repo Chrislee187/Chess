@@ -101,14 +101,14 @@ namespace chess.engine.Game
                 Debugger.Break();
             }
 
-            if (refreshPathsColour.HasValue)
-            {
-                clonedBoardState.RegeneratePaths((int) refreshPathsColour.Value);
-            }
-            else
-            {
-                clonedBoardState.RegenerateAllPaths();
-            }
+//            if (refreshPathsColour.HasValue)
+//            {
+//                clonedBoardState.RegeneratePossiblePaths((int) refreshPathsColour.Value);
+//            }
+//            else
+//            {
+                clonedBoardState.RegeneratePossiblePaths();
+//            }
 
             return clonedBoardState;
         }

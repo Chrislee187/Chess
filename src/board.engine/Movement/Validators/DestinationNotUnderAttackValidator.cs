@@ -21,7 +21,7 @@ namespace board.engine.Movement.Validators
             var enemyItems = roBoardState.GetItems().Where(i => i.Item.Owner != owner);
             enemyPaths.AddRange(enemyItems.SelectMany(li => li.Paths));
 
-            var attackMoveTypes = new []{ (int) DefaultActions.MoveOrTake, (int) DefaultActions.TakeOnly, (int) ChessMoveTypes.KingMove };
+            var attackMoveTypes = new []{ (int)(int) DefaultActions.MoveOrTake, (int) DefaultActions.TakeOnly, (int) ChessMoveTypes.KingMove };
             return !enemyPaths.ContainsMoveTypeTo(move.To, attackMoveTypes);
         }
 
