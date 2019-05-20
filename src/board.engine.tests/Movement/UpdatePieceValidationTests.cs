@@ -13,7 +13,8 @@ namespace board.engine.tests.Movement
     {
         private Mock<UpdatePieceValidator<TestBoardEntity>.IBoardStateWrapper> _wrapperMock;
         private UpdatePieceValidator<TestBoardEntity> _validator;
-        private Mock<DestinationIsEmptyOrContainsEnemyValidator<TestBoardEntity>.IBoardStateWrapper> _innerValidatorWrapperMock;
+        private Mock<DestinationIsEmptyValidator<TestBoardEntity>.IBoardStateWrapper> _isEmptyMock;
+        private Mock<DestinationContainsEnemyMoveValidator<TestBoardEntity>.IBoardStateWrapper> _containsEnemyMock;
 
         [SetUp]
         public void SetUp()
@@ -21,13 +22,13 @@ namespace board.engine.tests.Movement
             _wrapperMock = new Mock<UpdatePieceValidator<TestBoardEntity>.IBoardStateWrapper>();
             _validator = new UpdatePieceValidator<TestBoardEntity>();
 
-            _innerValidatorWrapperMock = new Mock<DestinationIsEmptyOrContainsEnemyValidator<TestBoardEntity>.IBoardStateWrapper>();
-            _innerValidatorWrapperMock.Setup(m => m.GetDestinationIsEmptyWrapper())
-                .Returns(new Mock<DestinationIsEmptyValidator<TestBoardEntity>.IBoardStateWrapper>().Object);
-            _innerValidatorWrapperMock.Setup(m => m.GetDestinationContainsEnemyMoveWrapper())
-                .Returns(new Mock<DestinationContainsEnemyMoveValidator<TestBoardEntity>.IBoardStateWrapper>().Object);
-            _wrapperMock.Setup(m => m.GetDestinationIsEmptyOrContainsEnemyWrapper())
-                .Returns(_innerValidatorWrapperMock.Object);
+            _isEmptyMock = new Mock<DestinationIsEmptyValidator<TestBoardEntity>.IBoardStateWrapper>();
+            _containsEnemyMock = new Mock<DestinationContainsEnemyMoveValidator<TestBoardEntity>.IBoardStateWrapper>();
+
+            _wrapperMock.Setup(m => m.GetDestinationIsEmptyWrapper())
+                .Returns(_isEmptyMock.Object);
+            _wrapperMock.Setup(m => m.GetDestinationContainsEnemyMoveWrapper())
+                .Returns(_containsEnemyMock.Object);
         }
 
         [Test]

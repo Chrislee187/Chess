@@ -22,6 +22,7 @@ namespace board.engine.Actions
                 {(int) DefaultActions.TakeOnly, (s) => new TakeOnlyAction<TEntity>(this, s)},
                 {(int) DefaultActions.MoveOrTake, (s) => new MoveOrTakeAction<TEntity>(this, s)},
                 {(int) DefaultActions.UpdatePiece, (s) => new UpdatePieceAction<TEntity>(entityFactory, this, s)},
+                {(int) DefaultActions.UpdatePieceWithTake, (s) => new UpdatePieceAction<TEntity>(entityFactory, this, s)},
             };
         }
 
@@ -43,5 +44,6 @@ namespace board.engine.Actions
         MoveOnly = 2,
         TakeOnly = 3,
         UpdatePiece = 4,
+        UpdatePieceWithTake = 5,
     }
 }

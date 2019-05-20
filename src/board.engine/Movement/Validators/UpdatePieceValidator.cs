@@ -1,4 +1,5 @@
-﻿using board.engine.Actions;
+﻿using System.ComponentModel.DataAnnotations;
+using board.engine.Actions;
 using board.engine.Board;
 
 namespace board.engine.Movement.Validators
@@ -14,11 +15,17 @@ namespace board.engine.Movement.Validators
             var piece = wrapper.GetFromEntity(move);
             if (piece == null) return false;
 
-            var subWrapper = wrapper.GetDestinationIsEmptyOrContainsEnemyWrapper();
-
-
-            var valid = new DestinationIsEmptyOrContainsEnemyValidator<TEntity>()
-                .ValidateMove(move, subWrapper);
+            bool valid = false;
+            if(move.MoveType == (int) DefaultActions.UpdatePieceWithTake)
+            {
+                valid = new DestinationContainsEnemyMoveValidator<TEntity>()
+                    .ValidateMove(move, wrapper.GetDestinationContainsEnemyMoveWrapper());
+            }
+            else
+            {
+                valid = new DestinationIsEmptyValidator<TEntity>()
+                    .ValidateMove(move, wrapper.GetDestinationIsEmptyWrapper());
+            }
 
             return valid;
         }
@@ -27,8 +34,8 @@ namespace board.engine.Movement.Validators
         {
             LocatedItem<TEntity> GetFromEntity(BoardMove move);
 
-            DestinationIsEmptyOrContainsEnemyValidator<TEntity>.IBoardStateWrapper
-                GetDestinationIsEmptyOrContainsEnemyWrapper();
+            DestinationIsEmptyValidator<TEntity>.IBoardStateWrapper GetDestinationIsEmptyWrapper();
+            DestinationContainsEnemyMoveValidator<TEntity>.IBoardStateWrapper GetDestinationContainsEnemyMoveWrapper();
         }
 
         public class BoardStateWrapper : DefaultBoardStateWrapper<TEntity>, IBoardStateWrapper
@@ -39,3 +46,4 @@ namespace board.engine.Movement.Validators
         }
     }
 }
+

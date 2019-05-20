@@ -41,6 +41,12 @@ namespace board.engine.Movement
                         return new UpdatePieceValidator<TEntity>().ValidateMove(move, wrapper);
                     }
                 }},
+                { (int) DefaultActions.UpdatePieceWithTake, new BoardMovePredicate<TEntity>[] { (move, boardState) =>
+                    {
+                        var wrapper = UpdatePieceValidator<TEntity>.Wrap(boardState);
+                        return new UpdatePieceValidator<TEntity>().ValidateMove(move, wrapper);
+                    }
+                }},
             };
 
         }

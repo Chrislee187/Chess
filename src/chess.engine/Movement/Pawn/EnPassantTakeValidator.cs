@@ -1,5 +1,4 @@
-﻿using board.engine;
-using board.engine.Board;
+﻿using board.engine.Board;
 using board.engine.Movement;
 using board.engine.Movement.Validators;
 using chess.engine.Entities;
