@@ -6,7 +6,7 @@ namespace board.engine.tests.Actions
 {
     public class TestBoardEntity : IBoardEntity
     {
-        public TestBoardEntity(int owner = 1)
+        public TestBoardEntity(int owner = 0)
         {
             Owner = owner;
             EntityName = Guid.NewGuid().ToString();

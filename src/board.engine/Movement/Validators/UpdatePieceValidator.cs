@@ -5,44 +5,27 @@ using board.engine.Board;
 namespace board.engine.Movement.Validators
 {
     public class UpdatePieceValidator<TEntity>
-        : IMoveValidator<UpdatePieceValidator<TEntity>.IBoardStateWrapper>
+        : IMoveValidator<TEntity>
         where TEntity : class, IBoardEntity
     {
-        public static IBoardStateWrapper Wrap(IBoardState<TEntity> boardState) => new BoardStateWrapper(boardState);
-
-        public bool ValidateMove(BoardMove move, IBoardStateWrapper wrapper)
+        public bool ValidateMove(BoardMove move, IReadOnlyBoardState<TEntity> roBoardState)
         {
-            var piece = wrapper.GetFromEntity(move);
+            var piece = roBoardState.GetItem(move.From);
             if (piece == null) return false;
 
             bool valid = false;
             if(move.MoveType == (int) DefaultActions.UpdatePieceWithTake)
             {
                 valid = new DestinationContainsEnemyMoveValidator<TEntity>()
-                    .ValidateMove(move, wrapper.GetDestinationContainsEnemyMoveWrapper());
+                    .ValidateMove(move, roBoardState);
             }
             else
             {
                 valid = new DestinationIsEmptyValidator<TEntity>()
-                    .ValidateMove(move, wrapper.GetDestinationIsEmptyWrapper());
+                    .ValidateMove(move, roBoardState);
             }
 
             return valid;
-        }
-
-        public interface IBoardStateWrapper
-        {
-            LocatedItem<TEntity> GetFromEntity(BoardMove move);
-
-            DestinationIsEmptyValidator<TEntity>.IBoardStateWrapper GetDestinationIsEmptyWrapper();
-            DestinationContainsEnemyMoveValidator<TEntity>.IBoardStateWrapper GetDestinationContainsEnemyMoveWrapper();
-        }
-
-        public class BoardStateWrapper : DefaultBoardStateWrapper<TEntity>, IBoardStateWrapper
-        {
-            public BoardStateWrapper(IBoardState<TEntity> boardState) : base(boardState)
-            {
-            }
         }
     }
 }

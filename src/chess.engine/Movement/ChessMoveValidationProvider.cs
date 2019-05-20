@@ -13,14 +13,13 @@ namespace chess.engine.Movement
             Validators.Add((int)ChessMoveTypes.KingMove, new BoardMovePredicate<ChessPieceEntity>[] {
                 (move, boardState) =>
                 {
-                    var wrap = DestinationIsEmptyOrContainsEnemyValidator<ChessPieceEntity>.Wrap(boardState);
-                    return new DestinationIsEmptyOrContainsEnemyValidator<ChessPieceEntity>().ValidateMove(move,
-                        wrap);
+
+                    return new DestinationIsEmptyOrContainsEnemyValidator<ChessPieceEntity>().ValidateMove(move, boardState);
                 },
                 (move, boardState) =>
                 {
-                    var wrap = DestinationNotUnderAttackValidator<ChessPieceEntity>.Wrap(boardState);
-                    return new DestinationNotUnderAttackValidator<ChessPieceEntity>().ValidateMove(move, wrap);
+
+                    return new DestinationNotUnderAttackValidator<ChessPieceEntity>().ValidateMove(move, boardState);
                 }
             });
 
@@ -28,24 +27,22 @@ namespace chess.engine.Movement
                 new BoardMovePredicate<ChessPieceEntity>[]
                 {(move, boardState) =>
                     {
-                        var wrap = EnPassantTakeValidator.Wrap(boardState);
-                        return new EnPassantTakeValidator().ValidateMove(move, wrap);
+
+                        return new EnPassantTakeValidator().ValidateMove(move, boardState);
                     }
                 });
             Validators.Add((int)ChessMoveTypes.CastleKingSide,
                 new BoardMovePredicate<ChessPieceEntity>[]
                 { (move, boardState) =>
                     {
-                        var wrap = KingCastleValidator.Wrap(boardState);
-                        return new KingCastleValidator().ValidateMove(move, wrap);
+                        return new KingCastleValidator().ValidateMove(move, boardState);
                     }
                 });
             Validators.Add((int)ChessMoveTypes.CastleQueenSide,
                 new BoardMovePredicate<ChessPieceEntity>[]
                     {(move, boardState) =>
                         {
-                            var wrap = KingCastleValidator.Wrap(boardState);
-                            return new KingCastleValidator().ValidateMove(move, wrap);
+                            return new KingCastleValidator().ValidateMove(move, boardState);
                         }
                     });
 

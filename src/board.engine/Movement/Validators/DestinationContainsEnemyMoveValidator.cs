@@ -3,31 +3,18 @@
 namespace board.engine.Movement.Validators
 {
     public class DestinationContainsEnemyMoveValidator<TEntity>
-        : IMoveValidator<DestinationContainsEnemyMoveValidator<TEntity>.IBoardStateWrapper>
+        : IMoveValidator<TEntity>
         where TEntity : class, IBoardEntity
     {
-        public static IBoardStateWrapper Wrap(IBoardState<TEntity> boardState) => new BoardStateWrapper(boardState);
-
-        public bool ValidateMove(BoardMove move, IBoardStateWrapper wrapper)
+        public bool ValidateMove(BoardMove move, IReadOnlyBoardState<TEntity> roBoardState)
         {
-            var sourcePiece = wrapper.GetFromEntity(move);
+            var sourcePiece = roBoardState.GetItem(move.From);
             if (sourcePiece == null) return false;
 
-            var destinationPiece = wrapper.GetToEntity(move);
+            var destinationPiece = roBoardState.GetItem(move.To);
             if (destinationPiece == null) return false;
 
             return sourcePiece.Item.Owner != destinationPiece.Item.Owner;
-        }
-
-        public interface IBoardStateWrapper
-        {
-            LocatedItem<TEntity> GetFromEntity(BoardMove move);
-            LocatedItem<TEntity> GetToEntity(BoardMove move);
-        }
-
-        public class BoardStateWrapper : DefaultBoardStateWrapper<TEntity>, IBoardStateWrapper
-        {
-            public BoardStateWrapper(IBoardState<TEntity> boardState) : base(boardState) { }
         }
     }
 }

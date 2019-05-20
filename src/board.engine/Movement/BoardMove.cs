@@ -21,6 +21,7 @@ namespace board.engine.Movement
 
         public BoardMove(BoardLocation from, BoardLocation to, int moveType, object extraData = null)
         {
+            Guard.ArgumentException(() => from.Equals(to), "Cannot move to same place as starting location");
             From = from;
             To = to;
             MoveType = moveType;

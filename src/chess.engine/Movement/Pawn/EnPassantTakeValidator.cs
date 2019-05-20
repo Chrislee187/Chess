@@ -6,21 +6,21 @@ using chess.engine.Game;
 
 namespace chess.engine.Movement.Pawn
 {
-    public class EnPassantTakeValidator : IMoveValidator<EnPassantTakeValidator.IBoardStateWrapper> 
+    public class EnPassantTakeValidator : IMoveValidator<ChessPieceEntity> 
     {
-        public static IBoardStateWrapper Wrap(IBoardState<ChessPieceEntity> boardState) => new BoardStateWrapper(boardState);
-
-        public bool ValidateMove(BoardMove move, IBoardStateWrapper wrapper)
+        public bool ValidateMove(BoardMove move, IReadOnlyBoardState<ChessPieceEntity> roBoardState)
         {
             var destEmpty = new DestinationIsEmptyValidator<ChessPieceEntity>()
-                .ValidateMove(move, wrapper.GetDestinationIsEmptyWrapper());
+                .ValidateMove(move, roBoardState);
             if (!destEmpty) return false;
 
-            var entity = wrapper.GetFromEntity(move);
+            var entity = roBoardState.GetItem(move.From);
             if (entity == null) return false;
             var piece = entity.Item;
 
-            var passedEntity = wrapper.GetPassedEntity(move, piece.Player);
+            var passingPieceLocation = move.To.MoveBack(piece.Player);
+            var passedEntity = roBoardState.GetItem(passingPieceLocation);
+
             if (passedEntity == null) return false;
             
             if (!passedEntity.Item.Is(piece.Player.Enemy(), ChessPieceName.Pawn)) return false;
@@ -32,33 +32,6 @@ namespace chess.engine.Movement.Pawn
         {
             // Doesn't check it was the LAST move
             return moveTo.Item.LocationHistory.Count == 1;
-        }
-
-
-        public interface IBoardStateWrapper
-        {
-            DestinationIsEmptyValidator<ChessPieceEntity>.IBoardStateWrapper
-                GetDestinationIsEmptyWrapper();
-
-            LocatedItem<ChessPieceEntity> GetFromEntity(BoardMove move);
-
-            LocatedItem<ChessPieceEntity> GetPassedEntity(BoardMove move, Colours colour);
-        }
-
-        public class BoardStateWrapper : DefaultBoardStateWrapper<ChessPieceEntity>, IBoardStateWrapper
-        {
-            public BoardStateWrapper(IBoardState<ChessPieceEntity> boardState) : base(boardState)
-            {
-            }
-
-            public LocatedItem<ChessPieceEntity> GetPassedEntity(BoardMove move, Colours colour)
-            {
-                var passingPieceLocation = move.To.MoveBack(colour);
-
-                return passingPieceLocation == null 
-                    ? null 
-                    : BoardState.GetItem(passingPieceLocation);
-            }
         }
     }
 }

@@ -15,24 +15,23 @@ namespace chess.pgn.tests
         [Test]
         public void DebugPgnGameTest()
         {
-            var pgnText = @"[Event ""Hastings8990""]
- [Site ""Hastings""]
- [Date ""1989.??.??""]
- [Round ""?""]
- [White ""Spraggett, Kevin""]
+            var pgnText = @"[Event ""Tilburg rapid""]
+ [Site ""Tilburg""]
+ [Date ""1992.??.??""]
+ [Round ""3""]
+ [White ""Beliavsky, Alexander G""]
  [Black ""Adams, Michael""]
- [Result ""1-0""]
- [WhiteElo ""2585""]
- [BlackElo ""2505""]
- [ECO ""A25""]
+ [Result ""0-1""]
+ [WhiteElo ""2595""]
+ [BlackElo ""2610""]
+ [ECO ""B07""]
 
- 1.g3 Nf6 2.Bg2 e5 3.c4 Nc6 4.Nc3 Bb4 5.Nd5 O-O 6.a3 Bd6 7.Nc3 Re8 8.d3 Bf8
- 9.e3 Ne7 10.e4 c6 11.Bg5 Ng6 12.Nge2 h6 13.Bd2 Ne7 14.f4 exf4 15.gxf4 d5
- 16.e5 Ng4 17.h3 d4 18.hxg4 dxc3 19.Bxc3 Bxg4 20.d4 Ng6 21.O-O Nh4 22.Be4 Nf5
- 23.Bxf5 Bxf5 24.Ng3 Be6 25.b3 f5 26.Qd3 Qd7 27.a4 Qf7 28.Rad1 Rad8 29.Rd2 Rd7
- 30.Qf3 Red8 31.Rfd1 Kh7 32.Nf1 g5 33.Ne3 g4 34.Qh1 Rc7 35.Kf1 b6 36.Bb2 Qg6
- 37.d5 cxd5 38.Nxd5 Bxd5 39.cxd5 Bb4 40.d6 Rg7 41.Rc2 Bc5 42.Rd3 a5 43.Bd4 h5
- 44.Bxc5 bxc5 45.Rh2 Kh6 46.e6 c4 47.e7 Rb8 48.d7 cxd3 49.d8=Q  1-0
+ 1.d4 d6 2.e4 Nf6 3.Nc3 e5 4.dxe5 dxe5 5.Qxd8+ Kxd8 6.Bg5 Be6 7.O-O-O+ Nd7
+ 8.f4 exf4 9.Nf3 h6 10.Bxf4 c6 11.Bd3 Bc5 12.h3 Ke7 13.Na4 g5 14.Bh2 Be3+
+ 15.Kb1 Nh5 16.Rhe1 Bf4 17.Bg1 Bg3 18.Rf1 Bd6 19.e5 Bc7 20.Nc5 Nxc5 21.Bxc5+ Ke8
+ 22.Nd4 Ng7 23.Rde1 Bb6 24.Bxb6 axb6 25.g4 Bxa2+ 26.Kc1 Bd5 27.Kd2 b5 28.Rf2 Rd8
+ 29.Nf5 Nxf5 30.gxf5 Bc4 31.f6 Bxd3 32.cxd3 Kd7 33.h4 Ke6 34.Rg1 gxh4 35.Rf4 Rd5
+ 36.d4 Rhd8 37.Kc3 b4+  0-1
 ";
 
             var pgnReader = PgnReader.FromString(pgnText);
