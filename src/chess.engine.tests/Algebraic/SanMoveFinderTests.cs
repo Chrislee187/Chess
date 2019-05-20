@@ -59,6 +59,7 @@ namespace chess.engine.tests.Algebraic
         }
 
         [TestCase("O-O-O", "e1c1", Colours.White)]
+        [TestCase("O-O-O+", "e1c1", Colours.White)]
         [TestCase("O-O", "e1g1", Colours.White)]
         [TestCase("0-0-0", "e8c8", Colours.Black)]
         [TestCase("0-0", "e8g8", Colours.Black)]

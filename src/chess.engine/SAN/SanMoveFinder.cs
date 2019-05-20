@@ -11,7 +11,8 @@ using chess.engine.Pieces;
 
 namespace chess.engine.SAN
 {
-    public class SanMoveFinder
+    public class 
+        SanMoveFinder
     {
         private readonly IBoardState<ChessPieceEntity> _boardState;
 

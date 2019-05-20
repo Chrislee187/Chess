@@ -9,7 +9,7 @@ namespace chess.pgn.tests
 {
     [TestFixture]
     [Explicit("Test for use in debugging individual game problems")]
-    public class DebugPgnGame
+    public class ebugPgnGame
     {
 
         [Test]

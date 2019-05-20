@@ -90,18 +90,19 @@ namespace chess.engine.SAN
 
         public StandardAlgebraicNotation BuildFrom(string notation)
         {
-            if (notation.StartsWith("O") || notation.StartsWith("0"))
+            if (notation.StartsWith("O-O") || notation.StartsWith("0-0"))
             {
                 // TODO: Cheating here should parse it properly
-                if (notation.Length == 3)
+                if (notation.Length >= 5)
+                {
+                    return StandardAlgebraicNotation.QueenSideCastle;
+                }
+
+                if (notation.Length >= 3)
                 {
                     return StandardAlgebraicNotation.KingSideCastle;
                 }
 
-                if (notation.Length == 5)
-                {
-                    return StandardAlgebraicNotation.QueenSideCastle;
-                }
 
                 throw new ArgumentException($"{notation} is not a valid castle notation");
             }
