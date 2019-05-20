@@ -66,10 +66,12 @@ namespace chess.pgn.tests
                        "........"
                 );
             var game = ChessFactory.CustomChessGame(board.ToGameSetup());
-
             var piece = game.BoardState.GetItem("g4".ToBoardLocation());
 
             Assert.True(piece.Paths.ContainsMoveTo("g5".ToBoardLocation()));
+
+            game.Move("g5");
+
         }
         private static void PlayTurns(PgnGame game, ChessGame chessGame)
         {

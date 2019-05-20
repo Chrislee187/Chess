@@ -9,15 +9,22 @@ namespace chess.engine.Entities
     [DebuggerDisplay("{DebuggerDisplayText}")]
     public abstract class ChessPieceEntity : IBoardEntity
     {
+        private readonly List<BoardLocation> _locationHistory = new List<BoardLocation>();
         private string DebuggerDisplayText => $"{Player} {Piece}";
         public int EntityType { get; }
         public abstract IEnumerable<IPathGenerator> PathGenerators { get; }
         public string EntityName { get; }
         public int Owner { get; }
-
-
+        public void AddMoveTo(BoardLocation location)
+        {
+            _locationHistory.Add(location);
+        }
+        
         public Colours Player { get; }
         public ChessPieceName Piece { get; protected set; }
+
+        public IReadOnlyList<BoardLocation> LocationHistory 
+            => _locationHistory;
 
         protected ChessPieceEntity(Colours player, ChessPieceName piece)
         {

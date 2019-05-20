@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace board.engine.Board
 {
@@ -119,5 +120,78 @@ namespace board.engine.Board
             GetItems(owner).AsParallel()
                 .ForAll(i => RegeneratePaths(i.Location));
         }
+
+        #region For DEBUGGING use, remove in due course
+
+        public string ToTextBoard()
+        {
+            var sb = new StringBuilder();
+            for (var rank = 7; rank >= 0; rank--)
+            {
+                for (var file = 0; file < 8; file++)
+                {
+                    var entity = GetItem(BoardLocation.At(file+1, rank+1))?.Item;
+                    char chr;
+                    if (entity == null)
+                    {
+                        chr = '.';
+                    }
+                    else
+                    {
+                        chr = ChessPieceNameMapper.ToChar(entity.EntityType, entity.Owner);
+                    }
+                    sb.Append(chr == '\0' ? '.' : chr);
+                }
+
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }
+
+        //NOTE: Reproduced here for debugging convienced
+        static class ChessPieceNameMapper
+        {
+            private static readonly IDictionary<char, int> PieceNames = new Dictionary<char, int>
+            {
+                {'p', 1},
+                {'P', 1},
+                {'r', 2},
+                {'R', 2},
+                {'n', 4},
+                {'N', 4},
+                {'b', 3},
+                {'B', 3},
+                {'k', 5},
+                {'K', 5},
+                {'q', 6},
+                {'Q', 6},
+            };
+
+            public static bool ContainsPiece(char p)
+            {
+                return PieceNames.ContainsKey(p);
+            }
+
+            public static int FromChar(char c)
+            {
+                return PieceNames[c];
+            }
+
+            public static int ToOwner(char c)
+            {
+                return char.IsUpper(c) ? 0 : 1;
+            }
+
+            public static char ToChar(int piece, int owner)
+            {
+                var c = PieceNames.FirstOrDefault(n => n.Value == piece).Key;
+
+                return owner == 0 ? char.ToUpper(c) : char.ToLower(c);
+            }
+        }
+
+        #endregion
+
     }
 }

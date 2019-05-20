@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using chess.engine.Game;
 using chess.pgn;
 using NUnit.Framework;
@@ -36,10 +39,13 @@ namespace chess.big.tests
             Assert.That(gamesCount, Is.GreaterThan(0), "No games processed");
         }
 
-        [TestCase(@"D:\Src\PGNArchive\PGN\Adams\Adams.pgn")]
-        [Explicit("WARNING: Could take a long time.")]
-        public void Play_single_file(string filename)
+        [Test]
+//        [Explicit("WARNING: Could take a long time.")]
+        public void Should_play_all_games_in_a_single_file()
         {
+            var filename = @"D:\Src\PGNArchive\PGN\Adams\Adams.pgn";
+            TestContext.Progress.WriteLine($"Playing all games from;");
+            TestContext.Progress.WriteLine($"  {filename}");
             PlaySingleGame(PgnReader.FromFile(filename));
         }
 
@@ -51,16 +57,22 @@ namespace chess.big.tests
             var gameIdx = 0;
             try
             {
+                var timings = new List<TimeSpan>();
                 game = reader.ReadGame();
                 while (game != null)
                 {
                     gameIdx++;
-                    TestContext.Progress.WriteAsync(".");
                     chessGame = ChessFactory.NewChessGame();
+                    var sw = Stopwatch.StartNew();
                     PlayTurns(game, chessGame);
-
+                    var elapsed = sw.Elapsed;
+                    TestContext.Progress.WriteAsync($"{gameIdx} : {game} ({elapsed})");
+                    timings.Add(elapsed);
                     game = reader.ReadGame();
                 }
+
+                TestContext.Progress.WriteAsync($"Average playtime ({new TimeSpan(Convert.ToInt64(timings.Average(ts => ts.Ticks)))})");
+
             }
             catch
             {

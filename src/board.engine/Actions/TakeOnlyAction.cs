@@ -19,6 +19,7 @@ namespace board.engine.Actions
             BoardState.Remove(move.To);
 
             ActionProvider.Create((int)DefaultActions.MoveOnly, BoardState).Execute(move);
+
         }
     }
 }

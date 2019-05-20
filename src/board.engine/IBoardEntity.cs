@@ -13,6 +13,8 @@ namespace board.engine
         int EntityType { get; }
 
         int Owner { get; }
+
+        void AddMoveTo(BoardLocation location);
     }
 
     public interface IBoardEntityFactory<T> where T : IBoardEntity

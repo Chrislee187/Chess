@@ -13,9 +13,9 @@ namespace chess.engine.Movement.Pawn
 
         public bool ValidateMove(BoardMove move, IBoardStateWrapper wrapper)
         {
-            var normalTakeOk = new DestinationContainsEnemyMoveValidator<ChessPieceEntity>()
-                .ValidateMove(move, wrapper.GetDestinationContainsEnemyMoveWrapper());
-            if (normalTakeOk) return true;
+            var destEmpty = new DestinationIsEmptyValidator<ChessPieceEntity>()
+                .ValidateMove(move, wrapper.GetDestinationIsEmptyWrapper());
+            if (!destEmpty) return false;
 
             var entity = wrapper.GetFromEntity(move);
             if (entity == null) return false;
@@ -24,25 +24,22 @@ namespace chess.engine.Movement.Pawn
             var passedEntity = wrapper.GetPassedEntity(move, piece.Player);
             if (passedEntity == null) return false;
             
-            if (passedEntity.Item.Is(piece.Player)) return false;
-            if (!passedEntity.Item.Is(ChessPieceName.Pawn)) return false;
+            if (!passedEntity.Item.Is(piece.Player.Enemy(), ChessPieceName.Pawn)) return false;
 
-            return CheckPawnUsedDoubleMove(move.To);
+            return CheckPawnUsedDoubleMove(passedEntity);
         }
 
-        private bool CheckPawnUsedDoubleMove(BoardLocation moveTo)
+        private bool CheckPawnUsedDoubleMove(LocatedItem<ChessPieceEntity> moveTo)
         {
-            // ************************
-            // TODO: Need to check move count/history to confirm that the pawn we passed did it's double move last turn
-            // ************************
-            return true;
+            // Doesn't check it was the LAST move
+            return moveTo.Item.LocationHistory.Count == 1;
         }
 
 
         public interface IBoardStateWrapper
         {
-            DestinationContainsEnemyMoveValidator<ChessPieceEntity>.IBoardStateWrapper
-                GetDestinationContainsEnemyMoveWrapper();
+            DestinationIsEmptyValidator<ChessPieceEntity>.IBoardStateWrapper
+                GetDestinationIsEmptyWrapper();
 
             LocatedItem<ChessPieceEntity> GetFromEntity(BoardMove move);
 

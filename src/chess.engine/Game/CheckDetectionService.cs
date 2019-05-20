@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
@@ -89,6 +91,15 @@ namespace chess.engine.Game
             var clonedBoardState = (IBoardState<ChessPieceEntity>) boardState.Clone();
 
             _moveService.Move(clonedBoardState, move);
+
+            // TODO: 20/05/2019 Remove in due course
+            if (clonedBoardState.GetItems().Count(i => i.Item.Is(ChessPieceName.King)) != 2)
+            {
+                var b1 = boardState.ToTextBoard();
+                var b2 = clonedBoardState.ToTextBoard();
+                Debug.WriteLine($"source\n{b1}\nclone\n{b2}");
+                Debugger.Break();
+            }
 
             if (refreshPathsColour.HasValue)
             {

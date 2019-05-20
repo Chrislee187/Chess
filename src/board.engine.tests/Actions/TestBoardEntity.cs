@@ -20,5 +20,9 @@ namespace board.engine.tests.Actions
         public string EntityName { get; }
         public int EntityType { get; }
         public int Owner { get; }
+        public void AddMoveTo(BoardLocation location)
+        {
+            
+        }
     }
 }

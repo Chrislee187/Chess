@@ -22,7 +22,7 @@ namespace chess.engine.tests.Movement.Pawn
             var board = new ChessBoardBuilder()
                 .Board("   qk  r" +
                        "        " +
-                       "Pp Pb PP" +
+                       "Pe Pb PP" +
                        "        " +
                        "        " +
                        "        " +
@@ -37,8 +37,8 @@ namespace chess.engine.tests.Movement.Pawn
         public void Should_return_true_for_valid_take()
         {
             BoardLocation to = "B7".ToBoardLocation();
-            var promote = new BoardMove("A6".ToBoardLocation(), to, (int)DefaultActions.TakeOnly);
-            Assert.True(_validator.ValidateMove(promote, EnPassantTakeValidator.Wrap(_boardState)));
+            var move = new BoardMove("A6".ToBoardLocation(), to, (int)DefaultActions.TakeOnly);
+            Assert.True(_validator.ValidateMove(move, EnPassantTakeValidator.Wrap(_boardState)));
         }
 
         [Test]
@@ -46,8 +46,8 @@ namespace chess.engine.tests.Movement.Pawn
         {
             _boardState.Remove("B6".ToBoardLocation());
             BoardLocation to = "B7".ToBoardLocation();
-            var promote = new BoardMove("A6".ToBoardLocation(), to, (int) DefaultActions.TakeOnly);
-            Assert.False(_validator.ValidateMove(promote, EnPassantTakeValidator.Wrap(_boardState)));
+            var move = new BoardMove("A6".ToBoardLocation(), to, (int) DefaultActions.TakeOnly);
+            Assert.False(_validator.ValidateMove(move, EnPassantTakeValidator.Wrap(_boardState)));
         }
 
         [TestCase("D6", "E7")]
@@ -55,8 +55,8 @@ namespace chess.engine.tests.Movement.Pawn
         public void Should_return_false_when_wrong_piece_in_passing_location(string from, string to)
         {
             BoardLocation to1 = to.ToBoardLocation();
-            var promote = new BoardMove(@from.ToBoardLocation(), to1, (int) DefaultActions.TakeOnly);
-            Assert.False(_validator.ValidateMove(promote, EnPassantTakeValidator.Wrap(_boardState)));
+            var move = new BoardMove(@from.ToBoardLocation(), to1, (int) DefaultActions.TakeOnly);
+            Assert.False(_validator.ValidateMove(move, EnPassantTakeValidator.Wrap(_boardState)));
         }
 
 

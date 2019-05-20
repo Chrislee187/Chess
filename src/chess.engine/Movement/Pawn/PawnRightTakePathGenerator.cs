@@ -1,4 +1,5 @@
-﻿using board.engine;
+﻿using System.Collections.Generic;
+using board.engine;
 using board.engine.Actions;
 using board.engine.Movement;
 using chess.engine.Entities;
@@ -17,9 +18,12 @@ namespace chess.engine.Movement.Pawn
 
             var paths = new Paths();
 
-            var takeType = location.Y == Pieces.Pawn.EnPassantRankFor(playerIdx)
-                ? (int) ChessMoveTypes.TakeEnPassant
-                : (int) DefaultActions.TakeOnly;
+            var takeTypes = new List<int> {(int) DefaultActions.TakeOnly};
+
+            if (location.Y == Pieces.Pawn.EnPassantRankFor(playerIdx))
+            {
+                takeTypes.Add((int) ChessMoveTypes.TakeEnPassant);
+            }
 
 
             var takeLocation = location.MoveForward(playerIdx).MoveRight(playerIdx);
@@ -27,8 +31,11 @@ namespace chess.engine.Movement.Pawn
 
             if (takeLocation.Y != ChessGame.EndRankFor(playerIdx))
             {
-                var move = BoardMove.Create(location, takeLocation, takeType);
-                paths.Add(new Path {move});
+                foreach (var takeType in takeTypes)
+                {
+                    var move = BoardMove.Create(location, takeLocation, takeType);
+                    paths.Add(new Path { move });
+                }
             }
             else
             {

@@ -16,6 +16,7 @@ namespace board.engine.Actions
             var piece = BoardState.GetItem(move.From).Item;
             BoardState.Remove(move.From);
             BoardState.PlaceEntity(move.To, piece);
+            piece.AddMoveTo(move.To);
         }
     }
 }

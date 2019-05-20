@@ -1,16 +1,18 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using board.engine;
 using board.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Pieces;
+using Microsoft.Extensions.DependencyModel;
 
 namespace chess.engine.Game
 {
     public class ChessBoardBuilder
     {
-        private const string ValidPieces = "PKQRNB .";
+        private const string ValidPieces = "PKQRNB .E";
         private readonly char[,] _board = new char[8,8];
 
         public ChessBoardBuilder Rank(int rank, string pieces)
@@ -26,6 +28,10 @@ namespace chess.engine.Game
                 if (ValidPieces.Contains(piece.ToString().ToUpper()))
                 {
                     _board[file++, rank-1] = piece;
+                }
+                else
+                {
+                    throw new Exception($"Don't know how to map '{piece}' for board building purposes");
                 }
             }
 
@@ -160,7 +166,17 @@ namespace chess.engine.Game
                                 char.IsUpper(chr) ? Colours.White : Colours.Black
                             );
 
-                            engine.AddPiece(entity, BoardLocation.At(file + 1, rank + 1));
+                            var location = BoardLocation.At(file + 1, rank + 1);
+                            if (chr.ToString().ToUpper() == "E")
+                            {
+                                // Special pawn char for custom board setups, sets the move history so enpassant validation works
+                                entity.AddMoveTo(location);
+                            }
+                            engine.AddPiece(entity, location);
+                        }
+                        else if (chr != ' ' && chr != '.' && chr != '\0')
+                        {
+                            throw new Exception($"Invalid piece '{chr}'");
                         }
                     }
                 }

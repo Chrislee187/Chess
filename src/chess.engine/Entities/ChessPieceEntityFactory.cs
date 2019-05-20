@@ -7,7 +7,7 @@ namespace chess.engine.Entities
 {
     public class ChessPieceEntityFactory : IBoardEntityFactory<ChessPieceEntity>
     {
-        public string ValidPieces { get; }= "PRNBKQ";
+        public string ValidPieces { get; }= "PRNBKQE";
         private static readonly IDictionary<ChessPieceName, Func<Colours, ChessPieceEntity>> Factory 
             = new Dictionary<ChessPieceName, Func<Colours, ChessPieceEntity>>
         {

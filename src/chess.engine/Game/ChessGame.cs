@@ -1,4 +1,5 @@
-﻿using board.engine;
+﻿using System.Linq;
+using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Entities;
@@ -84,6 +85,7 @@ namespace chess.engine.Game
         private string PlayValidMove(BoardMove move)
         {
             _engine.Move(move);
+
 
             CurrentPlayer = NextPlayer();
             PlayerState = _gameStateService.CurrentPlayerState(BoardState, CurrentPlayer);

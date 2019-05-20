@@ -10,6 +10,8 @@ namespace chess.engine.Pieces
         {
             {'p', ChessPieceName.Pawn},
             {'P', ChessPieceName.Pawn},
+            {'e', ChessPieceName.Pawn},
+            {'E', ChessPieceName.Pawn},
             {'r', ChessPieceName.Rook},
             {'R', ChessPieceName.Rook},
             {'n', ChessPieceName.Knight},

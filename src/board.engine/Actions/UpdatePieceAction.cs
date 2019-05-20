@@ -33,6 +33,8 @@ namespace board.engine.Actions
             var chessPieceEntity = _entityFactory.Create(move.ExtraData);
 
             BoardState.PlaceEntity(move.To, chessPieceEntity);
+            chessPieceEntity.AddMoveTo(move.To);
+
         }
     }
 }

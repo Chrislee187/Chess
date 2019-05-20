@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using board.engine.Board;
 using board.engine.Movement;
 using Microsoft.Extensions.Logging;
@@ -90,8 +91,10 @@ namespace board.engine
 
         public void Move(BoardMove move)
         {
+            var t = move.ToString();
             _boardMoveService.Move(BoardState, move);
-            _refreshAllPaths.RefreshAllPaths(BoardState);
+
+        _refreshAllPaths.RefreshAllPaths(BoardState);
         }
 
         private class DefaultRefreshAllPaths : IRefreshAllPaths<TEntity>

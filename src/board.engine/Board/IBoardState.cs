@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace board.engine.Board
 {
-    public interface IBoardState<TEntity> : ICloneable where TEntity : class, IBoardEntity
+    public interface IBoardState<TEntity> : ICloneable 
+        where TEntity : class, IBoardEntity
     {
         void PlaceEntity(BoardLocation loc, TEntity entity);
         LocatedItem<TEntity> GetItem(BoardLocation loc);
@@ -22,5 +23,6 @@ namespace board.engine.Board
         void RegenerateAllPaths();
         void RegeneratePaths(int owner);
         void RegeneratePaths(BoardLocation at);
+        string ToTextBoard();
     }
 }
