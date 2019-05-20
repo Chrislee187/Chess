@@ -64,7 +64,7 @@ namespace chess.engine.tests
 
             var game = ChessFactory.CustomChessGame(setup, Colours.White);
 
-            var board = new ChessBoardBuilder().FromChessGame(game).ToString();
+            var board = new ChessBoardBuilder().FromChessGame(game).ToTextBoard();
             Console.WriteLine(board);
         }
 
@@ -90,7 +90,7 @@ namespace chess.engine.tests
 
             var game = ChessFactory.CustomChessGame(setup, Colours.White);
 
-            var board = new ChessBoardBuilder().FromChessGame(game).ToString();
+            var board = new ChessBoardBuilder().FromChessGame(game).ToTextBoard();
             Console.WriteLine(board);
         }
 

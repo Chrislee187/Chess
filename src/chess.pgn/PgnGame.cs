@@ -7,7 +7,7 @@ namespace chess.pgn
     [DebuggerDisplay("{DebuggerDisplayText}")]
     public class PgnGame
     {
-        private string DebuggerDisplayText => ToString();
+        private string DebuggerDisplayText => $"{White} vs {Black} @ {Event} #{Round} {Result}";
         public IReadOnlyDictionary<string, string> TagPairs { get; }
         public IEnumerable<PgnTurn> Turns { get; }
 
@@ -148,9 +148,5 @@ namespace chess.pgn
             return pairs.Last();
         }
 
-        public override string ToString()
-        {
-            return $"{White} vs {Black} @ {Event} #{Round} {Result}";
-        }
     }
 }

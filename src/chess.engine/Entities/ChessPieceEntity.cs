@@ -41,9 +41,5 @@ namespace chess.engine.Entities
         public bool Is(Colours owner) => owner == Player;
         public abstract object Clone();
 
-        public override string ToString()
-        {
-            return $"{Player.ToString()} {EntityName}";
-        }
     }
 }

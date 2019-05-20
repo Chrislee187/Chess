@@ -33,10 +33,5 @@ namespace chess.pgn
             }
             return new PgnTagPair(name, value);
         }
-
-        public override string ToString()
-        {
-            return $"[{Name} \"{Value}\"]";
-        }
     }
 }

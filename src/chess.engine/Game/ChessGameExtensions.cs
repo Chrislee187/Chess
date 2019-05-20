@@ -4,7 +4,7 @@
     {
         public static string ToText(this ChessGame game)
         {
-            return new ChessBoardBuilder().FromChessGame(game).ToString();
+            return new ChessBoardBuilder().FromChessGame(game).ToTextBoard();
         }
         public static string ToBuilderCode(this ChessGame game)
         {

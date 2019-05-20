@@ -9,6 +9,7 @@ namespace board.engine.Movement
     [DebuggerDisplay("{DebuggerDisplay}")]
     public class Paths : IEnumerable<Path>, ICloneable
     {
+        // NOTE: string.Join make the debugger a little slow
         private string DebuggerDisplay
             => $"{string.Join(", ", _paths.Select(m => m.ToString()))}";
 

@@ -1,7 +1,12 @@
+using System.Diagnostics;
+
 namespace chess.pgn
 {
+    [DebuggerDisplay("{DebuggerDisplay}")]
     public class PgnDate
     {
+        string DebuggerDisplay => $"{Year:0000}.{Month:00}.{Day:00}";
+
         public int? Year { get; }
         public int? Month { get; }
         public int? Day { get; }
@@ -35,7 +40,5 @@ namespace chess.pgn
 
             return new PgnDate(year, month, day);
         }
-
-        public override string ToString() => $"{Year:0000}.{Month:00}.{Day:00}";
-    }
+   }
 }

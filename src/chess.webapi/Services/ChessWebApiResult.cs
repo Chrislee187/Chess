@@ -29,7 +29,7 @@ namespace chess.webapi.Services
         {
             Game = game;
             Board = ChessGameConvert.Serialise(game);
-            BoardText = new ChessBoardBuilder().FromChessGame(game).ToString();
+            BoardText = new ChessBoardBuilder().FromChessGame(game).ToTextBoard();
             var items = game.BoardState.GetItems().ToList();
             Moves = items.SelectMany(i => i.Paths.FlattenMoves());
             AvailableMoves = ToMoveList(items.ToArray());

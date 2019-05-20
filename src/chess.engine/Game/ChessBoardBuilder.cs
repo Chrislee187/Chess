@@ -90,7 +90,7 @@ namespace chess.engine.Game
             return this;
         }
 
-        public override string ToString()
+        public string ToTextBoard()
         {
             var sb = new StringBuilder();
             for (var rank = 7; rank >=0; rank--)

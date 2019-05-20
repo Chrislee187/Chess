@@ -17,9 +17,5 @@ namespace chess.pgn
             Black = black;
         }
 
-        public override string ToString()
-        {
-            return DebuggerDisplayText;
-        }
     }
 }

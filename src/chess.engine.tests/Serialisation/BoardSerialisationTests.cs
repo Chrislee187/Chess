@@ -21,8 +21,8 @@ namespace chess.engine.tests.Serialisation
 
             var actualGame = ChessGameConvert.Deserialise(actualNewBoard);
 
-            var actualGameAsString = new ChessBoardBuilder().FromChessGame(actualGame).ToString();
-            var expectedGameAsString = new ChessBoardBuilder().FromChessGame(chessGame).ToString();
+            var actualGameAsString = new ChessBoardBuilder().FromChessGame(actualGame).ToTextBoard();
+            var expectedGameAsString = new ChessBoardBuilder().FromChessGame(chessGame).ToTextBoard();
             Assert.That(actualGameAsString, Is.EqualTo(expectedGameAsString));
             Console.WriteLine(actualGameAsString);
         }
