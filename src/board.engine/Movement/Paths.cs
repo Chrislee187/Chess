@@ -9,10 +9,11 @@ namespace board.engine.Movement
     [DebuggerDisplay("{DebuggerDisplay}")]
     public class Paths : IEnumerable<Path>, ICloneable
     {
+#if DEBUG
         // NOTE: string.Join make the debugger a little slow
         private string DebuggerDisplay
             => $"{string.Join(", ", _paths.Select(m => m.ToString()))}";
-
+#endif
         private readonly List<Path> _paths = new List<Path>();
         
         public void Add(Path path) 

@@ -20,7 +20,10 @@ The "engine" currently consists of the following components;
 * Azure publish. One click, very nice:) 
 * So... I've used and loved Generics for years, but it does create quite the rabbit hole sometimes.
 * No Property Injection in Microsoft.Extensions.DependencyInjection, shame have to manually pass Loggers in everywhere unless make them always last, optional param type approach, more thought needed.
-* 
+* Using R# Profiler found that `ToString()` (which I was using in `DebuggerDisplayAttributes`) can have some interesting performance implications, even when not really used outside of loggin etc., surrounded most of them with `#if DEBUG` for convience when debugging.
+* Starting seeing sub one second game parse times, a mini-milestone, 0.5 seconds next!
+
+
 [link.swaggerui]: https://chess-web-api.azurewebsites.net/swagger/index.html
 [link.chess.webapi.index.live]: https://chess-web-api.azurewebsites.net
 [link.Spiker]: /src/spiker

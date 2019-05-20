@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using board.engine.Movement;
 
 namespace board.engine.Board
 {
@@ -75,13 +77,25 @@ namespace board.engine.Board
 
         public void RegeneratePossiblePaths(LocatedItem<TEntity> locatedItem)
         {
-            var item = locatedItem;
+            Guard.NotNull(locatedItem, $"Null item found!");
 
-            Guard.NotNull(item, $"Null item found!");
+            var paths = _pathsValidator.GeneratePossiblePaths(this, locatedItem.Item, locatedItem.Location);
 
-            var paths = _pathsValidator.GeneratePossiblePaths(this, item.Item, locatedItem.Location);
+            locatedItem.UpdatePaths(paths);
+        }
 
-            item.UpdatePaths(paths);
+        public void UpdatePaths(LocatedItem<TEntity>[] items)
+        {
+//            _items.Clear();
+//            items.ToList().ForEach(i =>
+//            {
+//                _items.Add(i.Location, i);
+//            });
+
+            foreach (var item in items)
+            {
+                _items[item.Location].UpdatePaths((Paths) item.Paths.Clone());
+            }
         }
 
 
@@ -176,6 +190,5 @@ namespace board.engine.Board
         }
 
         #endregion
-
     }
 }

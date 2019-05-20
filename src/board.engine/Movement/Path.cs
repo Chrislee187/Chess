@@ -12,10 +12,11 @@ namespace board.engine.Movement
     [DebuggerDisplay("{DebuggerDisplay}")]
     public class Path : IEnumerable<BoardMove>, ICloneable
     {
-        // NOTE: string.Join make the debugger a little slow
+        // NOTE: string.Join makes execution in DEBUG mode slower, eventhough the debugger display is not directly being used
+#if DEBUG
         private string DebuggerDisplay
             => $"{string.Join(", ", _moves.Select(m => m.ToString()))}";
-
+#endif
         private readonly List<BoardMove> _moves = new List<BoardMove>();
 
         public void Add(BoardMove move) => _moves.Add(move);

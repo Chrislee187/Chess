@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
@@ -30,14 +32,42 @@ namespace chess.engine.Movement
             _logger = logger;
             _checkDetectionService = checkDetectionService;
         }
+
+
+        private readonly IDictionary<string, LocatedItem<ChessPieceEntity>[]> _stateCache
+        = new Dictionary<string, LocatedItem<ChessPieceEntity>[]>();
+
+        private void RefreshPathsFeature(IBoardState<ChessPieceEntity> boardState)
+        {
+            if (FeatureFlags.CachingPaths)
+            {
+                // Need proper boardstate key I think, currently a few tests fail, I guess around some state related
+                // so something not encoded in the textboard (enpassant  and castle viability namely)
+                var stateKey = ChessGameConvert.SerialiseBoard(boardState);
+                if (_stateCache.TryGetValue(stateKey, out var items))
+                {
+                    boardState.UpdatePaths(items);
+                }
+                else
+                {
+                    boardState.RegeneratePossiblePaths();
+
+                    if (FeatureFlags.CachingPaths)
+                    {
+                        _stateCache.Add(stateKey, boardState.GetItems().ToArray());
+                    }
+                }
+            }
+            else
+            {
+                boardState.RegeneratePossiblePaths();
+            }
+        }
         public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
         {
             _logger?.LogDebug("Beginning ChessRefreshAllPaths process...");
 
-            // TODO: Some sort of simple cache hooked in to the App scope,
-            // one average sample game calls this 156000 times!!!!!
-            
-            boardState.RegeneratePossiblePaths();
+            RefreshPathsFeature(boardState);
 
             // NOTE: IMPORTANT: Kings must be evaluated last to ensure that moves
             // from other pieces that would cause check are generated first!

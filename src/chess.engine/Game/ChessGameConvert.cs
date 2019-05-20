@@ -15,26 +15,42 @@ namespace chess.engine.Game
         public static string Serialise(ChessGame chessGameBoard)
         {
             var sb = new StringBuilder();
+                
+            sb.Append(SerialiseBoard(chessGameBoard.BoardState));
+
+            sb.Append(SerialiseCurrentPlayer(chessGameBoard));
+
+            sb.Append(CheckForCastleEligibility(chessGameBoard));
+
+            return sb.ToString();
+        }
+
+        public static string SerialiseCurrentPlayer(ChessGame chessGameBoard)
+        {
+            return chessGameBoard.CurrentPlayer.ToString().First().ToString();
+        }
+
+        public static string SerialiseBoard(IBoardState<ChessPieceEntity> boardState)
+        {
+            var sb = new StringBuilder();
 
             for (var y = 8; y >= 1; y--)
             {
                 for (var x = 1; x <= 8; x++)
                 {
-                    var item = chessGameBoard.Board[x - 1, y - 1];
+                    var item = boardState.GetItem(BoardLocation.At(x, y));
                     var c = AsChar(item);
                     sb.Append(c);
                 }
             }
 
-            sb.Append(chessGameBoard.CurrentPlayer.ToString().First());
-
-            CheckForCastleEligibility(chessGameBoard, sb);
-
             return sb.ToString();
         }
 
-        private static void CheckForCastleEligibility(ChessGame chessGameBoard, StringBuilder sb)
+
+        public static string CheckForCastleEligibility(ChessGame chessGameBoard)
         {
+            var sb = new StringBuilder();
             LocatedItem<ChessPieceEntity> GetKing(Colours colours) =>
                 chessGameBoard.BoardState.GetItem(King.StartPositionFor(colours));
 
@@ -51,18 +67,22 @@ namespace chess.engine.Game
 
             AddCastleEligibility(GetKing(Colours.White)?.Paths.FlattenMoves().ToList() ?? new List<BoardMove>());
             AddCastleEligibility(GetKing(Colours.Black)?.Paths.FlattenMoves().ToList() ?? new List<BoardMove>());
+            return sb.ToString();
         }
 
         private static char AsChar(LocatedItem<ChessPieceEntity> item)
         {
             if (item == null) return '.';
 
+
             if (item.Item.Piece == ChessPieceName.Pawn)
             {
+                var pawn = (PawnEntity) item.Item;
                 // TODO: Enpassant eligibility check and flag
             }
-
             var textRepresentation = ChessPieceNameMapper.ToChar(item.Item.Piece, item.Item.Player);
+
+            
             // TODO: Add enpassant check
             return textRepresentation;
         }

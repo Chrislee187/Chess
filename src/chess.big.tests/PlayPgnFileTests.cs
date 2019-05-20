@@ -47,7 +47,8 @@ namespace chess.big.tests
             //var filename = @"D:\Src\PGNArchive\PGN\Adams\Adams.pgn";          //  58.7377 Minutes - 3081 games    Average playtime (00:00:01.1312775) (DEBUG)
             //var filename = @"D:\Src\PGNArchive\PGN\Akobian\Akobian.pgn";      //  24.0282 Minutes - 1250 games    Average playtime (00:00:01.1436758) (DEBUG)
             // var filename = @"D:\Src\PGNArchive\PGN\Akopian\Akopian.pgn";        //  29.0058 Minutes - 1880 games    Average playtime (00:00:00.9179160)(RELEASE)
-            var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";        //  (RELEASE)
+            // var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";        // 12.1338 - 776  Average playtime (00:00:00.9298538) (RELEASE)
+            var filename = @"D:\Src\PGNArchive\PGN\Modern\Modern.pgn";        // (RELEASE)
             TestContext.Progress.WriteLine($"Playing all games from;");
             TestContext.Progress.WriteLine($"  {filename}");
             PlaySingleGame(PgnReader.FromFile(filename));

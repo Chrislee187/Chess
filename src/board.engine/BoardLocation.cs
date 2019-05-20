@@ -7,8 +7,9 @@ namespace board.engine
     [DebuggerDisplay("{DebuggerDisplay}")]
     public class BoardLocation : ICloneable
     {
+#if DEBUG
         private string DebuggerDisplay => $"({X},{Y})";
-
+#endif
         public int X { get; }
         public int Y { get; }
 

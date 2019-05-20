@@ -24,5 +24,6 @@ namespace board.engine.Board
         void RegeneratePossiblePaths(int owner);
 
         void RegeneratePossiblePaths(LocatedItem<TEntity> locatedItem);
+        void UpdatePaths(LocatedItem<TEntity>[] items);
     }
 }

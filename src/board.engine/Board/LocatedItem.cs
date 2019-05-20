@@ -9,7 +9,9 @@ namespace board.engine.Board
     [DebuggerDisplayAttribute("{DebuggerDisplayText}")]
     public class LocatedItem<TEntity> : ICloneable where TEntity : class, ICloneable, IBoardEntity
     {
+#if DEBUG
         private string DebuggerDisplayText => $"{Location} {Item.EntityName} ({Item.Owner})";
+#endif
         public LocatedItem(BoardLocation location, TEntity item, Paths paths)
         {
             Location = location;

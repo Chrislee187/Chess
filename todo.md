@@ -16,10 +16,16 @@
 * Feature level test that plays a full game through the API
 * Detailed feature level tests, Pawn_can_move_two_squares_at_start(), Pawn_cannot_move_two_squares_after_start()
   * How to handle these need to be easy to implement and setup the required states, want to be able to create the rules of chess in feature tests
+* Engine is now successfully parsing many (1000's) games
+
 
 ## Performance
-* did some simple analysis with R# profile, found some good improvements avg game parse time currently around 1.14ms
+* ~~did some simple analysis with R# profile, found some good improvements avg game parse time currently around 1.14ms~~ sub 1sec averager now
 * seperate performance test assembly, appends results to a file that can be graphed (and asserted against?)
+* Im pretty sure my algorithm for analysing the boards ends up generating paths for duplicate boards (when validating moves and generating paths for the validated moves)
+  * Can we improve the apporach to not do this?
+  * Can we cache results and reuse them if we are duplicating to avoid regenerating paths
+
 ### Measurements
 * Counters - get some counters and timers in the frequently used stuff
 

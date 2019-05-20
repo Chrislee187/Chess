@@ -94,7 +94,7 @@ namespace board.engine
             var t = move.ToString();
             _boardMoveService.Move(BoardState, move);
 
-        _refreshAllPaths.RefreshAllPaths(BoardState);
+            _refreshAllPaths.RefreshAllPaths(BoardState);
         }
 
         private class DefaultRefreshAllPaths : IRefreshAllPaths<TEntity>
