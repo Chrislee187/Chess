@@ -15,8 +15,7 @@ namespace chess.engine.Entities
             new List<IPathGenerator>
             {
                 new PawnNormalAndStartingPathGenerator(),
-                new PawnRightTakePathGenerator(),
-                new PawnLeftTakePathGenerator()
+                new PawnTakePathGenerator()
             };
         public override object Clone()
         {

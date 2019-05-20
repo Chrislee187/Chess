@@ -1,4 +1,5 @@
-﻿using board.engine.Board;
+﻿using board.engine.Actions;
+using board.engine.Board;
 
 namespace board.engine.Movement.Validators
 {
@@ -14,10 +15,12 @@ namespace board.engine.Movement.Validators
             if (piece == null) return false;
 
             var subWrapper = wrapper.GetDestinationIsEmptyOrContainsEnemyWrapper();
-            var destinationIsValid = new DestinationIsEmptyOrContainsEnemyValidator<TEntity>()
+
+
+            var valid = new DestinationIsEmptyOrContainsEnemyValidator<TEntity>()
                 .ValidateMove(move, subWrapper);
 
-            return destinationIsValid;
+            return valid;
         }
 
         public interface IBoardStateWrapper

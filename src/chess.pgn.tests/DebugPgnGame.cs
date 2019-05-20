@@ -1,4 +1,5 @@
 ﻿using System;
+using board.engine;
 using board.engine.Movement;
 using chess.engine.Extensions;
 using chess.engine.Game;
@@ -14,23 +15,24 @@ namespace chess.pgn.tests
         [Test]
         public void DebugPgnGameTest()
         {
-            var pgnText = @"[Event ""London NWYM""]
- [Site ""London""]
- [Date ""1987.??.??""]
+            var pgnText = @"[Event ""Hastings8990""]
+ [Site ""Hastings""]
+ [Date ""1989.??.??""]
  [Round ""?""]
- [White ""Vlahos, Kiriakos""]
+ [White ""Spraggett, Kevin""]
  [Black ""Adams, Michael""]
- [Result ""0-1""]
- [WhiteElo ""2275""]
- [BlackElo ""2360""]
- [ECO ""A28""]
+ [Result ""1-0""]
+ [WhiteElo ""2585""]
+ [BlackElo ""2505""]
+ [ECO ""A25""]
 
- 1.c4 e5 2.Nc3 Nf6 3.Nf3 Nc6 4.e3 Bb4 5.Qc2 O-O 6.Nd5 Re8 7.Qf5 d6 8.Nxf6+ gxf6
- 9.Qh5 d5 10.Bd3 e4 11.cxd5 exd3 12.dxc6 bxc6 13.b3 Bf8 14.Bb2 Re4 15.h3 Rb8
- 16.Nd4 Qd5 17.Qxd5 cxd5 18.Nf3 Re6 19.O-O Ba6 20.Rfc1 Rb7 21.Nd4 Reb6 22.Nf3 Bb5
- 23.Bd4 Ba3 24.Bxb6 axb6 25.Nd4 Bxc1 26.Rxc1 Bd7 27.Rc3 c5 28.Nf3 Bb5 29.a4 Ba6
- 30.b4 Bc4 31.bxc5 bxc5 32.Kh2 Rb2 33.Kg3 Rc2 34.Kf4 Kf8 35.g4 h6 36.h4 Ke7
- 37.Kf5 Ba6 38.g5 fxg5 39.hxg5 h5 40.Rb3 c4 41.Ra3 d4 42.exd4  0-1
+ 1.g3 Nf6 2.Bg2 e5 3.c4 Nc6 4.Nc3 Bb4 5.Nd5 O-O 6.a3 Bd6 7.Nc3 Re8 8.d3 Bf8
+ 9.e3 Ne7 10.e4 c6 11.Bg5 Ng6 12.Nge2 h6 13.Bd2 Ne7 14.f4 exf4 15.gxf4 d5
+ 16.e5 Ng4 17.h3 d4 18.hxg4 dxc3 19.Bxc3 Bxg4 20.d4 Ng6 21.O-O Nh4 22.Be4 Nf5
+ 23.Bxf5 Bxf5 24.Ng3 Be6 25.b3 f5 26.Qd3 Qd7 27.a4 Qf7 28.Rad1 Rad8 29.Rd2 Rd7
+ 30.Qf3 Red8 31.Rfd1 Kh7 32.Nf1 g5 33.Ne3 g4 34.Qh1 Rc7 35.Kf1 b6 36.Bb2 Qg6
+ 37.d5 cxd5 38.Nxd5 Bxd5 39.cxd5 Bb4 40.d6 Rg7 41.Rc2 Bc5 42.Rd3 a5 43.Bd4 h5
+ 44.Bxc5 bxc5 45.Rh2 Kh6 46.e6 c4 47.e7 Rb8 48.d7 cxd3 49.d8=Q  1-0
 ";
 
             var pgnReader = PgnReader.FromString(pgnText);
@@ -55,22 +57,33 @@ namespace chess.pgn.tests
         [Test]
         public void DebugBoardState()
         {
+            //            var board = new ChessBoardBuilder()
+            //                .Board(".r......" +
+            //                       "...PP.r." +
+            //                       "......qk" +
+            //                       "p....p.p" +
+            //                       "P....Pp." +
+            //                       ".P.p...." +
+            //                       ".......R" +
+            //                       ".....K.Q"
+            //                );
             var board = new ChessBoardBuilder()
-                .Board("........" +
-                       "....kp.." +
-                       "b....p.p" +
-                       "..pp.K.." +
-                       "P.....PP" +
-                       "..RpPN.." +
-                       "..rP.P.." +
-                       "........"
+                .Board(".r......" +
+                       "...PP.r." +
+                       ".......k" +
+                       "........" +
+                       "........" +
+                       "........" +
+                       "........" +
+                       ".....K.Q"
                 );
             var game = ChessFactory.CustomChessGame(board.ToGameSetup());
-            var piece = game.BoardState.GetItem("g4".ToBoardLocation());
 
-            Assert.True(piece.Paths.ContainsMoveTo("g5".ToBoardLocation()));
+            Console.WriteLine(game.BoardState.GetItem("d7".ToBoardLocation()).Paths);
+            Console.WriteLine(game.BoardState.GetItem("e7".ToBoardLocation()).Paths);
 
-            game.Move("g5");
+            game.Move("d8=Q");
+
 
         }
         private static void PlayTurns(PgnGame game, ChessGame chessGame)

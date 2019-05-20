@@ -9,21 +9,22 @@ using NUnit.Framework;
 namespace chess.engine.tests.Movement.Pawn
 {
     [TestFixture]
-    public class PawnRightTakePathGeneratorTests : ChessPathGeneratorTestsBase
+    public class PawnTakePathGeneratorTests : ChessPathGeneratorTestsBase
     {
-        private PawnRightTakePathGenerator _gen;
+        // TODO: These are the old right path gen tests, more & better tests needed
+        private PawnTakePathGenerator _gen;
 
         [SetUp]
         public new void SetUp()
         {
-            _gen = new PawnRightTakePathGenerator();
+            _gen = new PawnTakePathGenerator();
         }
         [Test]
         public void PathsFrom_returns_empty_list_when_on_right_edge()
         {
 
-            Assert.That(_gen.PathsFrom("H2".ToBoardLocation(), (int)Colours.White).Count(), Is.EqualTo(0));
-            Assert.That(_gen.PathsFrom("A7".ToBoardLocation(), (int)Colours.Black).Count(), Is.EqualTo(0));
+            Assert.That(_gen.PathsFrom("H2".ToBoardLocation(), (int)Colours.White).Count(), Is.EqualTo(1));
+            Assert.That(_gen.PathsFrom("A7".ToBoardLocation(), (int)Colours.Black).Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -37,7 +38,7 @@ namespace chess.engine.tests.Movement.Pawn
                 .Build();
 
             AssertPathContains(paths, ep, Colours.White);
-            Assert.That(paths.Count(), Is.EqualTo(1));
+            Assert.That(paths.Count(), Is.EqualTo(2));
         }
 
 
@@ -46,7 +47,7 @@ namespace chess.engine.tests.Movement.Pawn
         {
             var startLocation = "B7".ToBoardLocation();
             var whitePaths = _gen.PathsFrom(startLocation, (int)Colours.White).ToList();
-            Assert.That(whitePaths.Count(), Is.EqualTo(4));
+            Assert.That(whitePaths.Count(), Is.EqualTo(8));
 
             AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
                 .ToUpdatePiece("C8", ChessPieceName.Queen)
