@@ -40,7 +40,7 @@ namespace chess.big.tests
         }
 
         [Test]
-//        [Explicit("WARNING: Could take a long time.")]
+        [Explicit("WARNING: Could take a long time.")]
         public void Should_play_all_games_in_a_single_file()
         {
             var filename = @"D:\Src\PGNArchive\PGN\Adams\Adams.pgn";
