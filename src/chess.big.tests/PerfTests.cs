@@ -40,9 +40,8 @@ namespace chess.big.tests
         }
 
         [Test]
-        [Repeat(100)]
-        [Explicit(
-            "Comment out this attribute and using 'dotnet test --filter chess.big.tests.PerfTests.Perf_RefreshAllPaths' to see the proper output (NUnit Test Runner issues with console output and threads)")]
+        [Repeat(10)]
+//        [Explicit("Comment out this attribute and using 'dotnet test --filter chess.big.tests.PerfTests.Perf_RefreshAllPaths' to see the proper output (NUnit Test Runner issues with console output and threads)")]
         public void Perf_RefreshAllPaths()
         {
             var sequential = Play(false);
@@ -51,14 +50,7 @@ namespace chess.big.tests
             var parallel = Play(true);
             _timings[_keyParallel].Add(parallel);
 
-            TestContext.Progress.WriteLine($"{nameof(Perf_RefreshAllPaths)}");
             OutputComparison(parallel, sequential);
-
-            // Times based on initial observations rounded up to the nearest 1/4 second
-            // Use a simple check to ensure we don't do something silly that radically 
-            // decreases performance
-            Assert.That(sequential, Is.LessThan(TimeSpan.FromSeconds(4)));
-            Assert.That(parallel, Is.LessThan(TimeSpan.FromSeconds(1.75)));
         }
 
         private TimeSpan Play(bool parallelise)
@@ -103,11 +95,13 @@ namespace chess.big.tests
                     game = reader.ReadGame();
                 }
             }
-            catch
+            catch (Exception e)
             {
                 Console.WriteLine($"Game: #{gameIdx} / {game?.ToString() ?? ""}");
                 Console.WriteLine($"Board:\n{chessGame.ToText()}");
                 Console.WriteLine($"Full PGN Text:\n{reader.LastGameText}");
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
                 throw;
             }
         }

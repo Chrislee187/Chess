@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace board.engine.Movement
@@ -8,8 +9,12 @@ namespace board.engine.Movement
     /// <summary>
     /// Path is a sequence of Move's that require the previous moves to be valid before the next moves can be considered
     /// </summary>
+    [DebuggerDisplay("{DebuggerDisplay}")]
     public class Path : IEnumerable<BoardMove>, ICloneable
     {
+        private string DebuggerDisplay
+            => $"{string.Join(", ", _moves.Select(m => m.ToString()))}";
+
         private readonly List<BoardMove> _moves = new List<BoardMove>();
 
         public void Add(BoardMove move) => _moves.Add(move);
@@ -39,9 +44,6 @@ namespace board.engine.Movement
         }
 
         public override int GetHashCode() => _moves.GetHashCode();
-
-        public override string ToString() 
-            => $"{string.Join(", ", _moves.Select(m=> m.ToString()))}";
 
         public IEnumerator<BoardMove> GetEnumerator() => _moves.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

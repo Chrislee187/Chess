@@ -6,6 +6,6 @@
         public static bool ParalleliseRefreshAllPaths = true;
 
         // WIP - Not working yet
-        public static bool ParalleliseRemoveInvalidMoves = false;
+        public static bool ParalleliseRemoveInvalidMoves = true;
     }
 }

@@ -30,7 +30,12 @@ namespace board.engine.Board
         public IEnumerable<BoardLocation> GetAllItemLocations => _items.Keys;
 
         public LocatedItem<TEntity> GetItem(BoardLocation loc)
-            => GetItems(loc).SingleOrDefault();
+        {
+            if (_items.TryGetValue(loc, out var value))
+                return value;
+
+            return null;
+        }
 
         public IEnumerable<LocatedItem<TEntity>> GetItems(params BoardLocation[] locations)
             => _items.Where(itm => locations.Contains(itm.Key)).Select(kvp => kvp.Value);

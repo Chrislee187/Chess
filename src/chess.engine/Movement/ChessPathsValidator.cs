@@ -28,8 +28,6 @@ namespace chess.engine.Movement
         {
             _logger?.LogDebug($"Generating possible paths for {entity} at {boardLocation}.");
 
-           if (boardLocation.ToString().StartsWith("(5,7)")) Debugger.Break();
-
             var paths = new Paths();
             paths.AddRange(
                 entity.PathGenerators
@@ -77,7 +75,7 @@ namespace chess.engine.Movement
             _logger?.LogDebug($"Removing invalid moves from {possiblePaths} paths.");
             var validPaths = new Paths();
 
-            possiblePaths.AsParallel().ForAll(possiblePath =>
+            possiblePaths.ToList().ForEach(possiblePath =>
             {
                 var testedPath = _pathValidator.ValidatePath(boardState, possiblePath);
 

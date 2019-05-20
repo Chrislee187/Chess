@@ -1,6 +1,4 @@
 ﻿using System;
-using board.engine;
-using board.engine.Movement;
 using chess.engine.Extensions;
 using chess.engine.Game;
 using NUnit.Framework;
@@ -8,30 +6,33 @@ using NUnit.Framework;
 namespace chess.pgn.tests
 {
     [TestFixture]
-    [Explicit("Test for use in debugging individual game problems")]
-    public class ebugPgnGame
+//    [Explicit("Test for use in debugging individual game problems")]
+    public class DebugPgnGame
     {
 
         [Test]
+//        [Repeat(10)]
         public void DebugPgnGameTest()
         {
-            var pgnText = @"[Event ""Tilburg rapid""]
- [Site ""Tilburg""]
- [Date ""1992.??.??""]
- [Round ""3""]
- [White ""Beliavsky, Alexander G""]
- [Black ""Adams, Michael""]
- [Result ""0-1""]
- [WhiteElo ""2595""]
+            var pgnText = @"[Event ""PCA/Intel-GP""]
+ [Site ""New York""]
+ [Date ""1994.??.??""]
+ [Round ""1""]
+ [White ""Adams, Michael""]
+ [Black ""Malaniuk, Vladimir P""]
+ [Result ""1-0""]
+ [WhiteElo ""2640""]
  [BlackElo ""2610""]
- [ECO ""B07""]
+ [ECO ""C48""]
 
- 1.d4 d6 2.e4 Nf6 3.Nc3 e5 4.dxe5 dxe5 5.Qxd8+ Kxd8 6.Bg5 Be6 7.O-O-O+ Nd7
- 8.f4 exf4 9.Nf3 h6 10.Bxf4 c6 11.Bd3 Bc5 12.h3 Ke7 13.Na4 g5 14.Bh2 Be3+
- 15.Kb1 Nh5 16.Rhe1 Bf4 17.Bg1 Bg3 18.Rf1 Bd6 19.e5 Bc7 20.Nc5 Nxc5 21.Bxc5+ Ke8
- 22.Nd4 Ng7 23.Rde1 Bb6 24.Bxb6 axb6 25.g4 Bxa2+ 26.Kc1 Bd5 27.Kd2 b5 28.Rf2 Rd8
- 29.Nf5 Nxf5 30.gxf5 Bc4 31.f6 Bxd3 32.cxd3 Kd7 33.h4 Ke6 34.Rg1 gxh4 35.Rf4 Rd5
- 36.d4 Rhd8 37.Kc3 b4+  0-1
+ 1.e4 e5 2.Nf3 Nc6 3.Nc3 Nf6 4.Bb5 Nd4 5.Ba4 c6 6.Nxe5 d5 7.d3 Bd6 8.f4 Bc5
+ 9.exd5 b5 10.Bb3 cxd5 11.Ne2 Nxb3 12.axb3 d4 13.O-O O-O 14.Ng3 Bb7 15.Bd2 Re8
+ 16.Re1 Bb6 17.Qe2 Rc8 18.Rac1 g6 19.Qf2 Nd5 20.f5 Qc7 21.Nf3 Rxe1+ 22.Qxe1 Ne3
+ 23.Qe2 gxf5 24.Bxe3 dxe3 25.Nxf5 Kh8 26.Kh1 Qf4 27.Ng3 Rc6 28.Rf1 Rh6 29.Kg1 Rg6
+ 30.c3 Bc7 31.d4 Qg4 32.Qxe3 Bxg3 33.hxg3 Qxg3 34.Qe5+ Qxe5 35.dxe5 a5 36.Kf2 a4
+ 37.b4 Re6 38.Re1 Bd5 39.Nd4 Rb6 40.Rd1 Bc4 41.Nf5 h5 42.Rd6 Rb7 43.Rh6+ Kg8
+ 44.Rxh5 a3 45.bxa3 Ra7 46.Nd6 Rxa3 47.Nxc4 bxc4 48.Rh3 Kf8 49.Ke2 Ke7 50.Kd2 Ke6
+ 51.Rh4 Ra2+ 52.Ke3  1-0
 ";
 
             var pgnReader = PgnReader.FromString(pgnText);

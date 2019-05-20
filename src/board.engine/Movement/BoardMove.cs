@@ -8,7 +8,7 @@ namespace board.engine.Movement
     [DebuggerDisplay("{DebuggerDisplay, nq}")]
     public class BoardMove : ICloneable
     {
-        private string DebuggerDisplay => $"{From},{To}";
+        private string DebuggerDisplay => $"{From}{To}{MoveType}";
 
         public static BoardMove Create(BoardLocation from, BoardLocation to, int moveType)
             => new BoardMove(from, to, moveType);
@@ -57,12 +57,6 @@ namespace board.engine.Movement
             {
                 return ((From != null ? From.GetHashCode() : 0) * 397) ^ (To != null ? To.GetHashCode() : 0);
             }
-        }
-
-
-        public override string ToString()
-        {
-            return $"{From}{To}{MoveType}";
         }
 
         public object Clone()

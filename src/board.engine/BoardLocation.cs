@@ -4,10 +4,10 @@ using System.Diagnostics;
 namespace board.engine
 {
     // TODO: Refactor 'Colours' out of here
-    [DebuggerDisplay("{DebuggerDisplay, nq}")]
+    [DebuggerDisplay("{DebuggerDisplay}")]
     public class BoardLocation : ICloneable
     {
-        private string DebuggerDisplay => $"{X},{Y}";
+        private string DebuggerDisplay => $"({X},{Y})";
 
         public int X { get; }
         public int Y { get; }
@@ -28,7 +28,6 @@ namespace board.engine
 
 
         #region Object overrides
-        public override string ToString() => $"({X},{Y})";
         public object Clone() => At(X, Y);
 
         protected bool Equals(BoardLocation other)

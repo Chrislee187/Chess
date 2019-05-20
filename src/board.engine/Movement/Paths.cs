@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using board.engine.Actions;
 
 namespace board.engine.Movement
 {
+    [DebuggerDisplay("{DebuggerDisplay}")]
     public class Paths : IEnumerable<Path>, ICloneable
     {
+        private string DebuggerDisplay
+            => $"{string.Join(", ", _paths.Select(m => m.ToString()))}";
+
         private readonly List<Path> _paths = new List<Path>();
         
         public void Add(Path path) 
@@ -48,9 +52,6 @@ namespace board.engine.Movement
         }
 
         public override int GetHashCode() => _paths.GetHashCode();
-
-        public override string ToString()
-            => $"{string.Join(", ", _paths.Select(m => m.ToString()))}";
 
         public IEnumerator<Path> GetEnumerator() => _paths.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
