@@ -20,7 +20,7 @@ namespace chess.engine.tests.Movement.King
         }
 
         [Test]
-        public void PathsFrom_returns_all_directions()
+        public void PathsFrom_generates_all_directions()
         {
             var boardLocation = "E2".ToBoardLocation();
             var whitePaths = _gen.PathsFrom(boardLocation, (int) Colours.White).ToList();

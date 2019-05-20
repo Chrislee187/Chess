@@ -27,9 +27,9 @@ namespace chess.engine.tests.Builders
             return To((BoardLocation) at.ToBoardLocation(), chessMoveTypes);
         }
 
-        public ChessPathDestinationsBuilder ToUpdatePiece(string at, ChessPieceName promotionPiece)
+        public ChessPathDestinationsBuilder ToUpdatePiece(string at, ChessPieceName promotionPiece, DefaultActions defaultActions = DefaultActions.UpdatePiece)
         {
-            return To((BoardLocation) at.ToBoardLocation(), (int) DefaultActions.UpdatePiece);
+            return To((BoardLocation) at.ToBoardLocation(), (int) defaultActions);
         }
 
         public Path Build()

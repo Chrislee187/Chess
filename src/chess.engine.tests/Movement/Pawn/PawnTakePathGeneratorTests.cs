@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using board.engine.Actions;
 using chess.engine.Extensions;
@@ -20,7 +21,7 @@ namespace chess.engine.tests.Movement.Pawn
             _gen = new PawnTakePathGenerator();
         }
         [Test]
-        public void PathsFrom_returns_empty_list_when_on_right_edge()
+        public void PathsFrom_generates_empty_list_when_on_right_edge()
         {
 
             Assert.That(_gen.PathsFrom("H2".ToBoardLocation(), (int)Colours.White).Count(), Is.EqualTo(1));
@@ -28,7 +29,7 @@ namespace chess.engine.tests.Movement.Pawn
         }
 
         [Test]
-        public void PathsFrom_returns_return_take()
+        public void PathsFrom_generates_take()
         {
             var pieceLocation = "B2".ToBoardLocation();
             var paths = _gen.PathsFrom(pieceLocation, (int)Colours.White).ToList();
@@ -43,24 +44,22 @@ namespace chess.engine.tests.Movement.Pawn
 
 
         [Test]
-        public void PathsFrom_returns_pawn_promotions()
+        public void PathsFrom_generates_all_pawn_promotions()
         {
             var startLocation = "B7".ToBoardLocation();
             var whitePaths = _gen.PathsFrom(startLocation, (int)Colours.White).ToList();
             Assert.That(whitePaths.Count(), Is.EqualTo(8));
 
-            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
-                .ToUpdatePiece("C8", ChessPieceName.Queen)
-                .Build(), Colours.White);
-            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
-                .ToUpdatePiece("C8", ChessPieceName.Rook)
-                .Build(), Colours.White);
-            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
-                .ToUpdatePiece("C8", ChessPieceName.Bishop)
-                .Build(), Colours.White);
-            AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
-                .ToUpdatePiece("C8", ChessPieceName.Knight)
-                .Build(), Colours.White);
+            foreach (var chessPieceName in new[]{ChessPieceName.Knight, ChessPieceName.Bishop, ChessPieceName.Rook, ChessPieceName.Queen})
+            {
+                AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
+                    .ToUpdatePiece("A8", chessPieceName, DefaultActions.UpdatePieceWithTake)
+                    .Build(), Colours.White);
+
+                AssertPathContains(whitePaths, new ChessPathBuilder().From(startLocation)
+                    .ToUpdatePiece("C8", chessPieceName, DefaultActions.UpdatePieceWithTake)
+                    .Build(), Colours.White);
+            }
         }
     }
 }

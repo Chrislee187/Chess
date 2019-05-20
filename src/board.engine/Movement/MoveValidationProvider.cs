@@ -48,7 +48,6 @@ namespace board.engine.Movement
                     }
                 }},
             };
-
         }
 
         public IEnumerable<BoardMovePredicate<TEntity>> Create(int chessMoveTypes, IBoardState<TEntity> boardState)

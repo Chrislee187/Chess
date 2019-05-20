@@ -11,6 +11,7 @@ namespace chess.engine.tests.Game
         [Test]
         public void Should_play_the_wiki_game_with_san_moves()
         {
+            // TODO: Why dooes this sometimes take 30sec'ish and other 7-8?
             var game = ChessFactory.NewChessGame();
             var moveIdx = 0;
             foreach (var move in WikiGame.Moves)

@@ -21,7 +21,7 @@ namespace chess.engine.tests.Movement.King
 
         [TestCase(Colours.White)]
         [TestCase(Colours.Black)]
-        public void PathsFrom_returns_castle_locations_for_kings(Colours forPlayer)
+        public void PathsFrom_generates_castle_locations_for_kings(Colours forPlayer)
         {
             var rank = forPlayer == Colours.White ? 1 : 8;
             var boardLocation = $"E{rank}".ToBoardLocation();
