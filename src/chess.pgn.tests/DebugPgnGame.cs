@@ -3,6 +3,7 @@ using board.engine;
 using chess.engine.Extensions;
 using chess.engine.Game;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace chess.pgn.tests
 {
@@ -54,16 +55,16 @@ namespace chess.pgn.tests
                        "........" +
                        "P..Rp..." +
                        "......pk" +
-                       "..b..pP." +
+                       "..b..pE." +
                        ".....P.." +
                        "...R.K.." +
                        "r......."
                 );
-            var game = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White);
+            var game = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.Black);
 
             var msg = game.Move("fxg3+");
 
-            Assert.That(msg, Is.EqualTo(""), msg);
+            StringAssert.DoesNotContain(msg, "ERROR");
             Console.WriteLine(game.ToTextBoard());
             Assert.Null(game.BoardState.GetItem("G1".ToBoardLocation()));
 

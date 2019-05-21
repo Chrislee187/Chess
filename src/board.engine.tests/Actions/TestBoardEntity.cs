@@ -17,6 +17,7 @@ namespace board.engine.tests.Actions
         }
 
         public IEnumerable<IPathGenerator> PathGenerators { get; }
+        public IEnumerable<BoardLocation> LocationHistory { get; }
         public string EntityName { get; }
         public int EntityType { get; }
         public int Owner { get; }

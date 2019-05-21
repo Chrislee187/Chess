@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using board.engine.Movement;
@@ -112,7 +111,8 @@ namespace board.engine.Board
             {
                 for (var file = 0; file < 8; file++)
                 {
-                    var entity = GetItem(BoardLocation.At(file+1, rank+1))?.Item;
+                    var loc = BoardLocation.At(file+1, rank+1);
+                    var entity = GetItem(loc)?.Item;
                     char chr;
                     if (entity == null)
                     {
@@ -121,7 +121,14 @@ namespace board.engine.Board
                     else
                     {
                         chr = ChessPieceNameMapper.ToChar(entity.EntityType, entity.Owner);
+
+                       var epY = char.IsUpper(chr) ? 5 : 4;
+                        if (chr == 'p' || chr == 'P' && loc.Y == epY && entity.LocationHistory.Count() == 2)
+                        {
+                            chr = chr == 'p' ? 'e' : 'E';
+                        }
                     }
+
                     sb.Append(chr == '\0' ? '.' : chr);
                 }
 

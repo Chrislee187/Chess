@@ -163,12 +163,13 @@ namespace chess.engine.Game
                             );
 
                             var location = BoardLocation.At(file + 1, rank + 1);
+
+                            engine.AddPiece(entity, location);
                             if (chr.ToString().ToUpper() == "E")
                             {
                                 // Special pawn char for custom board setups, sets the move history so enpassant validation works
                                 entity.AddMoveTo(location);
                             }
-                            engine.AddPiece(entity, location);
                         }
                         else if (chr != ' ' && chr != '.' && chr != '\0')
                         {

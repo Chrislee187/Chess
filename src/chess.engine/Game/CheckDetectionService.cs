@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Entities;
-using chess.engine.Extensions;
 using chess.engine.Movement;
 using Microsoft.Extensions.Logging;
 
@@ -22,6 +19,7 @@ namespace chess.engine.Game
             ILogger<CheckDetectionService> logger,
             IPlayerStateService playerStateService,
             IBoardMoveService<ChessPieceEntity> moveService
+
         )
         {
             _logger = logger;
@@ -62,26 +60,13 @@ namespace chess.engine.Game
 
         public bool DoesMoveLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move)
         {
-            /*
-             * Leaves us in check
-             * Clone the board
-             * Remove the move.From piece
-             * Get enemy pieces attacking friendly kings location using IsLocationUnderAttack()
-             * inCheck = enemyPieces.Any(p => p.Location != move.To) // Got taken if loc == move.To so no longer a threat
-             */
             var defendingPlayer = boardState.GetItem(move.From).Item.Player;
 
             var clone = (IBoardState<ChessPieceEntity>) boardState.Clone();
-            var movePiece = clone.GetItem(move.From);
-            clone.Remove(move.From);
-            clone.PlaceEntity(move.To, movePiece.Item);
+            _moveService.Move(clone, move);
 
             var defendingKing = clone.GetItems((int)defendingPlayer, (int)ChessPieceName.King).Single();
             return IsLocationUnderAttack(clone, defendingKing.Location, defendingPlayer);
-
-
-//            IEnumerable<LocatedItem<ChessPieceEntity>> attackers = GetPiecesAttacking(defendingKing.Location, us.Enemy());
-//            return attackers.Any(p => !p.Location.Equals(move.To));
         }
 
         private bool IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,

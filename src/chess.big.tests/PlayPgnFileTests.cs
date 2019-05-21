@@ -19,7 +19,7 @@ namespace chess.big.tests
 
         [TestCase(@".\PGNFiles")]
         [TestCase(@"D:\Src\PGNArchive\PGN")]
-        [Explicit("WARNING: Could take a VERY long time.")]
+        [Explicit("WARNING: Could take a VERY long time.")]// NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
         public void PlayAllFiles(string path)
         {
             var pgnfiles = Directory.GetFiles(path, "*.pgn", SearchOption.AllDirectories);
@@ -40,10 +40,11 @@ namespace chess.big.tests
         }
 
         [Test]
-//        [Explicit("WARNING: Could take a VERY long time.")]
+//        [Explicit("WARNING: Could take a VERY long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
         public void Should_play_all_games_in_a_single_file()
         {
             //  Last Test: 19/05/19 - 58.7377 Minutes - 3081 games    Average playtime (00:00:01.1312775) (DEBUG)
+            //  Last Test: 21/05/19 - 15.5203 Minutes - 3081 games    Average playtime (00:00:00.2983940)
             var filename = @"D:\Src\PGNArchive\PGN\Adams\Adams.pgn";
 
             //  Last Test: 19/05/19 - 24.0282 Minutes - 1250 games    Average playtime (00:00:01.1436758) (DEBUG)

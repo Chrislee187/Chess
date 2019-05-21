@@ -12,6 +12,16 @@
 <H1>History</H1>
 <table>
     <tr>
+        <td>21/05/2018</td>
+        <td>
+            More fixed for edge cases (i.e. when enpassant causes check) and some huge performance improvements
+            to board parsing due to parallising some of the board generation and using a much more efficient
+            check detection algorithm. <br/>
+            Avg. game parse time down from 1.13 secs when I first started measuring
+            to 0.29 secs
+        </td>
+    </tr>
+    <tr>
         <td>20/05/2018</td>
         <td>Performance improvements, board-parsing now 2-3x quicker, fix some edge case bugs</td>
     </tr>

@@ -7,7 +7,7 @@ namespace board.engine
     public interface IBoardEntity: ICloneable
     {
         IEnumerable<IPathGenerator> PathGenerators { get; }
-
+        IEnumerable<BoardLocation> LocationHistory { get; }
         string EntityName { get; }
 
         int EntityType { get; }

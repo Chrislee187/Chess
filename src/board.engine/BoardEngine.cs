@@ -59,6 +59,7 @@ namespace board.engine
         public BoardEngine<TEntity> AddPiece(TEntity create, BoardLocation startingLocation)
         {
             BoardState.PlaceEntity(startingLocation, create);
+            create.AddMoveTo(startingLocation);
             return this;
         }
 

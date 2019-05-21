@@ -1,4 +1,5 @@
-﻿using board.engine.Board;
+﻿using System.Linq;
+using board.engine.Board;
 using board.engine.Movement;
 using board.engine.Movement.Validators;
 using chess.engine.Entities;
@@ -28,10 +29,7 @@ namespace chess.engine.Movement.Pawn
             return CheckPawnUsedDoubleMove(passedEntity);
         }
 
-        private bool CheckPawnUsedDoubleMove(LocatedItem<ChessPieceEntity> moveTo)
-        {
-            // Doesn't check it was the LAST move
-            return moveTo.Item.LocationHistory.Count == 1;
-        }
+        private bool CheckPawnUsedDoubleMove(LocatedItem<ChessPieceEntity> moveTo) 
+            => moveTo.Item.LocationHistory.Count() == 2;
     }
 }

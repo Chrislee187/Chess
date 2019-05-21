@@ -15,6 +15,8 @@ namespace chess.engine.Entities
         public abstract IEnumerable<IPathGenerator> PathGenerators { get; }
         public string EntityName { get; }
         public int Owner { get; }
+        public IEnumerable<BoardLocation> LocationHistory
+            => _locationHistory;
         public void AddMoveTo(BoardLocation location)
         {
             _locationHistory.Add(location);
@@ -22,9 +24,6 @@ namespace chess.engine.Entities
         
         public Colours Player { get; }
         public ChessPieceName Piece { get; protected set; }
-
-        public IReadOnlyList<BoardLocation> LocationHistory 
-            => _locationHistory;
 
         protected ChessPieceEntity(Colours player, ChessPieceName piece)
         {
