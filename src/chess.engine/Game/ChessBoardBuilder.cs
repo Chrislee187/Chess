@@ -138,10 +138,6 @@ namespace chess.engine.Game
             return new CustomChessBoardSetup(_board);
         }
 
-        public IBoardState<ChessPieceEntity> ToBoardState()
-        {
-            return ChessFactory.CustomChessGame(ToGameSetup()).BoardState;
-        }
         private class CustomChessBoardSetup : IBoardSetup<ChessPieceEntity>
         {
             private readonly char[,] _board;

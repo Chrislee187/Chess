@@ -98,7 +98,7 @@ namespace chess.big.tests
             catch (Exception e)
             {
                 Console.WriteLine($"Game: #{gameIdx} / {game?.ToString() ?? ""}");
-                Console.WriteLine($"Board:\n{chessGame.ToText()}");
+                Console.WriteLine($"Board:\n{chessGame.ToTextBoard()}");
                 Console.WriteLine($"Full PGN Text:\n{reader.LastGameText}");
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);

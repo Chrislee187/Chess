@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
@@ -10,40 +10,34 @@ namespace chess.engine.Game
 {
     public class ChessGame
     {
-        public static bool OutOfBounds(int value) => value < 1 || value > 8;
-
+        private readonly ILogger<ChessGame> _logger;
         private readonly BoardEngine<ChessPieceEntity> _engine;
+        private readonly ICheckDetectionService _checkDetectionService;
 
+        private SanMoveFinder _sanMoveFinder;
+
+        public static bool OutOfBounds(int value) => value < 1 || value > 8;
         public Colours CurrentPlayer { get; private set; }
-        private Colours NextPlayer() => CurrentPlayer == Colours.White ? Colours.Black : Colours.White;
-
-        public PlayerState PlayerState { get; private set; }
-        public bool InProgress => PlayerState == PlayerState.InProgress;
-
+        public GameCheckState CheckState { get; private set; }
+        public bool InProgress => CheckState == GameCheckState.None;
         public LocatedItem<ChessPieceEntity>[,] Board => _engine.Board;
 
         public IBoardState<ChessPieceEntity> BoardState => _engine.BoardState;
-
-        private readonly ILogger<ChessGame> _logger;
-        private readonly IBoardEntityFactory<ChessPieceEntity> _entityFactory;
-        private readonly IPlayerStateService _gameStateService;
-        private SanMoveFinder _sanMoveFinder;
 
         public ChessGame(
             ILogger<ChessGame> logger,
             IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
             IBoardEntityFactory<ChessPieceEntity> entityFactory,
-            IPlayerStateService gameStateService
+            ICheckDetectionService checkDetectionService
         )
-            : this(logger, boardEngineProvider, entityFactory, gameStateService, new ChessBoardSetup(entityFactory))
+            : this(logger, boardEngineProvider, checkDetectionService, new ChessBoardSetup(entityFactory))
         {
         }
 
         public ChessGame(
             ILogger<ChessGame> logger,
             IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
-            IBoardEntityFactory<ChessPieceEntity> entityFactory,
-            IPlayerStateService gameStateService,
+            ICheckDetectionService checkDetectionService,
             IBoardSetup<ChessPieceEntity> setup,
             Colours whoseTurn = Colours.White)
         {
@@ -52,10 +46,10 @@ namespace chess.engine.Game
             _logger?.LogInformation("Initialising new chess game");
 
             _engine = boardEngineProvider.Provide(setup);
-            _entityFactory = entityFactory;
-            _gameStateService = gameStateService;
+
+            _checkDetectionService = checkDetectionService;
             CurrentPlayer = whoseTurn;
-            PlayerState = _gameStateService.CurrentPlayerState(BoardState, CurrentPlayer);
+            CheckState = _checkDetectionService.Check(BoardState);
         }
 
         public string Move(string input)
@@ -84,18 +78,25 @@ namespace chess.engine.Game
 
         private string PlayValidMove(BoardMove move)
         {
+            var preMove = _engine.BoardState.ToTextBoard();
             _engine.Move(move);
 
+            if (preMove == _engine.BoardState.ToTextBoard())
+            {
+                Debugger.Break();
+            }
 
             CurrentPlayer = NextPlayer();
-            PlayerState = _gameStateService.CurrentPlayerState(BoardState, CurrentPlayer);
+            CheckState = _checkDetectionService.Check(BoardState);
 
-            return PlayerState == PlayerState.Check || PlayerState == PlayerState.Checkmate
-                ? PlayerState.ToString()
+            return CheckState != GameCheckState.None
+                ? CheckState.ToString()
                 : "";
 
         }
- 
+
+        private Colours NextPlayer() => CurrentPlayer == Colours.White ? Colours.Black : Colours.White;
+
         #region Meta Info
 
         public static int DirectionModifierFor(Colours player) => player == Colours.White ? +1 : -1;
@@ -106,7 +107,7 @@ namespace chess.engine.Game
 
     public enum PlayerState
     {
-        InProgress,
+        None,
         Check,
         Checkmate
     }

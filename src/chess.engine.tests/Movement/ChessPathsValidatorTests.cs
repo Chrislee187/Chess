@@ -9,7 +9,7 @@ namespace chess.engine.tests.Movement
     {
 
         [Test]
-        public void Should_find_move_that_leaves_king_in_check()
+        public void Should_not_find_move_that_leaves_king_in_check()
         {
             var board = new ChessBoardBuilder()
                 .Board("    k   " +
@@ -21,7 +21,7 @@ namespace chess.engine.tests.Movement
                        "        " +
                        "    K   "
                 );
-            var game = ChessFactory.CustomChessGame(board.ToGameSetup());
+            var game = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.Black);
 
             var blockedPieceLocation = "E5".ToBoardLocation();
 

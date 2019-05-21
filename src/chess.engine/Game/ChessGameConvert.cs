@@ -104,8 +104,7 @@ namespace chess.engine.Game
             return new ChessGame(
                 ChessFactory.Logger<ChessGame>(),
                 ChessFactory.ChessBoardEngineProvider(),
-                ChessFactory.ChessPieceEntityFactory(),
-                ChessFactory.PlayerStateService(),
+                ChessFactory.CheckDetectionService(),
                 setup,
                 whoseTurn
             );

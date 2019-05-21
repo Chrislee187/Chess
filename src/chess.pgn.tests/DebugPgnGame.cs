@@ -16,30 +16,57 @@ namespace chess.pgn.tests
         public void DebugPgnGameTest()
         {
             // TODO: This has a race condition problem somewhere, only see it when
-            FeatureFlags.ParalleliseRefreshAllPaths = true;
-            var pgnText = @"[Event ""Yalta op""]
- [Site ""Yalta""]
- [Date ""1996.??.??""]
- [Round ""5""]
- [White ""Bezman, Vadim""]
- [Black ""Chehlov, Aleksander""]
- [Result ""1-0""]
- [WhiteElo ""2365""]
- [BlackElo ""2270""]
- [ECO ""E84""]
+            // FeatureFlags.ParalleliseRefreshAllPaths = true;
+            var pgnText = @"[Event ""Gibraltar Masters""]
+ [Site ""Caleta ENG""]
+ [Date ""2011.02.02""]
+ [Round ""9.6""]
+ [White ""Adams,Mi""]
+ [Black ""Lemos,D""]
+ [Result ""1/2-1/2""]
+ [WhiteElo ""2723""]
+ [BlackElo ""2553""]
+ [ECO ""C07""]
 
- 1.c4 g6 2.e4 Bg7 3.d4 d6 4.Nc3 Nf6 5.f3 O-O 6.Be3 Nc6 7.Nge2 a6 8.Qd2 Rb8
- 9.h4 h5 10.Bh6 e5 11.Bxg7 Kxg7 12.O-O-O b5 13.cxb5 axb5 14.Kb1 b4 15.Nd5 b3
- 16.a3 Nxd5 17.exd5 Bf5+ 18.Ka1 Nb4 19.Ng3 Nc2+ 20.Kb1 Nxa3+ 21.Kc1 Bc2 22.bxa3 Bxd1
- 23.Qxd1 b2+ 24.Kb1 Rb6 25.Bd3 Qa8 26.Qd2 f6 27.Qc3 Rf7 28.dxe5 dxe5 29.Ne4 c5
- 30.Nd2 Ra7 31.Nc4 Rba6 32.Bc2 Qxd5 33.Rd1 Qe6 34.Qd3 f5 35.Qc3 Kh7 36.Re1 Qe8
- 37.g3 Re6 38.Kxb2 e4 39.fxe4 fxe4 40.Re3 Rd7 41.Nd2 Rd4 42.Nb3 Rd5 43.Qc4 Rde5
- 44.Ka2 Qf8 45.Nd2 Qf2 46.Qe2 Qxe2 47.Rxe2 Kg7 48.Nxe4 g5 49.hxg5 Rxg5 50.Kb3 Rge5
- 51.Bd3 Re7 52.a4 Rb7+ 53.Bb5 Rbe7 54.Nc3 Rxe2 55.Nxe2 Kf6 56.a5 Re5 57.Kb2 Kg5
- 58.a6 Re7 59.Kc3 Kg4 60.Kd3  1-0
+ 1.e4 e6 2.d4 d5 3.Nd2 c5 4.exd5 Qxd5 5.dxc5 Bxc5 6.Ngf3 Nf6 7.Bc4 Qc6 8.Qe2 O-O
+ 9.O-O Nbd7 10.Nb3 b6 11.Nxc5 Qxc5 12.b3 Bb7 13.Bb2 Rfd8 14.Rfd1 Nf8 15.Ne5 Ng6
+ 16.Nxg6 hxg6 17.Qe5 Qxe5 18.Bxe5 Nd5 19.Rd2 f6 20.Bd4 Kf7 21.a4 Nb4 22.Rad1 Bd5
+ 23.Bc3 Nxc2 24.Ba6 Rdc8 25.Bxc8 Rxc8 26.Rxc2 Bxb3 27.Rd7+ Ke8 28.Rcd2 Bd5
+ 29.Rxa7 Rxc3 30.h4 Kf8 31.Rd4 Kg8 32.Rb4 Kh7 33.f3 Rc2 34.Ra6 Kh6 35.Raxb6 g5
+ 36.Rd6 f5 37.Rd4 g6 38.hxg5+ Kxg5 39.a5 Ra2 40.a6 Kh5 41.Kf1 g5 42.Ke1 f4
+ 43.Rd2 Ra1+ 44.Rd1 Ra2 45.Rd2 Ra1+ 46.Kf2 Bc4 47.g4+ fxg3+ 48.Kxg3 Rxa6 49.Rd8 Kg6
+ 50.Rg8+ Kf6 51.Rd7 Bd5 52.Rf8+ Kg6 53.Rdf7 e5 54.Rf5 Re6 55.Kg4 Kg7 56.R8f7+ Kg6
+ 57.Rd7 Bc6 58.Rxg5+ Kf6 59.Rf5+ Kg6 60.Rg5+ Kf6 61.Rf5+ Kg6 62.Rd3 e4 63.Re3 Bd7
+ 64.Rg5+ Kf6 65.f4 Re5+ 66.Kh4 Re8 67.Kg3 Bf5 68.Ra3 Re6 69.Kf2 Rd6 70.Ra5 Bg6
+ 71.Rgb5 Bh7 72.f5 Kg5 73.Ke3 Rf6 74.Kxe4 Rxf5 75.Rxf5+ Kg4 76.Ke5 Bxf5 77.Ra4+ Kg5
+ 78.Ra1 Bc2 79.Re1 Bd3 80.Rg1+ Kh6 81.Kf6 Kh7 82.Rg3 Bb1 83.Rh3+ Kg8 84.Rh2 Bh7  1/2-1/2
 ";
 
             PlayAllGames(PgnReader.FromString(pgnText));
+        }
+
+        [Test]
+
+        public void DebugBoardState()
+        {
+            var board = new ChessBoardBuilder()
+                .Board("........" +
+                       "........" +
+                       "P..Rp..." +
+                       "......pk" +
+                       "..b..pP." +
+                       ".....P.." +
+                       "...R.K.." +
+                       "r......."
+                );
+            var game = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White);
+
+            var msg = game.Move("fxg3+");
+
+            Assert.That(msg, Is.EqualTo(""), msg);
+            Console.WriteLine(game.ToTextBoard());
+            Assert.Null(game.BoardState.GetItem("G1".ToBoardLocation()));
+
         }
 
         private static void PlayAllGames(PgnReader pgnReader)
@@ -59,46 +86,9 @@ namespace chess.pgn.tests
                 throw;
             }
         }
-
-        [Test]
-
-        public void DebugBoardState()
-        {
-
-            var board = new ChessBoardBuilder()
-                .Board("r.bqk..r" +
-                       "p....ppp" +
-                       ".....n.." +
-                       ".pbpN..." +
-                       ".....P.." +
-                       ".P.P...." +
-                       ".PP.N.PP" +
-                       "R.BQK..R"
-                );
-            var game = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.Black);
-
-            var whiteKing = game.BoardState.GetItem("E1".ToBoardLocation());
-
-            Assert.False(whiteKing.Paths.ContainsMoveTo("g1".ToBoardLocation()));
-            Console.WriteLine(whiteKing.Paths);
-
-
-            game.Move("d4");
-            var king = game.BoardState.GetItem("e1".ToBoardLocation());
-
-            Assert.That(king.Paths.ContainsMoveTo("g1".ToBoardLocation()));
-
-            var moveResponse = game.Move("O-O");
-            Assert.IsEmpty(moveResponse);
-            Assert.Null(game.BoardState.GetItem("e1".ToBoardLocation()));
-            king = game.BoardState.GetItem("g1".ToBoardLocation());
-            Assert.NotNull(king);
-            Assert.That(king.Location, Is.EqualTo("g1".ToBoardLocation()));
-
-        }
         private static void PlayTurns(PgnGame game, ChessGame chessGame)
         {
-            var previousBoard = chessGame.ToText();
+            var previousBoard = chessGame.ToTextBoard();
             foreach (var gameTurn in game.Turns)
             {
                 if (gameTurn.White != null)
@@ -122,7 +112,7 @@ namespace chess.pgn.tests
         private static string AssertMoveWasExecuted(ChessGame chessGame, string previousBoard, PgnMove gameTurnWhite)
         {
             chessGame.Move(gameTurnWhite.San);
-            var board = chessGame.ToText();
+            var board = chessGame.ToTextBoard();
             Console.WriteLine(board);
             Assert.That(!previousBoard.Equals(board), $"'{gameTurnWhite.San}' not executed!");
             return board;

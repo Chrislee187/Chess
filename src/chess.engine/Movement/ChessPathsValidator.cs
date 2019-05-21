@@ -24,7 +24,7 @@ namespace chess.engine.Movement
             _pathValidator = pathValidator;
         }
 
-        public Paths GeneratePossiblePaths(IBoardState<ChessPieceEntity> boardState, ChessPieceEntity entity, BoardLocation boardLocation)
+        public Paths GetValidatedPaths(IBoardState<ChessPieceEntity> boardState, ChessPieceEntity entity, BoardLocation boardLocation)
         {
             _logger?.LogDebug($"Generating possible paths for {entity} at {boardLocation}.");
 
@@ -48,7 +48,10 @@ namespace chess.engine.Movement
             _logger?.LogDebug($"Removing invalid moves from {possiblePaths} paths.");
             var validPaths = new Paths();
 
-            possiblePaths.ToList().ForEach(possiblePath => { ValidatePath(boardState, possiblePath, validPaths); });
+            possiblePaths.ToList().ForEach(possiblePath =>
+            {
+                ValidatePath(boardState, possiblePath, validPaths);
+            });
 
             return validPaths;
         }

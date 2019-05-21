@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace board.engine.Board
 {
@@ -25,5 +26,6 @@ namespace board.engine.Board
 
         void RegeneratePossiblePaths(LocatedItem<TEntity> locatedItem);
         void UpdatePaths(LocatedItem<TEntity>[] items);
+        void RefreshPathsFor(IEnumerable<LocatedItem<TEntity>> items);
     }
 }

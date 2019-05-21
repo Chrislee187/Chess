@@ -16,9 +16,10 @@ namespace spiker
         {
             var logger = AppContainer.GetService<ILogger<ChessGame>>();
             var gameStateService = AppContainer.GetService<IPlayerStateService>();
+            var checkDetectionService = AppContainer.GetService<ICheckDetectionService>();
             var engineProvider = AppContainer.GetService<IBoardEngineProvider<ChessPieceEntity>>();
             var entityFactory = AppContainer.GetService<IBoardEntityFactory<ChessPieceEntity>>();
-            var game = new ChessGame(logger, engineProvider, entityFactory, gameStateService);
+            var game = new ChessGame(logger, engineProvider, entityFactory, checkDetectionService);
 
             var lastResult = "";
 

@@ -16,16 +16,19 @@ namespace chess.webapi.Services
         private readonly IBoardEngineProvider<ChessPieceEntity> _boardEngineProvider;
         private readonly IBoardEntityFactory<ChessPieceEntity> _entityFactory;
         private readonly IPlayerStateService _playerStateService;
+        private readonly ICheckDetectionService _checkDetectionService;
 
         public ChessGameService(
             ILogger<ChessGameService> logger,
             ILogger<ChessGame> chessGameLogger, 
-            IPlayerStateService playerStateService, 
+            IPlayerStateService playerStateService,
+            ICheckDetectionService   checkDetectionService,
             IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
             IBoardEntityFactory<ChessPieceEntity> entityFactory
             )
         {
             _playerStateService = playerStateService;
+            _checkDetectionService = checkDetectionService;
             _entityFactory = entityFactory;
             _chessGameLogger = chessGameLogger;
             _boardEngineProvider = boardEngineProvider;
@@ -38,7 +41,7 @@ namespace chess.webapi.Services
                 _chessGameLogger,
                 _boardEngineProvider,
                 _entityFactory,
-                _playerStateService
+                _checkDetectionService
             );
             var result = new ChessWebApiResult(
                 game,

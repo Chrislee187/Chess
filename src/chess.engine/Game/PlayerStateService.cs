@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using board.engine;
 using board.engine.Board;
+using board.engine.Movement;
 using chess.engine.Entities;
+using chess.engine.Movement;
 using Microsoft.Extensions.Logging;
 
 namespace chess.engine.Game
@@ -28,13 +31,61 @@ namespace chess.engine.Game
         {
             var king = boardState.GetItems((int)currentPlayer, (int)ChessPieceName.King).Single();
 
-            var enemies = boardState.GetItems((int) currentPlayer.Enemy())
+            var kingState = IsLocationUnderAttack(boardState, king.Location, king.Item.Player)
+                ? PlayerState.Check
+                : PlayerState.None;
+            if (kingState == PlayerState.None) return kingState;
+
+           var enemies = boardState.GetItems((int) currentPlayer.Enemy())
                 .ThatCanMoveTo(king.Location).ToList();
 
             return enemies.Any()
                 ? CheckForCheckMate(boardState, enemies, king)
-                : PlayerState.InProgress;
+                : PlayerState.None;
         }
+
+        private bool IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
+            BoardLocation location, Colours defender)
+        {
+            var pathFinder = new FindAttackPaths();
+            var attackPaths = pathFinder.Attacking(location, defender);
+
+            var straightAttackPieces = new[] { ChessPieceName.Rook, ChessPieceName.Queen };
+            var diagonalAttackPieces = new[] { ChessPieceName.Bishop, ChessPieceName.Queen };
+            var knightAttackPieces = new[] { ChessPieceName.Knight };
+            var pawnAttackPieces = new[] { ChessPieceName.Pawn };
+
+            if (PathsContainsAttack(attackPaths.Straight, straightAttackPieces, defender.Enemy(), boardState)) return true;
+            if (PathsContainsAttack(attackPaths.Diagonal, diagonalAttackPieces, defender.Enemy(), boardState)) return true;
+            if (PathsContainsAttack(attackPaths.Knight, knightAttackPieces, defender.Enemy(), boardState)) return true;
+            if (PathsContainsAttack(attackPaths.Pawns, pawnAttackPieces, defender.Enemy(), boardState)) return true;
+
+            return false;
+        }
+
+        private static bool PathsContainsAttack(Paths paths,
+            ChessPieceName[] straightAttackPieces, Colours enemy, IBoardState<ChessPieceEntity> boardState)
+        {
+            foreach (var attackPath in paths)
+            {
+                foreach (var path in attackPath)
+                {
+                    var piece = boardState.GetItem(path.To);
+                    if (piece != null)
+                    {
+                        if (straightAttackPieces.Any(p => piece.Item.Is(enemy, p)))
+                        {
+                            return true;
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            return false;
+        }
+
 
         private PlayerState CheckForCheckMate(
             IBoardState<ChessPieceEntity> boardState,

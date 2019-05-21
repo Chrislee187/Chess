@@ -2,7 +2,7 @@
 {
     public static class ChessGameExtensions
     {
-        public static string ToText(this ChessGame game)
+        public static string ToTextBoard(this ChessGame game)
         {
             return new ChessBoardBuilder().FromChessGame(game).ToTextBoard();
         }
@@ -10,7 +10,7 @@
         {
             return $"var builder = new ChessBoardBuilder()\r\n" +
                    $"   .Board(\r\n\"" +
-                   ToText(game) + 
+                   ToTextBoard(game) + 
                    "\r\n);";
         }
 

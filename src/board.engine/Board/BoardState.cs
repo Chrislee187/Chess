@@ -8,7 +8,6 @@ namespace board.engine.Board
 {
     public class BoardState<TEntity> : IBoardState<TEntity> where TEntity : class, IBoardEntity
     {
-        public static bool ParalleiseRefreshPaths => FeatureFlags.ParalleliseRefreshAllPaths;
 
         private readonly IDictionary<BoardLocation, LocatedItem<TEntity>> _items;
         private readonly IPathsValidator<TEntity> _pathsValidator;
@@ -36,24 +35,18 @@ namespace board.engine.Board
 
             return null;
         }
-
         public IEnumerable<LocatedItem<TEntity>> GetItems(params BoardLocation[] locations)
             => _items.Where(itm => locations.Contains(itm.Key)).Select(kvp => kvp.Value);
-
-        public IEnumerable<LocatedItem<TEntity>> GetItems(int owner)
-            => _items.Values.ForOwner(owner);
-
+        public IEnumerable<LocatedItem<TEntity>> GetItems()
+            => _items.Values;
+        public IEnumerable<LocatedItem<TEntity>> GetItems(int owner) => _items.Values.ForOwner(owner);
         public IEnumerable<LocatedItem<TEntity>> GetItems(int owner, int entityType) =>
             _items.Where(itm => itm.Value.Item.Owner.Equals(owner)
                                 && itm.Value.Item.EntityType == entityType
             ).Select(kvp => kvp.Value);
 
-        public IEnumerable<LocatedItem<TEntity>> GetItems()
-            => _items.Values;
-
         public void Remove(BoardLocation loc) => _items.Remove(loc);
         public void Clear() => _items.Clear();
-
         public object Clone()
         {
             var clonedItems = _items.Values.Select(e => e.Clone() as LocatedItem<TEntity>);
@@ -65,33 +58,17 @@ namespace board.engine.Board
 
         public bool IsEmpty(BoardLocation location) => !_items.ContainsKey(location);
 
-        private IOrderedEnumerable<LocatedItem<TEntity>> ChessOrdering(IEnumerable<LocatedItem<TEntity>> items)
-        {
-            return items.OrderBy(i => i.Item.EntityType);
-        }
-        private IEnumerable<LocatedItem<TEntity>> AllItems()
-            => ChessOrdering(_items.Values);
-
-        private IEnumerable<LocatedItem<TEntity>> AllItems(int owner)
-            => ChessOrdering(_items.Values.Where(i => i.Item.Owner == owner));
-
         public void RegeneratePossiblePaths(LocatedItem<TEntity> locatedItem)
         {
             Guard.NotNull(locatedItem, $"Null item found!");
 
-            var paths = _pathsValidator.GeneratePossiblePaths(this, locatedItem.Item, locatedItem.Location);
+            var paths = _pathsValidator.GetValidatedPaths(this, locatedItem.Item, locatedItem.Location);
 
             locatedItem.UpdatePaths(paths);
         }
 
         public void UpdatePaths(LocatedItem<TEntity>[] items)
         {
-//            _items.Clear();
-//            items.ToList().ForEach(i =>
-//            {
-//                _items.Add(i.Location, i);
-//            });
-
             foreach (var item in items)
             {
                 _items[item.Location].UpdatePaths((Paths) item.Paths.Clone());
@@ -99,9 +76,9 @@ namespace board.engine.Board
         }
 
 
-        private void RefreshPathsFor(IOrderedEnumerable<LocatedItem<TEntity>> items)
+        public void RefreshPathsFor(IEnumerable<LocatedItem<TEntity>> items)
         {
-            if (ParalleiseRefreshPaths)
+            if (FeatureFlags.ParalleliseRefreshAllPaths)
             {
                 items.AsParallel()
                     .ForAll(RegeneratePossiblePaths);
@@ -114,10 +91,17 @@ namespace board.engine.Board
         }
 
         public void RegeneratePossiblePaths(int owner)
-            => RefreshPathsFor(ChessOrdering(AllItems(owner)));
+            => RefreshPathsFor(AllItems(owner));
 
-        public void RegeneratePossiblePaths() 
-            => RefreshPathsFor(ChessOrdering(AllItems()));
+        public void RegeneratePossiblePaths()
+        {
+            RefreshPathsFor(AllItems());
+        }
+
+        private IEnumerable<LocatedItem<TEntity>> AllItems() => _items.Values;
+
+        private IEnumerable<LocatedItem<TEntity>> AllItems(int owner)
+            => _items.Values.Where(i => i.Item.Owner == owner);
 
         #region For DEBUGGING use, remove in due course
 
@@ -160,8 +144,8 @@ namespace board.engine.Board
                 {'N', 4},
                 {'b', 3},
                 {'B', 3},
-                {'k', 5},
-                {'K', 5},
+                {'k', int.MaxValue},
+                {'K', int.MaxValue},
                 {'q', 6},
                 {'Q', 6},
             };

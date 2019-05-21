@@ -18,6 +18,11 @@
   * How to handle these need to be easy to implement and setup the required states, want to be able to create the rules of chess in feature tests
 * Engine is now successfully parsing many (1000's) games
 
+# Useful commands n stuff
+Plays all games from a large PGN file through the engine, showing per game timings and average, NB PGN files can contain tens of thousands of games so this can still take quite some time.
+```
+dotnet test --filter Should_play_all_games_in_a_single_file --configuration RELEASE
+```
 
 ## Performance
 * ~~did some simple analysis with R# profile, found some good improvements avg game parse time currently around 1.14ms~~ sub 1sec averager now

@@ -18,7 +18,7 @@ namespace chess.engine.Movement
 
             var pawnPaths = new Paths();
 
-            var pawnPos1 = at.MoveForward(defendingPlayer).MoveLeft(defendingPlayer);
+            var pawnPos1 = at.MoveForward(defendingPlayer)?.MoveLeft(defendingPlayer);
             if (pawnPos1 != null)
             {
                 var path = new Path();
@@ -26,7 +26,7 @@ namespace chess.engine.Movement
                 pawnPaths.Add(path);
             }
 
-            var pawnPos2 = at.MoveForward(defendingPlayer).MoveRight(defendingPlayer);
+            var pawnPos2 = at.MoveForward(defendingPlayer)?.MoveRight(defendingPlayer);
             if (pawnPos2 != null)
             {
                 var path = new Path();

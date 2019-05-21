@@ -20,14 +20,14 @@ namespace chess.engine.tests.Game
                        "        " +
                        "    K  R"
                 );
-            var result = ChessFactory.CustomChessGame(builder.ToGameSetup(), Colours.Black);
+            var game = ChessFactory.CustomChessGame(builder.ToGameSetup(), Colours.Black);
 
-            Assert.That(result.PlayerState, Is.EqualTo(PlayerState.Check));
+            Assert.That(game.CheckState, Is.EqualTo(GameCheckState.BlackInCheck));
         }
         [Test]
         public void Should_find_simple_checkmate_condition()
         {
-            var result = ChessFactory.CustomChessGame(new ChessBoardBuilder()
+            var game = ChessFactory.CustomChessGame(new ChessBoardBuilder()
                 .Board("R   k   " +
                        "       R" +
                        "        " +
@@ -36,9 +36,9 @@ namespace chess.engine.tests.Game
                        "        " +
                        "        " +
                        "    K   "
-                ).ToGameSetup(), Colours.Black).PlayerState;
+                ).ToGameSetup(), Colours.Black);
 
-            Assert.That(result, Is.EqualTo(PlayerState.Checkmate));
+            Assert.That(game.CheckState, Is.EqualTo(GameCheckState.BlackCheckmated));
         }
     }
 }

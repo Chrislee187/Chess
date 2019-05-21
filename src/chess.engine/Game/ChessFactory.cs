@@ -45,13 +45,19 @@ namespace chess.engine.Game
                 moveValidationProvider ?? MoveValidationProvider(logger)
             );
 
+        private static ChessPathsValidator _pathsValidatorSingleton;
         public static ChessPathsValidator PathsValidator(
             IPathValidator<ChessPieceEntity> pathValidator = null,
             LoggerType logger = LoggerType.Injected)
-            => new ChessPathsValidator(
+        {
+            if (_pathsValidatorSingleton != null) return _pathsValidatorSingleton;
+
+            _pathsValidatorSingleton = new ChessPathsValidator(
                 Logger<ChessPathsValidator>(logger),
                 pathValidator ?? PathValidator(null, logger)
             );
+            return _pathsValidatorSingleton;
+        }
 
         public static ChessRefreshAllPaths ChessRefreshAllPaths(
             ChessBoardActionProvider chessBoardActionProvider = null,
@@ -74,15 +80,14 @@ namespace chess.engine.Game
                 Logger<ChessGame>(logger),
                 ChessBoardEngineProvider(logger),
                 ChessPieceEntityFactory(logger),
-                PlayerStateService(logger)
+                CheckDetectionService(logger)
                 );
 
         public static ChessGame CustomChessGame(IBoardSetup<ChessPieceEntity> setup, Colours toPlay = Colours.White, LoggerType logger = LoggerType.Injected) 
             => new ChessGame(
                 Logger<ChessGame>(logger),
                 ChessBoardEngineProvider(logger),
-                ChessPieceEntityFactory(logger),
-                PlayerStateService(logger),
+                CheckDetectionService(logger),
                 setup,
                 toPlay
                 );

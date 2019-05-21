@@ -5,6 +5,6 @@ namespace board.engine
 {
     public interface IPathsValidator<TEntity> where TEntity : class, IBoardEntity
     {
-        Paths GeneratePossiblePaths(IBoardState<TEntity> boardState, TEntity entity, BoardLocation boardLocation);
+        Paths GetValidatedPaths(IBoardState<TEntity> boardState, TEntity entity, BoardLocation boardLocation);
     }
 }

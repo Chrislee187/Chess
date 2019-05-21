@@ -40,15 +40,23 @@ namespace chess.big.tests
         }
 
         [Test]
-        [Explicit("WARNING: Could take a long time.")]
+//        [Explicit("WARNING: Could take a VERY long time.")]
         public void Should_play_all_games_in_a_single_file()
         {
+            //  Last Test: 19/05/19 - 58.7377 Minutes - 3081 games    Average playtime (00:00:01.1312775) (DEBUG)
+            var filename = @"D:\Src\PGNArchive\PGN\Adams\Adams.pgn";
 
-            //var filename = @"D:\Src\PGNArchive\PGN\Adams\Adams.pgn";          //  58.7377 Minutes - 3081 games    Average playtime (00:00:01.1312775) (DEBUG)
-            //var filename = @"D:\Src\PGNArchive\PGN\Akobian\Akobian.pgn";      //  24.0282 Minutes - 1250 games    Average playtime (00:00:01.1436758) (DEBUG)
-            // var filename = @"D:\Src\PGNArchive\PGN\Akopian\Akopian.pgn";        //  29.0058 Minutes - 1880 games    Average playtime (00:00:00.9179160)(RELEASE)
-            // var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";        // 12.1338 - 776  Average playtime (00:00:00.9298538) (RELEASE)
-            var filename = @"D:\Src\PGNArchive\PGN\Modern\Modern.pgn";        // (RELEASE)
+            //  Last Test: 19/05/19 - 24.0282 Minutes - 1250 games    Average playtime (00:00:01.1436758) (DEBUG)
+            //var filename = @"D:\Src\PGNArchive\PGN\Akobian\Akobian.pgn"; 
+
+            //  Last Test: 19/05/19 - 29.0058 Minutes - 1880 games    Average playtime (00:00:00.9179160)(RELEASE)
+            // var filename = @"D:\Src\PGNArchive\PGN\Akopian\Akopian.pgn";
+
+            //  Last Test: 19/05/19 - 12.1338 - 776  Average playtime (00:00:00.9298538) (RELEASE)
+            // var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";
+            
+            // YET TO COMPLETE A FULL RUN
+            //  var filename = @"D:\Src\PGNArchive\PGN\Modern\Modern.pgn";        // (RELEASE)
             TestContext.Progress.WriteLine($"Playing all games from;");
             TestContext.Progress.WriteLine($"  {filename}");
             PlayAllGames(PgnReader.FromFile(filename));
@@ -85,7 +93,7 @@ namespace chess.big.tests
             {
                 TestContext.Out.WriteLine($"FAILED");
                 TestContext.Out.WriteLine($"Game: #{gameIdx} / {game?.ToString() ?? ""}");
-                TestContext.Out.WriteLine($"Board:\n{chessGame.ToText()}");
+                TestContext.Out.WriteLine($"Board:\n{chessGame.ToTextBoard()}");
                 TestContext.Out.WriteLine($"Full PGN Text:\n{reader.LastGameText}");
                 throw;
             }

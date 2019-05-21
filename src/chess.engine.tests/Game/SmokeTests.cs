@@ -18,8 +18,8 @@ namespace chess.engine.tests.Game
             {
                 Console.WriteLine($"Move #{++moveIdx}: {move}");
                 var msg = game.Move(move);
-                Console.WriteLine(game.PlayerState + " - " + game.CurrentPlayer + " to move.");
-                Console.WriteLine(game.ToText());
+                Console.WriteLine(game.CheckState + " - " + game.CurrentPlayer + " to move.");
+                Console.WriteLine(game.ToTextBoard());
                 if (!string.IsNullOrEmpty(msg))
                 {
                     if (msg.Contains("Error:")) Assert.Fail($"Error: {msg}");
