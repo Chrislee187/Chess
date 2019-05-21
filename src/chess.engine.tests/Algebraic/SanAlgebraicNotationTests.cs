@@ -137,6 +137,7 @@ namespace chess.engine.tests.Algebraic
         }
 
         [Test]
+        [Ignore("Feature currently disabled")]
         public void Should_put_plus_on_end_of_moves_that_cause_check()
         {
             // TODO: Better way to check this, than using a full board.

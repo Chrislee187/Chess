@@ -31,7 +31,7 @@ namespace chess.big.tests
                 fileCount++;
                 if (file.Contains("FAILED")) continue;
 
-                PlaySingleGame(PgnReader.FromFile(file));
+                PlayAllGames(PgnReader.FromFile(file));
             }
 
             Console.WriteLine($"Files #: {fileCount}, Total Games #: {gamesCount}");
@@ -51,11 +51,12 @@ namespace chess.big.tests
             var filename = @"D:\Src\PGNArchive\PGN\Modern\Modern.pgn";        // (RELEASE)
             TestContext.Progress.WriteLine($"Playing all games from;");
             TestContext.Progress.WriteLine($"  {filename}");
-            PlaySingleGame(PgnReader.FromFile(filename));
+            PlayAllGames(PgnReader.FromFile(filename));
             TestContext.Progress.WriteLine($"  {filename} complete!");
         }
 
-        private void PlaySingleGame(PgnReader reader)
+        // TODO: Add an option to parallelise this
+        private void PlayAllGames(PgnReader reader)
         {
             PgnGame game = null;
             ChessGame chessGame = null;

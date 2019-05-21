@@ -83,7 +83,7 @@ namespace chess.engine.SAN
 
             //NOTE: This seemingly innocuous line, just to add a '+' to the end of a string,
             // causes the move to be played on a cloned board and all paths to be refreshed.
-            var inCheck = _checkDetectionService.DoesMoveCauseCheck(boardState, move);
+            var inCheck = false; //_checkDetectionService.DoesMoveCauseCheck(boardState, move);
 
             return new StandardAlgebraicNotation(piece, fromFile, fromRank, toFile, toRank, moveType, promotionPiece, inCheck );
         }
