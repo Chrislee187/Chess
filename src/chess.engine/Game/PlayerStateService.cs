@@ -12,7 +12,7 @@ namespace chess.engine.Game
     {
         PlayerState CurrentPlayerState(IBoardState<ChessPieceEntity> boardState, Colours currentPlayer);
 
-        (bool result, LocatedItem<ChessPieceEntity> attacker) IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
+        (bool result, LocatedItem<ChessPieceEntity> attacker) IsLocationUnderCheck(IBoardState<ChessPieceEntity> boardState,
             BoardLocation location, Colours defender);
     }
 
@@ -40,17 +40,17 @@ namespace chess.engine.Game
         {
             var king = boardState.GetItems((int)currentPlayer, (int)ChessPieceName.King).Single();
 
-            var isLocationUnderAttack = IsLocationUnderAttack(boardState, king.Location, king.Item.Player);
-            if(isLocationUnderAttack.result)
+            var locationUnderCheck = IsLocationUnderCheck(boardState, king.Location, king.Item.Player);
+            if(locationUnderCheck.result)
             {
-                return CheckForCheckMate(boardState, king, isLocationUnderAttack.attacker);
+                return CheckForCheckMate(boardState, king, locationUnderCheck.attacker);
             }
 
 
             return PlayerState.None;
         }
 
-        public (bool result, LocatedItem<ChessPieceEntity> attacker) IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
+        public (bool result, LocatedItem<ChessPieceEntity> attacker) IsLocationUnderCheck(IBoardState<ChessPieceEntity> boardState,
             BoardLocation location, Colours defender)
         {
             var attackPaths = _pathFinder.Attacking(location, defender);
@@ -112,19 +112,11 @@ namespace chess.engine.Game
             var clone = (IBoardState<ChessPieceEntity>) boardState.Clone();
 
              // Find the attacking piece
-             // Not sure why we need to refresh it piece paths here but I get problems with out it
-             // attcking piece
+             // Not sure why we need to refresh its piece paths here but I get problems with out it
              RefreshPiecePaths(clone, attacker);
 
             // find the path it's attacking on
             var attackPath = attacker.Paths.FirstOrDefault(p => p.ContainsTo(king.Location));
-
-            //
-            // get all friendly pieces except king
-            // refresh there paths
-            var friendlyPieces = clone.GetItems(king.Item.Owner)
-                .Where(p => p.Item.Piece != ChessPieceName.King)
-                .OrderBy(p => p.Item.EntityType);
 
             // Remove the king from the board so as to not have it's location block 
             // attack paths from the new location
@@ -132,8 +124,14 @@ namespace chess.engine.Game
             var kingCannotMove = !king.Paths.Any() || king.Paths.FlattenMoves()
                  .ToList()
                  .All(m 
-                    => IsLocationUnderAttack(clone, m.To, king.Item.Player).result);
+                    => IsLocationUnderCheck(clone, m.To, king.Item.Player).result);
 
+            //
+            // get all friendly pieces except king
+            // refresh there paths
+            var friendlyPieces = clone.GetItems(king.Item.Owner)
+                .Where(p => p.Item.Piece != ChessPieceName.King)
+                .OrderBy(p => p.Item.EntityType);
 
             // check if any friendly paths intersect the attackPath or attack the attacker
             var canBlock = friendlyPieces.Where(fp 

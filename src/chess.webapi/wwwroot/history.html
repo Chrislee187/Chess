@@ -14,9 +14,9 @@
     <tr>
         <td>22/05/2018</td>
         <td>
-            More refinement around check detection routines, custom mechanisms for "does a move cause check"
-            and "does a move leave me in check" implemented as the later of those two is much slower to work out
-            than the former
+            More refinement around check detection routines, faster to not have to really on path regeneration, and 
+            checking which pieces can attack the king but rather, using a simple mask system, checks all possible 
+            squares that could attack the king for pieces that have moves that could attack from that square.
             <br />Avg. game parse time at 0.22 secs
         </td>
     </tr>

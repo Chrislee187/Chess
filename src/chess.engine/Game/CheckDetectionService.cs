@@ -67,36 +67,20 @@ namespace chess.engine.Game
         // Used more specifically to enforce board logic
         public bool DoesMoveLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move)
         {
-            // NOTE: We could reuse the PlayerStateService here
             var attackingPlayer = boardState.GetItem(move.From).Item.Player;
 
             var clone = (IBoardState<ChessPieceEntity>) boardState.Clone();
             _moveService.Move(clone, move);
 
-            // NOTE: Paths are NOT refreshed by the MoveService and we MUST NOT refresh alls paths here
-            // typically already inside a refresh cycle when we perform this check (it would also slow things down a lot)
-            var friendlyKing = clone.GetItems((int) attackingPlayer, (int) ChessPieceName.King).Single();
+            var king = clone.GetItems((int) attackingPlayer, (int) ChessPieceName.King).Single();
 
-            var doesMoveLeaveUsInCheck = _playerStateService.IsLocationUnderAttack(clone, friendlyKing.Location, friendlyKing.Item.Player);
-            return doesMoveLeaveUsInCheck.result;
-
-// NOTE: 22/05/2019 - This is whats needed to use CurrentPlayerState() method on the PlayerStateService, the refreshes hammer performance
-// Leave this around for a while as an alternative approach should we require it.
-// 
-//            RefreshPiecePaths(clone, friendlyKing);
-//            var friendlyPieces = clone.GetItems((int) attackingPlayer.Enemy())
-//                .Where(p => p.Item.Piece != ChessPieceName.King)
-//                .OrderBy(p => p.Item.EntityType);
-//
-//            friendlyPieces.AsParallel()
-//                .ForAll(piece => RefreshPiecePaths(clone, piece));
-//
-//            return _playerStateService.CurrentPlayerState(clone, attackingPlayer) != PlayerState.None;
+            return _playerStateService.IsLocationUnderCheck(clone, king.Location, king.Item.Player).result;
         }
 
         // Typically only used to produce correct san notation on output
         public bool DoesMoveCauseCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move)
         {
+            // TODO: Would it be quicker to 
             var attackingPlayer = boardState.GetItem(move.From).Item.Player;
 
             var defender = boardState.GetItem(move.To);
@@ -107,71 +91,10 @@ namespace chess.engine.Game
 
             var clone = (IBoardState<ChessPieceEntity>)boardState.Clone();
             _moveService.Move(clone, move);
-            RefreshPiecePaths(clone, clone.GetItem(move.To));
 
-            var defendingKing = clone.GetItems((int)attackingPlayer.Enemy(), (int)ChessPieceName.King).Single();
-            RefreshPiecePaths(clone, defendingKing);
-            var friendlyPieces = clone.GetItems((int)attackingPlayer.Enemy())
-                .Where(p => p.Item.Piece != ChessPieceName.King)
-                .OrderBy(p => p.Item.EntityType);
-
-            friendlyPieces.AsParallel()
-                .ForAll(piece => RefreshPiecePaths(clone, piece));
-            // NOTE: The PlayerStateService is dependent on valid piece paths to determine checkmate conditions
-            // but we cannot refresh the board here (see the note in DoesMoveLeaveUsInCheck
-            return _playerStateService.CurrentPlayerState(clone, attackingPlayer.Enemy()) != PlayerState.None;
-//
-//             var defendingKing = clone.GetItems((int)attackingPlayer.Enemy(), (int)ChessPieceName.King).Single();
-//            return IsLocationUnderAttack(clone, defendingKing.Location, defendingKing.Item.Player);
+            var king = clone.GetItems((int)attackingPlayer.Enemy(), (int)ChessPieceName.King).Single();
+            return _playerStateService.IsLocationUnderCheck(boardState, king.Location, king.Item.Player).result;
         }
-        private void RefreshPiecePaths(IBoardState<ChessPieceEntity> boardState, LocatedItem<ChessPieceEntity> piece)
-        {
-            var validatedPaths = _pathsValidator.GetValidatedPaths(boardState, piece.Item, piece.Location);
-            piece.UpdatePaths(validatedPaths);
-        }
-
-
-        private bool IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
-            BoardLocation location, Colours defender)
-        {
-            var attackPaths = _pathFinder.Attacking(location, defender);
-
-            var straightAttackPieces = new[] { ChessPieceName.Rook, ChessPieceName.Queen };
-            var diagonalAttackPieces = new[] { ChessPieceName.Bishop, ChessPieceName.Queen };
-            var knightAttackPieces = new[] { ChessPieceName.Knight };
-            var pawnAttackPieces = new[] { ChessPieceName.Pawn };
-
-            if (PathsContainsAttack(attackPaths.Straight, straightAttackPieces, defender.Enemy(), boardState)) return true;
-            if (PathsContainsAttack(attackPaths.Diagonal, diagonalAttackPieces, defender.Enemy(), boardState)) return true;
-            if (PathsContainsAttack(attackPaths.Knight, knightAttackPieces, defender.Enemy(), boardState)) return true;
-            if (PathsContainsAttack(attackPaths.Pawns, pawnAttackPieces, defender.Enemy(), boardState)) return true;
-
-            return false;
-        }
-
-        private static bool PathsContainsAttack(Paths paths,
-            ChessPieceName[] straightAttackPieces, Colours enemy, IBoardState<ChessPieceEntity> boardState)
-        {
-            foreach (var attackPath in paths)
-            {
-                foreach (var path in attackPath)
-                {
-                    var piece = boardState.GetItem(path.To);
-                    if (piece != null)
-                    {
-                        if (straightAttackPieces.Any(p => piece.Item.Is(enemy, p)))
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            return false;
-        }
-
     }
 
     public interface ICheckDetectionService

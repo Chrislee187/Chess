@@ -18,7 +18,7 @@ namespace chess.big.tests
         }
 
         [Test(Description = "Best Average, inVS: 0.35, inConsole (RELEASE): 0.23 ")]
-//        [Ignore("WARNING: Could take a long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
+        [Explicit("WARNING: Could take a long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
         public void Measure_parse_game_time_100_games()
         {
             var filename = @"D:\Src\PGNArchive\PGN\Modern100.pgn";
@@ -68,8 +68,7 @@ namespace chess.big.tests
             //  Last Test: 22/05/19 -  3.8212 - 776  Average playtime (00:00:00.2911059)
             //            var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";
 
-            // Last Test: 22/05/19 - 1.0659 hours - 13077 - Average playtime (00:00:00.2908500)
-            var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";
+            var filename = @"D:\Src\PGNArchive\PGN\Modern\Modern.pgn";
 
 
             TestContext.Progress.WriteLine($"Playing all games from;");
