@@ -1,6 +1,5 @@
 ﻿using System;
 using board.engine;
-using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Actions;
 using chess.engine.Entities;
@@ -68,8 +67,11 @@ namespace chess.engine.Game
             );
 
         public static IPlayerStateService PlayerStateService(LoggerType logger = LoggerType.Injected) 
-        => new PlayerStateService(Logger<IPlayerStateService>());
+        => new PlayerStateService(Logger<IPlayerStateService>(logger),
+            FindAttackPaths(logger));
 
+        public static IFindAttackPaths FindAttackPaths(LoggerType logger = LoggerType.Injected)
+            => new FindAttackPaths();
         public static ChessBoardActionProvider ChessBoardActionProvider(IBoardEntityFactory<ChessPieceEntity> entityFactory = null, LoggerType logger = LoggerType.Injected)
             => new ChessBoardActionProvider(
                 entityFactory ?? ChessPieceEntityFactory(logger)
@@ -105,7 +107,7 @@ namespace chess.engine.Game
 
         public static ChessBoardEngineProvider ChessBoardEngineProvider(LoggerType logger = LoggerType.Injected) =>
             new ChessBoardEngineProvider(
-                Logger<BoardEngine<ChessPieceEntity>>(),
+                Logger<BoardEngine<ChessPieceEntity>>(logger),
                 ChessRefreshAllPaths(null, logger),
                 PathsValidator(null, logger),
                 BoardMoveService(null, null, logger));
@@ -113,19 +115,14 @@ namespace chess.engine.Game
         public static ICheckDetectionService CheckDetectionService(LoggerType logger = LoggerType.Injected)
         {
             return new CheckDetectionService(
-                Logger<CheckDetectionService>(),
+                Logger<CheckDetectionService>(logger),
                 PlayerStateService(logger),
-                BoardMoveService(null, null, logger)
+                BoardMoveService(null, null, logger),
+                FindAttackPaths(logger)
             );
         }
 
-        public static ISanTokenParser SanTokenFactory()
-        {
-            return new SanTokenParser();
-        }
-
-        public static LocatedItem<ChessPieceEntity> LocatedItem(BoardLocation at, ChessPieceName piece, Colours owner, Paths paths = null)
-        => new LocatedItem<ChessPieceEntity>(at, ChessPieceEntityFactory().Create(piece, owner), paths ?? new Paths());
+        public static ISanTokenParser SanTokenFactory() => new SanTokenParser();
 
         public static ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData MoveExtraData(Colours owner,
             ChessPieceName piece)

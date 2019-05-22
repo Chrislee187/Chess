@@ -1,4 +1,7 @@
-﻿using board.engine;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using board.engine;
 using board.engine.Actions;
 using board.engine.Movement;
 using chess.engine.Game;
@@ -8,10 +11,23 @@ using chess.engine.Movement.Rook;
 
 namespace chess.engine.Movement
 {
-    public class FindAttackPaths
+    public interface IFindAttackPaths
     {
+        AttackPaths Attacking(BoardLocation at, Colours defendingPlayer = Colours.White);
+    }
+
+    public class FindAttackPaths : IFindAttackPaths
+    {
+        private ConcurrentDictionary<(BoardLocation, Colours), AttackPaths> _cache = new ConcurrentDictionary<(BoardLocation, Colours), AttackPaths>();
         public AttackPaths Attacking(BoardLocation at, Colours defendingPlayer = Colours.White)
         {
+            var key = (at, defendingPlayer);
+            if (_cache.TryGetValue(key, out var attacks))
+            {
+                return attacks;
+            }
+
+
             var straightPaths = new RookPathGenerator().PathsFrom(at, (int) Colours.White);
             var diagonalPaths = new BishopPathGenerator().PathsFrom(at, (int)Colours.White);
             var knightPaths = new KnightPathGenerator().PathsFrom(at, (int)Colours.White);
@@ -34,7 +50,13 @@ namespace chess.engine.Movement
                 pawnPaths.Add(path);
             }
 
-            return new AttackPaths(straightPaths, diagonalPaths, knightPaths, pawnPaths);
+            var attackPaths = new AttackPaths(straightPaths, diagonalPaths, knightPaths, pawnPaths);
+            if (_cache.TryAdd(key, attackPaths))
+            {
+                return attackPaths;
+            }
+
+            throw new SystemException("Failed to add AttackPaths to cache");
         }
 
     }

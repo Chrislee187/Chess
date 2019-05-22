@@ -14,17 +14,21 @@ namespace chess.engine.Game
         private readonly ILogger<CheckDetectionService> _logger;
         private readonly IPlayerStateService _playerStateService;
         private readonly IBoardMoveService<ChessPieceEntity> _moveService;
+        private readonly IFindAttackPaths _pathFinder;
 
         public CheckDetectionService(
             ILogger<CheckDetectionService> logger,
             IPlayerStateService playerStateService,
-            IBoardMoveService<ChessPieceEntity> moveService
+            IBoardMoveService<ChessPieceEntity> moveService,
+            IFindAttackPaths findAttackPaths
 
         )
         {
             _logger = logger;
             _moveService = moveService;
             _playerStateService = playerStateService;
+            _pathFinder = findAttackPaths;
+
         }
 
         public GameCheckState Check(IBoardState<ChessPieceEntity> boardState)
@@ -72,8 +76,7 @@ namespace chess.engine.Game
         private bool IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
             BoardLocation location, Colours defender)
         {
-            var pathFinder = new FindAttackPaths();
-            var attackPaths = pathFinder.Attacking(location, defender);
+            var attackPaths = _pathFinder.Attacking(location, defender);
 
             var straightAttackPieces = new[] {ChessPieceName.Rook, ChessPieceName.Queen};
             var diagonalAttackPieces = new[] {ChessPieceName.Bishop, ChessPieceName.Queen};

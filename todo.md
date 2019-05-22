@@ -32,6 +32,7 @@ dotnet test --filter Should_play_all_games_in_a_single_file --configuration RELE
   * Can we improve the apporach to not do this?
   * Can we cache results and reuse them if we are duplicating to avoid regenerating paths
 * DONE  ~~did some simple analysis with R# profile, found some good improvements avg game parse time currently around 1.14ms~~ sub 1sec averager now
+* DONE ~~Tried parallelise cloning of boardstate items, was slower~~
 
 ### Measurements
 * Counters - get some counters and timers in the frequently used stuff

@@ -71,6 +71,7 @@ namespace chess.engine
 
             services.AddTransient<IPlayerStateService, PlayerStateService>();
             services.AddTransient<ICheckDetectionService, CheckDetectionService>();
+            services.AddSingleton<IFindAttackPaths, FindAttackPaths>();
 
         }
     }

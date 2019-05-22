@@ -40,10 +40,9 @@ namespace chess.engine.SAN
             var piece = fromItem.Item.Piece;
             int? fromFile = null;
             int? fromRank = null;
-            int toFile = move.To.X;
-            int toRank = move.To.Y;
+            var toFile = move.To.X;
+            var toRank = move.To.Y;
             var moveType = boardState.IsEmpty(move.To) ? SanMoveTypes.Move : SanMoveTypes.Take;
-            var extra = "";
 
             // Are they any other pieces, 
             //      of same type as the from item
@@ -81,8 +80,8 @@ namespace chess.engine.SAN
                 promotionPiece = data.PieceName;
             }
 
-            //NOTE: This seemingly innocuous line, just to add a '+' to the end of a string,
-            // causes the move to be played on a cloned board and all paths to be refreshed.
+            //TODO: Don't have a cheap enough solution for this to make it worth while yet
+            // 
             var inCheck = false; //_checkDetectionService.DoesMoveCauseCheck(boardState, move);
 
             return new StandardAlgebraicNotation(piece, fromFile, fromRank, toFile, toRank, moveType, promotionPiece, inCheck );
@@ -180,12 +179,12 @@ namespace chess.engine.SAN
             {SanTokenTypes.Piece, (b,c) => b.WithPieceToken(c) },
             {SanTokenTypes.File, (b,c) => b.WithFileToken(c) },
             {SanTokenTypes.Rank, (b,c) => b.WithRankToken(c) },
-            {SanTokenTypes.Take, (b,c) => b.WithTakeMove(c) },
+            {SanTokenTypes.Take, (b,c) => b.WithTakeMove() },
             {SanTokenTypes.PromoteDelimiter, (b, c) => { } },
-            {SanTokenTypes.Check, (b, c) => b.WithCheck(c)  }
+            {SanTokenTypes.Check, (b, c) => b.WithCheck()  }
         };
             
-        private void WithCheck(char c)
+        private void WithCheck()
         {
             _inCheck = true;
         }
@@ -234,7 +233,7 @@ namespace chess.engine.SAN
             }
         }
 
-        private void WithTakeMove(char c) => _moveType = SanMoveTypes.Take;
+        private void WithTakeMove() => _moveType = SanMoveTypes.Take;
         private void WithPiece(ChessPieceName c) => _piece = c;
         private void WithPromotionPiece(char c) => _promotionPiece = ChessPieceNameMapper.FromChar(c);
         private void WithFirstFile(int tokenValue) => _firstFile = tokenValue;

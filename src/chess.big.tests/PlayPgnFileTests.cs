@@ -25,7 +25,7 @@ namespace chess.big.tests
             var pgnfiles = Directory.GetFiles(path, "*.pgn", SearchOption.AllDirectories);
             var fileCount = 0;
             var gamesCount = 0;
-            var fileGamesCount = 0;
+
             foreach (var file in pgnfiles)
             {
                 fileCount++;
@@ -58,16 +58,28 @@ namespace chess.big.tests
             //            var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";
 
             // Last Test: 22/05/19 - 1.0659 hours - 13077 - Average playtime (00:00:00.2908500)
-            var filename = @"D:\Src\PGNArchive\PGN\Modern\Modern.pgn";
+            var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";
+
+
             TestContext.Progress.WriteLine($"Playing all games from;");
             TestContext.Progress.WriteLine($"  {filename}");
             PlayAllGames(PgnReader.FromFile(filename));
             TestContext.Progress.WriteLine($"  {filename} complete!");
         }
-
+        [Test(Description = "Best Average, inVS: 0.35, inConsole (RELEASE): 0.23 ")]
+        //        [Explicit("WARNING: Could take a VERY long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
+        public void Measure_parse_game_time_100_games()
+        {
+            var filename = @"D:\Src\PGNArchive\PGN\Modern100.pgn";
+            TestContext.Progress.WriteLine($"Playing all games from;");
+            TestContext.Progress.WriteLine($"  {filename}");
+            PlayAllGames(PgnReader.FromFile(filename));
+            TestContext.Progress.WriteLine($"  {filename} complete!");
+        }
         // TODO: Add an option to parallelise this
         private void PlayAllGames(PgnReader reader)
         {
+            var loggerType = ChessFactory.LoggerType.Null;
             PgnGame game = null;
             ChessGame chessGame = null;
             var gameIdx = 0;
@@ -78,7 +90,7 @@ namespace chess.big.tests
                 while (game != null)
                 {
                     gameIdx++;
-                    chessGame = ChessFactory.NewChessGame();
+                    chessGame = ChessFactory.NewChessGame(loggerType);
                     var sw = Stopwatch.StartNew();
                     PlayTurns(game, chessGame);
                     var elapsed = sw.Elapsed;

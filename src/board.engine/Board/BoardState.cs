@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using board.engine.Movement;
@@ -48,9 +49,10 @@ namespace board.engine.Board
         public void Clear() => _items.Clear();
         public object Clone()
         {
-            var clonedItems = _items.Values.Select(e => e.Clone() as LocatedItem<TEntity>);
-
-            var clonedState = new BoardState<TEntity>(_pathsValidator, clonedItems);
+            // NOTE: Do not parallise the Values.Select() it makes the clone slower!
+            var clonedState = new BoardState<TEntity>(
+                _pathsValidator, 
+                _items.Values.Select(item => item.Clone() as LocatedItem<TEntity>));
 
             return clonedState;
         }

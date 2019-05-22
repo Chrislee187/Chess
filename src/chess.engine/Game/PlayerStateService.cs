@@ -17,10 +17,14 @@ namespace chess.engine.Game
     public class PlayerStateService : IPlayerStateService
     {
         private ILogger<IPlayerStateService> _logger;
+        private IFindAttackPaths _pathFinder;
 
-        public PlayerStateService(ILogger<IPlayerStateService> logger)
+        public PlayerStateService(ILogger<IPlayerStateService> logger, IFindAttackPaths findAttackPaths)
         {
             _logger = logger;
+            _pathFinder = findAttackPaths;
+
+
         }
 
         // TODO: Needs tests
@@ -47,8 +51,7 @@ namespace chess.engine.Game
         private bool IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
             BoardLocation location, Colours defender)
         {
-            var pathFinder = new FindAttackPaths();
-            var attackPaths = pathFinder.Attacking(location, defender);
+            var attackPaths = _pathFinder.Attacking(location, defender);
 
             var straightAttackPieces = new[] { ChessPieceName.Rook, ChessPieceName.Queen };
             var diagonalAttackPieces = new[] { ChessPieceName.Bishop, ChessPieceName.Queen };

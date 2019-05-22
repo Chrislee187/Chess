@@ -12,25 +12,21 @@ namespace board.engine.Movement
     [DebuggerDisplay("{DebuggerDisplay}")]
     public class Path : IEnumerable<BoardMove>, ICloneable
     {
-        // NOTE: string.Join makes execution in DEBUG mode slower, eventhough the debugger display is not directly being used
 #if DEBUG
-        private string DebuggerDisplay
-            => $"{string.Join(", ", _moves.Select(m => m.ToString()))}";
+        // NOTE: string.Join makes execution in DEBUG builds mode slower, event though the debugger display is not directly being used
+        private string DebuggerDisplay=> $"{string.Join(", ", _moves.Select(m => m.ToString()))}";
 #endif
-        private readonly List<BoardMove> _moves = new List<BoardMove>();
+        private readonly List<BoardMove> _moves;
 
         public void Add(BoardMove move) => _moves.Add(move);
-        public void AddRange(IEnumerable<BoardMove> moves) => _moves.AddRange(moves);
 
-        public object Clone()
-        {
-            var clone = new Path();
-            clone.AddRange(_moves.Select(m => m.Clone() as BoardMove));
-            return clone;
-        }
+        public Path() => _moves = new List<BoardMove>();
 
-        public bool CanMoveTo(BoardLocation destination) 
-            => this.Any(m => m.To.Equals(destination));
+        private Path(IEnumerable<BoardMove> moves) => _moves = new List<BoardMove>(moves);
+
+        public object Clone() => new Path(_moves.Select(m => m.Clone() as BoardMove));
+
+        public bool CanMoveTo(BoardLocation destination) => this.Any(m => m.To.Equals(destination));
 
         #region Equality, Enumerator and Overrides
 
@@ -50,7 +46,6 @@ namespace board.engine.Movement
         public IEnumerator<BoardMove> GetEnumerator() => _moves.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        #endregion
 
 #if DEBUG
         public override string ToString()
@@ -58,5 +53,7 @@ namespace board.engine.Movement
             return DebuggerDisplay;
         }
 #endif
+
+        #endregion
     }
 }

@@ -3,7 +3,6 @@ using System.Linq;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
-using board.engine.tests.Actions;
 using chess.engine.Entities;
 using chess.engine.Game;
 using Moq;
@@ -48,7 +47,8 @@ namespace chess.engine.tests.Game
             var service = new CheckDetectionService(
                 ChessFactory.Logger<CheckDetectionService>(),
                 _playerStateServiceMock.Object,
-                ChessFactory.BoardMoveService(ChessFactory.ChessBoardActionProvider())
+                ChessFactory.BoardMoveService(ChessFactory.ChessBoardActionProvider()),
+                ChessFactory.FindAttackPaths()
             );
 
             if (expectedGameState != GameCheckState.BlackCheckmated &&
@@ -71,7 +71,9 @@ namespace chess.engine.tests.Game
             var service = new CheckDetectionService(
                 ChessFactory.Logger<CheckDetectionService>(),
                 _playerStateServiceMock.Object,
-                _moveServiceMock.Object
+                _moveServiceMock.Object,
+                ChessFactory.FindAttackPaths()
+
             );
 
             SetupCheckState(PlayerState.Check, Colours.White);
