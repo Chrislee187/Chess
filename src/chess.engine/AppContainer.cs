@@ -60,6 +60,7 @@ namespace chess.engine
 
         public static void AddChessDependencies(this IServiceCollection services)
         {
+            // board.engine generic dependencies
             services.AddTransient<IRefreshAllPaths<ChessPieceEntity>, ChessRefreshAllPaths>();
             services.AddTransient<IPathsValidator<ChessPieceEntity>, ChessPathsValidator>();
             services.AddTransient<IPathValidator<ChessPieceEntity>,ChessPathValidator>();
@@ -69,8 +70,13 @@ namespace chess.engine
             services.AddTransient<IBoardMoveService<ChessPieceEntity>,BoardMoveService<ChessPieceEntity>>();
             services.AddTransient<IBoardEngineProvider<ChessPieceEntity>,ChessBoardEngineProvider>();
 
+            // chess.engine specific dependencies
             services.AddTransient<IPlayerStateService, PlayerStateService>();
             services.AddTransient<ICheckDetectionService, CheckDetectionService>();
+            services.AddTransient<ISanTokenParser, SanTokenParser>();
+            services.AddTransient<ISanBuilder, SanBuilder>();
+
+            // NOTE: Acts as a cache, hence singleton usage
             services.AddSingleton<IFindAttackPaths, FindAttackPaths>();
 
         }

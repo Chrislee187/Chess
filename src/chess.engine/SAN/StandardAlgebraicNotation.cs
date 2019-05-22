@@ -45,7 +45,9 @@ namespace chess.engine.SAN
         public static StandardAlgebraicNotation Parse(string notation)
         {
             var sanTokenParser = new SanTokenParser();
-            var an = new SanBuilder(ChessFactory.CheckDetectionService(), sanTokenParser).BuildFrom(notation);
+            var sanBuilder = AppContainer.GetService<ISanBuilder>();
+
+            var an = sanBuilder.BuildFrom(notation);
 
             if (an.CastleMove == CastleSide.None && an.ToNotation() != notation)
             {

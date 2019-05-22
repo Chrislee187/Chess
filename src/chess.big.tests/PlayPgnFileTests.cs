@@ -67,7 +67,7 @@ namespace chess.big.tests
             TestContext.Progress.WriteLine($"  {filename} complete!");
         }
         [Test(Description = "Best Average, inVS: 0.35, inConsole (RELEASE): 0.23 ")]
-        //        [Explicit("WARNING: Could take a VERY long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
+        [Explicit("WARNING: Could take a long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
         public void Measure_parse_game_time_100_games()
         {
             var filename = @"D:\Src\PGNArchive\PGN\Modern100.pgn";

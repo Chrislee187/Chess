@@ -86,6 +86,15 @@ namespace board.engine.Board
                 .SelectMany(fi => fi.Paths.FlattenMoves())
                 .Select(m => m.To);
         }
+        public static LocatedItem<TEntity>
+            FindItem<TEntity>(
+                this IEnumerable<LocatedItem<TEntity>> items,
+                int owner, int entityType)
+            where TEntity : class, IBoardEntity
+        {
+            return items
+                .Single(m => m.Item.EntityType == entityType && m.Item.Owner == owner);
+        }
 
     }
 }

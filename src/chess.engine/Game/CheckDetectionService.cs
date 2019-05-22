@@ -73,7 +73,7 @@ namespace chess.engine.Game
             return IsLocationUnderAttack(clone, defendingKing.Location, defendingPlayer);
         }
 
-        private bool IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
+        public bool IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
             BoardLocation location, Colours defender)
         {
             var attackPaths = _pathFinder.Attacking(location, defender);
@@ -119,6 +119,9 @@ namespace chess.engine.Game
     {
         bool DoesMoveLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardMove move);
         GameCheckState Check(IBoardState<ChessPieceEntity> boardState);
+
+        bool IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
+            BoardLocation location, Colours defender);
     }
 
     public enum GameCheckState

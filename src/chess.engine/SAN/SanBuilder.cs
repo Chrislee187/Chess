@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using board.engine.Board;
 using board.engine.Movement;
@@ -33,7 +34,7 @@ namespace chess.engine.SAN
 
         private string _originalNotation;
         private bool _inCheck;
-        public StandardAlgebraicNotation BuildFrom(IBoardState<ChessPieceEntity> boardState, BoardMove move)
+        public StandardAlgebraicNotation BuildFrom(IBoardState<ChessPieceEntity> boardState, BoardMove move, bool performCheckTest = false)
         {
             var fromItem = boardState.GetItem(move.From);
 
@@ -80,13 +81,26 @@ namespace chess.engine.SAN
                 promotionPiece = data.PieceName;
             }
 
-            //TODO: Don't have a cheap enough solution for this to make it worth while yet
+            // Note: This may has a small performance impact when parsing lots of games, approx 20ms per game on my rig,
+            // it just produces the check notator '+' at the
+            // end of a move that causes check, it's for display information only and not used at all by any processing.
+            // Make it optional so that things display moves can show it but things just parsing moves doesn't need it
             // 
-            var inCheck = false; //_checkDetectionService.DoesMoveCauseCheck(boardState, move);
-
+            var inCheck = performCheckTest && IsEnemyInCheck(boardState, fromItem);
             return new StandardAlgebraicNotation(piece, fromFile, fromRank, toFile, toRank, moveType, promotionPiece, inCheck );
         }
 
+        private bool IsEnemyInCheck(IBoardState<ChessPieceEntity> boardState, LocatedItem<ChessPieceEntity> fromItem)
+        {
+            var enemyKingLoc = boardState.GetItems()
+                .FindItem((int) fromItem.Item.Player.Enemy(), (int) ChessPieceName.King);
+
+            return _checkDetectionService
+                .IsLocationUnderAttack(boardState,
+                    enemyKingLoc.Location, enemyKingLoc.Item.Player);
+        }
+
+        // TODO: Was doesn't this use the TryParse pattern
         public StandardAlgebraicNotation BuildFrom(string notation)
         {
             if (notation.StartsWith("O-O") || notation.StartsWith("0-0"))
