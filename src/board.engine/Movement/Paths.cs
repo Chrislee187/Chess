@@ -18,7 +18,7 @@ namespace board.engine.Movement
 
         public Paths() => _paths = new List<Path>();
 
-        private Paths(IEnumerable<Path> paths) => _paths = new List<Path>(paths);
+        public Paths(IEnumerable<Path> paths) => _paths = new List<Path>(paths);
 
         public void Add(Path path) => _paths.Add(path);
 

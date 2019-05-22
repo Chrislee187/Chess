@@ -52,7 +52,9 @@ namespace chess.webapi.Services
         public Move[] ToMoveList(params LocatedItem<ChessPieceEntity>[] locatedItems)
         {
             return locatedItems.SelectMany(i => i.Paths.FlattenMoves()
-                .Select(m => new Move($"{m.ToChessCoords()}", StandardAlgebraicNotation.ParseFromGameMove(Game.BoardState, m).ToNotation() ))).ToArray();
+                .Select(m => new Move($"{m.ToChessCoords()}", 
+                    StandardAlgebraicNotation.ParseFromGameMove(Game.BoardState, m, true)
+                        .ToNotation() ))).ToArray();
         }
 
         public class Move

@@ -25,23 +25,25 @@ namespace chess.engine.Extensions
             if (s.Length != 2) throw new ArgumentException($"Invalid BoardLocation {s}");
 
             // TODO: This is nice helper function but does make it dependent on ChessFile a Chess specific!!!
-            if (!Enum.TryParse(s[0].ToString().ToUpper(), out ChessFile x)) throw new ArgumentException($"Invalid BoardLocation {s}");
+            if (!Enum.TryParse(s[0].ToString().ToUpper(), out ChessFile x))
+                throw new ArgumentException($"Invalid BoardLocation {s}");
             if (!int.TryParse(s[1].ToString(), out var y)) throw new ArgumentException($"Invalid BoardLocation {s}");
 
-            return BoardLocation.At((int)x, y);
+            return BoardLocation.At((int) x, y);
         }
 
         public static StandardAlgebraicNotation ToSan(this string s)
         {
             return StandardAlgebraicNotation.Parse(s);
         }
+
         public static Stream ToStream(this string s)
         {
             MemoryStream stream = new MemoryStream();
             StreamWriter writer = new StreamWriter(stream);
-                writer.Write(s);
-                writer.Flush();
-                stream.Position = 0;
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
             return stream;
         }
 
@@ -53,4 +55,18 @@ namespace chess.engine.Extensions
             return temp;
         }
     }
+
+    public static class ExtraLinqExtensions
+    {
+        public static IEnumerable<T> TakeUntil<T>(this IEnumerable<T> list, Func<T, bool> predicate)
+        {
+            foreach (T el in list)
+            {
+                yield return el;
+                if (predicate(el))
+                    yield break;
+            }
+        }
+    }
 }
+

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
@@ -12,19 +11,25 @@ namespace chess.engine.Game
     public interface IPlayerStateService
     {
         PlayerState CurrentPlayerState(IBoardState<ChessPieceEntity> boardState, Colours currentPlayer);
+
+        (bool result, LocatedItem<ChessPieceEntity> attacker) IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
+            BoardLocation location, Colours defender);
     }
 
+    // TODO: Badly need unit tests for this one.
     public class PlayerStateService : IPlayerStateService
     {
         private ILogger<IPlayerStateService> _logger;
-        private IFindAttackPaths _pathFinder;
+        private readonly IFindAttackPaths _pathFinder;
+        private readonly IPathsValidator<ChessPieceEntity> _pathsValidator;
 
-        public PlayerStateService(ILogger<IPlayerStateService> logger, IFindAttackPaths findAttackPaths)
+        public PlayerStateService(ILogger<IPlayerStateService> logger, 
+            IFindAttackPaths findAttackPaths,
+            IPathsValidator<ChessPieceEntity> pathsValidator)
         {
             _logger = logger;
             _pathFinder = findAttackPaths;
-
-
+            _pathsValidator = pathsValidator;
         }
 
         // TODO: Needs tests
@@ -35,20 +40,17 @@ namespace chess.engine.Game
         {
             var king = boardState.GetItems((int)currentPlayer, (int)ChessPieceName.King).Single();
 
-            var kingState = IsLocationUnderAttack(boardState, king.Location, king.Item.Player)
-                ? PlayerState.Check
-                : PlayerState.None;
-            if (kingState == PlayerState.None) return kingState;
+            var isLocationUnderAttack = IsLocationUnderAttack(boardState, king.Location, king.Item.Player);
+            if(isLocationUnderAttack.result)
+            {
+                return CheckForCheckMate(boardState, king, isLocationUnderAttack.attacker);
+            }
 
-           var enemies = boardState.GetItems((int) currentPlayer.Enemy())
-                .ThatCanMoveTo(king.Location).ToList();
 
-            return enemies.Any()
-                ? CheckForCheckMate(boardState, enemies, king)
-                : PlayerState.None;
+            return PlayerState.None;
         }
 
-        private bool IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
+        public (bool result, LocatedItem<ChessPieceEntity> attacker) IsLocationUnderAttack(IBoardState<ChessPieceEntity> boardState,
             BoardLocation location, Colours defender)
         {
             var attackPaths = _pathFinder.Attacking(location, defender);
@@ -58,15 +60,22 @@ namespace chess.engine.Game
             var knightAttackPieces = new[] { ChessPieceName.Knight };
             var pawnAttackPieces = new[] { ChessPieceName.Pawn };
 
-            if (PathsContainsAttack(attackPaths.Straight, straightAttackPieces, defender.Enemy(), boardState)) return true;
-            if (PathsContainsAttack(attackPaths.Diagonal, diagonalAttackPieces, defender.Enemy(), boardState)) return true;
-            if (PathsContainsAttack(attackPaths.Knight, knightAttackPieces, defender.Enemy(), boardState)) return true;
-            if (PathsContainsAttack(attackPaths.Pawns, pawnAttackPieces, defender.Enemy(), boardState)) return true;
+            var attackPath = PathsContainsAttack(attackPaths.Straight, straightAttackPieces, defender.Enemy(), boardState);
+            if (attackPath.result) return (true, attackPath.attacker);
 
-            return false;
+            attackPath = PathsContainsAttack(attackPaths.Diagonal, diagonalAttackPieces, defender.Enemy(), boardState);
+            if (attackPath.result) return (true, attackPath.attacker);
+
+            attackPath = PathsContainsAttack(attackPaths.Knight, knightAttackPieces, defender.Enemy(), boardState);
+            if (attackPath.result) return (true, attackPath.attacker);
+
+            attackPath = PathsContainsAttack(attackPaths.Pawns, pawnAttackPieces, defender.Enemy(), boardState);
+            if (attackPath.result) return (true, attackPath.attacker);
+
+            return (false, null);
         }
 
-        private static bool PathsContainsAttack(Paths paths,
+        private static (bool result, LocatedItem<ChessPieceEntity> attacker) PathsContainsAttack(Paths paths,
             ChessPieceName[] straightAttackPieces, Colours enemy, IBoardState<ChessPieceEntity> boardState)
         {
             foreach (var attackPath in paths)
@@ -78,7 +87,7 @@ namespace chess.engine.Game
                     {
                         if (straightAttackPieces.Any(p => piece.Item.Is(enemy, p)))
                         {
-                            return true;
+                            return (true, piece);
                         }
 
                         break;
@@ -86,40 +95,61 @@ namespace chess.engine.Game
                 }
             }
 
-            return false;
+            return (false, null);
         }
 
+        private void RefreshPiecePaths(IBoardState<ChessPieceEntity> boardState, LocatedItem<ChessPieceEntity> piece)
+        {
+            var validatedPaths = _pathsValidator.GetValidatedPaths(boardState, piece.Item, piece.Location);
+            piece.UpdatePaths(validatedPaths);
+        }
 
-        private PlayerState CheckForCheckMate(
-            IBoardState<ChessPieceEntity> boardState,
-            IEnumerable<LocatedItem<ChessPieceEntity>> enemiesAttackingKing, 
-            LocatedItem<ChessPieceEntity> king)
+        private PlayerState CheckForCheckMate(IBoardState<ChessPieceEntity> boardState,
+            LocatedItem<ChessPieceEntity> king, LocatedItem<ChessPieceEntity> attacker)
         {
             var state = PlayerState.Check;
-            var kingCannotMove = !king.Paths.Any(); // Move validator will ensure we can't move into check
 
-            var friendlyDestinations = boardState.GetItems(king.Item.Owner)
-                .AllDestinations();
+            var clone = (IBoardState<ChessPieceEntity>) boardState.Clone();
 
-            var canBlock = enemiesAttackingKing.All(enemy =>
+             // Find the attacking piece
+             // Not sure why we need to refresh it piece paths here but I get problems with out it
+             // attcking piece
+             RefreshPiecePaths(clone, attacker);
+
+            // find the path it's attacking on
+            var attackPath = attacker.Paths.FirstOrDefault(p => p.ContainsTo(king.Location));
+
+            //
+            // get all friendly pieces except king
+            // refresh there paths
+            var friendlyPieces = clone.GetItems(king.Item.Owner)
+                .Where(p => p.Item.Piece != ChessPieceName.King)
+                .OrderBy(p => p.Item.EntityType);
+
+            // Remove the king from the board so as to not have it's location block 
+            // attack paths from the new location
+            clone.Remove(king.Location); 
+            var kingCannotMove = !king.Paths.Any() || king.Paths.FlattenMoves()
+                 .ToList()
+                 .All(m 
+                    => IsLocationUnderAttack(clone, m.To, king.Item.Player).result);
+
+
+            // check if any friendly paths intersect the attackPath or attack the attacker
+            var canBlock = friendlyPieces.Where(fp 
+                => fp.Paths.FlattenMoves()
+                    .Any(fm => attackPath
+                        .Any(am => am.To.Equals(fm.To) || am.From.Equals(fm.To)
+                        )
+                    )
+                );
+
+            if (kingCannotMove && !canBlock.Any())
             {
-                // NOTE: Edge case here, a pawn has multiple attack paths to the same location for
-                // each promotion piece when applicable, we only care about one of them here.
-                var attackingPath = enemy.Paths
-                    .First(attackPath => attackPath.CanMoveTo(king.Location));
-
-                // Check if any friendly pieces can move to the path or take the item
-                return friendlyDestinations.Any(fd => fd.Equals(enemy.Location)
-                                                      || attackingPath.CanMoveTo(fd)
-                                                      );
-            });
-
-            if (kingCannotMove && !canBlock)
-            {
-                state = PlayerState.Checkmate;
+                return PlayerState.Checkmate;
             }
 
-            return state;
+            return PlayerState.Check;
         }
     }
 }

@@ -59,7 +59,7 @@ namespace board.engine.Board
 
         public bool IsEmpty(BoardLocation location) => !_items.ContainsKey(location);
 
-        public void RegeneratePossiblePaths(LocatedItem<TEntity> locatedItem)
+        public void RegenerateValidatedPaths(LocatedItem<TEntity> locatedItem)
         {
             Guard.NotNull(locatedItem, $"Null item found!");
 
@@ -82,19 +82,19 @@ namespace board.engine.Board
             if (FeatureFlags.ParalleliseRefreshAllPaths)
             {
                 items.AsParallel()
-                    .ForAll(RegeneratePossiblePaths);
+                    .ForAll(RegenerateValidatedPaths);
             }
             else
             {
                 items.ToList()
-                    .ForEach(RegeneratePossiblePaths);
+                    .ForEach(RegenerateValidatedPaths);
             }
         }
 
-        public void RegeneratePossiblePaths(int owner)
+        public void RegenerateValidatedPaths(int owner)
             => RefreshPathsFor(AllItems(owner));
 
-        public void RegeneratePossiblePaths()
+        public void RegenerateValidatedPaths()
         {
             RefreshPathsFor(AllItems());
         }

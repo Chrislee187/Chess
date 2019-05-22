@@ -102,7 +102,7 @@ namespace board.engine
         {
             public void RefreshAllPaths(IBoardState<TEntity> boardState) 
                 => boardState.GetItems().ToList()
-                    .ForEach(boardState.RegeneratePossiblePaths);
+                    .ForEach(boardState.RegenerateValidatedPaths);
         }
     }
 }

@@ -48,7 +48,8 @@ namespace chess.engine.tests.Game
                 ChessFactory.Logger<CheckDetectionService>(),
                 _playerStateServiceMock.Object,
                 ChessFactory.BoardMoveService(ChessFactory.ChessBoardActionProvider()),
-                ChessFactory.FindAttackPaths()
+                ChessFactory.FindAttackPaths(),
+                ChessFactory.PathsValidator()
             );
 
             if (expectedGameState != GameCheckState.BlackCheckmated &&
@@ -72,7 +73,8 @@ namespace chess.engine.tests.Game
                 ChessFactory.Logger<CheckDetectionService>(),
                 _playerStateServiceMock.Object,
                 _moveServiceMock.Object,
-                ChessFactory.FindAttackPaths()
+                ChessFactory.FindAttackPaths(),
+                ChessFactory.PathsValidator()
 
             );
 

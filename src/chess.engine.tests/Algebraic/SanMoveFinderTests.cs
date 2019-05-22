@@ -1,5 +1,4 @@
-﻿using chess.engine.Entities;
-using chess.engine.Extensions;
+﻿using chess.engine.Extensions;
 using chess.engine.Game;
 using chess.engine.SAN;
 using NUnit.Framework;
@@ -67,12 +66,12 @@ namespace chess.engine.tests.Algebraic
         {
             var builder = new ChessBoardBuilder()
                 .Board("r   k  r" +
-                       "pppppppp" +
                        "        " +
                        "        " +
                        "        " +
                        "        " +
-                       "PPPPPPPP" +
+                       "        " +
+                       "        " +
                        "R   K  R"
                 );
 

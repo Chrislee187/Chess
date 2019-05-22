@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
 using board.engine.Board;
 using board.engine.Movement;
@@ -32,7 +31,6 @@ namespace chess.engine.SAN
         private int? _secondRank;
         private SanMoveTypes _moveType = SanMoveTypes.Move;
 
-        private string _originalNotation;
         private bool _inCheck;
         public StandardAlgebraicNotation BuildFrom(IBoardState<ChessPieceEntity> boardState, BoardMove move, bool performCheckTest = false)
         {
@@ -47,7 +45,7 @@ namespace chess.engine.SAN
 
             // Are they any other pieces, 
             //      of same type as the from item
-            //      how can also move to the same location
+            //      that can also move to the same location
             var otherPieces = boardState.GetItems()
                 .Where(i => !i.Location.Equals(move.From))
                 .Where(i => i.Item.Is(fromItem.Item.Player, fromItem.Item.Piece))
@@ -80,24 +78,10 @@ namespace chess.engine.SAN
             {
                 promotionPiece = data.PieceName;
             }
-
-            // Note: This may has a small performance impact when parsing lots of games, approx 20ms per game on my rig,
-            // it just produces the check notator '+' at the
-            // end of a move that causes check, it's for display information only and not used at all by any processing.
-            // Make it optional so that things display moves can show it but things just parsing moves doesn't need it
-            // 
-            var inCheck = performCheckTest && IsEnemyInCheck(boardState, fromItem);
+            // Note: This has a small performance impact when reverse engineering SAN from move co-ords
+            // (approx 20ms a game on my rig) which is why it's optional and defaults to off
+            var inCheck = performCheckTest && _checkDetectionService.DoesMoveCauseCheck(boardState, move);
             return new StandardAlgebraicNotation(piece, fromFile, fromRank, toFile, toRank, moveType, promotionPiece, inCheck );
-        }
-
-        private bool IsEnemyInCheck(IBoardState<ChessPieceEntity> boardState, LocatedItem<ChessPieceEntity> fromItem)
-        {
-            var enemyKingLoc = boardState.GetItems()
-                .FindItem((int) fromItem.Item.Player.Enemy(), (int) ChessPieceName.King);
-
-            return _checkDetectionService
-                .IsLocationUnderAttack(boardState,
-                    enemyKingLoc.Location, enemyKingLoc.Item.Player);
         }
 
         // TODO: Was doesn't this use the TryParse pattern
@@ -119,7 +103,6 @@ namespace chess.engine.SAN
 
                 throw new ArgumentException($"{notation} is not a valid castle notation");
             }
-            _originalNotation = notation;
             var tokens = ParseFirstToken(notation);
 
             ParseRemainingTokens(tokens);
@@ -259,7 +242,7 @@ namespace chess.engine.SAN
     }
     public interface ISanBuilder
     {
-        StandardAlgebraicNotation BuildFrom(IBoardState<ChessPieceEntity> boardState, BoardMove move);
+        StandardAlgebraicNotation BuildFrom(IBoardState<ChessPieceEntity> boardState, BoardMove move, bool performCheckTest = true);
         StandardAlgebraicNotation BuildFrom(string notation);
     }
 

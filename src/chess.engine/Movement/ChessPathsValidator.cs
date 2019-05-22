@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
@@ -26,10 +23,7 @@ namespace chess.engine.Movement
 
         public Paths GetValidatedPaths(IBoardState<ChessPieceEntity> boardState, ChessPieceEntity entity, BoardLocation boardLocation)
         {
-            _logger?.LogDebug($"Generating possible paths for {entity} at {boardLocation}.");
-
-            var paths = new Paths();
-            paths.AddRange(
+            var paths = new Paths(
                 entity.PathGenerators
                     .SelectMany(pg => pg.PathsFrom(boardLocation, (int) entity.Player))
             );
@@ -38,14 +32,11 @@ namespace chess.engine.Movement
                 ? RemoveInvalidMovesParallel(boardState, paths) 
                 : RemoveInvalidMoves(boardState, paths);
 
-            _logger?.LogDebug($"Valid paths for {entity} at {boardLocation}. {validPaths}");
-
             return validPaths;
         }
 
         private Paths RemoveInvalidMoves(IBoardState<ChessPieceEntity> boardState, Paths possiblePaths)
         {
-            _logger?.LogDebug($"Removing invalid moves from {possiblePaths} paths.");
             var validPaths = new Paths();
 
             possiblePaths.ToList().ForEach(possiblePath =>
@@ -66,10 +57,6 @@ namespace chess.engine.Movement
                 // TODO: Filter out moves that would take the king
 
                 validPaths.Add(testedPath);
-            }
-            else
-            {
-                _logger?.LogDebug($"Removed {possiblePath}.");
             }
         }
 

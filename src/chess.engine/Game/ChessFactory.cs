@@ -45,9 +45,9 @@ namespace chess.engine.Game
             );
 
         private static ChessPathsValidator _pathsValidatorSingleton;
-        public static ChessPathsValidator PathsValidator(
-            IPathValidator<ChessPieceEntity> pathValidator = null,
-            LoggerType logger = LoggerType.Injected)
+        public static ChessPathsValidator PathsValidator(LoggerType logger = LoggerType.Injected,
+            IPathValidator<ChessPieceEntity> pathValidator = null
+            )
         {
             if (_pathsValidatorSingleton != null) return _pathsValidatorSingleton;
 
@@ -58,9 +58,9 @@ namespace chess.engine.Game
             return _pathsValidatorSingleton;
         }
 
-        public static ChessRefreshAllPaths ChessRefreshAllPaths(
-            ChessBoardActionProvider chessBoardActionProvider = null,
-            LoggerType logger = LoggerType.Injected)
+        public static ChessRefreshAllPaths ChessRefreshAllPaths(LoggerType logger = LoggerType.Injected,
+            ChessBoardActionProvider chessBoardActionProvider = null
+            )
             => new ChessRefreshAllPaths(
                 Logger<ChessRefreshAllPaths>(logger),
                 CheckDetectionService(logger)
@@ -68,7 +68,7 @@ namespace chess.engine.Game
 
         public static IPlayerStateService PlayerStateService(LoggerType logger = LoggerType.Injected) 
         => new PlayerStateService(Logger<IPlayerStateService>(logger),
-            FindAttackPaths(logger));
+            FindAttackPaths(logger), PathsValidator(logger));
 
         public static IFindAttackPaths FindAttackPaths(LoggerType logger = LoggerType.Injected)
             => new FindAttackPaths();
@@ -108,8 +108,8 @@ namespace chess.engine.Game
         public static ChessBoardEngineProvider ChessBoardEngineProvider(LoggerType logger = LoggerType.Injected) =>
             new ChessBoardEngineProvider(
                 Logger<BoardEngine<ChessPieceEntity>>(logger),
-                ChessRefreshAllPaths(null, logger),
-                PathsValidator(null, logger),
+                ChessRefreshAllPaths(logger),
+                PathsValidator(logger),
                 BoardMoveService(null, null, logger));
 
         public static ICheckDetectionService CheckDetectionService(LoggerType logger = LoggerType.Injected)
@@ -118,7 +118,8 @@ namespace chess.engine.Game
                 Logger<CheckDetectionService>(logger),
                 PlayerStateService(logger),
                 BoardMoveService(null, null, logger),
-                FindAttackPaths(logger)
+                FindAttackPaths(logger),
+                PathsValidator(logger)
             );
         }
 

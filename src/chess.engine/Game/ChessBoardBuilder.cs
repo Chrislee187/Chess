@@ -2,11 +2,9 @@
 using System.Linq;
 using System.Text;
 using board.engine;
-using board.engine.Board;
 using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Pieces;
-using Microsoft.Extensions.DependencyModel;
 
 namespace chess.engine.Game
 {

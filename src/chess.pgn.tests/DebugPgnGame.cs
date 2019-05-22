@@ -18,29 +18,28 @@ namespace chess.pgn.tests
         {
             // TODO: This has a race condition problem somewhere, only see it when
             // FeatureFlags.ParalleliseRefreshAllPaths = true;
-            var pgnText = @"[Event ""Gibraltar Masters""]
- [Site ""Caleta ENG""]
- [Date ""2011.02.02""]
- [Round ""9.6""]
- [White ""Adams,Mi""]
- [Black ""Lemos,D""]
- [Result ""1/2-1/2""]
- [WhiteElo ""2723""]
- [BlackElo ""2553""]
- [ECO ""C07""]
+            var pgnText = @"[Event ""CSR-ch""]
+ [Site ""Prague""]
+ [Date ""1955.??.??""]
+ [Round ""17""]
+ [White ""Rejfir, Josef""]
+ [Black ""Alster, Ladislav""]
+ [Result ""1-0""]
+ [WhiteElo """"]
+ [BlackElo """"]
+ [ECO ""E80""]
 
- 1.e4 e6 2.d4 d5 3.Nd2 c5 4.exd5 Qxd5 5.dxc5 Bxc5 6.Ngf3 Nf6 7.Bc4 Qc6 8.Qe2 O-O
- 9.O-O Nbd7 10.Nb3 b6 11.Nxc5 Qxc5 12.b3 Bb7 13.Bb2 Rfd8 14.Rfd1 Nf8 15.Ne5 Ng6
- 16.Nxg6 hxg6 17.Qe5 Qxe5 18.Bxe5 Nd5 19.Rd2 f6 20.Bd4 Kf7 21.a4 Nb4 22.Rad1 Bd5
- 23.Bc3 Nxc2 24.Ba6 Rdc8 25.Bxc8 Rxc8 26.Rxc2 Bxb3 27.Rd7+ Ke8 28.Rcd2 Bd5
- 29.Rxa7 Rxc3 30.h4 Kf8 31.Rd4 Kg8 32.Rb4 Kh7 33.f3 Rc2 34.Ra6 Kh6 35.Raxb6 g5
- 36.Rd6 f5 37.Rd4 g6 38.hxg5+ Kxg5 39.a5 Ra2 40.a6 Kh5 41.Kf1 g5 42.Ke1 f4
- 43.Rd2 Ra1+ 44.Rd1 Ra2 45.Rd2 Ra1+ 46.Kf2 Bc4 47.g4+ fxg3+ 48.Kxg3 Rxa6 49.Rd8 Kg6
- 50.Rg8+ Kf6 51.Rd7 Bd5 52.Rf8+ Kg6 53.Rdf7 e5 54.Rf5 Re6 55.Kg4 Kg7 56.R8f7+ Kg6
- 57.Rd7 Bc6 58.Rxg5+ Kf6 59.Rf5+ Kg6 60.Rg5+ Kf6 61.Rf5+ Kg6 62.Rd3 e4 63.Re3 Bd7
- 64.Rg5+ Kf6 65.f4 Re5+ 66.Kh4 Re8 67.Kg3 Bf5 68.Ra3 Re6 69.Kf2 Rd6 70.Ra5 Bg6
- 71.Rgb5 Bh7 72.f5 Kg5 73.Ke3 Rf6 74.Kxe4 Rxf5 75.Rxf5+ Kg4 76.Ke5 Bxf5 77.Ra4+ Kg5
- 78.Ra1 Bc2 79.Re1 Bd3 80.Rg1+ Kh6 81.Kf6 Kh7 82.Rg3 Bb1 83.Rh3+ Kg8 84.Rh2 Bh7  1/2-1/2
+ 1.c4 g6 2.d4 Bg7 3.Nc3 d6 4.e4 Nf6 5.f3 e5 6.dxe5 dxe5 7.Qxd8+ Kxd8 8.Bg5 c6
+ 9.Nge2 Nd7 10.Rd1 Kc7 11.Nc1 Nc5 12.Be3 Nfd7 13.b4 Ne6 14.Nb3 Bf8 15.c5 a5
+ 16.Nxa5 Nexc5 17.a3 Ne6 18.Kf2 Be7 19.Rc1 Bg5 20.Bxg5 Nxg5 21.Bc4 Nb6 22.h4 Ne6
+ 23.Nb5+ Kb8 24.Nd6 Nxc4 25.Naxc4 f6 26.Rc3 Ra6 27.Rhc1 Rd8 28.Nxc8 Kxc8 29.a4 Kd7
+ 30.Rd1+ Ke7 31.Rxd8 Kxd8 32.a5 Ke7 33.Nb6 c5 34.Nd5+ Kf7 35.bxc5 Rc6 36.Ke3 f5
+ 37.g3 Nxc5 38.Nb4 f4+ 39.gxf4 exf4+ 40.Ke2 Rc7 41.Nd3 Ne6 42.Rxc7+ Nxc7 43.Nxf4 Kf6
+ 44.Nd3 Ne6 45.Ke3 Ke7 46.Nf4 Nc5 47.Nd5+ Kf7 48.Nb6 Ke6 49.Nc4 h6 50.f4 Nb3
+ 51.h5 gxh5 52.f5+ Ke7 53.e5 h4 54.Kf4 h5 55.f6+ Ke6 56.Nd6 Nxa5 57.f7 Ke7
+ 58.e6 Nc6 59.Nf5+ Kf8 60.Nxh4 Ne7 61.Ke5 Kg7 62.Kd6 Kf8 63.Kc5 Kg7 64.Kc4 Kf8
+ 65.Kd4 Kg7 66.Kc5 Kf8 67.Kd6 b6 68.Ke5 Kg7 69.Kd4 Nc6+ 70.Kd5 Ne7+ 71.Ke5 b5
+ 72.Kd6 Kf8 73.Kc5 Kg7 74.Kxb5 Nd5 75.Kc6  1-0
 ";
 
             PlayAllGames(PgnReader.FromString(pgnText));
@@ -79,13 +78,13 @@ namespace chess.pgn.tests
             try
             {
                 PlayTurns(game, chessGame);
-                Assert.Pass();
             }
             catch
             {
                 Console.WriteLine($"Full PGN Text:\n{pgnReader.LastGameText}");
                 throw;
             }
+            Assert.Pass();
         }
         private static void PlayTurns(PgnGame game, ChessGame chessGame)
         {
@@ -112,7 +111,7 @@ namespace chess.pgn.tests
 
         private static string AssertMoveWasExecuted(ChessGame chessGame, string previousBoard, PgnMove gameTurnWhite)
         {
-            chessGame.Move(gameTurnWhite.San);
+            var msg = chessGame.Move(gameTurnWhite.San);
             var board = chessGame.ToTextBoard();
             Console.WriteLine(board);
             Assert.That(!previousBoard.Equals(board), $"'{gameTurnWhite.San}' not executed!");

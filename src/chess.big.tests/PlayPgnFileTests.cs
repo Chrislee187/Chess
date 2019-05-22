@@ -17,6 +17,17 @@ namespace chess.big.tests
         {
         }
 
+        [Test(Description = "Best Average, inVS: 0.35, inConsole (RELEASE): 0.23 ")]
+//        [Ignore("WARNING: Could take a long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
+        public void Measure_parse_game_time_100_games()
+        {
+            var filename = @"D:\Src\PGNArchive\PGN\Modern100.pgn";
+            TestContext.Progress.WriteLine($"Playing all games from;");
+            TestContext.Progress.WriteLine($"  {filename}");
+            PlayAllGames(PgnReader.FromFile(filename));
+            TestContext.Progress.WriteLine($"  {filename} complete!");
+        }
+
         [TestCase(@".\PGNFiles")]
         [TestCase(@"D:\Src\PGNArchive\PGN")]
         [Explicit("WARNING: Could take a VERY long time.")]// NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -66,16 +77,7 @@ namespace chess.big.tests
             PlayAllGames(PgnReader.FromFile(filename));
             TestContext.Progress.WriteLine($"  {filename} complete!");
         }
-        [Test(Description = "Best Average, inVS: 0.35, inConsole (RELEASE): 0.23 ")]
-        [Explicit("WARNING: Could take a long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
-        public void Measure_parse_game_time_100_games()
-        {
-            var filename = @"D:\Src\PGNArchive\PGN\Modern100.pgn";
-            TestContext.Progress.WriteLine($"Playing all games from;");
-            TestContext.Progress.WriteLine($"  {filename}");
-            PlayAllGames(PgnReader.FromFile(filename));
-            TestContext.Progress.WriteLine($"  {filename} complete!");
-        }
+
         // TODO: Add an option to parallelise this
         private void PlayAllGames(PgnReader reader)
         {

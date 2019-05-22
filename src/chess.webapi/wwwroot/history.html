@@ -12,18 +12,29 @@
 <H1>History</H1>
 <table>
     <tr>
+        <td>22/05/2018</td>
+        <td>
+            More refinement around check detection routines, custom mechanisms for "does a move cause check"
+            and "does a move leave me in check" implemented as the later of those two is much slower to work out
+            than the former
+            <br />Avg. game parse time at 0.22 secs
+        </td>
+    </tr>
+    <tr>
         <td>21/05/2018</td>
         <td>
             More fixed for edge cases (i.e. when enpassant causes check) and some huge performance improvements
             to board parsing due to parallising some of the board generation and using a much more efficient
-            check detection algorithm. <br/>
-            Avg. game parse time down from 1.13 secs when I first started measuring
-            to 0.29 secs
+            check detection algorithm. 
+            <br />Avg. game parse time at 0.29 secs
         </td>
     </tr>
     <tr>
         <td>20/05/2018</td>
-        <td>Performance improvements, board-parsing now 2-3x quicker, fix some edge case bugs</td>
+        <td>
+            Performance improvements, board-parsing now 2-3x quicker, fix some edge case bugs
+            <br />Avg. game parse time at 1.13
+        </td>
     </tr>
     <tr>
         <td>16/05/2018</td>

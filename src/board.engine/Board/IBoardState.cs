@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace board.engine.Board
 {
@@ -21,10 +20,10 @@ namespace board.engine.Board
         void Clear();
         void Remove(BoardLocation loc);
 
-        void RegeneratePossiblePaths();
-        void RegeneratePossiblePaths(int owner);
+        void RegenerateValidatedPaths();
+        void RegenerateValidatedPaths(int owner);
 
-        void RegeneratePossiblePaths(LocatedItem<TEntity> locatedItem);
+        void RegenerateValidatedPaths(LocatedItem<TEntity> locatedItem);
         void UpdatePaths(LocatedItem<TEntity>[] items);
         void RefreshPathsFor(IEnumerable<LocatedItem<TEntity>> items);
     }

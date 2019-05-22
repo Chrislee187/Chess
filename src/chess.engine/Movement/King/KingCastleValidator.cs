@@ -53,7 +53,8 @@ namespace chess.engine.Movement.King
             if (kingEntity == null) return false;
 
             var king = kingEntity.Item;
-            var kingIsValid = king.Piece.Equals(ChessPieceName.King); // && !king.MoveHistory.Any()
+            var kingIsValid = king.Piece.Equals(ChessPieceName.King);
+//                && king.LocationHistory.Count() == 1;
             if (!kingIsValid) return false;
 
             var rookLoc = move.MoveType == (int)ChessMoveTypes.CastleKingSide
@@ -63,17 +64,12 @@ namespace chess.engine.Movement.King
             var rook = roBoardState.GetItem(rookLoc);
             if (rook == null) return false;
 
-            var rookIsValid = rook.Item.Is(king.Player, ChessPieceName.Rook); // && !rook.MoveHistory.Any()
+            var rookIsValid = rook.Item.Is(king.Player, ChessPieceName.Rook);
+//                              && rook.Item.LocationHistory.Count() == 1;
 
             if (!rookIsValid) return false;
 
             var pathBetween = CalcPathBetweenKingAndCastle(move, king);
-
-//            var destinationIsEmptyValidator = new DestinationIsEmptyValidator<ChessPieceEntity>();
-            //            var pathIsEmpty = pathBetween.All(loc
-            //                =>  destinationIsEmptyValidator.ValidateMove(
-            //                    new BoardMove(move.From, loc, (int)DefaultActions.MoveOnly),
-            //                    roBoardState));
 
             var pathIsEmpty = pathBetween.All(loc
                 => roBoardState.GetItem(loc) == null);

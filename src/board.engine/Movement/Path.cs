@@ -21,12 +21,11 @@ namespace board.engine.Movement
         public void Add(BoardMove move) => _moves.Add(move);
 
         public Path() => _moves = new List<BoardMove>();
-
-        private Path(IEnumerable<BoardMove> moves) => _moves = new List<BoardMove>(moves);
+        public Path(IEnumerable<BoardMove> moves) => _moves = new List<BoardMove>(moves);
 
         public object Clone() => new Path(_moves.Select(m => m.Clone() as BoardMove));
 
-        public bool CanMoveTo(BoardLocation destination) => this.Any(m => m.To.Equals(destination));
+        public bool ContainsTo(BoardLocation destination) => this.Any(m => m.To.Equals(destination));
 
         #region Equality, Enumerator and Overrides
 
