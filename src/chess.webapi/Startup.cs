@@ -28,6 +28,7 @@ namespace chess.webapi
             services.AddSwaggerDocument();
 
             services.AddTransient<IChessService, ChessGameService>();
+            services.AddTransient<IPerfService, PerfService>();
             services.AddChessDependencies();
         }
 

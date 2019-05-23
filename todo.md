@@ -42,7 +42,7 @@ dotnet test --filter Measure_parse_game_time_100_games --configuration RELEASE
 
 ### Paralleise opportunities
 Parallellised generation of paths, combined with a new check detection algorithm avg game replay time down to around 0.3 seconds
-* FAILED - Tried it, but it was slower, did improve it a little by removing some ToString()'s that are only used for development conveinence ~~Board cloning~~
+* FAILED - Tried it, but it was slower, cloning wasn't super expensive so probably nothing to be gained by , did improve it a little by removing some ToString()'s that are only used for development conveinence ~~Board cloning~~
 * DONE ~~Path refreshing~~
 * DONE ~~Path validation~~
 
@@ -51,6 +51,10 @@ Parallellised generation of paths, combined with a new check detection algorithm
 
 ## PGN Parsing
 * Create a simple console app to convert PGN to a similar JSON format
+* One tool or PGN console tool suite, 
+  * pgn2json
+  * pgnsort, 
+  * pgnsearch
 
 ## SPIKER/Console Player
 * Can I reuse anything from the old consoleplayer? Do I want to?

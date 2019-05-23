@@ -15,18 +15,18 @@ namespace chess.engine.integration.tests
             var moveIdx = 0;
             foreach (var move in WikiGame.Moves)
             {
-                Console.WriteLine($"Move #{++moveIdx}: {move}");
+                TestContext.Progress.WriteLine($"Move #{++moveIdx}: {move}");
                 var msg = game.Move(move);
-                Console.WriteLine(game.CheckState + " - " + game.CurrentPlayer + " to move.");
-                Console.WriteLine(game.ToTextBoard());
+                TestContext.Progress.WriteLine(game.CheckState + " - " + game.CurrentPlayer + " to move.");
+                TestContext.Progress.WriteLine(game.ToTextBoard());
                 if (!string.IsNullOrEmpty(msg))
                 {
                     if (msg.Contains("Error:")) Assert.Fail($"Error: {msg}");
-                    Console.WriteLine(msg);
+                    TestContext.Progress.WriteLine(msg);
                 }
             }
 
-            Console.WriteLine("GAME OVER!");
+            TestContext.Progress.WriteLine("GAME OVER!");
         }
 
     }

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using chess.engine.Game;
 using chess.pgn;
+using chess.tests.utils.TestData;
 using NUnit.Framework;
 
 namespace chess.big.tests
@@ -28,7 +30,21 @@ namespace chess.big.tests
             TestContext.Progress.WriteLine($"  {filename} complete!");
         }
 
-        [TestCase(@".\PGNFiles")]
+        [Test(Description = "Best Average, inVS: 0.35, inConsole (RELEASE): 0.23 ")]
+        [Explicit("WARNING: Could take a long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
+        public void Measure_parse_wiki_game_time_100_games()
+        {
+            var times = new List<TimeSpan>();
+            for (int i = 0; i < 100; i++)
+            {
+                var sw = Stopwatch.StartNew();
+                PlayAllGames(PgnReader.FromString(WikiGame.PgnText));
+                times.Add(sw.Elapsed);
+            }
+
+            TestContext.Progress.WriteLine($"Average Game Parse TIme: { new TimeSpan(Convert.ToInt64(times.Average(ts => ts.Ticks)))}");
+        }
+//        [TestCase(@".\PGNFiles")]
         [TestCase(@"D:\Src\PGNArchive\PGN")]
         [Explicit("WARNING: Could take a VERY long time.")]// NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
         public void PlayAllFiles(string path)
@@ -36,16 +52,32 @@ namespace chess.big.tests
             var pgnfiles = Directory.GetFiles(path, "*.pgn", SearchOption.AllDirectories);
             var fileCount = 0;
             var gamesCount = 0;
+            var sw = Stopwatch.StartNew();
+            var fileTimes = new List<TimeSpan>();
 
-            foreach (var file in pgnfiles)
-            {
-                fileCount++;
-                if (file.Contains("FAILED")) continue;
+            // NOTE: As this loop includes file access care must be taken with current VS/R#dotnet type setups
+            // if they run tests in the background they can lock the files and cause weird errors here.
+            // TODO: Change these long running tests to a console application
+            pgnfiles.AsParallel().ForAll(file =>
+                {
+                    TestContext.Progress.WriteLine("*************************************");
+                    TestContext.Progress.WriteLine($"*** starting file: {file}");
+                    TestContext.Progress.WriteLine("*************************************");
+                    var fileSw = new Stopwatch();
+                    if (file.Contains("FAILED")) return;
+                    fileCount++;
 
-                PlayAllGames(PgnReader.FromFile(file));
-            }
-
-            Console.WriteLine($"Files #: {fileCount}, Total Games #: {gamesCount}");
+                    var text = File.ReadAllText(file);
+                    PlayAllGames(PgnReader.FromString(text));
+                    fileSw.Stop();
+                    fileTimes.Add(fileSw.Elapsed);
+                    TestContext.Progress.WriteLine("*************************************");
+                    TestContext.Progress.WriteLine($"*** finished file: {file} in {fileSw.Elapsed}");
+                    TestContext.Progress.WriteLine("*************************************");
+                });
+            sw.Stop();
+            Console.WriteLine($"Files #: {fileCount}/{pgnfiles.Length}, Total Games #: {gamesCount}");
+            Console.Write($"Total time: {sw.Elapsed}, Avg. File Parse Time: {sw.Elapsed / pgnfiles.Length}");
             Assert.That(fileCount, Is.GreaterThan(0), "No files processed");
             Assert.That(gamesCount, Is.GreaterThan(0), "No games processed");
         }
