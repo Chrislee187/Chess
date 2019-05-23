@@ -5,11 +5,11 @@ using chess.engine.Game;
 using chess.engine.Movement.King;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Movement.King
+namespace chess.engine.integration.tests.Movement
 {
     [TestFixture]
 
-    public class KingCastleValidatorIntegrationTests : ValidationTestsBase
+    public class KingCastleValidatorTests : ValidationTestsBase
     {
         private KingCastleValidator _validator;
         private readonly BoardMove _whiteInvalidKingCastle = new BoardMove("D1".ToBoardLocation(), "G1".ToBoardLocation(), (int)ChessMoveTypes.CastleKingSide);
@@ -100,15 +100,15 @@ namespace chess.engine.tests.Movement.King
         public void Regression_king_side_castle_bug()
         {
             var board = new ChessBoardBuilder()
-                    .Board(".rbqkbnr" +
-                           "pppppppp" +
-                           "n......." +
-                           "........" +
-                           "........" +
-                           ".....NPB" +
-                           "PPPPPP.P" +
-                           "RNBQK..R"
-                    );
+                .Board(".rbqkbnr" +
+                       "pppppppp" +
+                       "n......." +
+                       "........" +
+                       "........" +
+                       ".....NPB" +
+                       "PPPPPP.P" +
+                       "RNBQK..R"
+                );
 
             var buildGame = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White);
             var boardState = buildGame.BoardState;

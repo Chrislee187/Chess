@@ -2,8 +2,7 @@
 using board.engine.Actions;
 using board.engine.Board;
 using board.engine.Movement;
-using board.engine.Movement.Validators;
-using board.engine.tests.Actions;
+using board.engine.tests.utils;
 using Moq;
 
 namespace board.engine.tests.Movement
@@ -26,6 +25,7 @@ namespace board.engine.tests.Movement
             {
                 locatedEntity = new LocatedItem<TestBoardEntity>(move.From, entity, new Paths());
             }
+
             RoBoardStateMock.Setup(m => m.GetItem(It.Is<BoardLocation>(l => move.From.Equals(l))))
                 .Returns(locatedEntity);
         }
@@ -37,13 +37,14 @@ namespace board.engine.tests.Movement
             {
                 locatedEntity = new LocatedItem<TestBoardEntity>(move.To, entity, new Paths());
             }
+
             RoBoardStateMock.Setup(m => m.GetItem(It.Is<BoardLocation>(l => move.To.Equals(l))))
                 .Returns(locatedEntity);
         }
 
         protected void SetupGetNonOwnerEntities(BoardMove move, TestBoardEntity entity)
         {
-            var from = BoardLocation.At(1,1);
+            var from = BoardLocation.At(1, 1);
             var itemAttackingMoveToLocation = new LocatedItem<TestBoardEntity>(
                 from,
                 entity,

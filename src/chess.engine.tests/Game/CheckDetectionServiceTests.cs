@@ -5,6 +5,7 @@ using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Entities;
 using chess.engine.Game;
+using chess.engine.tests.Builders;
 using Moq;
 using NUnit.Framework;
 

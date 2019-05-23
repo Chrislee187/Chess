@@ -111,7 +111,7 @@ namespace chess.engine.tests.Algebraic
         public void ShouldParseFromBoardMove(string @from, string to, DefaultActions moveType, string expectedSan)
         {
             var game = ChessFactory.NewChessGame();
-            var move = BoardMove.Create(from.ToBoardLocation(), to.ToBoardLocation(), (int) moveType);
+            var move = BoardMove.Create(from.ToBoardLocation(), to.ToBoardLocation(), (int)moveType);
 
             Assert.That(StandardAlgebraicNotation.ParseFromGameMove(game.BoardState, move).ToNotation(), Is.EqualTo(expectedSan));
         }

@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using board.engine.Actions;
-using board.engine.Board;
+﻿using board.engine.Actions;
 using board.engine.Movement;
 using board.engine.Movement.Validators;
-using board.engine.tests.Actions;
-using Moq;
+using board.engine.tests.utils;
 using NUnit.Framework;
 
 namespace board.engine.tests.Movement

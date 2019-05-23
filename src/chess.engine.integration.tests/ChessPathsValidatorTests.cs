@@ -2,7 +2,7 @@
 using chess.engine.Game;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Movement
+namespace chess.engine.integration.tests
 {
     [TestFixture]
     public class ChessPathsValidatorTests

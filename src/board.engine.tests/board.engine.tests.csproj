@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\board.engine.tests.utils\board.engine.tests.utils.csproj" />
     <ProjectReference Include="..\board.engine\board.engine.csproj" />
   </ItemGroup>
 

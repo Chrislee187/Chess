@@ -2,7 +2,7 @@
 using chess.engine.Game;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Serialisation
+namespace chess.engine.integration.tests.Serialisation
 {
     [TestFixture]
     public class BoardSerialisationTests

@@ -3,7 +3,7 @@ using chess.engine.Game;
 using chess.engine.SAN;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Algebraic
+namespace chess.engine.integration.tests.Movement
 {
     [TestFixture]
     public class SanMoveFinderTests

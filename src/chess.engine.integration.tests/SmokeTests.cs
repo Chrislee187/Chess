@@ -3,7 +3,7 @@ using chess.engine.Game;
 using chess.tests.utils.TestData;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Game
+namespace chess.engine.integration.tests
 {
     [TestFixture]
     public class SmokeTests

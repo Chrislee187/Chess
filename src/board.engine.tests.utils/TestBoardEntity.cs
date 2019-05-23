@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using board.engine.Movement;
 
-namespace board.engine.tests.Actions
+namespace board.engine.tests.utils
 {
     public class TestBoardEntity : IBoardEntity
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using board.engine.Actions;
 using board.engine.Movement;
-using board.engine.tests.Actions;
+using board.engine.tests.utils;
 using NUnit.Framework;
 
 namespace board.engine.tests.Movement

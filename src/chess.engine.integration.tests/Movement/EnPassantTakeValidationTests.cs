@@ -8,14 +8,12 @@ using chess.engine.Extensions;
 using chess.engine.Game;
 using chess.engine.Movement.King;
 using chess.engine.Movement.Pawn;
-using chess.engine.tests.Builders;
-using Moq;
 using NUnit.Framework;
 
-namespace chess.engine.tests.Movement.Pawn
+namespace chess.engine.integration.tests.Movement
 {
     [TestFixture]
-    public class EnPassantTakeValidationIntegrationTests : ValidationTestsBase
+    public class EnPassantTakeValidationTests : ValidationTestsBase
     {
         private IBoardState<ChessPieceEntity> _boardState;
         private EnPassantTakeValidator _validator;
