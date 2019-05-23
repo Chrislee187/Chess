@@ -7,7 +7,7 @@ namespace chess.engine.tests.Movement
     [TestFixture]
     public class ChessPathsValidatorTests
     {
-
+        // TODO: Better/more tests needed
         [Test]
         public void Should_not_find_move_that_leaves_king_in_check()
         {

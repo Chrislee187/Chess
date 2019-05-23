@@ -17,7 +17,8 @@ namespace chess.engine.Movement
 
     public class FindAttackPaths : IFindAttackPaths
     {
-        private ConcurrentDictionary<(BoardLocation, Colours), AttackPaths> _cache = new ConcurrentDictionary<(BoardLocation, Colours), AttackPaths>();
+        // TODO: Test the caching??
+        private readonly ConcurrentDictionary<(BoardLocation, Colours), AttackPaths> _cache = new ConcurrentDictionary<(BoardLocation, Colours), AttackPaths>();
         public AttackPaths Attacking(BoardLocation at, Colours defendingPlayer = Colours.White)
         {
             var key = (at, defendingPlayer);
