@@ -4,6 +4,7 @@ using board.engine.Movement;
 using chess.engine.Actions;
 using chess.engine.Entities;
 using chess.engine.Movement;
+using chess.engine.Movement.King;
 using chess.engine.SAN;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -33,8 +34,10 @@ namespace chess.engine.Game
         public static ChessPieceEntityFactory ChessPieceEntityFactory(LoggerType logger = LoggerType.Injected)
             => new ChessPieceEntityFactory();
 
+        public static ICastleValidationSteps CastleValidationSteps()
+            => new CastleValidationSteps();
         public static ChessMoveValidationProvider MoveValidationProvider(LoggerType logger = LoggerType.Injected)
-            => new ChessMoveValidationProvider();
+            => new ChessMoveValidationProvider(CastleValidationSteps());
 
         public static ChessPathValidator PathValidator(
             IMoveValidationProvider<ChessPieceEntity> moveValidationProvider = null,

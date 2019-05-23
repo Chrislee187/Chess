@@ -8,7 +8,7 @@ namespace chess.engine.Movement
 {
     public class ChessMoveValidationProvider : MoveValidationProvider<ChessPieceEntity>
     {
-        public ChessMoveValidationProvider()
+        public ChessMoveValidationProvider(ICastleValidationSteps castleValidationSteps)
         {
             Validators.Add((int)ChessMoveTypes.KingMove, new BoardMovePredicate<ChessPieceEntity>[] {
                 (move, boardState) =>
@@ -35,14 +35,14 @@ namespace chess.engine.Movement
                 new BoardMovePredicate<ChessPieceEntity>[]
                 { (move, boardState) =>
                     {
-                        return new KingCastleValidator().ValidateMove(move, boardState);
+                        return new KingCastleValidator(castleValidationSteps).ValidateMove(move, boardState);
                     }
                 });
             Validators.Add((int)ChessMoveTypes.CastleQueenSide,
                 new BoardMovePredicate<ChessPieceEntity>[]
                     {(move, boardState) =>
                         {
-                            return new KingCastleValidator().ValidateMove(move, boardState);
+                            return new KingCastleValidator(castleValidationSteps).ValidateMove(move, boardState);
                         }
                     });
 

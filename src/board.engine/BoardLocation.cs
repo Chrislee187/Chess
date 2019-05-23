@@ -28,7 +28,7 @@ namespace board.engine
 
 
 
-        #region Object overrides
+        #region Equals overrides
         public object Clone() => At(X, Y);
 
         protected bool Equals(BoardLocation other)

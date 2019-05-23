@@ -9,6 +9,7 @@ namespace chess.engine.Movement.Pawn
 {
     public class EnPassantTakeValidator : IMoveValidator<ChessPieceEntity> 
     {
+        // TODO: Refactor to use same pattern as CastleValidator, do ChessValidationSteps first
         public bool ValidateMove(BoardMove move, IReadOnlyBoardState<ChessPieceEntity> roBoardState)
         {
             var destEmpty = new DestinationIsEmptyValidator<ChessPieceEntity>()

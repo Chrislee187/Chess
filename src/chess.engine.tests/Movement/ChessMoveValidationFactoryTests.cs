@@ -1,6 +1,7 @@
 ﻿using System;
 using board.engine.Movement;
 using chess.engine.Movement;
+using chess.engine.Movement.King;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement
@@ -13,7 +14,7 @@ namespace chess.engine.tests.Movement
         [SetUp]
         public void SetUp()
         {
-            _provider = new ChessMoveValidationProvider();
+            _provider = new ChessMoveValidationProvider(new CastleValidationSteps());
         }
         [Test]
         public void FactorySupportsAllMoveTypes()

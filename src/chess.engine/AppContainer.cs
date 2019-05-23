@@ -7,6 +7,7 @@ using chess.engine.Actions;
 using chess.engine.Entities;
 using chess.engine.Game;
 using chess.engine.Movement;
+using chess.engine.Movement.King;
 using chess.engine.SAN;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -74,6 +75,7 @@ namespace chess.engine
             services.AddTransient<IPlayerStateService, PlayerStateService>();
             services.AddTransient<ICheckDetectionService, CheckDetectionService>();
             services.AddTransient<ISanTokenParser, SanTokenParser>();
+            services.AddTransient<ICastleValidationSteps, CastleValidationSteps>();
             services.AddTransient<ISanBuilder, SanBuilder>();
 
             // NOTE: Acts as a cache, hence singleton usage

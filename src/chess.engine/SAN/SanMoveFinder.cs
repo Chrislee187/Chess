@@ -14,9 +14,9 @@ namespace chess.engine.SAN
     public class 
         SanMoveFinder
     {
-        private readonly IBoardState<ChessPieceEntity> _boardState;
+        private readonly IReadOnlyBoardState<ChessPieceEntity> _boardState;
 
-        public SanMoveFinder(IBoardState<ChessPieceEntity> boardState)
+        public SanMoveFinder(IReadOnlyBoardState<ChessPieceEntity> boardState)
         {
             _boardState = boardState;
         }
