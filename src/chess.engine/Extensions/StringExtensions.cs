@@ -24,7 +24,6 @@ namespace chess.engine.Extensions
         {
             if (s.Length != 2) throw new ArgumentException($"Invalid BoardLocation {s}");
 
-            // TODO: This is nice helper function but does make it dependent on ChessFile a Chess specific!!!
             if (!Enum.TryParse(s[0].ToString().ToUpper(), out ChessFile x))
                 throw new ArgumentException($"Invalid BoardLocation {s}");
             if (!int.TryParse(s[1].ToString(), out var y)) throw new ArgumentException($"Invalid BoardLocation {s}");

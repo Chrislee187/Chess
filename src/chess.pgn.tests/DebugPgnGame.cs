@@ -16,7 +16,6 @@ namespace chess.pgn.tests
 //        [Repeat(10)]
         public void DebugPgnGameTest()
         {
-            // TODO: This has a race condition problem somewhere, only see it when
             // FeatureFlags.ParalleliseRefreshAllPaths = true;
             var pgnText = @"[Event ""CSR-ch""]
  [Site ""Prague""]

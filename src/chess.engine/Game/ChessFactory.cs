@@ -34,8 +34,8 @@ namespace chess.engine.Game
         public static ChessPieceEntityFactory ChessPieceEntityFactory(LoggerType logger = LoggerType.Injected)
             => new ChessPieceEntityFactory();
 
-        public static ICastleValidationSteps CastleValidationSteps()
-            => new CastleValidationSteps();
+        public static IChessValidationSteps CastleValidationSteps()
+            => new ChessValidationSteps();
         public static ChessMoveValidationProvider MoveValidationProvider(LoggerType logger = LoggerType.Injected)
             => new ChessMoveValidationProvider(CastleValidationSteps());
 

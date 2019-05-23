@@ -53,9 +53,6 @@ namespace chess.engine.Movement
 
             if (testedPath.Any())
             {
-                // TODO: Write a test to reproduce the "check" problem seen on the index.html page
-                // TODO: Filter out moves that would take the king
-
                 validPaths.Add(testedPath);
             }
         }

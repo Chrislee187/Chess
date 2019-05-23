@@ -3,7 +3,6 @@ using System.Diagnostics;
 
 namespace board.engine
 {
-    // TODO: Refactor 'Colours' out of here
     [DebuggerDisplay("{DebuggerDisplay}")]
     public class BoardLocation : ICloneable
     {

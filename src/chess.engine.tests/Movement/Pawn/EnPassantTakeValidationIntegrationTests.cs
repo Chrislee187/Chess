@@ -6,18 +6,20 @@ using board.engine.tests.Movement;
 using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
+using chess.engine.Movement.King;
 using chess.engine.Movement.Pawn;
+using chess.engine.tests.Builders;
 using Moq;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement.Pawn
 {
     [TestFixture]
-    public class EnPassantTakeValidationTests : ValidationTestsBase
+    public class EnPassantTakeValidationIntegrationTests : ValidationTestsBase
     {
-        //TODO: Remove board builder and RoBoardStateMock
         private IBoardState<ChessPieceEntity> _boardState;
         private EnPassantTakeValidator _validator;
+
         [SetUp]
         public void SetUp()
         {
@@ -31,8 +33,9 @@ namespace chess.engine.tests.Movement.Pawn
                        "        " +
                        "    K  R"
                 );
+
             _boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
-            _validator = new EnPassantTakeValidator();
+            _validator = new EnPassantTakeValidator(new ChessValidationSteps());
         }
 
         [Test]
@@ -63,4 +66,5 @@ namespace chess.engine.tests.Movement.Pawn
 
 
     }
+
 }

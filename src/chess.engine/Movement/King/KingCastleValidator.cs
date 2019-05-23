@@ -1,17 +1,14 @@
-﻿using System.Collections.Generic;
-using board.engine;
-using board.engine.Board;
+﻿using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Entities;
-using chess.engine.Game;
 
 namespace chess.engine.Movement.King
 {
     public class KingCastleValidator : IMoveValidator<ChessPieceEntity>
     {
-        private readonly ICastleValidationSteps _validationSteps;
+        private readonly IChessValidationSteps _validationSteps;
 
-        public KingCastleValidator(ICastleValidationSteps validationSteps)
+        public KingCastleValidator(IChessValidationSteps validationSteps)
         {
             _validationSteps = validationSteps;
         }
@@ -28,18 +25,4 @@ namespace chess.engine.Movement.King
         }
     }
 
-    public interface ICastleValidationSteps
-    {
-        bool IsPathClearFromAttacks(BoardMove move, IReadOnlyBoardState<ChessPieceEntity> roBoardState, IEnumerable<BoardLocation> pathBetween);
-
-        bool IsPathBetweenClear(BoardMove move, IReadOnlyBoardState<ChessPieceEntity> roBoardState,
-            Colours kingColour, out IEnumerable<BoardLocation> pathBetween);
-
-        bool IsRookAllowedToCastle(BoardMove move,
-            IReadOnlyBoardState<ChessPieceEntity> roBoardState, Colours player);
-
-        bool IsKingAllowedToCastle(BoardMove move,
-            IReadOnlyBoardState<ChessPieceEntity> roBoardState,
-            out ChessPieceEntity king);
-    }
 }

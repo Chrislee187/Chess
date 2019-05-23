@@ -74,17 +74,19 @@ namespace chess.engine.Game
         {
             if (item == null) return '.';
 
+            var displayChar = ChessPieceNameMapper.ToChar(item.Item.Piece, item.Item.Player);
 
             if (item.Item.Piece == ChessPieceName.Pawn)
             {
                 var pawn = (PawnEntity) item.Item;
-                // TODO: Enpassant eligibility check and flag
-            }
-            var textRepresentation = ChessPieceNameMapper.ToChar(item.Item.Piece, item.Item.Player);
 
-            
-            // TODO: Add enpassant check
-            return textRepresentation;
+                if (pawn.LocationHistory.Count() == 2)// TODO: Check it was the last game move
+                {
+                    displayChar = pawn.Player == Colours.White ? 'E' : 'e';
+                }
+            }
+
+            return displayChar;
         }
 
         public static ChessGame Deserialise(string boardformat69Char)
@@ -100,14 +102,16 @@ namespace chess.engine.Game
                 ? Colours.White
                 : Colours.Black;
 
-            // TODO: King eligibility stuff
-            return new ChessGame(
+            // TODO: King/Castle location history stuff
+            
+            var chessGame = new ChessGame(
                 ChessFactory.Logger<ChessGame>(),
                 ChessFactory.ChessBoardEngineProvider(),
                 ChessFactory.CheckDetectionService(),
                 setup,
                 whoseTurn
             );
+            return chessGame;
         }
 
         private static DeserialisedBoardSetup CreatePieceEntitiesSetupActions(string pieces, int idx)

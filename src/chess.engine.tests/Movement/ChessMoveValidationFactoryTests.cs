@@ -14,7 +14,7 @@ namespace chess.engine.tests.Movement
         [SetUp]
         public void SetUp()
         {
-            _provider = new ChessMoveValidationProvider(new CastleValidationSteps());
+            _provider = new ChessMoveValidationProvider(new ChessValidationSteps());
         }
         [Test]
         public void FactorySupportsAllMoveTypes()

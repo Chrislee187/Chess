@@ -1,36 +1,27 @@
-﻿using System.Linq;
-using board.engine.Board;
+﻿using board.engine.Board;
 using board.engine.Movement;
-using board.engine.Movement.Validators;
 using chess.engine.Entities;
-using chess.engine.Game;
+using chess.engine.Movement.King;
 
 namespace chess.engine.Movement.Pawn
 {
     public class EnPassantTakeValidator : IMoveValidator<ChessPieceEntity> 
     {
-        // TODO: Refactor to use same pattern as CastleValidator, do ChessValidationSteps first
-        public bool ValidateMove(BoardMove move, IReadOnlyBoardState<ChessPieceEntity> roBoardState)
+        private readonly IChessValidationSteps _validationSteps;
+
+        public EnPassantTakeValidator(IChessValidationSteps validationSteps)
         {
-            var destEmpty = new DestinationIsEmptyValidator<ChessPieceEntity>()
-                .ValidateMove(move, roBoardState);
-            if (!destEmpty) return false;
-
-            var entity = roBoardState.GetItem(move.From);
-            if (entity == null) return false;
-            var piece = entity.Item;
-
-            var passingPieceLocation = move.To.MoveBack(piece.Player);
-            var passedEntity = roBoardState.GetItem(passingPieceLocation);
-
-            if (passedEntity == null) return false;
-            
-            if (!passedEntity.Item.Is(piece.Player.Enemy(), ChessPieceName.Pawn)) return false;
-
-            return CheckPawnUsedDoubleMove(passedEntity);
+            _validationSteps = validationSteps;
         }
 
-        private bool CheckPawnUsedDoubleMove(LocatedItem<ChessPieceEntity> moveTo) 
-            => moveTo.Item.LocationHistory.Count() == 2;
+        public bool ValidateMove(BoardMove move, IReadOnlyBoardState<ChessPieceEntity> roBoardState)
+        {
+            if (!_validationSteps.IsLocationEmpty(move.To, roBoardState)) return false;
+
+            if (!_validationSteps.IsFriendlyPawnValidForEnpassant(move, roBoardState, out var pawn)) return false;
+
+            var isEnemyPawnValidForEnpassant = _validationSteps.IsEnemyPawnValidForEnpassant(move, roBoardState, pawn.Player);
+            return isEnemyPawnValidForEnpassant;
+        }
     }
 }

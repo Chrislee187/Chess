@@ -11,20 +11,17 @@ namespace chess.engine.tests.Movement.King
 
     public class KingCastleValidatorIntegrationTests : ValidationTestsBase
     {
-        // TODO: Create new unit tests that mock the ICastleValidationSteps
-        // creaate integration tests for the ValidationStepos
-
         private KingCastleValidator _validator;
         private readonly BoardMove _whiteInvalidKingCastle = new BoardMove("D1".ToBoardLocation(), "G1".ToBoardLocation(), (int)ChessMoveTypes.CastleKingSide);
         private readonly BoardMove _whiteKingSideCastle = new BoardMove("E1".ToBoardLocation(), "G1".ToBoardLocation(), (int)ChessMoveTypes.CastleKingSide);
         private readonly BoardMove _whiteQueenSideCastle = new BoardMove("E1".ToBoardLocation(), "C1".ToBoardLocation(), (int)ChessMoveTypes.CastleKingSide);
 
-
         [SetUp]
         public void Setup()
         {
-            _validator = new KingCastleValidator(new CastleValidationSteps());
+            _validator = new KingCastleValidator(new ChessValidationSteps());
         }
+
         [Test]
         public void ValidateMove_fails_unless_king_is_in_starting_position()
         {

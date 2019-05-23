@@ -75,7 +75,7 @@ namespace chess.engine
             services.AddTransient<IPlayerStateService, PlayerStateService>();
             services.AddTransient<ICheckDetectionService, CheckDetectionService>();
             services.AddTransient<ISanTokenParser, SanTokenParser>();
-            services.AddTransient<ICastleValidationSteps, CastleValidationSteps>();
+            services.AddTransient<IChessValidationSteps, ChessValidationSteps>();
             services.AddTransient<ISanBuilder, SanBuilder>();
 
             // NOTE: Acts as a cache, hence singleton usage

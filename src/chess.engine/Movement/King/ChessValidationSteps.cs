@@ -11,15 +11,12 @@ using chess.engine.Game;
 
 namespace chess.engine.Movement.King
 {
-    // TODO: Rename this to something more common, ChessValidationSteps - create a nice Mock builder for it
+    // TODO: UnitTests
     // IsLocationUnderCheck etc. from PlayerStateService and refactor accordingly
     // IsLocationUnderAttack etc. like Check but includes the king in the scans
-    // Add IsPawnAllowedToEnpassant()
-    // Add IsPawnAllowedToTakeWithEnPassant()
 
-    public class CastleValidationSteps : ICastleValidationSteps
+    public class ChessValidationSteps : IChessValidationSteps
     {
-        // TODO: Needs integration tests at least, going to be clumsy to unit test with mocks
         public bool IsPathClearFromAttacks(BoardMove move, IReadOnlyBoardState<ChessPieceEntity> roBoardState, IEnumerable<BoardLocation> pathBetween)
         {
             // TODO: Use IsLocationUnderAttack() (see above) instead of the the validator
@@ -70,6 +67,34 @@ namespace chess.engine.Movement.King
                    && king.LocationHistory.Count() == 1;
         }
 
+        public bool IsLocationEmpty(BoardLocation location, IReadOnlyBoardState<ChessPieceEntity> roBoardState) 
+            => roBoardState.GetItem(location) == null;
+
+        public bool IsFriendlyPawnValidForEnpassant(BoardMove move, 
+            IReadOnlyBoardState<ChessPieceEntity> roBoardState,
+            out ChessPieceEntity pawn)
+        {
+            pawn = null;
+            var pawnItem = roBoardState.GetItem(move.From);
+            if (pawnItem == null) return false;
+            pawn = pawnItem.Item;
+
+            return pawnItem.Item.Is(ChessPieceName.Pawn);
+
+        }
+
+        public bool IsEnemyPawnValidForEnpassant(BoardMove move,
+            IReadOnlyBoardState<ChessPieceEntity> roBoardState, Colours attackingPlayer)
+        {
+            var passingPieceLocation = move.To.MoveBack(attackingPlayer);
+            var enemyPawn = roBoardState.GetItem(passingPieceLocation);
+
+            if (enemyPawn == null) return false;
+            if (!enemyPawn.Item.Is(attackingPlayer.Enemy(), ChessPieceName.Pawn)) return false;
+
+            return enemyPawn.Item.LocationHistory.Count() == 2;
+        }
+        
         private static IEnumerable<BoardLocation> CalcPathBetweenKingAndCastle(BoardMove move, Colours kingColour)
         {
             // TODO: This could be pulled out and tested in isolation indeed just be static lists
@@ -102,5 +127,32 @@ namespace chess.engine.Movement.King
             pathBetween.RemoveAll(location => location == null);
             return pathBetween;
         }
+    }
+
+
+    public interface IChessValidationSteps
+    {
+        bool IsPathClearFromAttacks(BoardMove move, IReadOnlyBoardState<ChessPieceEntity> roBoardState, 
+            IEnumerable<BoardLocation> pathBetween);
+
+        bool IsPathBetweenClear(BoardMove move, IReadOnlyBoardState<ChessPieceEntity> roBoardState,
+            Colours kingColour, out IEnumerable<BoardLocation> pathBetween);
+
+        bool IsRookAllowedToCastle(BoardMove move,
+            IReadOnlyBoardState<ChessPieceEntity> roBoardState, Colours player);
+
+        bool IsKingAllowedToCastle(BoardMove move,
+            IReadOnlyBoardState<ChessPieceEntity> roBoardState,
+            out ChessPieceEntity king);
+
+        bool IsLocationEmpty(BoardLocation location,
+            IReadOnlyBoardState<ChessPieceEntity> roBoardState);
+
+        bool IsFriendlyPawnValidForEnpassant(BoardMove move, 
+            IReadOnlyBoardState<ChessPieceEntity> roBoardState,
+            out ChessPieceEntity pawn);
+
+        bool IsEnemyPawnValidForEnpassant(BoardMove move,
+            IReadOnlyBoardState<ChessPieceEntity> roBoardState, Colours attackingPlayer);
     }
 }

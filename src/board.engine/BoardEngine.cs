@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using board.engine.Board;
 using board.engine.Movement;
 using Microsoft.Extensions.Logging;

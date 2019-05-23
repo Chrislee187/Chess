@@ -84,7 +84,7 @@ namespace chess.engine.SAN
             return new StandardAlgebraicNotation(piece, fromFile, fromRank, toFile, toRank, moveType, promotionPiece, inCheck );
         }
 
-        // TODO: Was doesn't this use the TryParse pattern
+        // TODO: Why doesn't this use the TryParse pattern
         public StandardAlgebraicNotation BuildFrom(string notation)
         {
             if (notation.StartsWith("O-O") || notation.StartsWith("0-0"))
