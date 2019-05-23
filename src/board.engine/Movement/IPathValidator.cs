@@ -4,6 +4,6 @@ namespace board.engine.Movement
 {
     public interface IPathValidator<TEntity> where TEntity : class, IBoardEntity
     {
-        Path ValidatePath(IBoardState<TEntity> boardState, Path possiblePath);
+        Path ValidatePath(IReadOnlyBoardState<TEntity> boardState, Path possiblePath);
     }
 }

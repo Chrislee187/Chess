@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using board.engine.Actions;
 using chess.engine.Extensions;

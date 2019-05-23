@@ -1,11 +1,8 @@
-﻿using System.Runtime.InteropServices;
-using board.engine;
+﻿using board.engine;
 using board.engine.Movement;
 using chess.engine.Game;
-using chess.engine.Movement.King;
 using chess.engine.Movement.Pawn;
 using chess.engine.tests.Builders;
-using Moq;
 using NUnit.Framework;
 
 namespace chess.engine.tests.Movement.Pawn
@@ -23,9 +20,9 @@ namespace chess.engine.tests.Movement.Pawn
         {
             _validator = new EnPassantTakeValidator(_stepMocker.Build());
 
-            _stepMocker.SetupLocationEmpty(false);
-            _stepMocker.SetupEnpassantFriendlyPawnValid(false, Friend);
-            _stepMocker.SetupEnpassantEnemyPawnValid(false);
+            _stepMocker.SetupLocationEmpty(false)
+                .SetupEnpassantFriendlyPawnValid(false, Friend)
+                .SetupEnpassantEnemyPawnValid(false);
         }
         [Test]
         public void ValidateMove_fails_when_take_location_not_empty()
@@ -42,17 +39,17 @@ namespace chess.engine.tests.Movement.Pawn
         [Test]
         public void ValidateMove_fails_enemy_pawn_invalid()
         {
-            _stepMocker.SetupLocationEmpty(true);
-            _stepMocker.SetupEnpassantFriendlyPawnValid(true, Friend);
+            _stepMocker.SetupLocationEmpty(true)
+                .SetupEnpassantFriendlyPawnValid(true, Friend);
 
             Assert.False(_validator.ValidateMove(AnyBoardMove, null));
         }
         [Test]
         public void ValidateMove_pass_when_both_pawns_valid()
         {
-            _stepMocker.SetupLocationEmpty(true);
-            _stepMocker.SetupEnpassantFriendlyPawnValid(true, Friend);
-            _stepMocker.SetupEnpassantEnemyPawnValid(true);
+            _stepMocker.SetupLocationEmpty(true)
+                .SetupEnpassantFriendlyPawnValid(true, Friend)
+                .SetupEnpassantEnemyPawnValid(true);
 
             Assert.True(_validator.ValidateMove(AnyBoardMove, null));
         }

@@ -18,7 +18,7 @@ namespace chess.engine.tests.Builders
             return _castleValidationStepsMock.Object;
         }
 
-        public void SetupKingCastleEligibility(bool eligible)
+        public ChessValidationStepsMocker SetupKingCastleEligibility(bool eligible)
         {
             ChessPieceEntity entity = new KingEntity(Colours.White);
             _castleValidationStepsMock.Setup(m =>
@@ -27,9 +27,10 @@ namespace chess.engine.tests.Builders
                         It.IsAny<IReadOnlyBoardState<ChessPieceEntity>>(),
                         out entity))
                 .Returns(eligible);
+            return this;
         }
 
-        public void SetupCastleRookEligibility(bool eligible)
+        public ChessValidationStepsMocker SetupCastleRookEligibility(bool eligible)
         {
             _castleValidationStepsMock.Setup(m =>
                     m.IsRookAllowedToCastle(
@@ -37,9 +38,10 @@ namespace chess.engine.tests.Builders
                         It.IsAny<IReadOnlyBoardState<ChessPieceEntity>>(),
                         It.IsAny<Colours>()))
                 .Returns(eligible);
+            return this;
         }
 
-        public void SetupPathIsClear(bool clear)
+        public ChessValidationStepsMocker SetupPathIsClear(bool clear)
         {
             IEnumerable<BoardLocation> pathBetween;
             _castleValidationStepsMock.Setup(m =>
@@ -49,9 +51,10 @@ namespace chess.engine.tests.Builders
                         It.IsAny<Colours>(),
                         out pathBetween))
                 .Returns(clear);
+            return this;
         }
 
-        public void SetupPathIsSafe(bool safe)
+        public ChessValidationStepsMocker SetupPathIsSafe(bool safe)
         {
             _castleValidationStepsMock.Setup(m =>
                     m.IsPathClearFromAttacks(
@@ -59,18 +62,20 @@ namespace chess.engine.tests.Builders
                         It.IsAny<IReadOnlyBoardState<ChessPieceEntity>>(),
                         It.IsAny<IEnumerable<BoardLocation>>()))
                 .Returns(safe);
+            return this;
         }
 
-        public void SetupLocationEmpty(bool empty)
+        public ChessValidationStepsMocker SetupLocationEmpty(bool empty)
         {
             _castleValidationStepsMock.Setup(m =>
                     m.IsLocationEmpty(
                         It.IsAny<BoardLocation>(),
                         It.IsAny<IReadOnlyBoardState<ChessPieceEntity>>()))
                 .Returns(empty);
+            return this;
         }
 
-        public void SetupEnpassantFriendlyPawnValid(bool valid, Colours friend)
+        public ChessValidationStepsMocker SetupEnpassantFriendlyPawnValid(bool valid, Colours friend)
         {
             ChessPieceEntity pawn = new PawnEntity(friend);
             _castleValidationStepsMock.Setup(m =>
@@ -79,8 +84,9 @@ namespace chess.engine.tests.Builders
                         It.IsAny<IReadOnlyBoardState<ChessPieceEntity>>(),
                         out pawn))
                 .Returns(valid);
+            return this;
         }
-        public void SetupEnpassantEnemyPawnValid(bool valid)
+        public ChessValidationStepsMocker SetupEnpassantEnemyPawnValid(bool valid)
         {
             _castleValidationStepsMock.Setup(m =>
                     m.IsEnemyPawnValidForEnpassant(
@@ -88,6 +94,7 @@ namespace chess.engine.tests.Builders
                         It.IsAny<IReadOnlyBoardState<ChessPieceEntity>>(), 
                         It.IsAny<Colours>()))
                 .Returns(valid);
+            return this;
         }
     }
 }

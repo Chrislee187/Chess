@@ -15,10 +15,10 @@ namespace chess.engine.tests.Movement.King
         {
             _validator = new KingCastleValidator(_stepMocker.Build());
 
-            _stepMocker.SetupKingCastleEligibility(false);
-            _stepMocker.SetupCastleRookEligibility(false);
-            _stepMocker.SetupPathIsClear(false);
-            _stepMocker.SetupPathIsSafe(false);
+            _stepMocker.SetupKingCastleEligibility(false)
+                .SetupCastleRookEligibility(false)
+                .SetupPathIsClear(false)
+                .SetupPathIsSafe(false);
         }
         [Test]
         public void ValidateMove_fails_when_king_is_not_allowed_to_castle()
@@ -35,27 +35,27 @@ namespace chess.engine.tests.Movement.King
         [Test]
         public void ValidateMove_fails_when_path_between_is_not_clear()
         {
-            _stepMocker.SetupKingCastleEligibility(true);
-            _stepMocker.SetupCastleRookEligibility(true);
+            _stepMocker.SetupKingCastleEligibility(true)
+                .SetupCastleRookEligibility(true);
 
             Assert.False(_validator.ValidateMove(null, null));
         }
         [Test]
         public void ValidateMove_fails_when_path_between_is_not_safe()
         {
-            _stepMocker.SetupKingCastleEligibility(true);
-            _stepMocker.SetupCastleRookEligibility(true);
-            _stepMocker.SetupPathIsClear(true);
+            _stepMocker.SetupKingCastleEligibility(true)
+                .SetupCastleRookEligibility(true)
+                .SetupPathIsClear(true);
 
             Assert.False(_validator.ValidateMove(null, null));
         }
         [Test]
         public void ValidateMove_succeeeds_when_all_steps_pass()
         {
-            _stepMocker.SetupKingCastleEligibility(true);
-            _stepMocker.SetupCastleRookEligibility(true);
-            _stepMocker.SetupPathIsClear(true);
-            _stepMocker.SetupPathIsSafe(true);
+            _stepMocker.SetupKingCastleEligibility(true)
+                .SetupCastleRookEligibility(true)
+                .SetupPathIsClear(true)
+                .SetupPathIsSafe(true);
 
             Assert.True(_validator.ValidateMove(null, null));
         }

@@ -21,7 +21,7 @@ namespace chess.engine.Movement
             _validationProvider = validationProvider;
         }
 
-        public Path ValidatePath(IBoardState<ChessPieceEntity> boardState, Path possiblePath)
+        public Path ValidatePath(IReadOnlyBoardState<ChessPieceEntity> boardState, Path possiblePath)
         {
             _logger?.LogDebug($"Validating path: {possiblePath}");
             var validPath = new Path();
@@ -51,7 +51,7 @@ namespace chess.engine.Movement
             return validPath;
         }
 
-        private static bool PathIsBlocked(BoardMove move, IBoardState<ChessPieceEntity> boardState)
+        private static bool PathIsBlocked(BoardMove move, IReadOnlyBoardState<ChessPieceEntity> boardState)
         {
             if (boardState.IsEmpty(move.To)) return false;
 
