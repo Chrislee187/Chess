@@ -27,6 +27,27 @@ namespace chess.engine.Movement
         private readonly IDictionary<string, LocatedItem<ChessPieceEntity>[]> _stateCache
         = new Dictionary<string, LocatedItem<ChessPieceEntity>[]>();
 
+        public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
+        {
+            _logger?.LogDebug("Beginning ChessRefreshAllPaths process...");
+
+            RefreshPathsFeature(boardState);
+
+            // NOTE: IMPORTANT: Kings must be evaluated last to ensure that moves
+            // from other pieces that would cause check are generated first!
+            // kings have an EntityType of int.MaxValue
+            var boardStateGetAllItemLocations = boardState.GetItems()
+                .OrderBy(i => i.Item.EntityType)
+                .Select(i => i.Location).ToList();
+            
+            foreach (var loc in boardStateGetAllItemLocations)
+            {
+                RemovePathsThatContainMovesThatLeaveUsInCheck(boardState, loc);
+            }
+
+            _logger?.LogDebug($"ChessRefreshAllPaths process finished... {boardStateGetAllItemLocations.Count()} paths refreshed");
+        }
+
         private void RefreshPathsFeature(IBoardState<ChessPieceEntity> boardState)
         {
             if (FeatureFlags.CachingPaths)
@@ -73,26 +94,6 @@ namespace chess.engine.Movement
 
         }
 
-        public void RefreshAllPaths(IBoardState<ChessPieceEntity> boardState)
-        {
-            _logger?.LogDebug("Beginning ChessRefreshAllPaths process...");
-
-            RefreshPathsFeature(boardState);
-
-            // NOTE: IMPORTANT: Kings must be evaluated last to ensure that moves
-            // from other pieces that would cause check are generated first!
-            var boardStateGetAllItemLocations = boardState.GetItems()
-                .OrderBy(i => i.Item.EntityType)
-                .Select(i => i.Location).ToList();
-            
-            foreach (var loc in boardStateGetAllItemLocations)
-            {
-                RemovePathsThatContainMovesThatLeaveUsInCheck(boardState, loc);
-            }
-
-            _logger?.LogDebug($"ChessRefreshAllPaths process finished... {boardStateGetAllItemLocations.Count()} paths refreshed");
-        }
-
         private void RemovePathsThatContainMovesThatLeaveUsInCheck(IBoardState<ChessPieceEntity> boardState, BoardLocation loc)
         {
             var piece = boardState.GetItem(loc);
@@ -107,14 +108,10 @@ namespace chess.engine.Movement
 
         private Path ValidatePathForDiscoveredCheck(IBoardState<ChessPieceEntity> boardState, Path path)
         {
-            var validPath = new Path();
-            foreach (var move in path)
-            {
-                var inCheck = _checkDetectionService.DoesMoveLeaveUsInCheck(boardState, move);
-               
-                if (!inCheck) validPath.Add(move);
-            }
-
+            var validPath = new Path(
+                    path.Where(move => !_checkDetectionService.DoesMoveLeaveUsInCheck(boardState, move))
+                );
+            
             return !validPath.Any() ? null : validPath;
         }
     }

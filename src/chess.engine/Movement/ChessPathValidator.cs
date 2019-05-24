@@ -25,7 +25,7 @@ namespace chess.engine.Movement
         {
             _logger?.LogDebug($"Validating path: {possiblePath}");
             var validPath = new Path();
-
+            // TODO: Not happy with algorithm, those breaks :(
             foreach(var move in possiblePath)
             {
                 if (!_validationProvider.TryGetValue(move.MoveType, out var moveTests))
