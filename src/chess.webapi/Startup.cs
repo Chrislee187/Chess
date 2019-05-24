@@ -25,7 +25,10 @@ namespace chess.webapi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             var config = services.ConfigureConfig();
             services.ConfigureLogging(config);
-            services.AddSwaggerDocument();
+            services.AddSwaggerDocument(settings =>
+            {
+                settings.Title = "Chess.WebAPI";
+            });
 
             services.AddTransient<IChessService, ChessGameService>();
             services.AddTransient<IPerfService, PerfService>();

@@ -12,28 +12,35 @@
 <H1>History</H1>
 <table>
     <tr>
+        <td>25/05/2018</td>
+        <td>
+            <li>/perf api endpoint added. Not as slow as I thought it would be on the azure website</li>
+            <li></li>
+        </td>
+    </tr>
+    <tr>
         <td>22/05/2018</td>
         <td>
-            More refinement around check detection routines, faster to not have to really on path regeneration, and 
-            checking which pieces can attack the king but rather, using a simple mask system, checks all possible 
-            squares that could attack the king for pieces that have moves that could attack from that square.
-            <br />Avg. game parse time at 0.22 secs
+            <li>More refinement around check detection routines, faster to not have to really on path regeneration, and
+                checking which pieces can attack the king but rather, using a simple mask system, checks all possible
+                squares that could attack the king for pieces that have moves that could attack from that square./li>
+            <li>>Avg. game parse time at 0.22 secs</li>
         </td>
     </tr>
     <tr>
         <td>21/05/2018</td>
         <td>
-            More fixed for edge cases (i.e. when enpassant causes check) and some huge performance improvements
+            <li>More fixed for edge cases (i.e. when enpassant causes check) and some huge performance improvements
             to board parsing due to parallising some of the board generation and using a much more efficient
-            check detection algorithm. 
-            <br />Avg. game parse time at 0.29 secs
+            check detection algorithm.</li>
+            <li>Avg. game parse time at 0.29 secs</li>
         </td>
     </tr>
     <tr>
         <td>20/05/2018</td>
         <td>
-            Performance improvements, board-parsing now 2-3x quicker, fix some edge case bugs
-            <br />Avg. game parse time at 1.13
+            <li>Performance improvements, board-parsing now 2-3x quicker, fix some edge case bugs</li>
+            <li>Avg. game parse time at 1.13</li>
         </td>
     </tr>
     <tr>
