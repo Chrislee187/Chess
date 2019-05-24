@@ -27,6 +27,9 @@ Note: These tests are marked Explicit or Ignore to avoid slowing down developmen
 dotnet test --filter Should_play_all_games_in_a_single_file --configuration RELEASE
 dotnet test --filter Measure_parse_game_time_100_games --configuration RELEASE
 
+# powershell doesn't support direct stdin redirects have to pipe it in
+get-content D:\src\PGNArchive\pgn\Modern\Modern.pgn | dotnet run --project pgn2json -- >modern.pgn.j
+son
 ```
 
 ## Performance
@@ -52,7 +55,7 @@ Parallellised generation of paths, combined with a new check detection algorithm
 ## PGN Parsing
 * Create a simple console app to convert PGN to a similar JSON format
 * One tool or PGN console tool suite, 
-  * pgn2json
+  * pgn2json - basic tool created, only reads/write a single stream from stdin/out currently
   * pgnsort, 
   * pgnsearch
 

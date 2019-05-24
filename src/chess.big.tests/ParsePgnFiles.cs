@@ -2,11 +2,12 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using chess.pgn;
+using chess.pgn.Parsing;
 using NUnit.Framework;
 
 namespace chess.big.tests
 {
-    [TestFixture, Explicit]
+    [TestFixture]
     public class ParsePgnFiles
     {
         [SetUp]
@@ -14,8 +15,8 @@ namespace chess.big.tests
         {
         }
 
-        [TestCase(@".\PGNFiles")]
-        [TestCase(@"D:\Src\PGNArchive\PGN")]
+//        [TestCase(@".\PGNFiles")]
+//        [TestCase(@"D:\Src\PGNArchive\PGN")]
         public void ParseAllFiles(string path)
         {
             var pgnfiles = Directory.GetFiles(path, "*.pgn", SearchOption.AllDirectories);
@@ -49,12 +50,13 @@ namespace chess.big.tests
                 fileGamesCount = 0;
             }
 
-            Console.WriteLine($"Files #: {fileCount}, Total Games #: {gamesCount}");
+            TestContext.Progress.WriteLine($"Files #: {fileCount}, Total Games #: {gamesCount}");
             Assert.That(fileCount, Is.GreaterThan(0), "No files processed");
             Assert.That(gamesCount, Is.GreaterThan(0), "No games processed");
         }
 
         [TestCase(@"D:\Src\PGNArchive\PGN\Adams\Adams.pgn")]
+        [Explicit]
 //        [TestCase(@"D:\Src\PGNArchive\PGN\Nielsen\Nielsen.pgn")]
         public void Parse_single_file(string filename)
         {

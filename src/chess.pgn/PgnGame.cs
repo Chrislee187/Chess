@@ -8,6 +8,10 @@ namespace chess.pgn
     public class PgnGame
     {
         private string DebuggerDisplayText => $"{White} vs {Black} @ {Event} #{Round} {Result}";
+
+        // NOTE: (https://en.wikipedia.org/wiki/Portable_Game_Notation#Tag_pairs)
+        // Strictly speaking Tag pairs have some rules about a standard set of 7 in a specific order
+        // we expose the 7 here as public properties, however we are not caring to about the order, nor enforcing their existence
         public IReadOnlyDictionary<string, string> TagPairs { get; }
         public IEnumerable<PgnTurn> Turns { get; }
 
@@ -29,24 +33,28 @@ namespace chess.pgn
         public string White => SafePairValue("White");
         public string Black => SafePairValue("Black");
         public PgnGameResult Result { get; }
-    
+        public string MoveText { get; }
 
-        private PgnGame(string pgnText, IReadOnlyDictionary<string, string> tagPairs, IEnumerable<PgnTurn> turns,
+
+        private PgnGame(string pgnText, string moveText, IReadOnlyDictionary<string, string> tagPairs,
+            IEnumerable<PgnTurn> turns,
             PgnGameResult pgnResult)
         {
             PgnText = pgnText;
             TagPairs = tagPairs;
             Turns = turns;
             Result = pgnResult;
+            MoveText = moveText;
         }
+
 
         public static PgnGame Parse(string gameText)
         {
             // NOTE: Known Issue: Because we split the turn numbers up based on the '.' char after the number we also lose any '.' chars
             // in any comments
             var remainder = ParseTagPairs(gameText, out var tagPairs).Trim();
-            var noLineEndings = remainder.Replace("\r", " ").Replace("\n", " ");
-            var tokens = new Stack<string>(noLineEndings.Split(new []{' ', '.'}).Where(s => s.Trim().Any()).Reverse());
+            var moveText = remainder.Replace("\r", " ").Replace("\n", " ");
+            var tokens = new Stack<string>(moveText.Split(new []{' ', '.'}).Where(s => s.Trim().Any()).Reverse());
 
             var turns = new List<PgnTurn>();
             PgnMove white = null;
@@ -111,7 +119,7 @@ namespace chess.pgn
                 }
             }
 
-            var pgnGame = new PgnGame(gameText, tagPairs, turns, pgnResult);
+            var pgnGame = new PgnGame(gameText, moveText, tagPairs, turns, pgnResult);
             return pgnGame;
         }
 

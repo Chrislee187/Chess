@@ -2,6 +2,7 @@
 using board.engine;
 using chess.engine.Extensions;
 using chess.engine.Game;
+using chess.pgn.Parsing;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 

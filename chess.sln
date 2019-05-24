@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "chess", "chess", "{D66F8692
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine.integration.tests", "src\chess.engine.integration.tests\chess.engine.integration.tests.csproj", "{D4E891C8-5540-4810-8FB9-D4507BEB01C6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pgn2json", "src\pgn2json\pgn2json.csproj", "{514C3274-7B12-453F-9951-9BB98DF666CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{D4E891C8-5540-4810-8FB9-D4507BEB01C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4E891C8-5540-4810-8FB9-D4507BEB01C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4E891C8-5540-4810-8FB9-D4507BEB01C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{514C3274-7B12-453F-9951-9BB98DF666CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{514C3274-7B12-453F-9951-9BB98DF666CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{514C3274-7B12-453F-9951-9BB98DF666CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{514C3274-7B12-453F-9951-9BB98DF666CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

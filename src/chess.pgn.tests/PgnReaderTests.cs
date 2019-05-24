@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using chess.pgn.Parsing;
 using chess.tests.utils.TestData;
 using NUnit.Framework;
 

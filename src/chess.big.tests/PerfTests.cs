@@ -5,6 +5,7 @@ using System.Linq;
 using board.engine;
 using chess.engine.Game;
 using chess.pgn;
+using chess.pgn.Parsing;
 using chess.tests.utils.TestData;
 using NUnit.Framework;
 
