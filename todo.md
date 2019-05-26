@@ -1,10 +1,33 @@
 # TODOS
-* Setup a simple pref test using the Wiki PGN file that runs in the webapi and report avg time to play to wikigame. The single core 1.75Ghz (**dbl checki those fitures**) ENV should be more consistent (and slower) than my uber rig
-* 
 * Basic web integration test, ensure index.html exists and contains a chessboard and moves
 * Create .feature tests for both the chess.engine and the chess.webapi
   * chess engine feature level tests, Pawn_can_move_two_squares_at_start(), Pawn_cannot_move_two_squares_after_start()
   * How to handle these need to be easy to implement and setup the required states, want to be able to create the rules of chess in feature tests
+* Add support to handle parsing of games inside zip files, most web resources are a zip file of a group of games.
+
+* Game Database
+  * Typical relational (SQL/SQLite) DB to store the PGN data
+    * GUID ID's
+    * Normalise the TagPair data
+    * Event, Site, Player, MoveList tables
+    * It's all basic data so should be simple enough
+    * GOAL: Get the 450k+ games I downloaded stored and indexed in a DB
+  * Import from
+    * a filename (may contain multiple games)
+    * a folder (or zip file), recursive all *.PGN files (default pattern)
+      * nice to have: zip file support
+    * a URL to a ZIP file
+    * a URL to a PGN file
+    * Console import tool for batch imports
+    * Maybe a web page as well
+  * Web App
+    * Basic search/filter/display over the game database
+    * Game selection and viewing
+  * Console App
+    * Basic search/filter/display over the game database
+    * Game selection and viewing
+
+* TODO's getting a bit long to keep managing in .MD files, really wanted to keep everything contained in the repo but my have to knock something up in Trello or similar to manage it better.
 
 * **IN PROGRESS** approx 30000 games so far, 450k to go! - validate game engine against LOTS of PGN games
 * proper error responses for invalid boards, moves etc. Just see a useless page on production boxes, drive out with the integration tests I still need to do.
@@ -12,13 +35,6 @@
 * RESTplayer doesn't show promotions properly and the moves don't work because of this
 * Proper feature flag mechanism NOT static flags
 * Feature level test that plays a full game through the API
-* DONE ~~not required, Coord moves are valid SAN moves, Create command parser to detect between SAN move and Coord moves~~
-* DONE ~~PGN file reader~~
-* DONE ~~Split board.engine tests from chess.engine.tests~~
-* DONE ~~Add SAN move support to ChessGame.Move()~~
-* DONE ~~(BoardStateWrapper's)- NOTE: Refactored to use a ReadOnlyBoardState approach Was hoping to avoid it but looks like will need some sort of simple facade wrappers around the BoardState object for its interactions with validators and actions to allow better testing, they currently need a full create boardstate to test with.~~
-* DONE chess.tests.utils ~~Create a chess.engine.tests.utils project contain for stuff like the builders~~
-* DONE chess.engine.integration.tests ~~Create integration tests for the engine, ie. for tests that still use a full board state)~~
 
 # Useful commands n stuff
 Plays all games from a large PGN file through the engine, showing per game timings and average, NB PGN files can contain tens of thousands of games so this can still take quite some time.
@@ -44,7 +60,8 @@ son
 * Counters - get some counters and timers in the frequently used stuff
 
 ### Paralleise opportunities
-Parallellised generation of paths, combined with a new check detection algorithm avg game replay time down to around 0.3 seconds
+
+
 * FAILED - Tried it, but it was slower, cloning wasn't super expensive so probably nothing to be gained by , did improve it a little by removing some ToString()'s that are only used for development conveinence ~~Board cloning~~
 * DONE ~~Path refreshing~~
 * DONE ~~Path validation~~
@@ -120,3 +137,14 @@ Parallellised generation of paths, combined with a new check detection algorithm
 |                      |
 ------------------------
 ```
+
+
+# DONE
+* DONE `/api/perf` endpoint ~~Setup a simple pref test using the Wiki PGN file that runs in the webapi and report avg time to play to wikigame. The single core 1.75Ghz (**dbl checki those fitures**) ENV should be more consistent (and slower) than my uber rig~~
+* DONE ~~not required, Coord moves are valid SAN moves, Create command parser to detect between SAN move and Coord moves~~
+* DONE ~~PGN file reader~~
+* DONE ~~Split board.engine tests from chess.engine.tests~~
+* DONE ~~Add SAN move support to ChessGame.Move()~~
+* DONE ~~(BoardStateWrapper's)- NOTE: Refactored to use a ReadOnlyBoardState approach Was hoping to avoid it but looks like will need some sort of simple facade wrappers around the BoardState object for its interactions with validators and actions to allow better testing, they currently need a full create boardstate to test with.~~
+* DONE chess.tests.utils ~~Create a chess.engine.tests.utils project contain for stuff like the builders~~
+* DONE chess.engine.integration.tests ~~Create integration tests for the engine, ie. for tests that still use a full board state)~~

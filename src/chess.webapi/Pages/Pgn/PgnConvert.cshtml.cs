@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Encodings.Web;
 using chess.pgn.Json;
 using chess.pgn.Parsing;
@@ -13,18 +16,15 @@ namespace chess.webapi.Pages.Pgn
 {
     public class PgnConvertModel : PageModel
     {
-        private readonly ILogger<PgnConvertModel> _logger;
-
-        public PgnConvertModel(ILogger<PgnConvertModel> logger)
-        {
-            _logger = logger;
-        }
-
-        [BindProperty(SupportsGet = true)]
+        [BindProperty]
+        [Required]
         public string PgnText{ get; set; }
 
         public string PgJson { get; set; }
 
+        [BindProperty]
+        [DisplayName("Expand moves")]
+        public bool ExpandMoves { get; set; }
         public IActionResult OnGet()
         {
             PgnText = WikiPgnText;
@@ -40,9 +40,18 @@ namespace chess.webapi.Pages.Pgn
                 return Page();
             }
 
-            var games = PgnReader.ReadAllGamesFromString(PgnText);
+            try
+            {
+                var games = PgnReader.ReadAllGamesFromString(PgnText);
 
-            PgJson = JsonConvert.SerializeObject(games, Formatting.Indented); ;
+                PgJson = ExpandMoves
+                    ? JsonConvert.SerializeObject(games, Formatting.Indented)
+                    : JsonConvert.SerializeObject(games.Select(p => new PgnJson(p)), Formatting.Indented);
+            }
+            catch (Exception e)
+            {
+                PgJson = $"Error: {e.Message}";
+            }
 
 
             return Page();

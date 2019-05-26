@@ -69,7 +69,7 @@ namespace chess.big.tests
                     fileCount++;
 
                     var text = File.ReadAllText(file);
-                    PlayAllGames(PgnReader.FromString(text));
+                    PlayAllGames(PgnReader.ReadAllGamesFromString(text));
                     fileSw.Stop();
                     fileTimes.Add(fileSw.Elapsed);
                     TestContext.Progress.WriteLine("*************************************");
@@ -106,23 +106,24 @@ namespace chess.big.tests
 
             TestContext.Progress.WriteLine($"Playing all games from;");
             TestContext.Progress.WriteLine($"  {filename}");
-            PlayAllGames(PgnReader.FromFile(filename));
+            PlayAllGames(PgnReader.ReadAllGamesFromString(filename));
             TestContext.Progress.WriteLine($"  {filename} complete!");
         }
 
         // TODO: Add an option to parallelise this
-        private void PlayAllGames(PgnReader reader)
+        private void PlayAllGames(IEnumerable<PgnGame> games)
         {
             var loggerType = ChessFactory.LoggerType.Null;
-            PgnGame game = null;
             ChessGame chessGame = null;
             var gameIdx = 0;
+            PgnGame currentGame = null;
             try
             {
                 var timings = new List<TimeSpan>();
-                game = reader.ReadGame();
-                while (game != null)
+
+                foreach (var game in games)
                 {
+                    currentGame = game;
                     gameIdx++;
                     chessGame = ChessFactory.NewChessGame(loggerType);
                     var sw = Stopwatch.StartNew();
@@ -131,7 +132,6 @@ namespace chess.big.tests
                     var desc = $"{game.Event} {game.Round} {game.White} vs {game.Black} {game.Result}";
                     TestContext.Progress.WriteAsync($"{gameIdx} : {desc} ({elapsed})");
                     timings.Add(elapsed);
-                    game = reader.ReadGame();
                 }
 
                 TestContext.Progress.WriteAsync($"Average playtime ({new TimeSpan(Convert.ToInt64(timings.Average(ts => ts.Ticks)))})");
@@ -140,9 +140,9 @@ namespace chess.big.tests
             catch
             {
                 TestContext.Out.WriteLine($"FAILED");
-                TestContext.Out.WriteLine($"Game: #{gameIdx} / {game?.ToString() ?? ""}");
+                TestContext.Out.WriteLine($"Game: #{gameIdx} / {games.Count()}");
                 TestContext.Out.WriteLine($"Board:\n{chessGame.ToTextBoard()}");
-                TestContext.Out.WriteLine($"Full PGN Text:\n{reader.LastGameText}");
+                TestContext.Out.WriteLine($"Full PGN Text:\n{currentGame?.PgnText}");
                 throw;
             }
 

@@ -16,9 +16,11 @@
 </p>
 <div asp-validation-summary="All"></div>
 <form method="POST">
-    <h1>PGN</h1>
+    <h1>Enter PGN Text</h1>
     <textarea rows="20" cols="60" asp-for="PgnText">@Model.PgnText</textarea><br />
+    <label asp-for="ExpandMoves"></label>
+    <input asp-for="ExpandMoves" checked="@Model.ExpandMoves"/>
     <button  type="submit">Convert</button><br />
     <h1>PGJSON</h1>
-    <textarea rows="20" cols="60" asp-for="PgJson"></textarea>
+    <textarea rows="20" cols="60">@Model.PgJson</textarea>
 </form>

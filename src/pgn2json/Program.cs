@@ -13,28 +13,24 @@ namespace pgn2json
         static void Main(string[] args)
         {
             TextReader reader = Console.In;
-            /*
-             * If 1st param is not an option assume it's a file pattern otherwise read from stdin
-             */
+
             if (args.Any())
             {
+                /*
+                 * TODO: need YACLAP for some CLI options
+                 */
                 Console.Error.WriteLine("No arguments yet, redirect standard input in using Get-Content/Type etc.");
                 Environment.Exit(1);
             }
 
             var writer = Console.Out;
 
-            var pgnReader = PgnReader.FromString(reader.ReadToEnd());
+            var games = PgnReader.ReadAllGamesFromString(reader.ReadToEnd());
 
-            var games = new List<PgnJson>();
-
-            var readGame = pgnReader.ReadGame();
-            while (readGame != null)
-            {
-                games.Add(new PgnJson(readGame));
-                readGame = pgnReader.ReadGame();
-            }
-            var pgnJson = JsonConvert.SerializeObject(games, Formatting.Indented);
+            bool expandMoves = false; // TODO: Need a CLI option for this and indentation
+            var pgnJson = expandMoves
+                ? JsonConvert.SerializeObject(games, Formatting.Indented)
+                : JsonConvert.SerializeObject(games.Select(g => new PgnJson(g)), Formatting.Indented);
             writer.WriteLine(pgnJson);
         }
     }
