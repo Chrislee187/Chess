@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -29,6 +31,19 @@ namespace chess.pgn.Parsing
             var text = ReadSingleGame();
             LastGameText = text;
             return PgnGame.Parse(text);
+        }
+        public static IEnumerable<PgnGame> ReadAllGamesFromString(string pgnText)
+        {
+            var pgnReader = FromString(pgnText);
+            var games = new List<PgnGame>();
+            var readGame = pgnReader.ReadGame();
+            while (readGame != null)
+            {
+                games.Add(readGame);
+                readGame = pgnReader.ReadGame();
+            }
+
+            return games;
         }
 
         private string ReadSingleGame()

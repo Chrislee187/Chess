@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
+using System.Xml.Serialization;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
@@ -25,12 +27,10 @@ namespace chess.engine.Movement
         {
             var paths = new Paths(
                 entity.PathGenerators
-                    .SelectMany(pg => pg.PathsFrom(boardLocation, (int) entity.Player))
+                    .SelectMany(pg => pg.PathsFrom(boardLocation, entity.Owner))
             );
 
-            var validPaths = FeatureFlags.ParalleliseRemoveInvalidMoves 
-                ? RemoveInvalidMovesParallel(boardState, paths) 
-                : RemoveInvalidMoves(boardState, paths);
+            var validPaths = RemoveInvalidMoves2(boardState, paths);
 
             return validPaths;
         }
@@ -57,19 +57,17 @@ namespace chess.engine.Movement
             }
         }
 
-
-        private Paths RemoveInvalidMovesParallel(IBoardState<ChessPieceEntity> boardState, Paths possiblePaths)
+        private Paths RemoveInvalidMoves2(IBoardState<ChessPieceEntity> boardState, Paths possiblePaths)
         {
-
-            _logger?.LogDebug($"Removing invalid moves from {possiblePaths} paths.");
-            var validPaths = new Paths();
-
-            possiblePaths.AsParallel().ForAll(possiblePath =>
-            {
-                ValidatePath(boardState, possiblePath, validPaths);
-            });
-
+            var validPaths = new Paths(
+                    possiblePaths.ToList()
+                        .Where(possiblePath 
+                            => _pathValidator.ValidatePath(boardState, possiblePath).Any())
+                        .Select(pp => _pathValidator.ValidatePath(boardState, pp))
+                );
             return validPaths;
         }
+
+
     }
 }

@@ -5,15 +5,16 @@ using Microsoft.Extensions.Logging;
 
 namespace chess.webapi.Controllers
 {
-    [Route("api/[controller]")]
+    [Produces("application/json")]
+    [Route("api/chessgame")]
     [ApiController]
-    public class ChessGameController : Controller
+    public class ChessGameApiController : Controller
     {
-        private ILogger<ChessGameController> _logger;
+        private ILogger<ChessGameApiController> _logger;
         private readonly IChessService _chessService;
 
-        public ChessGameController(
-            ILogger<ChessGameController> logger,
+        public ChessGameApiController(
+            ILogger<ChessGameApiController> logger,
             IChessService chessService
             )
         {

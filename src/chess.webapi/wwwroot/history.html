@@ -12,16 +12,25 @@
 <H1>History</H1>
 <table>
     <tr>
+        <td>26/05/2018</td>
+        <td>
+            <li>/pgn/pgnconvert page added  - decided to try out the "razor page model" approach.
+                Not decided if I like it or not yet.
+                </li>
+            <li></li>
+        </td>
+    </tr>    <tr>
         <td>25/05/2018</td>
         <td>
             <li>/perf api endpoint added. Not as slow as I thought it would be on the azure website</li>
             <li></li>
         </td>
-    </tr>
+    </tr> 
     <tr>
         <td>22/05/2018</td>
         <td>
-            <li>More refinement around check detection routines, faster to not have to really on path regeneration, and
+            <li>
+                More refinement around check detection routines, faster to not have to really on path regeneration, and
                 checking which pieces can attack the king but rather, using a simple mask system, checks all possible
                 squares that could attack the king for pieces that have moves that could attack from that square./li>
             <li>>Avg. game parse time at 0.22 secs</li>
@@ -30,9 +39,11 @@
     <tr>
         <td>21/05/2018</td>
         <td>
-            <li>More fixed for edge cases (i.e. when enpassant causes check) and some huge performance improvements
-            to board parsing due to parallising some of the board generation and using a much more efficient
-            check detection algorithm.</li>
+            <li>
+                More fixed for edge cases (i.e. when enpassant causes check) and some huge performance improvements
+                to board parsing due to parallising some of the board generation and using a much more efficient
+                check detection algorithm.
+            </li>
             <li>Avg. game parse time at 0.29 secs</li>
         </td>
     </tr>

@@ -3,6 +3,7 @@ using chess.engine;
 using chess.webapi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,7 +58,7 @@ namespace chess.webapi
             app.UseSwagger();
             app.UseSwaggerUi3();
 
-            app.UseMvc();
+            app.UseMvcWithDefaultRoute();
         }
     }
 
