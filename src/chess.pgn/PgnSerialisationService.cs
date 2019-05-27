@@ -7,13 +7,17 @@ using Newtonsoft.Json;
 
 namespace chess.pgn
 {
-    public class PgnSerialisationService
+    public interface IPgnSerialisationService
+    {
+        string SerializeAllGames(string text, bool expandedFormat);
+    }
+
+    public class PgnSerialisationService : IPgnSerialisationService
     {
         public string SerializeAllGames(string text, bool expandedFormat)
         {
             try
             {
-                // TODO: Move all this in to a service
                 var games = PgnReader.ReadAllGamesFromString(text);
                 var settings = new JsonSerializerSettings();
 

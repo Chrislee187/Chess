@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using chess.pgn;
 using chess.pgn.Json;
 using chess.pgn.Parsing;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,13 @@ namespace chess.web.Pages.Pgn
 {
     public class PgnConvertModel : PageModel
     {
+        private readonly IPgnSerialisationService _pgnSerialisationService;
+
+        public PgnConvertModel(IPgnSerialisationService pgnSerialisationService)
+        {
+            _pgnSerialisationService = pgnSerialisationService;
+        }
+
         [BindProperty]
         [Required]
         public string PgnText{ get; set; }
@@ -36,25 +44,7 @@ namespace chess.web.Pages.Pgn
                 return Page();
             }
 
-            try
-            {
-                // TODO: Move all this in to a service
-                var games = PgnReader.ReadAllGamesFromString(PgnText);
-                var settings = new JsonSerializerSettings();
-
-                settings.NullValueHandling = NullValueHandling.Ignore;
-                settings.DefaultValueHandling = DefaultValueHandling.Ignore;
-
-                PgJson = ExpandedFormat
-                    ? JsonConvert.SerializeObject(games, Formatting.Indented, settings)
-                    : JsonConvert.SerializeObject(games.Select(p => new PgnJson(p)), Formatting.Indented, settings);
-            }
-            catch (Exception e)
-            {
-                PgJson = $"Error: {e.Message}";
-            }
-
-
+            PgJson = _pgnSerialisationService.SerializeAllGames(PgnText, ExpandedFormat);
             return Page();
         }
 
