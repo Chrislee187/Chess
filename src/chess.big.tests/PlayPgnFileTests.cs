@@ -27,7 +27,7 @@ namespace chess.big.tests
             var filename = @"D:\Src\PGNArchive\PGN\Modern100.pgn";
             TestContext.Progress.WriteLine($"Playing all games from;");
             TestContext.Progress.WriteLine($"  {filename}");
-            PlayAllGames(PgnReader.FromFile(filename));
+            PlayAllGames(PgnReader.ReadAllGamesFromString(filename));
             TestContext.Progress.WriteLine($"  {filename} complete!");
         }
 
@@ -39,7 +39,7 @@ namespace chess.big.tests
             for (int i = 0; i < 100; i++)
             {
                 var sw = Stopwatch.StartNew();
-                PlayAllGames(PgnReader.FromString(WikiGame.PgnText));
+                PlayAllGames(PgnReader.ReadAllGamesFromString(WikiGame.PgnText));
                 times.Add(sw.Elapsed);
             }
 

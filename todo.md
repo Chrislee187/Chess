@@ -1,5 +1,7 @@
 # TODOS
-* Basic web integration test, ensure index.html exists and contains a chessboard and moves
+* Tests around parsing of PGN comments, there are some issues
+* Basic web integration tests for chess-web-api endpoints
+* Basic features tests chess-web
 * Create .feature tests for both the chess.engine and the chess.webapi
   * chess engine feature level tests, Pawn_can_move_two_squares_at_start(), Pawn_cannot_move_two_squares_after_start()
   * How to handle these need to be easy to implement and setup the required states, want to be able to create the rules of chess in feature tests
@@ -32,10 +34,9 @@
 * **IN PROGRESS** approx 30000 games so far, 450k to go! - validate game engine against LOTS of PGN games
 * proper error responses for invalid boards, moves etc. Just see a useless page on production boxes, drive out with the integration tests I still need to do.
 * Fix up team-city to use dotnet better not the existing msbuild/nunit etc. tasks
-* RESTplayer doesn't show promotions properly and the moves don't work because of this
+* RESTplayer doesn't show promotions properly
 * Proper feature flag mechanism NOT static flags
 * Feature level test that plays a full game through the API
-
 # Useful commands n stuff
 Plays all games from a large PGN file through the engine, showing per game timings and average, NB PGN files can contain tens of thousands of games so this can still take quite some time.
 Note: These tests are marked Explicit or Ignore to avoid slowing down development flow, you will need to comment the attributre out to run from the command line with the current NUNit runner at least, I can right click and run in the R# runner in VS
@@ -148,3 +149,5 @@ son
 * DONE ~~(BoardStateWrapper's)- NOTE: Refactored to use a ReadOnlyBoardState approach Was hoping to avoid it but looks like will need some sort of simple facade wrappers around the BoardState object for its interactions with validators and actions to allow better testing, they currently need a full create boardstate to test with.~~
 * DONE chess.tests.utils ~~Create a chess.engine.tests.utils project contain for stuff like the builders~~
 * DONE chess.engine.integration.tests ~~Create integration tests for the engine, ie. for tests that still use a full board state)~~
+* DONE chess-web.azurewebsites.net ~~Create 'Chris's Sandbox' site and starting reference the chess stuff from there~~
+  * ~~Reference PGN Convert uses Razor Pages (as opposed to Razor Views)~~

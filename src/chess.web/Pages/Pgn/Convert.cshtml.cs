@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.Encodings.Web;
 using chess.pgn.Json;
 using chess.pgn.Parsing;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace chess.webapi.Pages.Pgn
+namespace chess.web.Pages.Pgn
 {
     public class PgnConvertModel : PageModel
     {
@@ -23,8 +19,8 @@ namespace chess.webapi.Pages.Pgn
         public string PgJson { get; set; }
 
         [BindProperty]
-        [DisplayName("Expand moves")]
-        public bool ExpandMoves { get; set; }
+        [DisplayName("Expanded Format")]
+        public bool ExpandedFormat { get; set; }
         public IActionResult OnGet()
         {
             PgnText = WikiPgnText;
@@ -42,11 +38,16 @@ namespace chess.webapi.Pages.Pgn
 
             try
             {
+                // TODO: Move all this in to a service
                 var games = PgnReader.ReadAllGamesFromString(PgnText);
+                var settings = new JsonSerializerSettings();
 
-                PgJson = ExpandMoves
-                    ? JsonConvert.SerializeObject(games, Formatting.Indented)
-                    : JsonConvert.SerializeObject(games.Select(p => new PgnJson(p)), Formatting.Indented);
+                settings.NullValueHandling = NullValueHandling.Ignore;
+                settings.DefaultValueHandling = DefaultValueHandling.Ignore;
+
+                PgJson = ExpandedFormat
+                    ? JsonConvert.SerializeObject(games, Formatting.Indented, settings)
+                    : JsonConvert.SerializeObject(games.Select(p => new PgnJson(p)), Formatting.Indented, settings);
             }
             catch (Exception e)
             {
@@ -64,7 +65,7 @@ namespace chess.webapi.Pages.Pgn
                                       "[White \"Fischer, Robert J.\"]\n" +
                                       "[Black \"Spassky, Boris V.\"]\n" +
                                       "[Result \"1/2-1/2\"]\n\n" +
-                                      "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 { This opening is called the Ruy Lopez.}\n" +
+                                      "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6\n" +
                                       "4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Nb8 10. d4 Nbd7\n" +
                                       "11. c4 c6 12. cxb5 axb5 13. Nc3 Bb7 14. Bg5 b4 15. Nb1 h6 16. Bh4 c5 17. dxe5\n" +
                                       "Nxe4 18. Bxe7 Qxe7 19. exd6 Qf6 20. Nbd2 Nxd6 21. Nc4 Nxc4 22. Bxc4 Nb6\n" +

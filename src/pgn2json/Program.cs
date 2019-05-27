@@ -27,8 +27,9 @@ namespace pgn2json
 
             var games = PgnReader.ReadAllGamesFromString(reader.ReadToEnd());
 
-            bool expandMoves = false; // TODO: Need a CLI option for this and indentation
-            var pgnJson = expandMoves
+            // TODO: Need to make 'Expanded Format' part of the PgnJson handling
+            bool expandedFormat = false; // TODO: Need a CLI option for this and indentation
+            var pgnJson = expandedFormat
                 ? JsonConvert.SerializeObject(games, Formatting.Indented)
                 : JsonConvert.SerializeObject(games.Select(g => new PgnJson(g)), Formatting.Indented);
             writer.WriteLine(pgnJson);

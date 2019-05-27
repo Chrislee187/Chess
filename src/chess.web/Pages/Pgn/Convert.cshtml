@@ -1,5 +1,5 @@
 ﻿@page
-@model chess.webapi.Pages.Pgn.PgnConvertModel
+@model chess.web.Pages.Pgn.PgnConvertModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewBag.Title = "PGN Convert";
@@ -18,8 +18,9 @@
 <form method="POST">
     <h1>Enter PGN Text</h1>
     <textarea rows="20" cols="60" asp-for="PgnText">@Model.PgnText</textarea><br />
-    <label asp-for="ExpandMoves"></label>
-    <input asp-for="ExpandMoves" checked="@Model.ExpandMoves"/>
+    
+    <label asp-for="ExpandedFormat"  title="Expands the 'Moves' in to an array or 'Turns' for easier parsing"></label>
+    <input asp-for="ExpandedFormat" checked="@Model.ExpandedFormat"/>
     <button  type="submit">Convert</button><br />
     <h1>PGJSON</h1>
     <textarea rows="20" cols="60">@Model.PgJson</textarea>

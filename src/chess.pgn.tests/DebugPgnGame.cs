@@ -29,7 +29,7 @@ namespace chess.pgn.tests
  [BlackElo """"]
  [ECO ""E80""]
 
- 1.c4 g6 2.d4 Bg7 3.Nc3 d6 4.e4 Nf6 5.f3 e5 6.dxe5 dxe5 7.Qxd8+ Kxd8 8.Bg5 c6
+ 1.c4 g6 2.d4 Bg7 3.Nc3 d6 { this is a comment } 4.e4 Nf6 5.f3 e5 6.dxe5 dxe5 7.Qxd8+ Kxd8 8.Bg5 c6
  9.Nge2 Nd7 10.Rd1 Kc7 11.Nc1 Nc5 12.Be3 Nfd7 13.b4 Ne6 14.Nb3 Bf8 15.c5 a5
  16.Nxa5 Nexc5 17.a3 Ne6 18.Kf2 Be7 19.Rc1 Bg5 20.Bxg5 Nxg5 21.Bc4 Nb6 22.h4 Ne6
  23.Nb5+ Kb8 24.Nd6 Nxc4 25.Naxc4 f6 26.Rc3 Ra6 27.Rhc1 Rd8 28.Nxc8 Kxc8 29.a4 Kd7
