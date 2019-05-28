@@ -1,5 +1,4 @@
 # TODOS
-* Tests around parsing of PGN comments, there are some issues
 * Basic web integration tests for chess-web-api endpoints
 * Basic features tests chess-web
 * Create .feature tests for both the chess.engine and the chess.webapi
@@ -44,7 +43,7 @@ Note: These tests are marked Explicit or Ignore to avoid slowing down developmen
 dotnet test --filter Should_play_all_games_in_a_single_file --configuration RELEASE
 dotnet test --filter Measure_parse_game_time_100_games --configuration RELEASE
 
-# powershell doesn't support direct stdin redirects have to pipe it in
+# powershell doesn't support direct stdin redirects so have to pipe it in
 get-content D:\src\PGNArchive\pgn\Modern\Modern.pgn | dotnet run --project pgn2json -- >modern.pgn.j
 son
 ```
@@ -151,3 +150,4 @@ son
 * DONE chess.engine.integration.tests ~~Create integration tests for the engine, ie. for tests that still use a full board state)~~
 * DONE chess-web.azurewebsites.net ~~Create 'Chris's Sandbox' site and starting reference the chess stuff from there~~
   * ~~Reference PGN Convert uses Razor Pages (as opposed to Razor Views)~~
+* ~~DONE~~ Tests around parsing of PGN comments, there are some issues
