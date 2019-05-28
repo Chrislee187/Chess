@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -16,16 +15,15 @@ namespace chess.pgn
         public static IEnumerable<PgnTurn> Parse(string text, out PgnGameResult result)
         {
             var moveText = text.Replace("\r", " ").Replace("\n", " ");
-            var tokens = new Stack<string>(moveText.Split(new[] {' ', '.'}).Where(s => s.Trim().Any()).Reverse());
+            var tokens = new Stack<string>(moveText.Split(new[] {' ', '\t', '.'}).Where(s => s.Trim().Any()).Reverse());
 
             var turns = new List<PgnTurn>();
             PgnMove white = null;
             PgnMove black = null;
-            var commentToken = false;
-            var comment = "";
+            var annotationToken = false;
+            var annotation = "";
             var turnIdx = 0;
             result = PgnGameResult.Unknown;
-            var turnsParsed = 0;
             var tokenParser = new PgnTurnTokenParser();
 
             while (tokens.Any())
@@ -35,61 +33,78 @@ namespace chess.pgn
 
                 var tokenType = tokenParser.GetTokenType(token);
 
-                if (tokenType == PgnTurnTokenTypes.CommentEnd)
+                if (annotationToken && tokenType != PgnTurnTokenTypes.AnnotationEnd)
                 {
-                    commentToken = false;
-                }
-                else if (tokenType == PgnTurnTokenTypes.CommentStart)
-                {
-                    if (token.Length > 1) tokens.Push(token.Substring(1));
-                    commentToken = true;
-                }
-                else if (commentToken)
-                {
-                    comment = comment == string.Empty
+                    annotation = string.IsNullOrEmpty(annotation)
                         ? token
-                        : $"{comment} {token}";
+                        : $"{annotation} {token}";
+                    continue;
                 }
-                else if (tokenType == PgnTurnTokenTypes.TurnStart)
+
+                switch (tokenType)
                 {
-                    turnIdx = token.ToInt();
-                    if (white != null && black != null)
+                    case PgnTurnTokenTypes.AnnotationStart:
+                        if (token.Length > 1) tokens.Push(token.Substring(1));
+                        annotationToken = true;
+                        break;
+
+                    case PgnTurnTokenTypes.AnnotationEnd:
+                        if (token.Length > 1)
+                        {
+                            tokens.Push("}");
+                            tokens.Push(token.Substring(0,token.Length-1));
+                        }
+                        else
+                        {
+                            annotationToken = false;
+
+                            if (white != null && black == null)
+                            {
+                                white.Annotation = annotation;
+                            }
+                            else if (black != null)
+                            {
+                                black.Annotation = annotation;
+                            }
+                            annotation = null;
+                        }
+                        break;
+                    case PgnTurnTokenTypes.TurnStart:
                     {
-                        turns.Add(new PgnTurn(token.ToInt(), white, black));
-                        white = null;
-                        black = null;
-                        comment = "";
+                        turnIdx = token.ToInt();
+                        if (white != null && black != null)
+                        {
+                            turns.Add(new PgnTurn(token.ToInt(), white, black));
+                            white = black = null;
+                            annotation = null;
+                        }
+
+                        break;
                     }
+                    case PgnTurnTokenTypes.Notation when white == null:
+                        white = new PgnMove(token, annotation);
+                        break;
+                    case PgnTurnTokenTypes.Notation:
+                        black = new PgnMove(token, annotation);
+                        break;
+                    case PgnTurnTokenTypes.GameResult:
+                        result = PgnTurnTokenParser.ParseResult(token);
+                        turns.Add(new PgnTurn(turnIdx, white, black));
+                        white = black = null;
+                        annotation = null;
+                        break;
+                    default:
+                        throw new Exception($"Unexpected tokenType '{tokenType}'");
                 }
-                else if (tokenType == PgnTurnTokenTypes.Notation)
-                {
-                    if (white == null)
-                    {
-                        white = new PgnMove(token, comment);
-                    }
-                    else
-                    {
-                        black = new PgnMove(token, comment);
-                    }
-                }
-                else if (tokenType == PgnTurnTokenTypes.GameResult)
-                {
-                    result = PgnTurnTokenParser.ParseResult(token);
-                    turns.Add(new PgnTurn(turnIdx, white, black));
-                    turnsParsed++;
-                    white = null;
-                    black = null;
-                    comment = "";
-                }
-                else
-                {
-                    throw new Exception($"Unexpected tokenType '{tokenType}'");
-                }
+
             }
 
-            if (white != null || black != null)
+            if (white != null)
             {
-                turns.Add(new PgnTurn(turnIdx, white, black));
+                if (turns.All(t => t.Turn != turnIdx))
+                {
+                    turns.Add(new PgnTurn(turnIdx, white, black));
+                }
             }
 
             return turns;

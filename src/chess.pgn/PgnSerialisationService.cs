@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using chess.pgn.Json;
-using chess.pgn.Parsing;
 using Newtonsoft.Json;
 
 

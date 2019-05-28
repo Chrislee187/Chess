@@ -25,22 +25,4 @@ namespace chess.pgn.tests
             Assert.That(unparsedGame.MoveListSection, Is.EqualTo(moveListText));
         }
     }
-
-    public class PgnTurnParsingTests
-    {
-        [TestCase("1. d4 d5", 1, "d4", "d5")]
-        [TestCase("3. d4 d5", 3, "d4", "d5")]
-        public void Parse_should_handle_single_turn(string turnText, int turn, string white, string black)
-        {
-            var parsed = PgnTurn.Parse(turnText, out var result).First();
-
-            Assert.That(parsed.Turn, Is.EqualTo(turn));
-            Assert.That(parsed.White.San, Is.EqualTo(white));
-            Assert.Null(parsed.White.Comment);
-            Assert.That(parsed.Black.San, Is.EqualTo(black));
-            Assert.Null(parsed.Black.Comment);
-
-
-        }
-    }
 }

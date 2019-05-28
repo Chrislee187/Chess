@@ -2,8 +2,8 @@ namespace chess.pgn
 {
     public enum PgnTurnTokenTypes
     {
-        CommentStart = 1,
-        CommentEnd,
+        AnnotationStart = 1,
+        AnnotationEnd,
         TurnStart,
         GameResult,
         Notation

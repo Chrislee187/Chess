@@ -5,8 +5,8 @@ namespace chess.pgn
 
         public PgnTurnTokenTypes GetTokenType(string token)
         {
-            if (token.StartsWith("{")) return PgnTurnTokenTypes.CommentStart;
-            if (token == "}") return PgnTurnTokenTypes.CommentEnd;
+            if (token.StartsWith("{")) return PgnTurnTokenTypes.AnnotationStart;
+            if (token.EndsWith("}")) return PgnTurnTokenTypes.AnnotationEnd;
             if (token.ToInt() > 0) return PgnTurnTokenTypes.TurnStart;
             if (ParseResult(token) == PgnGameResult.Unknown) return PgnTurnTokenTypes.Notation;
 

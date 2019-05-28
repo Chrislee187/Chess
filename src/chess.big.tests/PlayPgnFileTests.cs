@@ -82,7 +82,7 @@ namespace chess.big.tests
         }
 
         [Test]
-        [Explicit("WARNING: Could take a VERY long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
+//        [Explicit("WARNING: Could take a VERY long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
         public void Should_play_all_games_in_a_single_file()
         {
             //  Last Test: 19/05/19 - 58.7377 Minutes - 3081 games    Average playtime (00:00:01.1312775) (DEBUG)
@@ -99,7 +99,7 @@ namespace chess.big.tests
             //  Last Test: 22/05/19 -  3.8212 - 776  Average playtime (00:00:00.2911059)
             //            var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";
 
-            var filename = @"D:\Src\PGNArchive\PGN\Adams\Adams.pgn";
+            var filename = @"D:\Src\PGNArchive\PGN\Modern100.pgn";
 
 
             TestContext.Progress.WriteLine($"Playing all games from;");
@@ -115,6 +115,7 @@ namespace chess.big.tests
             ChessGame chessGame = null;
             var gameIdx = 0;
             PgnGame currentGame = null;
+            var swTotal = Stopwatch.StartNew();
             try
             {
                 var timings = new List<TimeSpan>();
@@ -132,7 +133,7 @@ namespace chess.big.tests
                     timings.Add(elapsed);
                 }
 
-                TestContext.Progress.WriteAsync($"Average playtime ({new TimeSpan(Convert.ToInt64(timings.Average(ts => ts.Ticks)))})");
+                TestContext.Progress.WriteLine($"Average playtime ({new TimeSpan(Convert.ToInt64(timings.Average(ts => ts.Ticks)))})");
 
             }
             catch
@@ -144,7 +145,7 @@ namespace chess.big.tests
                 throw;
             }
 
-            TestContext.WriteLine("Finished");
+            TestContext.WriteLine($"Finished, Total Time: {swTotal.Elapsed}");
         }
 
         private static void PlayTurns(PgnGame game, ChessGame chessGame)

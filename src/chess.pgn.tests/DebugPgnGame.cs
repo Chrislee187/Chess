@@ -19,19 +19,21 @@ namespace chess.pgn.tests
         public void DebugPgnGameTest()
         {
             // FeatureFlags.ParalleliseRefreshAllPaths = true;
-            var pgnText = @"[Event ""London WFW""]
- [Site ""London""]
- [Date ""1989.??.??""]
- [Round ""?""]
- [White ""Adams, Michael""]
- [Black ""Hodgson, Julian M""]
- [Result ""1/2-1/2""]
- [WhiteElo ""2495""]
- [BlackElo ""2545""]
- [ECO ""C63""]
- 1.e4 e5 2.Nf3 Nc6 3.Bb5 f5 4.d3 fxe4 5.dxe4 Nf6 6.O-O  1/2-1/2
-
-";
+            var pgnText = @"[Event ""RUS-ch02""]
+[Site ""Moscow""]
+[Date ""1901.??.??""]
+[Round ""10""]
+[White ""Grigoriev, B.""]
+[Black ""Yankovich, Boris""]
+[Result ""1-0""]
+[WhiteElo """"]
+[BlackElo """"]
+[ECO ""A42""]
+1.e4 d6 2.d4 g6 3.c4 Bg7 4.Nc3 Nc6 5.Be3 e5 6.d5 Nce7 7.c5 Nh6 8.f3 f5 9.cxd6 cxd6
+10.Bb5+ Kf8 11.Qa4 f4 12.Bf2 Bf6 13.Nge2 Kg7 14.Rc1 a6 15.O-O g5 16.Rc2 Rb8
+17.Bd3 Nf7 18.Rfc1 Qd7 19.Bb6 Qxa4 20.Nxa4 Bd7 21.Nec3 Rbc8 22.Ba5 Bxa4 23.Nxa4 Rxc2
+24.Rxc2 Rc8 25.Nb6 Rxc2 26.Bxc2 h5 27.Ba4 g4 28.Bd7 gxf3 29.gxf3 Ng5 30.Kf2 Kf8
+31.Nc4 Ng6 32.Bc8 Be7 33.Bxb7 Nh4 34.Nd2 Nh3+ 35.Kf1  1-0";
 
             PlayGame(PgnGame.ReadAllGamesFromString(pgnText).First());
         }
