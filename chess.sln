@@ -46,6 +46,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.games.db", "src\chess
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.web", "src\chess.web\chess.web.csproj", "{4A197FA9-21C2-4374-9479-AC03B02DC9AB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.smoketester", "src\chess.smoketester\chess.smoketester.csproj", "{2DB1CD11-6B91-4C4B-9761-5DB80AFFAF1B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +114,10 @@ Global
 		{4A197FA9-21C2-4374-9479-AC03B02DC9AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A197FA9-21C2-4374-9479-AC03B02DC9AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A197FA9-21C2-4374-9479-AC03B02DC9AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DB1CD11-6B91-4C4B-9761-5DB80AFFAF1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DB1CD11-6B91-4C4B-9761-5DB80AFFAF1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DB1CD11-6B91-4C4B-9761-5DB80AFFAF1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DB1CD11-6B91-4C4B-9761-5DB80AFFAF1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

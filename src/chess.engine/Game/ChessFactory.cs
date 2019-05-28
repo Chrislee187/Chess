@@ -46,21 +46,30 @@ namespace chess.engine.Game
                 Logger<ChessPathValidator>(logger),
                 moveValidationProvider ?? MoveValidationProvider(logger)
             );
+//
+//        private static ChessPathsValidator _pathsValidatorSingleton;
+//        public static ChessPathsValidator PathsValidator(LoggerType logger = LoggerType.Injected,
+//            IPathValidator<ChessPieceEntity> pathValidator = null
+//            )
+//        {
+//            if (_pathsValidatorSingleton != null) return _pathsValidatorSingleton;
+//
+//            _pathsValidatorSingleton = new ChessPathsValidator(
+//                Logger<ChessPathsValidator>(logger),
+//                pathValidator ?? PathValidator(null, logger)
+//            );
+//            return _pathsValidatorSingleton;
+//        }
 
-        private static ChessPathsValidator _pathsValidatorSingleton;
         public static ChessPathsValidator PathsValidator(LoggerType logger = LoggerType.Injected,
             IPathValidator<ChessPieceEntity> pathValidator = null
-            )
+        )
         {
-            if (_pathsValidatorSingleton != null) return _pathsValidatorSingleton;
-
-            _pathsValidatorSingleton = new ChessPathsValidator(
+            return new ChessPathsValidator(
                 Logger<ChessPathsValidator>(logger),
                 pathValidator ?? PathValidator(null, logger)
             );
-            return _pathsValidatorSingleton;
         }
-
         public static ChessRefreshAllPaths ChessRefreshAllPaths(LoggerType logger = LoggerType.Injected,
             ChessBoardActionProvider chessBoardActionProvider = null
             )

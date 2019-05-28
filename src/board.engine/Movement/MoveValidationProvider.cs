@@ -9,7 +9,7 @@ namespace board.engine.Movement
     public class MoveValidationProvider<TEntity> : IMoveValidationProvider<TEntity>
        where TEntity : class, IBoardEntity
     {
-        protected static Dictionary<int, IEnumerable<BoardMovePredicate<TEntity>>> Validators;
+        protected Dictionary<int, IEnumerable<BoardMovePredicate<TEntity>>> Validators;
 
         public MoveValidationProvider()
         {

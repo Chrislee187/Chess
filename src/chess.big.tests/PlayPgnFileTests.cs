@@ -82,7 +82,7 @@ namespace chess.big.tests
         }
 
         [Test]
-//        [Explicit("WARNING: Could take a VERY long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
+        [Explicit("WARNING: Could take a VERY long time.")] // NEVER COMMIT THIS !!!!!!!!!!!!!!!!!!!!!!!!!
         public void Should_play_all_games_in_a_single_file()
         {
             //  Last Test: 19/05/19 - 58.7377 Minutes - 3081 games    Average playtime (00:00:01.1312775) (DEBUG)
