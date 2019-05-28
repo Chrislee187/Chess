@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using board.engine;
 using chess.engine.Extensions;
 using chess.engine.Game;
@@ -42,7 +43,7 @@ namespace chess.pgn.tests
  72.Kd6 Kf8 73.Kc5 Kg7 74.Kxb5 Nd5 75.Kc6  1-0
 ";
 
-            PlayAllGames(PgnReader.FromString(pgnText));
+            PlayGame(PgnGame.ReadAllGamesFromString(pgnText).First());
         }
 
         [Test]
@@ -69,9 +70,8 @@ namespace chess.pgn.tests
 
         }
 
-        private static void PlayAllGames(PgnReader pgnReader)
+        private static void PlayGame(PgnGame game)
         {
-            var game = pgnReader.ReadGame();
 
             var chessGame = ChessFactory.NewChessGame();
 
@@ -81,7 +81,7 @@ namespace chess.pgn.tests
             }
             catch
             {
-                Console.WriteLine($"Full PGN Text:\n{pgnReader.LastGameText}");
+                Console.WriteLine($"Full PGN Text:\n{game.PgnText}");
                 throw;
             }
             Assert.Pass();
@@ -145,7 +145,7 @@ namespace chess.pgn.tests
  44.Rxh5 a3 45.bxa3 Ra7 46.Nd6 Rxa3 47.Nxc4 bxc4 48.Rh3 Kf8 49.Ke2 Ke7 50.Kd2 Ke6
  51.Rh4 Ra2+ 52.Ke3  1-0
 ";
-            PlayAllGames(PgnReader.FromString(pgnText));
+            PlayGame(PgnGame.ReadAllGamesFromString(pgnText).First());
 
         }
 

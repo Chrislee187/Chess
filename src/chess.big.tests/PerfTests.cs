@@ -62,7 +62,8 @@ namespace chess.big.tests
             var stopwatch = Stopwatch.StartNew();
             try
             {
-                PlaySingleGame(PgnReader.FromString(WikiGame.PgnText));
+                var pgnGame = PgnGame.ReadAllGamesFromString(WikiGame.PgnText).First();
+                PlaySingleGame(pgnGame);
             }
             catch (Exception e)
             {
@@ -78,29 +79,19 @@ namespace chess.big.tests
             return elapsed;
         }
 
-        private void PlaySingleGame(PgnReader reader)
+        private void PlaySingleGame(PgnGame game)
         {
-            PgnGame game = null;
             ChessGame chessGame = null;
-            var gameIdx = 0;
             try
             {
-                game = reader.ReadGame();
-                while (game != null)
-                {
-                    gameIdx++;
-
-                    chessGame = ChessFactory.NewChessGame();
-                    PlayTurns(game, chessGame);
-
-                    game = reader.ReadGame();
-                }
+                chessGame = ChessFactory.NewChessGame();
+                PlayTurns(game, chessGame);
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Game: #{gameIdx} / {game?.ToString() ?? ""}");
+                Console.WriteLine($"Game: {game?.ToString() ?? ""}");
                 Console.WriteLine($"Board:\n{chessGame.ToTextBoard()}");
-                Console.WriteLine($"Full PGN Text:\n{reader.LastGameText}");
+                Console.WriteLine($"Full PGN Text:\n{game.PgnText}");
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
                 throw;

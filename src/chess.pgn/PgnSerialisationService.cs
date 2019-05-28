@@ -18,7 +18,7 @@ namespace chess.pgn
         {
             try
             {
-                var games = PgnReader.ReadAllGamesFromString(text);
+                var games = PgnGame.ReadAllGamesFromString(text);
                 var settings = new JsonSerializerSettings();
 
                 settings.NullValueHandling = NullValueHandling.Ignore;

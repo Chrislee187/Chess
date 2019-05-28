@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using chess.pgn;
 using chess.pgn.Parsing;
@@ -30,16 +33,10 @@ namespace chess.big.tests
 
                 try
                 {
-                    var pgnReader = PgnReader.FromFile(file);
+                    var games = PgnGame.ReadAllGamesFromString(File.ReadAllText(file));
 
-                    var game = pgnReader.ReadGame();
-                    while (game != null)
-                    {
-                        fileGamesCount++;
                         // DumpGameInfo(game);
-                        game = pgnReader.ReadGame();
-                    }
-                    gamesCount += fileGamesCount;
+                    gamesCount += games.Count();
                 }
                 catch 
                 {
@@ -55,9 +52,9 @@ namespace chess.big.tests
             Assert.That(gamesCount, Is.GreaterThan(0), "No games processed");
         }
 
-        [TestCase(@"D:\Src\PGNArchive\PGN\Adams\Adams.pgn")]
+//        [TestCase(@"D:\Src\PGNArchive\PGN\Adams\Adams.pgn")]
         [Explicit]
-//        [TestCase(@"D:\Src\PGNArchive\PGN\Nielsen\Nielsen.pgn")]
+        [TestCase(@"D:\Src\PGNArchive\PGN\Nielsen\Nielsen.pgn")]
         public void Parse_single_file(string filename)
         {
             ParseSingleFile(filename);
@@ -69,16 +66,8 @@ namespace chess.big.tests
             var count = 1;
             try
             {
-                var pgnReader = PgnReader.FromFile(file);
-
-                game = pgnReader.ReadGame();
-
-                while (game != null)
-                {
-//                    DumpGameInfo(game);
-                    game = pgnReader.ReadGame();
-                    count++;
-                }
+                var games = PgnGame.ReadAllGamesFromString(File.ReadAllText(file));
+                    count = games.Count();
             }
             catch 
             {

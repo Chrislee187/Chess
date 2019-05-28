@@ -10,7 +10,7 @@ namespace chess.pgn.Json
 
         public PgnJson(PgnGame game)
         {
-            game.TagPairs.ToList().ForEach(tp => Add(tp.Key, tp.Value));
+            game.TagPairs.ToList().ForEach(tp => Add(tp.Name, tp.Value));
 
             Add("Moves", game.MoveText);
 

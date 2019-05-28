@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace chess.pgn
@@ -32,6 +33,32 @@ namespace chess.pgn
                 value = value.Substring(0, value.Length - 1).Trim();
             }
             return new PgnTagPair(name, value);
+        }
+
+        public static IEnumerable<PgnTagPair> ParseMultiple(string text)
+        {
+            var pairs = text.Split(']');
+            var tps = new List<PgnTagPair>();
+
+            if (pairs.Length > 0)
+            {
+                foreach (var pair in pairs)
+                {
+                    if (!string.IsNullOrEmpty(pair))
+                    {
+                        if (pair.Trim().First() == '[')
+                        {
+                            tps.Add(Parse(pair));
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return tps;
         }
     }
 }

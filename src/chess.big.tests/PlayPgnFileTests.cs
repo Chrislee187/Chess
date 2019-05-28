@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using chess.engine.Game;
 using chess.pgn;
-using chess.pgn.Parsing;
 using chess.tests.utils.TestData;
 using NUnit.Framework;
 
@@ -27,7 +25,7 @@ namespace chess.big.tests
             var filename = @"D:\Src\PGNArchive\PGN\Modern100.pgn";
             TestContext.Progress.WriteLine($"Playing all games from;");
             TestContext.Progress.WriteLine($"  {filename}");
-            PlayAllGames(PgnReader.ReadAllGamesFromString(filename));
+            PlayAllGames(PgnGame.ReadAllGamesFromFile(filename));
             TestContext.Progress.WriteLine($"  {filename} complete!");
         }
 
@@ -39,7 +37,7 @@ namespace chess.big.tests
             for (int i = 0; i < 100; i++)
             {
                 var sw = Stopwatch.StartNew();
-                PlayAllGames(PgnReader.ReadAllGamesFromString(WikiGame.PgnText));
+                PlayAllGames(PgnGame.ReadAllGamesFromString(WikiGame.PgnText));
                 times.Add(sw.Elapsed);
             }
 
@@ -69,7 +67,7 @@ namespace chess.big.tests
                     fileCount++;
 
                     var text = File.ReadAllText(file);
-                    PlayAllGames(PgnReader.ReadAllGamesFromString(text));
+                    PlayAllGames(PgnGame.ReadAllGamesFromString(text));
                     fileSw.Stop();
                     fileTimes.Add(fileSw.Elapsed);
                     TestContext.Progress.WriteLine("*************************************");
@@ -106,7 +104,7 @@ namespace chess.big.tests
 
             TestContext.Progress.WriteLine($"Playing all games from;");
             TestContext.Progress.WriteLine($"  {filename}");
-            PlayAllGames(PgnReader.ReadAllGamesFromString(filename));
+            PlayAllGames(PgnGame.ReadAllGamesFromString(filename));
             TestContext.Progress.WriteLine($"  {filename} complete!");
         }
 
