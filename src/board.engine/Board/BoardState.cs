@@ -52,7 +52,7 @@ namespace board.engine.Board
             // NOTE: Do not parallise the Values.Select() it makes the clone slower!
             var clonedState = new BoardState<TEntity>(
                 _pathsValidator, 
-                _items.Values.Select(item => item.Clone() as LocatedItem<TEntity>));
+                _items.Values.Select(item => item.Clone() as LocatedItem<TEntity>).ToList());
 
             return clonedState;
         }
@@ -158,21 +158,6 @@ namespace board.engine.Board
                 {'q', 6},
                 {'Q', 6},
             };
-
-            public static bool ContainsPiece(char p)
-            {
-                return PieceNames.ContainsKey(p);
-            }
-
-            public static int FromChar(char c)
-            {
-                return PieceNames[c];
-            }
-
-            public static int ToOwner(char c)
-            {
-                return char.IsUpper(c) ? 0 : 1;
-            }
 
             public static char ToChar(int piece, int owner)
             {

@@ -15,7 +15,6 @@ namespace spiker
         static void Main(string[] args)
         {
             var logger = AppContainer.GetService<ILogger<ChessGame>>();
-            var gameStateService = AppContainer.GetService<IPlayerStateService>();
             var checkDetectionService = AppContainer.GetService<ICheckDetectionService>();
             var engineProvider = AppContainer.GetService<IBoardEngineProvider<ChessPieceEntity>>();
             var entityFactory = AppContainer.GetService<IBoardEntityFactory<ChessPieceEntity>>();

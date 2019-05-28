@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using board.engine;
 using board.engine.Board;
-using chess.engine;
 using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
@@ -15,19 +14,16 @@ namespace chess.webapi.Services
         private readonly ILogger<ChessGame> _chessGameLogger;
         private readonly IBoardEngineProvider<ChessPieceEntity> _boardEngineProvider;
         private readonly IBoardEntityFactory<ChessPieceEntity> _entityFactory;
-        private readonly IPlayerStateService _playerStateService;
         private readonly ICheckDetectionService _checkDetectionService;
 
         public ChessGameService(
             ILogger<ChessGameService> logger,
-            ILogger<ChessGame> chessGameLogger, 
-            IPlayerStateService playerStateService,
-            ICheckDetectionService   checkDetectionService,
+            ILogger<ChessGame> chessGameLogger,
+            ICheckDetectionService  checkDetectionService,
             IBoardEngineProvider<ChessPieceEntity> boardEngineProvider,
             IBoardEntityFactory<ChessPieceEntity> entityFactory
             )
         {
-            _playerStateService = playerStateService;
             _checkDetectionService = checkDetectionService;
             _entityFactory = entityFactory;
             _chessGameLogger = chessGameLogger;

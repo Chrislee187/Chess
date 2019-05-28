@@ -102,7 +102,7 @@ namespace chess.engine.tests.Algebraic
         [TestCase("e8=Z")]
         public void ShouldFailParsing(string notation)
         {
-            Assert.False(StandardAlgebraicNotation.TryParse(notation, out var an));
+            Assert.False(StandardAlgebraicNotation.TryParse(notation, out _));
             Assert.That(() => StandardAlgebraicNotation.Parse(notation), Throws.Exception);
         }
 

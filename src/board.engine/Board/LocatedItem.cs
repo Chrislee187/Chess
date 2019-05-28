@@ -57,16 +57,6 @@ namespace board.engine.Board
                 => itm.Paths.ContainsMoveTo(location));
         }
 
-        public static IEnumerable<LocatedItem<TEntity>>
-            ThatCanMoveTypeTo<TEntity>(
-                this IEnumerable<LocatedItem<TEntity>> items,
-                BoardLocation location,
-                params int[] moveTypesAndActions)
-            where TEntity : class, IBoardEntity
-        {
-            return items.Where(itm
-                => itm.Paths.ContainsMoveTypeTo(location, moveTypesAndActions));
-        }
 
         public static IEnumerable<LocatedItem<TEntity>>
             ForOwner<TEntity>(
@@ -75,25 +65,6 @@ namespace board.engine.Board
             where TEntity : class, IBoardEntity
         {
             return items.Where(itm => itm.Item.Owner == owner);
-        }
-
-        public static IEnumerable<BoardLocation>
-            AllDestinations<TEntity>(
-                this IEnumerable<LocatedItem<TEntity>> items)
-            where TEntity : class, IBoardEntity
-        {
-            return items
-                .SelectMany(fi => fi.Paths.FlattenMoves())
-                .Select(m => m.To);
-        }
-        public static LocatedItem<TEntity>
-            FindItem<TEntity>(
-                this IEnumerable<LocatedItem<TEntity>> items,
-                int owner, int entityType)
-            where TEntity : class, IBoardEntity
-        {
-            return items
-                .Single(m => m.Item.EntityType == entityType && m.Item.Owner == owner);
         }
 
     }
