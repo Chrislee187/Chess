@@ -32,6 +32,15 @@ namespace chess.engine.SAN
         private SanMoveTypes _moveType = SanMoveTypes.Move;
 
         private bool _inCheck;
+        /// <summary>
+        ///             
+        /// </summary>
+        /// <param name="boardState"></param>
+        /// <param name="move"></param>
+        /// <param name="performCheckTest">
+        /// This has a small performance impact when reverse engineering SAN from the board move
+        /// (approx 20ms a game on my rig) which is why it's optional and defaults to off</param>
+        /// <returns></returns>
         public StandardAlgebraicNotation BuildFrom(IBoardState<ChessPieceEntity> boardState, BoardMove move, bool performCheckTest = false)
         {
             var fromItem = boardState.GetItem(move.From);
@@ -78,8 +87,7 @@ namespace chess.engine.SAN
             {
                 promotionPiece = data.PieceName;
             }
-            // Note: This has a small performance impact when reverse engineering SAN from move co-ords
-            // (approx 20ms a game on my rig) which is why it's optional and defaults to off
+
             var inCheck = performCheckTest && _checkDetectionService.DoesMoveCauseCheck(boardState, move);
             return new StandardAlgebraicNotation(piece, fromFile, fromRank, toFile, toRank, moveType, promotionPiece, inCheck );
         }

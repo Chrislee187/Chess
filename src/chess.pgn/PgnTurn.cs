@@ -24,14 +24,13 @@ namespace chess.pgn
             var annotation = "";
             var turnIdx = 0;
             result = PgnGameResult.Unknown;
-            var tokenParser = new PgnTurnTokenParser();
 
             while (tokens.Any())
             {
                 // Number, '{}', Alpha, PgnGameResult
                 var token = tokens.Pop();
 
-                var tokenType = tokenParser.GetTokenType(token);
+                var tokenType = PgnTurnTokenParser.GetTokenType(token);
 
                 if (annotationToken && tokenType != PgnTurnTokenTypes.AnnotationEnd)
                 {

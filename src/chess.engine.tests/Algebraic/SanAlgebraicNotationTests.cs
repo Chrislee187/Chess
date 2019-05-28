@@ -130,14 +130,13 @@ namespace chess.engine.tests.Algebraic
         [TestCase("R4h2")]
         [TestCase("Bab2")]
         [TestCase("Bhxg7")]
-        [TestCase("axb4")]
+        [TestCase("axb4+")]
         public void Should_parse_san_notation(string san)
         {
             Assert.That(StandardAlgebraicNotation.Parse(san).ToNotation(), Is.EqualTo(san));
         }
 
         [Test]
-        [Ignore("Feature currently disabled")]
         public void Should_put_plus_on_end_of_moves_that_cause_check()
         {
             // TODO: Better way to check this, than using a full board.
@@ -156,7 +155,7 @@ namespace chess.engine.tests.Algebraic
             var from = "C4".ToBoardLocation();
             var piece = game.BoardState.GetItem(from);
             var boardMove = piece.Paths.FindMove(from, "f7".ToBoardLocation());
-            var san = StandardAlgebraicNotation.ParseFromGameMove(game.BoardState, boardMove);
+            var san = StandardAlgebraicNotation.ParseFromGameMove(game.BoardState, boardMove, true);
             Assert.That(san.ToNotation(), Is.EqualTo("Bxf7+"));
         }
 

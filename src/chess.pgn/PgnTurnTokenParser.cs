@@ -3,7 +3,7 @@ namespace chess.pgn
     public class PgnTurnTokenParser
     {
 
-        public PgnTurnTokenTypes GetTokenType(string token)
+        public static PgnTurnTokenTypes GetTokenType(string token)
         {
             if (token.StartsWith("{")) return PgnTurnTokenTypes.AnnotationStart;
             if (token.EndsWith("}")) return PgnTurnTokenTypes.AnnotationEnd;

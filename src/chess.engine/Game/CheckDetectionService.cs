@@ -93,7 +93,7 @@ namespace chess.engine.Game
             _moveService.Move(clone, move);
 
             var king = clone.GetItems((int)attackingPlayer.Enemy(), (int)ChessPieceName.King).Single();
-            return _playerStateService.IsLocationUnderCheck(boardState, king.Location, king.Item.Player).result;
+            return _playerStateService.IsLocationUnderCheck(clone, king.Location, king.Item.Player).result;
         }
     }
 

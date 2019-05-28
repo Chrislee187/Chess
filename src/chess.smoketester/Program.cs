@@ -65,11 +65,15 @@ namespace chess.smoketester
             {
 
                 chessGame = ChessFactory.NewChessGame(loggerType);
-                games.AsParallel().ForAll(game =>
+                games.ToList().ForEach(game =>
                 {
-                    Console.Write(".");
+
                     lastPgnText = game.PgnText;
                     gameIdx++;
+                    Console.Write(gameIdx % 1000 == 0 ? "M"
+                        : gameIdx % 500 == 0 ? "D"
+                        : gameIdx % 100 == 0 ? "C"
+                        : ".");
                     chessGame = ChessFactory.NewChessGame(loggerType);
                     var sw = Stopwatch.StartNew();
 
