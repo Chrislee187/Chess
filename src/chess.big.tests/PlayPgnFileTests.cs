@@ -99,12 +99,12 @@ namespace chess.big.tests
             //  Last Test: 22/05/19 -  3.8212 - 776  Average playtime (00:00:00.2911059)
             //            var filename = @"D:\Src\PGNArchive\PGN\Alburt\Alburt.pgn";
 
-            var filename = @"D:\Src\PGNArchive\PGN\Modern\Modern.pgn";
+            var filename = @"D:\Src\PGNArchive\PGN\Adams\Adams.pgn";
 
 
             TestContext.Progress.WriteLine($"Playing all games from;");
             TestContext.Progress.WriteLine($"  {filename}");
-            PlayAllGames(PgnGame.ReadAllGamesFromString(filename));
+            PlayAllGames(PgnGame.ReadAllGamesFromFile(filename));
             TestContext.Progress.WriteLine($"  {filename} complete!");
         }
 

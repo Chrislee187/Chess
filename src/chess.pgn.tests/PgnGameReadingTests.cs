@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace chess.pgn.tests
 {
-    public class PgnReaderTests
+    public class PgnGameReadingTests
     {
         [Test]
         public void Wiki_games_FromString_works()

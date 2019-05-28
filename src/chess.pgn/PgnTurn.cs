@@ -16,7 +16,7 @@ namespace chess.pgn
         public static IEnumerable<PgnTurn> Parse(string text, out PgnGameResult result)
         {
             var moveText = text.Replace("\r", " ").Replace("\n", " ");
-            var tokens = new Stack<string>(moveText.Split(new[] { ' ', '.' }).Where(s => s.Trim().Any()).Reverse());
+            var tokens = new Stack<string>(moveText.Split(new[] {' ', '.'}).Where(s => s.Trim().Any()).Reverse());
 
             var turns = new List<PgnTurn>();
             PgnMove white = null;
@@ -25,8 +25,8 @@ namespace chess.pgn
             var comment = "";
             var turnIdx = 0;
             result = PgnGameResult.Unknown;
-
-            var tokenParser = new PgnTurnTokenParser(); 
+            var turnsParsed = 0;
+            var tokenParser = new PgnTurnTokenParser();
 
             while (tokens.Any())
             {
@@ -53,36 +53,43 @@ namespace chess.pgn
                 else if (tokenType == PgnTurnTokenTypes.TurnStart)
                 {
                     turnIdx = token.ToInt();
-                    if (turnIdx != 1)
+                    if (white != null && black != null)
                     {
-                        turns.Add(new PgnTurn(turnIdx - 1, white, black));
+                        turns.Add(new PgnTurn(token.ToInt(), white, black));
                         white = null;
                         black = null;
                         comment = "";
                     }
                 }
-                else
+                else if (tokenType == PgnTurnTokenTypes.Notation)
                 {
-                    if (tokenType == PgnTurnTokenTypes.Notation)
+                    if (white == null)
                     {
-                        if (white == null)
-                        {
-                            white = new PgnMove(token, comment);
-                        }
-                        else
-                        {
-                            black = new PgnMove(token, comment);
-                        }
+                        white = new PgnMove(token, comment);
                     }
                     else
                     {
-                        result = PgnTurnTokenParser.ParseResult(token);
-                        turns.Add(new PgnTurn(turnIdx, white, black));
-                        white = null;
-                        black = null;
-                        comment = "";
+                        black = new PgnMove(token, comment);
                     }
                 }
+                else if (tokenType == PgnTurnTokenTypes.GameResult)
+                {
+                    result = PgnTurnTokenParser.ParseResult(token);
+                    turns.Add(new PgnTurn(turnIdx, white, black));
+                    turnsParsed++;
+                    white = null;
+                    black = null;
+                    comment = "";
+                }
+                else
+                {
+                    throw new Exception($"Unexpected tokenType '{tokenType}'");
+                }
+            }
+
+            if (white != null || black != null)
+            {
+                turns.Add(new PgnTurn(turnIdx, white, black));
             }
 
             return turns;
@@ -99,6 +106,5 @@ namespace chess.pgn
             White = white;
             Black = black;
         }
-
     }
 }
