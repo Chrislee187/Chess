@@ -68,3 +68,5 @@ packages/
 
 #Test files
 *.testsettings
+/src/chess.games.db/chessgames.db
+/src/chess.games.db.pgnimporter/chessgames.db

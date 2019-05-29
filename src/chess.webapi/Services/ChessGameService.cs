@@ -49,7 +49,7 @@ namespace chess.webapi.Services
 
         public ChessWebApiResult PlayMove(string board, string move)
         {
-            var game= CreateChessGame(board);
+            var game= ChessGameConvert.Deserialise(board);
             var msg = game.Move(move);
             
             return new ChessWebApiResult(
@@ -62,28 +62,24 @@ namespace chess.webapi.Services
 
         public ChessWebApiResult GetMoves(string board)
         {
-            var game = CreateChessGame(board);
+            var game = ChessGameConvert.Deserialise(board);
             var items = game.BoardState.GetItems();
             return new ChessWebApiResult(game, game.CurrentPlayer, string.Empty, items.ToArray());
         }
 
         public ChessWebApiResult GetMovesForPlayer(string board, Colours forPlayer)
         {
-            var game = CreateChessGame(board);
+            var game = ChessGameConvert.Deserialise(board);
             var items = game.BoardState.GetItems((int) forPlayer);
             return new ChessWebApiResult(game, forPlayer, string.Empty, items.ToArray());
         }
 
         public ChessWebApiResult GetMovesForLocation(string board, string location)
         {
-            var game = CreateChessGame(board);
+            var game = ChessGameConvert.Deserialise(board);
             var loc = location.ToBoardLocation();
             var item = game.BoardState.GetItem(loc);
             return new ChessWebApiResult(game,item.Item.Player, string.Empty, item);
         }
-
-
-        private static ChessGame CreateChessGame(string board)
-            => ChessGameConvert.Deserialise(board);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace chess.games.db.Entities
 {
-    public class Event : DbEntity
+    public class Player : DbEntity
     {
         public string Name { get; set; }
     }

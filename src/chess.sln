@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "board.engine", "src\board.engine\board.engine.csproj", "{2170319A-ED97-4C14-8A81-4C641185552A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "board.engine", "board.engine\board.engine.csproj", "{2170319A-ED97-4C14-8A81-4C641185552A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine", "src\chess.engine\chess.engine.csproj", "{D8954B12-FD49-41CA-A428-7BBA911E8501}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine", "chess.engine\chess.engine.csproj", "{D8954B12-FD49-41CA-A428-7BBA911E8501}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{70BA6ADB-8EE8-4D80-B52B-B31C76AD6209}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,41 +14,47 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Why.MD = Why.MD
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine.tests", "src\chess.engine.tests\chess.engine.tests.csproj", "{8B251D3F-A1F2-446F-99FB-9611E8808087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine.tests", "chess.engine.tests\chess.engine.tests.csproj", "{8B251D3F-A1F2-446F-99FB-9611E8808087}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.webapi", "src\chess.webapi\chess.webapi.csproj", "{57DC1D3B-DC4D-4C47-9D6C-223E5A0FF408}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.webapi", "chess.webapi\chess.webapi.csproj", "{57DC1D3B-DC4D-4C47-9D6C-223E5A0FF408}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spiker", "src\spiker\spiker.csproj", "{7E7E9C0A-088D-4CAF-9D2F-76BCEA4D1CE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spiker", "spiker\spiker.csproj", "{7E7E9C0A-088D-4CAF-9D2F-76BCEA4D1CE3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "board.engine.tests", "src\board.engine.tests\board.engine.tests.csproj", "{FF3D56BD-48FC-47E5-B7C6-53B7D445B545}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "board.engine.tests", "board.engine.tests\board.engine.tests.csproj", "{FF3D56BD-48FC-47E5-B7C6-53B7D445B545}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "board.engine.tests.utils", "src\board.engine.tests.utils\board.engine.tests.utils.csproj", "{4AF0F19E-AE64-4918-814B-CEF14FE17556}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "board.engine.tests.utils", "board.engine.tests.utils\board.engine.tests.utils.csproj", "{4AF0F19E-AE64-4918-814B-CEF14FE17556}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.pgn", "src\chess.pgn\chess.pgn.csproj", "{2961134A-E6FB-4B5B-AC7B-B50F71A38240}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.pgn", "chess.pgn\chess.pgn.csproj", "{2961134A-E6FB-4B5B-AC7B-B50F71A38240}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.pgn.tests", "src\chess.pgn.tests\chess.pgn.tests.csproj", "{B19793D5-6C72-49DC-A31F-1F1C386D4B1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.pgn.tests", "chess.pgn.tests\chess.pgn.tests.csproj", "{B19793D5-6C72-49DC-A31F-1F1C386D4B1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.big.tests", "src\chess.big.tests\chess.big.tests.csproj", "{BCB36558-8F47-4239-978F-D4D2F0CADA33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.big.tests", "chess.big.tests\chess.big.tests.csproj", "{BCB36558-8F47-4239-978F-D4D2F0CADA33}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.tests.utils", "src\chess.tests.utils\chess.tests.utils.csproj", "{5FC357DA-1D4D-4A16-AE0A-CED5F4971C3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.tests.utils", "chess.tests.utils\chess.tests.utils.csproj", "{5FC357DA-1D4D-4A16-AE0A-CED5F4971C3E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "board", "board", "{52364696-01F5-4BE8-8482-4C4470F1F435}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Board Engine", "Board Engine", "{52364696-01F5-4BE8-8482-4C4470F1F435}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "chess", "chess", "{D66F8692-7592-4977-A200-38AF88CA55ED}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chess Engine", "Chess Engine", "{D66F8692-7592-4977-A200-38AF88CA55ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine.integration.tests", "src\chess.engine.integration.tests\chess.engine.integration.tests.csproj", "{D4E891C8-5540-4810-8FB9-D4507BEB01C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.engine.integration.tests", "chess.engine.integration.tests\chess.engine.integration.tests.csproj", "{D4E891C8-5540-4810-8FB9-D4507BEB01C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pgn2json", "src\pgn2json\pgn2json.csproj", "{514C3274-7B12-453F-9951-9BB98DF666CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pgn2json", "pgn2json\pgn2json.csproj", "{514C3274-7B12-453F-9951-9BB98DF666CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E67ABC55-B42C-4755-A7AE-EB06E910F2E1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.games.db", "src\chess.games.db\chess.games.db.csproj", "{99F71982-F468-4A07-90D5-6E44DC4DDA4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.web", "chess.web\chess.web.csproj", "{4A197FA9-21C2-4374-9479-AC03B02DC9AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.web", "src\chess.web\chess.web.csproj", "{4A197FA9-21C2-4374-9479-AC03B02DC9AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.smoketester", "chess.smoketester\chess.smoketester.csproj", "{2DB1CD11-6B91-4C4B-9761-5DB80AFFAF1B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.smoketester", "src\chess.smoketester\chess.smoketester.csproj", "{2DB1CD11-6B91-4C4B-9761-5DB80AFFAF1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.web.tests", "chess.web.tests\chess.web.tests.csproj", "{E3562DAE-AF22-4AB0-AA1F-D773DCB8C1FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.web.tests", "src\chess.web.tests\chess.web.tests.csproj", "{E3562DAE-AF22-4AB0-AA1F-D773DCB8C1FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.games.db", "chess.games.db\chess.games.db.csproj", "{F4F5AA00-0C02-4D7C-8624-3F1A8B3DE16F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chess Games Database", "Chess Games Database", "{D71C4987-B7B7-4493-8896-D6D6BD2CA50A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.games.db.api", "chess.games.db.api\chess.games.db.api.csproj", "{4E901705-2675-4E1C-A679-6788712D1DB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chess.games.db.pgnimporter", "chess.games.db.pgnimporter\chess.games.db.pgnimporter.csproj", "{CCF1DB1A-AC6D-4D03-8FD6-779AD7955AE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,10 +114,6 @@ Global
 		{514C3274-7B12-453F-9951-9BB98DF666CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{514C3274-7B12-453F-9951-9BB98DF666CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{514C3274-7B12-453F-9951-9BB98DF666CA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{99F71982-F468-4A07-90D5-6E44DC4DDA4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99F71982-F468-4A07-90D5-6E44DC4DDA4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99F71982-F468-4A07-90D5-6E44DC4DDA4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99F71982-F468-4A07-90D5-6E44DC4DDA4E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A197FA9-21C2-4374-9479-AC03B02DC9AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A197FA9-21C2-4374-9479-AC03B02DC9AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A197FA9-21C2-4374-9479-AC03B02DC9AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -124,6 +126,18 @@ Global
 		{E3562DAE-AF22-4AB0-AA1F-D773DCB8C1FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3562DAE-AF22-4AB0-AA1F-D773DCB8C1FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3562DAE-AF22-4AB0-AA1F-D773DCB8C1FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4F5AA00-0C02-4D7C-8624-3F1A8B3DE16F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4F5AA00-0C02-4D7C-8624-3F1A8B3DE16F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4F5AA00-0C02-4D7C-8624-3F1A8B3DE16F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4F5AA00-0C02-4D7C-8624-3F1A8B3DE16F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E901705-2675-4E1C-A679-6788712D1DB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E901705-2675-4E1C-A679-6788712D1DB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E901705-2675-4E1C-A679-6788712D1DB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E901705-2675-4E1C-A679-6788712D1DB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCF1DB1A-AC6D-4D03-8FD6-779AD7955AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCF1DB1A-AC6D-4D03-8FD6-779AD7955AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCF1DB1A-AC6D-4D03-8FD6-779AD7955AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCF1DB1A-AC6D-4D03-8FD6-779AD7955AE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,6 +153,9 @@ Global
 		{BCB36558-8F47-4239-978F-D4D2F0CADA33} = {D66F8692-7592-4977-A200-38AF88CA55ED}
 		{5FC357DA-1D4D-4A16-AE0A-CED5F4971C3E} = {D66F8692-7592-4977-A200-38AF88CA55ED}
 		{D4E891C8-5540-4810-8FB9-D4507BEB01C6} = {D66F8692-7592-4977-A200-38AF88CA55ED}
+		{F4F5AA00-0C02-4D7C-8624-3F1A8B3DE16F} = {D71C4987-B7B7-4493-8896-D6D6BD2CA50A}
+		{4E901705-2675-4E1C-A679-6788712D1DB1} = {D71C4987-B7B7-4493-8896-D6D6BD2CA50A}
+		{CCF1DB1A-AC6D-4D03-8FD6-779AD7955AE8} = {D71C4987-B7B7-4493-8896-D6D6BD2CA50A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6028EDE1-0978-48EE-94B9-B22C0599BB55}
