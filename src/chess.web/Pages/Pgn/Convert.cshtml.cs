@@ -1,13 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using chess.pgn;
-using chess.pgn.Json;
-using chess.pgn.Parsing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 
 namespace chess.web.Pages.Pgn
 {
@@ -24,15 +19,16 @@ namespace chess.web.Pages.Pgn
         [Required]
         public string PgnText{ get; set; }
 
-        public string PgJson { get; set; }
-
         [BindProperty]
         [DisplayName("Expanded Format")]
         public bool ExpandedFormat { get; set; }
+
+        public string PgJson { get; set; }
+
         public IActionResult OnGet()
         {
             PgnText = WikiPgnText;
-            PgJson = "JSON version will appear here.";
+            PgJson = DefaultJson;
             return Page();
         }
 
@@ -63,5 +59,7 @@ namespace chess.web.Pages.Pgn
                                       "hxg5 29. b3 Ke6 30. a3 Kd6 31. axb4 cxb4 32. Ra5 Nd5 33. f3 Bc8 34. Kf2 Bf5\n" +
                                       "35. Ra7 g6 36. Ra6+ Kc5 37. Ke1 Nf4 38. g3 Nxh3 39. Kd2 Kb5 40. Rd6 Kc5 41. Ra6\n" +
                                       "Nf2 42. g4 Bd3 43. Re6 1/2-1/2\n";
+
+        public const string DefaultJson = "JSON version will appear here.";
     }
 }
