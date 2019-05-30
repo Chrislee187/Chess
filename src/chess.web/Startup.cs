@@ -1,8 +1,10 @@
+using chess.games.db.Entities;
 using chess.pgn;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,6 +33,10 @@ namespace chess.web
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddTransient<IPgnSerialisationService, PgnSerialisationService>();
+
+//            var dbFile = @"D:\Src\Chess\src\chess.web\bin\Debug\netcoreapp2.2\Database\ChessGames10000.db";
+            var dbFile = @"Database/ChessGames10000.db";
+            services.AddTransient((p) => new ChessGamesDbContext(dbFile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

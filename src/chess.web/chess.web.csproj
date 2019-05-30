@@ -7,21 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="ClientApp\package-lock.json" />
-    <Content Remove="ClientApp\package.json" />
-    <Content Remove="ClientApp\public\manifest.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="ClientApp\package-lock.json" />
-    <None Include="ClientApp\package.json" />
-    <None Include="ClientApp\public\manifest.json" />
+    <Compile Remove="ClientApp\**" />
+    <Content Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ClientApp\**" />
+    <None Remove="ClientApp\**" />
   </ItemGroup>
 
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
   </ItemGroup>
@@ -29,7 +25,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\chess.engine\chess.engine.csproj" />
+    <ProjectReference Include="..\chess.games.db.api\chess.games.db.api.csproj" />
+    <ProjectReference Include="..\chess.games.db\chess.games.db.csproj" />
     <ProjectReference Include="..\chess.pgn\chess.pgn.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="Database\ChessGames10000.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -13,5 +13,11 @@
         public GameResult Result { get; set; }
 
         public string MoveText { get; set; }
+
+        public bool ContainsPlayer(string name)
+        {
+            if (Black == null || White == null) return false;
+            return Black.Name.Contains("Short") || White.Name.Contains("Short");
+        }
     }
 }
