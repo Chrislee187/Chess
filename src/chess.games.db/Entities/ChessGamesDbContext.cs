@@ -19,9 +19,9 @@ namespace chess.games.db.Entities
 
         // NOTE: Resharper tries to use the interface returned by Include(), (IIncludableQueryable) which is wrong and
         // stops the Includes working until a ToList(). (Any()/Single() etc. receive null children)
-        public static IEnumerable<Game> HydrateGames(DbSet<Game> games)
+        public IEnumerable<Game> GamesWithIncludes()
         {
-            return games
+            return Games
                 .Include(i => i.Black)
                 .Include(i => i.White)
                 .Include(i => i.Event)

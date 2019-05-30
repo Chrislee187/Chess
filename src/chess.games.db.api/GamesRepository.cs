@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using chess.games.db.Entities;
 using chess.pgn;
 
@@ -18,30 +16,15 @@ namespace chess.games.db.api
     {
         private readonly ChessGamesDbContext _chessGamesDbContext;
 
-        private bool PgnGameMatcher(PgnGame pgnGame, Game game)
-        {
-            return game.Black.Name.Equals(pgnGame.Black)
-                   && game.White.Name.Equals(pgnGame.White)
-                   && game.Event.Name.Equals(pgnGame.Event)
-                   && game.Site.Name.Equals(pgnGame.Site)
-                   && game.Round.Equals(pgnGame.Round)
-                   && game.MoveText.Equals(pgnGame.MoveText)
-                   && game.Date.Equals(pgnGame.Date.ToString())
-                //                Result = pgnGame.Result    // TODO: Mappers
-                ;
-        }
-
         public GamesRepository(ChessGamesDbContext chessGamesDbContext)
         {
             _chessGamesDbContext = chessGamesDbContext;
         }
 
-        public  bool Exists(PgnGame pgnGame) =>
-            ChessGamesDbContext.HydrateGames(_chessGamesDbContext.Games)
+        public  bool Exists(PgnGame pgnGame) => _chessGamesDbContext.GamesWithIncludes()
                 .Any(game => PgnGameMatcher(pgnGame, game));
 
-        private Game FindExact(PgnGame pgnGame) =>
-            ChessGamesDbContext.HydrateGames(_chessGamesDbContext.Games) 
+        private Game FindExact(PgnGame pgnGame) => _chessGamesDbContext.GamesWithIncludes() 
                 .SingleOrDefault(game => PgnGameMatcher(pgnGame, game));
 
         public Game GetOrCreate(PgnGame pgnGame)
@@ -79,9 +62,19 @@ namespace chess.games.db.api
             return game;
         }
 
-        public  IEnumerable<Game> Select(){
-            return _chessGamesDbContext.Games;
-        }
+        public  IEnumerable<Game> Select() => _chessGamesDbContext.GamesWithIncludes();
 
+        private bool PgnGameMatcher(PgnGame pgnGame, Game game)
+        {
+            return game.Black.Name.Equals(pgnGame.Black)
+                   && game.White.Name.Equals(pgnGame.White)
+                   && game.Event.Name.Equals(pgnGame.Event)
+                   && game.Site.Name.Equals(pgnGame.Site)
+                   && game.Round.Equals(pgnGame.Round)
+                   && game.MoveText.Equals(pgnGame.MoveText)
+                   && game.Date.Equals(pgnGame.Date.ToString())
+                //                Result = pgnGame.Result    // TODO: Mappers
+                ;
+        }
     }
 }

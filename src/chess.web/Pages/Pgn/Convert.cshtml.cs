@@ -4,13 +4,13 @@ using chess.pgn;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace chess.web.Pages.Pgn
+namespace chess.web.Pages.Pgn.Convert
 {
-    public class PgnConvertModel : PageModel
+    public class ConvertModel : PageModel
     {
         private readonly IPgnSerialisationService _pgnSerialisationService;
 
-        public PgnConvertModel(IPgnSerialisationService pgnSerialisationService)
+        public ConvertModel(IPgnSerialisationService pgnSerialisationService)
         {
             _pgnSerialisationService = pgnSerialisationService;
         }

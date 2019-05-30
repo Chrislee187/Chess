@@ -1,23 +1,23 @@
 using chess.pgn;
-using chess.web.Pages.Pgn;
+using chess.web.Pages.Pgn.Convert;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using NUnit.Framework;
 
 namespace chess.web.tests
 {
-    public class PgnConvertModelTests
+    public class ConvertModelTests
     {
         private const string AnyPgn = "Some PGN text";
         private const string AnyJson = "Some JSON text";
         private Mock<IPgnSerialisationService> _serialisationService;
-        private PgnConvertModel _model;
+        private ConvertModel _model;
 
         [SetUp]
         public void Setup()
         {
             _serialisationService = new Mock<IPgnSerialisationService>();
-            _model = new PgnConvertModel(_serialisationService.Object);
+            _model = new ConvertModel(_serialisationService.Object);
         }
 
         [Test]
@@ -26,8 +26,8 @@ namespace chess.web.tests
             var result = _model.OnGet();
 
             Assert.That(result, Is.TypeOf<PageResult>());
-            Assert.That(_model.PgnText, Is.EqualTo(PgnConvertModel.WikiPgnText));
-            Assert.That(_model.PgJson, Is.EqualTo(PgnConvertModel.DefaultJson));
+            Assert.That(_model.PgnText, Is.EqualTo(ConvertModel.WikiPgnText));
+            Assert.That(_model.PgJson, Is.EqualTo(ConvertModel.DefaultJson));
         }
 
         [Test]

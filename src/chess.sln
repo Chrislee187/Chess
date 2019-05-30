@@ -54,7 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chess Games Database", "Che
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.games.db.api", "chess.games.db.api\chess.games.db.api.csproj", "{4E901705-2675-4E1C-A679-6788712D1DB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chess.games.db.pgnimporter", "chess.games.db.pgnimporter\chess.games.db.pgnimporter.csproj", "{CCF1DB1A-AC6D-4D03-8FD6-779AD7955AE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.games.db.pgnimporter", "chess.games.db.pgnimporter\chess.games.db.pgnimporter.csproj", "{CCF1DB1A-AC6D-4D03-8FD6-779AD7955AE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
