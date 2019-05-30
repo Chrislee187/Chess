@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 using chess.games.db.Entities;
 using chess.pgn;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace chess.games.db.api
 {
@@ -34,27 +31,17 @@ namespace chess.games.db.api
                 ;
         }
 
-        private IIncludableQueryable<Game, DbEntity> HydrateGames(DbSet<Game> games)
-        {
-            return games.Include(i => i.Black)
-                .Include(i => i.White)
-                .Include(i => i.Event)
-                .Include(i => i.Site);
-
-        }
-
         public GamesRepository(ChessGamesDbContext chessGamesDbContext)
         {
             _chessGamesDbContext = chessGamesDbContext;
         }
 
         public  bool Exists(PgnGame pgnGame) =>
-            HydrateGames(_chessGamesDbContext.Games)
+            ChessGamesDbContext.HydrateGames(_chessGamesDbContext.Games)
                 .Any(game => PgnGameMatcher(pgnGame, game));
 
         private Game FindExact(PgnGame pgnGame) =>
-            // TODO: NEED TO SORT THE TOLIST THING, EVERY NEW GAME ADDED MAKES ADDING THE NEXT ONE SLOWER
-            HydrateGames(_chessGamesDbContext.Games).ToList() // NOTE: This only works when ToList() is here, don't think we want to read the whole DB every time?
+            ChessGamesDbContext.HydrateGames(_chessGamesDbContext.Games) 
                 .SingleOrDefault(game => PgnGameMatcher(pgnGame, game));
 
         public Game GetOrCreate(PgnGame pgnGame)
@@ -63,10 +50,18 @@ namespace chess.games.db.api
 
             if (game != null) return game;
 
-            var site = GetOrCreateSite(pgnGame);
-            var whitePlayer = GetOrCreatePlayer(pgnGame.White);
-            var blackPlayer = GetOrCreatePlayer(pgnGame.Black);
-            var @event = GetOrCreateEvent(pgnGame);
+            var site = _chessGamesDbContext.GetOrCreate(
+                s1 => s1.Name.Equals(pgnGame.Site),
+                () => new Site {Name = pgnGame.Site});
+            var whitePlayer = _chessGamesDbContext.GetOrCreate(
+                s1 => s1.Name.Equals(pgnGame.White),
+                () => new Player { Name = pgnGame.White});
+            var blackPlayer = _chessGamesDbContext.GetOrCreate(
+                s1 => s1.Name.Equals(pgnGame.Black),
+                () => new Player { Name = pgnGame.Black });
+            var @event = _chessGamesDbContext.GetOrCreate(
+                s1 => s1.Name.Equals(pgnGame.Event),
+                () => new Event { Name = pgnGame.Event });
 
             game = new Game
             {
@@ -88,52 +83,5 @@ namespace chess.games.db.api
             return _chessGamesDbContext.Games;
         }
 
-        private Site GetOrCreateSite(PgnGame pgnGame)
-        {
-            Site site;
-            if (_chessGamesDbContext.Sites.Any(s => s.Name.Equals(pgnGame.Site)))
-            {
-                site = _chessGamesDbContext.Sites.Single(s => s.Name.Equals(pgnGame.Site));
-            }
-            else
-            {
-                site = new Site { Name = pgnGame.Site };
-//                _chessGamesDbContext.Sites.Add(site);
-            }
-
-            return site;
-        }
-
-        private Event GetOrCreateEvent(PgnGame pgnGame)
-        {
-            Event evt;
-            if (_chessGamesDbContext.Events.Any(s => s.Name.Equals(pgnGame.Event)))
-            {
-                evt = _chessGamesDbContext.Events.Single(s => s.Name.Equals(pgnGame.Event));
-            }
-            else
-            {
-                evt = new Event { Name = pgnGame.Event };
-//                _chessGamesDbContext.Events.Add(evt);
-            }
-
-            return evt;
-        }
-
-        private  Player GetOrCreatePlayer(string playerName)
-        {
-            Player player;
-            if (_chessGamesDbContext.Players.Any(s => s.Name.Equals(playerName)))
-            {
-                player = _chessGamesDbContext.Players.Single(s => s.Name.Equals(playerName));
-            }
-            else
-            {
-                player = new Player { Name = playerName };
-//                _chessGamesDbContext.Players.Add(player);
-            }
-
-            return player;
-        }
     }
 }
