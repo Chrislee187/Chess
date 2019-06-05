@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\chess.engine\chess.engine.csproj" />
-    <ProjectReference Include="..\chess.pgn\chess.pgn.csproj" />
   </ItemGroup>
 
   <ItemGroup>

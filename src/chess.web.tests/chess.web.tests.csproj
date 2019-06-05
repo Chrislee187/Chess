@@ -18,4 +18,10 @@
     <ProjectReference Include="..\chess.web\chess.web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="pgn-reader">
+      <HintPath>C:\Users\chris\.nuget\packages\pgn-reader\1.0.0\lib\netstandard2.0\pgn-reader.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

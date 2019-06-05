@@ -20,6 +20,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="pgn-reader" Version="1.0.0" />
   </ItemGroup>
 
 
@@ -27,7 +28,6 @@
     <ProjectReference Include="..\chess.engine\chess.engine.csproj" />
     <ProjectReference Include="..\chess.games.db.api\chess.games.db.api.csproj" />
     <ProjectReference Include="..\chess.games.db\chess.games.db.csproj" />
-    <ProjectReference Include="..\chess.pgn\chess.pgn.csproj" />
   </ItemGroup>
 
 

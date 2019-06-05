@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using chess.pgn;
-using chess.pgn.Json;
-using chess.pgn.Parsing;
 using Newtonsoft.Json;
+using PgnReader;
 
 namespace pgn2json
 {

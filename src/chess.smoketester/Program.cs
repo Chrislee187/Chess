@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using chess.engine.Game;
-using chess.pgn;
+using PgnReader;
 
 namespace chess.smoketester
 {

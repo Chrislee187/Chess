@@ -6,8 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="pgn-reader" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\chess.engine\chess.engine.csproj" />
-    <ProjectReference Include="..\chess.pgn\chess.pgn.csproj" />
   </ItemGroup>
 
 </Project>

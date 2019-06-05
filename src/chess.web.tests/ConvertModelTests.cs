@@ -1,8 +1,8 @@
-using chess.pgn;
 using chess.web.Pages.Pgn.Convert;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using NUnit.Framework;
+using PgnReader;
 
 namespace chess.web.tests
 {

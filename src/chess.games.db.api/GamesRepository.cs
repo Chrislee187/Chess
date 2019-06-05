@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using chess.games.db.Entities;
-using chess.pgn;
+using PgnReader;
 
 namespace chess.games.db.api
 {

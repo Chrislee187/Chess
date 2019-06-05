@@ -1,12 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using chess.pgn;
-using chess.pgn.Parsing;
 using NUnit.Framework;
+using PgnReader;
 
 namespace chess.big.tests
 {
