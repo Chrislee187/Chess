@@ -1,0 +1,56 @@
+﻿@page "/pgn/convert"
+@using PgnReader;
+<h2>PGN Conversion</h2>
+
+<p>
+    Simple conversion from PGN to a JSON version of the same data.
+</p>
+<p>
+    Enter PGN data in the text below and click convert
+</p>
+<div asp-validation-summary="All"></div>
+<div class="container-fluid">
+    <EditForm Model="@convert" OnValidSubmit="@HandleValidSubmit">
+        <div class="row">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="PgnText">Enter PGN Text</label><br />
+            </div>
+            <div class="col-md-6">
+                <InputCheckBox id="ExpandedFormat" @bind-Value="@convert.ExpandedFormat"></InputCheckBox>
+                <label for="ExpandedFormat">Expanded format.</label><br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <InputTextArea id="PgnText" @bind-Value="@convert.PgnText" style="font-family: monospace; width: 100%;"></InputTextArea>
+            </div>
+            <div class="col-md-6">
+                <InputTextArea id="PgJson" @bind-Value="@convert.PgJson" style="font-family: monospace; width: 100%;"></InputTextArea>
+            </div>
+        </div>
+        <div class="row">
+            <button type="submit">Convert</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private ConvertModel convert = new ConvertModel();
+
+void HandleValidSubmit() {
+    var service = new PgnSerialisationService();
+    convert.PgJson = service.SerializeAllGames(convert.PgnText, convert.ExpandedFormat);
+    Console.WriteLine("hello");
+}
+
+
+//
+//@* void IncrementCount() *@
+//@* { *@
+//@*     currentCount++; *@
+//@* } *@
+}

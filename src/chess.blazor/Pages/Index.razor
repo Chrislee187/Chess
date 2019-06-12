@@ -1,0 +1,91 @@
+﻿@page "/"
+
+    <div class="text-left">
+        <h1 class="display-4">Welcome</h1>
+        <p>
+            Welcome to the home-page of my chess "web-site".
+        </p>
+        <p>
+            <em>
+                NOTE: Although I can and have played chess on a regular basis in the past I'm currently not an "active" player and this site is not used for anything other than practice/self-improvement in the art of software development. As such the site are is often in a state of flux and subject to change at anytime. I consider it a massive <a href="https://en.wikipedia.org/wiki/Kata_(programming)">"code kata"</a> for the larger scope of full software development compared to "code-kata's" more traditional scope of a single small programming problem.
+
+            </em>
+        </p>
+        <h2>Why Chess?</h2>
+        <p>
+            I chose chess because it is an existing, finite and well known "domain", simple to understand but with many complexities to implement and as such ideal to use as a sandbox for experimenting with many software development practices, ideas and implementations. This includes such things as; </p>
+        <ul>
+            <li>architecture and design approaches</li>
+            <li>coding techniques, patterns, styles</li>
+            <li>using different libraries, tooling, frameworks</li>
+            <li>testing at different levels with different tools</li>
+            <li>integration and deployment mechanisms</li>
+            <li>performance analysis and optimisation through parallelisation and algorithm effiency improvements</li>
+            <li>dealing with large amounts of data and large processing loads (I have almost 500,000 historical chess game files to use for validating the engine)</li>
+        </ul>
+
+        <p>
+            The core of this code is a <a href="https://github.com/Chrislee187/Chess">chess "engine"</a>, which supports;
+            <ul>
+                <li>maintaining the state of a chess board
+                </li>
+                <li>updating the board state with a valid move supplied in <a href="https://en.wikipedia.org/wiki/Algebraic_notation_(chess)" target="_blank">Standard Algebraic Notation (SAN)</a>.
+                </li>
+                <li>identifying all valid moves for the current board state
+                </li>
+                <li>determine the game state (check/checkmate etc.) of the current board state
+                </li>
+            </ul>
+        </p>
+        <p>
+            With the engine as the base, further components are in-development or planned including;<br/>
+            <h2>IN-DEVELOPMENT</h2>
+            <ul>
+                <li>
+                    a simple webapi that uses a text based serialised representation of a board to transfer the board state over http and can be used to update board state from valid moves
+                    <br/>
+                    <a href="http://chess-web-api.azurewebsites.net/swagger" target="_blank">See the swagger UI for it here</a><br/>
+                    Source code can be found at <a href="https://github.com/Chrislee187/Chess/tree/master/src/chess.webapi">https://github.com/Chrislee187/Chess/tree/master/src/chess.webapi</a>
+                </li>
+                <li>
+                    A very simple web-page using handlebars and a little jQuery to use the above web-api allow a game of chess to be played on between two human players.
+                    <br /><a href="https://chess-web-api.azurewebsites.net/" target="_blank">See it here</a>
+                </li>
+                <li>
+                    PGN Parsing. <a href="https://en.wikipedia.org/wiki/Portable_Game_Notation" target="_blank">PGN</a> is a standard format/notation used to encode chess games. Tooling to include;
+                    <ul>
+                        <li>
+                            A PgnReader to read PGN text files and parse in to .NET objects
+                        </li>
+                        <li>
+                            Conversion of PGN file to a JSON readable format.<br/>
+                            <a href="/pgn/convert">A blazor page that runs the .NET assemblies directly in the browser! Pretty neat!</a>
+                        </li>
+                        <li>
+                            .NET Core console application(s) to sort/filter PGN files.
+                        </li>
+                        <li>
+                            A PGN Library application to store 100'000's of games plus supporting applications
+                        </li>
+                    </ul>
+                    <br />
+                    Source code can be found at <a href="https://github.com/Chrislee187/pgn-tools">https://github.com/Chrislee187/pgn-tools</a>
+
+                </li>
+            </ul>
+            <h2>PLANNED</h2>
+            <ul>
+                <li>Blazor SPA app, hosted in Electron that can replay PGN games on visual chess board</li>
+                <li>Blazor SPA app, hosted in Electron to manage PGN files</li>
+                <li>"AI" players, using the valid move lists generated by the chess.engine, create some "AI" players</li>
+                <li>"AI" Tournament, ability for "AI" players to play against each other, lots of times, in large tournaments.
+                <em>No real use for this other than an interesting experiment in heavy loads/parallelisation etc.</em>
+                </li>
+            </ul>
+
+        </p>
+
+        <p>
+            The code for this site and all of the tools can be found on my Github <a href="https://github.com/Chrislee187">https://github.com/Chrislee187</a>
+        </p>
+    </div>
