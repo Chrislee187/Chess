@@ -1,14 +1,17 @@
 ﻿@page "/"
 
-    <div class="text-left">
+    <div class="container-fluid">
         <h1 class="display-4">Welcome</h1>
         <p>
             Welcome to the home-page of my chess "web-site".
         </p>
         <p>
             <em>
-                NOTE: Although I can and have played chess on a regular basis in the past I'm currently not an "active" player and this site is not used for anything other than practice/self-improvement in the art of software development. As such the site are is often in a state of flux and subject to change at anytime. I consider it a massive <a href="https://en.wikipedia.org/wiki/Kata_(programming)">"code kata"</a> for the larger scope of full software development compared to "code-kata's" more traditional scope of a single small programming problem.
-
+                NOTE: Although I can and have played chess on a regular basis in the past I'm currently not an "active" player and this site is not used for anything other than practice/self-improvement in the art of software development. As such the site are is often in a state of flux and subject to change at anytime. I consider it a massive <externala href="https://en.wikipedia.org/wiki/Kata_(programming)">"code kata"</externala> for the larger scope of full software development compared to "code-kata's" more traditional scope of a single small programming problem.
+            </em>
+        </p><p>
+            <em>
+                NOTE the 2nd: This site is developed using client-side <externala href="https://docs.microsoft.com/en-gb/aspnet/core/blazor/get-started?view=aspnetcore-3.0&tabs=visual-studio">Blazor</externala>, which runs C# in the browser under <externala href="https://webassembly.org/"> WebAssembly</externala>, whilst Blazor is no longer classed as "experimental" by Microsoft and they have committed to shipping it as a supported UI framework, it is currently still in it's beta/preview stages and isn't fully optimised yet.
             </em>
         </p>
         <h2>Why Chess?</h2>
@@ -25,11 +28,11 @@
         </ul>
 
         <p>
-            The core of this code is a <a href="https://github.com/Chrislee187/Chess">chess "engine"</a>, which supports;
+            The core of this code is a <externala href="https://github.com/Chrislee187/Chess">chess "engine"</externala>, which supports;
             <ul>
                 <li>maintaining the state of a chess board
                 </li>
-                <li>updating the board state with a valid move supplied in <a href="https://en.wikipedia.org/wiki/Algebraic_notation_(chess)" target="_blank">Standard Algebraic Notation (SAN)</a>.
+                <li>updating the board state with a valid move supplied in <externala href="https://en.wikipedia.org/wiki/Algebraic_notation_(chess)" target="_blank">Standard Algebraic Notation (SAN)</externala>.
                 </li>
                 <li>identifying all valid moves for the current board state
                 </li>
@@ -44,22 +47,22 @@
                 <li>
                     a simple webapi that uses a text based serialised representation of a board to transfer the board state over http and can be used to update board state from valid moves
                     <br/>
-                    <a href="http://chess-web-api.azurewebsites.net/swagger" target="_blank">See the swagger UI for it here</a><br/>
-                    Source code can be found at <a href="https://github.com/Chrislee187/Chess/tree/master/src/chess.webapi">https://github.com/Chrislee187/Chess/tree/master/src/chess.webapi</a>
+                    <externala href="http://chess-web-api.azurewebsites.net/swagger" target="_blank">See the swagger UI for it here</externala><br/>
+                    Source code can be found at <externala href="https://github.com/Chrislee187/Chess/tree/master/src/chess.webapi">https://github.com/Chrislee187/Chess/tree/master/src/chess.webapi</externala>
                 </li>
                 <li>
                     A very simple web-page using handlebars and a little jQuery to use the above web-api allow a game of chess to be played on between two human players.
-                    <br /><a href="https://chess-web-api.azurewebsites.net/" target="_blank">See it here</a>
+                    <br /><externala href="https://chess-web-api.azurewebsites.net/" target="_blank">See it here</externala>
                 </li>
                 <li>
-                    PGN Parsing. <a href="https://en.wikipedia.org/wiki/Portable_Game_Notation" target="_blank">PGN</a> is a standard format/notation used to encode chess games. Tooling to include;
+                    PGN Parsing. <externala href="https://en.wikipedia.org/wiki/Portable_Game_Notation" target="_blank">PGN</externala> is a standard format/notation used to encode chess games. Tooling to include;
                     <ul>
                         <li>
                             A PgnReader to read PGN text files and parse in to .NET objects
                         </li>
                         <li>
                             Conversion of PGN file to a JSON readable format.<br/>
-                            <a href="/pgn/convert">A blazor page that runs the .NET assemblies directly in the browser! Pretty neat!</a>
+                            <externala href="/pgn/convert">A blazor page that runs the .NET assemblies directly in the browser! Pretty neat!</externala>
                         </li>
                         <li>
                             .NET Core console application(s) to sort/filter PGN files.
@@ -69,7 +72,7 @@
                         </li>
                     </ul>
                     <br />
-                    Source code can be found at <a href="https://github.com/Chrislee187/pgn-tools">https://github.com/Chrislee187/pgn-tools</a>
+                    Source code can be found at <externala href="https://github.com/Chrislee187/pgn-tools">https://github.com/Chrislee187/pgn-tools</externala>
 
                 </li>
             </ul>
@@ -86,6 +89,6 @@
         </p>
 
         <p>
-            The code for this site and all of the tools can be found on my Github <a href="https://github.com/Chrislee187">https://github.com/Chrislee187</a>
+            The code for this site and all of the tools can be found on my Github <externala href="https://github.com/Chrislee187">https://github.com/Chrislee187</externala>
         </p>
     </div>

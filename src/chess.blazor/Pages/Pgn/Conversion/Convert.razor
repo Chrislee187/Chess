@@ -1,7 +1,5 @@
-﻿@inherits ConvertBlazorModel
+﻿@inherits ConvertComponent
 @page "/pgn/convert"
-@using PgnReader;
-
 <h2>PGN Conversion</h2>
 
 <p>
@@ -11,7 +9,7 @@
     Enter PGN data in the text below and click convert
 </p>
 <div asp-validation-summary="All"></div>
-<div class="container-fluid" styl>
+<div class="container-fluid">
     <EditForm Model="@Model" OnValidSubmit="@Convert">
         <div class="row">
             <DataAnnotationsValidator />
@@ -24,7 +22,7 @@
                                @bind-value="@Model.PgnText"
                                style="font-family: monospace; width: 100%;"
                                rows="10"
-                               placeholder="Paste a PGN Game here"
+                               placeholder="Paste PGN Game(s) here"
                                spellcheck="false"></InputTextArea>
             </div>
             <div class="col-md">
