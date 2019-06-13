@@ -1,5 +1,7 @@
-﻿@page "/pgn/convert"
+﻿@inherits ConvertBlazorModel
+@page "/pgn/convert"
 @using PgnReader;
+
 <h2>PGN Conversion</h2>
 
 <p>
@@ -9,27 +11,32 @@
     Enter PGN data in the text below and click convert
 </p>
 <div asp-validation-summary="All"></div>
-<div class="container-fluid">
-    <EditForm Model="@convert" OnValidSubmit="@HandleValidSubmit">
+<div class="container-fluid" styl>
+    <EditForm Model="@Model" OnValidSubmit="@Convert">
         <div class="row">
             <DataAnnotationsValidator />
             <ValidationSummary />
         </div>
-        <div class="row">
-            <div class="col-md-6">
+        <div class="row h-75">
+            <div class="col-md">
                 <label for="PgnText">Enter PGN Text</label><br />
+                <InputTextArea id="PgnText"
+                               @bind-value="@Model.PgnText"
+                               style="font-family: monospace; width: 100%;"
+                               rows="10"
+                               placeholder="Paste a PGN Game here"
+                               spellcheck="false"></InputTextArea>
             </div>
-            <div class="col-md-6">
-                <InputCheckBox id="ExpandedFormat" @bind-Value="@convert.ExpandedFormat"></InputCheckBox>
+            <div class="col-md">
+                <InputCheckBox id="ExpandedFormat"
+                               @bind-value="@Model.ExpandedFormat"></InputCheckBox>
                 <label for="ExpandedFormat">Expanded format.</label><br />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <InputTextArea id="PgnText" @bind-Value="@convert.PgnText" style="font-family: monospace; width: 100%;"></InputTextArea>
-            </div>
-            <div class="col-md-6">
-                <InputTextArea id="PgJson" @bind-Value="@convert.PgJson" style="font-family: monospace; width: 100%;"></InputTextArea>
+                <InputTextArea id="PgJson"
+                               @bind-value="@Model.PgJson"
+                               style="font-family: monospace; width: 100%;"
+                               rows="10"
+                               placeholder="JSON will appear here"
+                               spellcheck="false"></InputTextArea>
             </div>
         </div>
         <div class="row">
@@ -38,19 +45,3 @@
     </EditForm>
 </div>
 
-@code {
-    private ConvertModel convert = new ConvertModel();
-
-void HandleValidSubmit() {
-    var service = new PgnSerialisationService();
-    convert.PgJson = service.SerializeAllGames(convert.PgnText, convert.ExpandedFormat);
-    Console.WriteLine("hello");
-}
-
-
-//
-//@* void IncrementCount() *@
-//@* { *@
-//@*     currentCount++; *@
-//@* } *@
-}

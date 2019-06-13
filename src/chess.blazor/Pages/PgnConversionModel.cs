@@ -1,42 +1,17 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using PgnReader;
 
 namespace chess.blazor.Pages
 {
-    public class ConvertModel
+    public class PgnConversionModel
     {
-//        private readonly IPgnSerialisationService _pgnSerialisationService;
-//
-//        public ConvertModel(/*IPgnSerialisationService pgnSerialisationService*/)
-//        {
-//            _pgnSerialisationService = pgnSerialisationService;
-//        }
-
         [Required] public string PgnText { get; set; } = WikiPgnText;
 
         [DisplayName("Expanded Format")]
         public bool ExpandedFormat { get; set; }
 
-        public string PgJson { get; set; } = DefaultJson;
-
-//        public IActionResult OnGet()
-//        {
-//            PgnText = WikiPgnText;
-//            PgJson = DefaultJson;
-//            return Page();
-//        }
-//
-//        public IActionResult OnPost()
-//        {
-//            if (!ModelState.IsValid)
-//            {
-//                PgJson = "MODEL INVALID";
-//                return Page();
-//            }
-//
-//            PgJson = _pgnSerialisationService.SerializeAllGames(PgnText, ExpandedFormat);
-//            return Page();
-//        }
+        public string PgJson { get; set; }
 
         public const string WikiPgnText = "[Event \"F/S Return Match\"]\n" +
                                       "[Site \"Belgrade, Serbia JUG\"]\n" +
