@@ -9,19 +9,5 @@
 <h2>PGN Conversion</h2>
 
 <p>
-    Simple conversion from PGN to a JSON version of the same data.
+    Moved to new Blazor SPA application at <a href="https://chessstaticstorage.z33.web.core.windows.net/pgn/convert">https://chessstaticstorage.z33.web.core.windows.net/pgn/convert</a>. 
 </p>
-<p>
-    Enter PGN data in the text below and click convert
-</p>
-<div asp-validation-summary="All"></div>
-<form method="POST">
-    <h1>Enter PGN Text</h1>
-    <textarea rows="20" cols="60" asp-for="PgnText">@Model.PgnText</textarea><br />
-    
-    <label asp-for="ExpandedFormat"  title="Expands the 'Moves' in to an array or 'Turns' for easier parsing"></label>
-    <input asp-for="ExpandedFormat" checked="@Model.ExpandedFormat"/>
-    <button  type="submit">Convert</button><br />
-    <h1>PGJSON</h1>
-    <textarea rows="20" cols="60">@Model.PgJson</textarea>
-</form>

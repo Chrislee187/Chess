@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-
-namespace chess.blazor.Components
+namespace chess.blazor.Shared
 {
     /// <summary>
     /// Simple component to generate an anchor tags that targets a new tab
