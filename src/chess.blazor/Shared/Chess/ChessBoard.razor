@@ -4,7 +4,7 @@
 <div class="container-fluid chessboard">
     <table>
         <thead>
-            <BoardBorderRow/>
+            <BoardBorderRow />
         </thead>
         @{
             var black = false;
@@ -14,7 +14,7 @@
                     <td class="board-border">@y</td>
                     @for (int x = 1; x <= 8; x++)
                     {
-                        <BoardCell piece="@Piece(x,y)" black="@black"/>
+                        <BoardCell piece="@Piece(x,y)" black="@black" />
                         black = !black;
                     }
                     <td class="board-border">@y</td>
@@ -23,8 +23,8 @@
             }
         }
         <tfoot>
-            <BoardBorderRow/>
+            <BoardBorderRow />
         </tfoot>
     </table>
-    <button onclick="@Test">Test state update</button>
+    <button onclick="@Test">Test state update</button>    <button onclick="@ResetBoard">ResetBoard</button>
 </div>

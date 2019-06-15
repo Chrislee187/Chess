@@ -3,7 +3,6 @@ using chess.engine;
 using chess.webapi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +32,7 @@ namespace chess.webapi
 
             services.AddTransient<IChessService, ChessGameService>();
             services.AddTransient<IPerfService, PerfService>();
+
             services.AddChessDependencies();
         }
 
@@ -57,7 +57,13 @@ namespace chess.webapi
 
             app.UseSwagger();
             app.UseSwaggerUi3();
-
+            app.UseCors(builder => {
+                builder
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .SetIsOriginAllowed(s => true);
+//                    .WithOrigins("http://localhost:5000");
+            });
             app.UseMvcWithDefaultRoute();
         }
     }
