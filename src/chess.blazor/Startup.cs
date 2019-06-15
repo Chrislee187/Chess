@@ -1,4 +1,5 @@
 using System.Net.Http;
+using chess.webapi.client.csharp;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using PgnReader;

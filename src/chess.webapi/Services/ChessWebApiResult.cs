@@ -7,18 +7,14 @@ using chess.engine.Entities;
 using chess.engine.Extensions;
 using chess.engine.Game;
 using chess.engine.SAN;
+using chess.webapi.client.csharp;
 using Newtonsoft.Json;
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace chess.webapi.Services
 {
-    public class ChessWebApiResult
+    public class ChessWebApiResult : client.csharp.ChessWebApiResult
     {
-        public string Message { get; }
-        public string Board { get; set; }
-        public string BoardText { get; set; }
-        public Move[] AvailableMoves { get; }
-        public string WhoseTurn { get; }
         [JsonIgnore]
         public ChessGame Game { get; }
 
@@ -51,22 +47,13 @@ namespace chess.webapi.Services
 
         public Move[] ToMoveList(params LocatedItem<ChessPieceEntity>[] locatedItems)
         {
-            return locatedItems.SelectMany(i => i.Paths.FlattenMoves()
-                .Select(m => new Move($"{m.ToChessCoords()}", 
-                    StandardAlgebraicNotation.ParseFromGameMove(Game.BoardState, m, true)
-                        .ToNotation() ))).ToArray();
-        }
-
-        public class Move
-        {
-            public string SAN { get; }
-            public string Coord { get; }
-
-            public Move(string coord, string san = "")
-            {
-                Coord = coord;
-                SAN = san;
-            }
+            return locatedItems
+                .SelectMany(i => i.Paths.FlattenMoves())
+                .Select(m => new Move
+                {
+                    Coord = $"{m.ToChessCoords()}",
+                    SAN = StandardAlgebraicNotation.ParseFromGameMove(Game.BoardState, m, true).ToNotation()
+                }).ToArray();
         }
     }
 }

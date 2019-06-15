@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\chess.engine\chess.engine.csproj" />
+    <ProjectReference Include="..\chess.webapi.client.csharp\chess.webapi.client.csharp.csproj" />
   </ItemGroup>
 
   <ItemGroup>
