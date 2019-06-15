@@ -1,11 +1,10 @@
 ﻿@inherits ChessBoardComponent
-@page "/board"
 <link href="css/chessboard.css" rel="stylesheet" />
 
 <div class="container-fluid chessboard">
     <table>
         <thead>
-            <tr class="board-border"><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td></td></tr>
+            <BoardBorderRow/>
         </thead>
         @{
             var black = false;
@@ -24,7 +23,7 @@
             }
         }
         <tfoot>
-            <tr class="board-border"><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td></td></tr>
+            <BoardBorderRow/>
         </tfoot>
     </table>
     <button onclick="@Test">Test state update</button>
