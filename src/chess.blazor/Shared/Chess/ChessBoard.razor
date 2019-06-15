@@ -1,0 +1,26 @@
+﻿@inherits ChessBoardComponent
+@page "/board"
+<link href="css/chessboard.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <table class="chessboard">
+        <thead>
+            <tr class="board-border"><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td></td></tr>
+        </thead>
+        @for (int y = 8; y >= 1; y--)
+        {
+            <tr>
+                <td class="board-border">@y</td>
+                @for (int x = 1; x <= 8; x++)
+                {
+                    <BoardCell piece='@Piece(x,y)' />
+                }
+                <td class="board-border">@y</td>
+            </tr>
+        }
+        <tfoot>
+            <tr class="board-border"><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td></td></tr>
+        </tfoot>
+    </table>
+    <button onclick="@Test">Test state update</button>
+</div>

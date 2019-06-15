@@ -1,0 +1,12 @@
+﻿.chessboard {
+    width: 100%;
+}
+.chessboard TD {
+    min-width: 1em;
+    min-height: 1em;
+    text-align: center;
+}
+.board-border {
+    background-color: brown;
+    min-width: 1em;
+}
