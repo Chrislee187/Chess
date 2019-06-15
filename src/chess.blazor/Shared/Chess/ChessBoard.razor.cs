@@ -18,7 +18,7 @@ namespace chess.blazor.Shared.Chess
         [Inject] public IChessGameApiClient ApiClient { get; set; }
 
         public char Piece(int x, int y) => Board[ToBoardStringIdx(x,y)];
-
+        public string Message { get; set; }
         private string _startingBoard;
         protected override async Task OnInitAsync()
         {
