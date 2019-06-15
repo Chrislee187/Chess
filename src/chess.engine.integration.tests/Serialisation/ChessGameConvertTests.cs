@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace chess.engine.integration.tests.Serialisation
 {
     [TestFixture]
-    public class BoardSerialisationTests
+    public class ChessGameConvertTests
     {
         [Test]
         public void Should_serialise_and_deserialise_to_68char_format()

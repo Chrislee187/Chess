@@ -2,21 +2,26 @@
 @page "/board"
 <link href="css/chessboard.css" rel="stylesheet" />
 
-<div class="container-fluid">
-    <table class="chessboard">
+<div class="container-fluid chessboard">
+    <table>
         <thead>
             <tr class="board-border"><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td></td></tr>
         </thead>
-        @for (int y = 8; y >= 1; y--)
-        {
-            <tr>
-                <td class="board-border">@y</td>
-                @for (int x = 1; x <= 8; x++)
-                {
-                    <BoardCell piece='@Piece(x,y)' />
-                }
-                <td class="board-border">@y</td>
-            </tr>
+        @{
+            var black = false;
+            for (int y = 8; y >= 1; y--)
+            {
+                <tr>
+                    <td class="board-border">@y</td>
+                    @for (int x = 1; x <= 8; x++)
+                    {
+                        <BoardCell piece="@Piece(x,y)" black="@black"/>
+                        black = !black;
+                    }
+                    <td class="board-border">@y</td>
+                </tr>
+                black = !black;
+            }
         }
         <tfoot>
             <tr class="board-border"><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td></td></tr>

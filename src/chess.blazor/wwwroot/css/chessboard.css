@@ -1,12 +1,33 @@
 ﻿.chessboard {
     width: 100%;
+    height: 100%;
+    padding: 0px;
 }
+.chessboard TABLE {
+    width: 100%;
+    padding-bottom: 100%;
+    height: complex;    
+}
+
+.chessboard TD:before {
+    padding-top: 100%;
+}
+
 .chessboard TD {
-    min-width: 1em;
-    min-height: 1em;
+    min-width: 1rem;
     text-align: center;
 }
 .board-border {
     background-color: brown;
-    min-width: 1em;
+    color: gold;
+    min-width: 1rem;
+}
+
+.black-cell {
+    background-color: black;
+    color: white;
+}
+.white-cell {
+    background-color: white;
+    color: black;
 }

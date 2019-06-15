@@ -12,6 +12,12 @@ namespace chess.engine.Game
 {
     public static class ChessGameConvert
     {
+        public static int ToBoardIdx(this (int x, int y) location) 
+            => ((8 - location.y) * 8) + location.x - 1;
+
+        public static int ToBoardIdx(this BoardLocation location) 
+            => (location.X, location.Y).ToBoardIdx();
+
         public static string Serialise(ChessGame chessGameBoard)
         {
             var sb = new StringBuilder();
@@ -48,7 +54,7 @@ namespace chess.engine.Game
         }
 
 
-        public static string CheckForCastleEligibility(ChessGame chessGameBoard)
+        private static string CheckForCastleEligibility(ChessGame chessGameBoard)
         {
             var sb = new StringBuilder();
             LocatedItem<ChessPieceEntity> GetKing(Colours colours) =>
