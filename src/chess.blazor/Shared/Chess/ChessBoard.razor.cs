@@ -1,8 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using chess.blazor.Extensions;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Newtonsoft.Json.Linq;
 
 namespace chess.blazor.Shared.Chess
 {
@@ -14,30 +13,38 @@ namespace chess.blazor.Shared.Chess
         [Parameter]
         public string Board { get; set; } = new string('.', 64);
 
-        [Inject] public IChessGameApiClient _gameApi { get; set; }
         [Inject] public HttpClient HttpClient { get; set; }
+        [Inject] public IChessGameApiClient ApiClient { get; set; }
         public char Piece(int x, int y) => Board[ToBoardStringIdx(x,y)];
 
         private string _startingBoard;
         protected override async Task OnInitAsync()
         {
-            ResetBoard();
+            await ResetBoard();
         }
 
-        private async void InitialiseBoard()
+        private async Task InitialiseBoard()
         {
+            string result = string.Empty;
             if (string.IsNullOrEmpty(_startingBoard))
             {
                 // TODO: Create a proper client, not the nswag one, way to cumbersome for these basic needs
                 // use a proper base class/virtuals etc. to handle error flows etc. See the NSwag one for details
-                // 
-                _startingBoard = await HttpClient.GetStringAsync("https://chess-web-api.azurewebsites.net/api/chessgame");
-            }
-            //            var result = await _gameApi.IndexAsync();
-            var jObject = JObject.Parse(_startingBoard);
+                //                result= await HttpClient.GetStringAsync("https://chess-web-api.azurewebsites.net/api/chessgame");
 
-            Board = jObject["board"].ToString();
+                result = await ApiClient.ChessGameAsync();
+
+                _startingBoard = ExtractBoard(result);
+            }
+
+            Board = _startingBoard;
             StateHasChanged();
+        }
+
+        private string ExtractBoard(string chessWebApiResult)
+        {
+            var jsonDocument = System.Text.Json.JsonDocument.Parse(chessWebApiResult);
+            return jsonDocument.RootElement.GetString("board");
         }
 
         private bool _flip;
@@ -47,9 +54,9 @@ namespace chess.blazor.Shared.Chess
             _flip = !_flip;
         }
 
-        public void ResetBoard()
+        public async Task ResetBoard()
         {
-            InitialiseBoard();
+            await InitialiseBoard();
         }
 
         private int ToBoardStringIdx(int x, int y)

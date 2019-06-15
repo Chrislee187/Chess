@@ -23,14 +23,14 @@ namespace chess.webapi.Controllers
 
         [HttpGet]
         // GET
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View("Index");
         }
 
         [HttpGet("playwikigame/{iterations}")]
         // GET /
-        public IActionResult Index([Range(1, 100, ErrorMessage = "Max iterations allowed is 100.")]int iterations)
+        public ActionResult Index([Range(1, 100, ErrorMessage = "Max iterations allowed is 100.")]int iterations)
         {
 
             return Json(_perfService.PlayWikiGame(iterations));
