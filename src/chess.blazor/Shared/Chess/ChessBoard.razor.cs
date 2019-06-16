@@ -13,41 +13,29 @@ namespace chess.blazor.Shared.Chess
     public class ChessBoardComponent : ComponentBase
     {
         [Parameter]
-        public string Board { get; set; } = new string('.', 64);
+        public string Board
+        {
+            get => _board;
+            set
+            {
+                _board = value;
+                StateHasChanged();
+            }
+        }
 
-        [Inject] public IChessGameApiClient ApiClient { get; set; }
 
         public char Piece(int x, int y) => Board[ToBoardStringIdx(x,y)];
         public string Message { get; set; }
-        private string _startingBoard;
-        protected override async Task OnInitAsync()
-        {
-            await ResetBoard();
-        }
 
-        private async Task InitialiseBoard()
-        {
-            ChessWebApiResult result;
-            if (string.IsNullOrEmpty(_startingBoard))
-            {
-                result = await ApiClient.ChessGameAsync();
-
-                _startingBoard = result.Board;
-            }
-
-            Board = _startingBoard;
-            StateHasChanged();
-        }
 
         private bool _flip;
+        private string _board = new string('.', 64);
+
         public void Test()
         {
             Board = _flip ? Board.ToUpper() : Board.ToLower();
             _flip = !_flip;
         }
-
-        public async Task ResetBoard() => await InitialiseBoard();
-
         private int ToBoardStringIdx(int x, int y) => ((8 - y) * 8) + x - 1;
     }
 }

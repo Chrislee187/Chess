@@ -1,5 +1,7 @@
-﻿@page "/boardtest"
+﻿@inherits BoardTestComponent
+@page "/boardtest"
 
 <div style="width: 400px; height: 400px">
-    <ChessBoard></ChessBoard>
+    <ChessBoard @ref="ChessBoard"></ChessBoard>
 </div>
+<button onclick="@ResetBoard">ResetBoard</button>
