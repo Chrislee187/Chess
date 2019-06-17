@@ -1,0 +1,12 @@
+﻿.movelist {
+    /* display: flex; */
+    /* flex-direction: row; */
+    /* flex-wrap: wrap; */
+    width: 400px;
+    height: 400px;
+    padding-left: 10px;
+}
+.move {
+    width: 4em;
+    margin-bottom: 10px;
+}

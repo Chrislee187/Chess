@@ -1,9 +1,4 @@
-﻿using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-using chess.blazor.Extensions;
-using chess.webapi.client.csharp;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace chess.blazor.Shared.Chess
 {

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using chess.blazor.Shared.Chess;
 using chess.webapi.client.csharp;
 using Microsoft.AspNetCore.Components;
@@ -8,15 +9,16 @@ namespace chess.blazor.Pages
     public class BoardTestComponent : ComponentBase
     {
         protected ChessBoardComponent ChessBoard { get; set; }
+        protected AvailableMoveListComponent MoveList { get; set; }
         [Inject] public IChessGameApiClient ApiClient { get; set; }
 
         private ChessWebApiResult _firstResult;
         protected override async Task OnInitAsync()
         {
-            await InitialiseBoard();
+            await InitialiseBoardAsync();
         }
 
-        private async Task InitialiseBoard()
+        private async Task InitialiseBoardAsync()
         {
             if (_firstResult == null)
             {
@@ -24,11 +26,12 @@ namespace chess.blazor.Pages
             }
 
             ChessBoard.Board = _firstResult.Board;
+            MoveList.Moves = _firstResult.AvailableMoves;
         }
 
-        public void ResetBoard()
+        public async Task ResetBoardAsync()
         {
-            InitialiseBoard().RunSynchronously();
+            await InitialiseBoardAsync();
         }
     }
 }

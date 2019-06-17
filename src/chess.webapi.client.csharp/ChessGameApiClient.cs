@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace chess.webapi.client.csharp
 {
@@ -11,7 +12,11 @@ namespace chess.webapi.client.csharp
 
         public Task<ChessWebApiResult> ChessGameAsync() => ChessGameAsync(CancellationToken.None);
 
-        public async Task<ChessWebApiResult> ChessGameAsync(CancellationToken cancellationToken) => await GetJsonAsync<ChessWebApiResult>("chessgame");
+        public async Task<ChessWebApiResult> ChessGameAsync(CancellationToken cancellationToken)
+        {
+            // TODO: Find out why availableMoves is not deserialised when using GetJsonAsync method from the new .NET Json libraries
+            return JsonConvert.DeserializeObject<ChessWebApiResult>(await GetStringAsync("chessgame"));
+        }
     }
 
     public class ChessWebApiResult
