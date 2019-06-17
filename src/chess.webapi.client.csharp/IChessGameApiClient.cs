@@ -6,5 +6,8 @@ namespace chess.webapi.client.csharp
     {
         Task<ChessWebApiResult> ChessGameAsync();
         Task<ChessWebApiResult> ChessGameAsync(System.Threading.CancellationToken cancellationToken);
+        Task<ChessWebApiResult> PlayMoveAsync(string board, string move);
+        Task<ChessWebApiResult> PlayMoveAsync(string board, string move, System.Threading.CancellationToken cancellationToken);
+
     }
 }

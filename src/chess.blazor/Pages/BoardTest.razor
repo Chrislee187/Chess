@@ -1,7 +1,7 @@
 ﻿@inherits BoardTestComponent
 @page "/boardtest"
-
-<div style="width: 400px; height: 400px">
-    <ChessBoard @ref="ChessBoard"></ChessBoard>
-</div>
-<button onclick="@ResetBoard">ResetBoard</button>
+    <div class="row">
+        <ChessBoard @ref="ChessBoard"></ChessBoard>
+        <AvailableMoveList @ref="MoveList" OnMoveSelected="@OnMoveSelected"></AvailableMoveList>
+    </div>
+<button onclick="@ResetBoardAsync">Reset Board</button>
