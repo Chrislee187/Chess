@@ -1,2 +1,2 @@
 # LOADING THE PROJECT IN VS2017
-NOTE that this solution was moved to VS2019 to utilise Blazor in .NET Core 3 Preview6, as a preview the installation a usage is not as cut and dried as more mature libraries and as such the two webapi's no longer load for me in VS2017. I've believe that you can get VS2017 to support the preview but I've not bothered setting this up. Hopefully this problem will disappear once Blazor is out of preview.
+NOTE that this solution was moved to VS2019 to utilise Blazor in .NET Core 3 Preview6, as a preview the installation a usage is not as cut and dried as more mature libraries, currently the wenapwebapi and the blazor site only load correctly in visual studio if you load it from the src folder.
