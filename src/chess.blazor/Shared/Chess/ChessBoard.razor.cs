@@ -12,13 +12,20 @@ namespace chess.blazor.Shared.Chess
     {
         private readonly MoveSelection _moveSelection;
 
-        protected readonly IDictionary<string, BoardCellComponent> BoardCells = new Dictionary<string, BoardCellComponent>();
+        protected readonly IDictionary<string, BoardCellComponent> BoardCells =
+            new Dictionary<string, BoardCellComponent>();
+
+        private string _board = new string('.', 64);
 
         [Parameter]
-        public string Board { get; set; } = new string('.', 64);
+        public string Board
+        {
+            get => _board;
+            set => _board = value.Replace("E", "P").Replace("e", "p");
+        }
 
         [Parameter] public bool WhiteToPlay { get; set; }
-        
+
         [Parameter] private EventCallback<string> OnMoveSelectedAsync { get; set; }
 
         public Move[] AvailableMoves { get; set; }
@@ -36,7 +43,7 @@ namespace chess.blazor.Shared.Chess
         {
             _moveSelection = new MoveSelection(BoardCells);
         }
-        
+
         public async Task<bool> MoveSelected(string move)
         {
             Console.WriteLine($"Making move: {move}");
@@ -44,7 +51,7 @@ namespace chess.blazor.Shared.Chess
             if (OnMoveSelectedAsync.HasDelegate) await OnMoveSelectedAsync.InvokeAsync(move);
             return true;
         }
-        
+
         public void Refresh(string resultBoard, Move[] resultAvailableMoves)
         {
             Board = resultBoard;
@@ -61,7 +68,6 @@ namespace chess.blazor.Shared.Chess
             {
                 await MoveSelected($"{_moveSelection.Move}");
             }
-
         }
     }
 }
