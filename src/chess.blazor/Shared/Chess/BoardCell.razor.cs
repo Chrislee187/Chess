@@ -34,20 +34,15 @@ namespace chess.blazor.Shared.Chess
 
         public bool PieceIsWhite => char.IsUpper(Piece);
 
-        public void SetAsSourceLocation()
-        {
-            IsSourceLocation = true;
-        }
+        public void SetAsSourceLocation() => IsSourceLocation = true;
+        public void SetAsDestinationLocation() => IsDestinationLocation = true;
+
         public void ClearLocationStyle()
         {
             IsSourceLocation = false;
             IsDestinationLocation = false;
         }
 
-        public void SetAsDestinationLocation()
-        {
-            IsDestinationLocation = true;
-        }
     }
 
     public class PieceSelectedEventArgs
