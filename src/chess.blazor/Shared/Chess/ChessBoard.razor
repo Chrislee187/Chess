@@ -2,7 +2,7 @@
 <link href="css/chessboard.css" rel="stylesheet" />
 
 <div class="chessboard">
-    <table>
+    <table class="@(WhiteToPlay ? "white-to-play" : "black-to-play")">
         <thead>
             <BoardBorderRow />
         </thead>
@@ -14,7 +14,10 @@
                     <td class="board-border">@y</td>
                     @for (int x = 1; x <= 8; x++)
                     {
-                        <BoardCell piece="@Piece(x,y)" black="@black" />
+                        <BoardCell 
+                                   piece="@Piece(x,y)" 
+                                   IsBlackSquare="@black" 
+                                   />
                         black = !black;
                     }
                     <td class="board-border">@y</td>

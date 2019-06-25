@@ -31,7 +31,9 @@ namespace chess.blazor.Pages
 
         private void UpdateBoardAndMoves(ChessWebApiResult result)
         {
+            ChessBoard.WhiteToPlay = result.WhoseTurn.ToLower().Contains("white");
             ChessBoard.Board = result.Board;
+            Console.WriteLine(ChessBoard.WhiteToPlay);
             MoveList.Moves = result.AvailableMoves;
             if (string.IsNullOrEmpty(result.Message))
             {
@@ -43,9 +45,9 @@ namespace chess.blazor.Pages
             }
         }
 
-        public async Task OnMoveSelected(string move)
+        public async Task OnMoveSelectedAsync(string move)
         {
-            Console.WriteLine($"OnMoveSelected({move})");
+            Console.WriteLine($"OnMoveSelectedAsync({move})");
             var result = await ApiClient.PlayMoveAsync(ChessBoard.Board, EncodeMove(move));
             UpdateBoardAndMoves(result);
         }

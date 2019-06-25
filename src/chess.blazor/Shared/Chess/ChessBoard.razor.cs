@@ -19,6 +19,9 @@ namespace chess.blazor.Shared.Chess
         public char Piece(int x, int y) => Board[ToBoardStringIdx(x,y)];
         public string Message { get; set; }
 
+        [Parameter]
+        public bool WhiteToPlay { get; set; }
+
         private string _emptyBoard = new string('.', 64);
 
         private int ToBoardStringIdx(int x, int y) => ((8 - y) * 8) + x - 1;

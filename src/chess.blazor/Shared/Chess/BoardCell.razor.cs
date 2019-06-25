@@ -8,6 +8,10 @@ namespace chess.blazor.Shared.Chess
         public char Piece { get; set; }
 
         [Parameter]
-        public bool Black { get; set; }
+        public bool IsBlackSquare { get; set; }
+
+        public bool IsEmptySquare => Piece == ' ' || Piece == '.';
+
+        public bool PieceIsWhite => char.IsUpper(Piece);
     }
 }

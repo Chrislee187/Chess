@@ -2,6 +2,6 @@
 @page "/boardtest"
     <div class="row">
         <ChessBoard @ref="ChessBoard"></ChessBoard>
-        <AvailableMoveList @ref="MoveList" OnMoveSelected="@OnMoveSelected"></AvailableMoveList>
+        <AvailableMoveList @ref="MoveList" OnMoveSelectedAsync="@OnMoveSelectedAsync"></AvailableMoveList>
     </div>
 <button onclick="@ResetBoardAsync">Reset Board</button>

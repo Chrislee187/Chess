@@ -26,14 +26,14 @@ namespace chess.blazor.Shared.Chess
         }
 
         [Parameter]
-        private EventCallback<string> OnMoveSelected { get; set; }
+        private EventCallback<string> OnMoveSelectedAsync { get; set; }
 
         [Parameter]
         public string Title { get; set; }
 
         public async Task<bool> MoveSelected(string move)
         {
-            if(OnMoveSelected.HasDelegate) await OnMoveSelected.InvokeAsync(move);
+            if(OnMoveSelectedAsync.HasDelegate) await OnMoveSelectedAsync.InvokeAsync(move);
 
             return true;
         }
