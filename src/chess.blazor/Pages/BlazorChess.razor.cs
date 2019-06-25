@@ -18,6 +18,7 @@ namespace chess.blazor.Pages
         private ChessWebApiResult _firstResult;
         private ChessWebApiResult _lastResult;
 
+        private int _moveCount = 0;
         protected override async Task OnInitAsync()
         {
             await InitialiseBoardAsync();
@@ -33,6 +34,7 @@ namespace chess.blazor.Pages
             _lastResult = _firstResult ?? throw new NullReferenceException("Unable to initialise board");
 
             UpdateBoardAndMoves(_firstResult);
+            _moveCount = 0;
         }
 
         private void UpdateBoardAndMoves(ChessWebApiResult result)
@@ -64,17 +66,20 @@ namespace chess.blazor.Pages
         public async Task OnMoveSelectedAsync(string move)
         {
             ChessBoard.Message = "";
+
             try
             {
+                if (_moveCount > 150) throw new Exception("Move count exceeded");
                 _lastResult = await ApiClient.PlayMoveAsync(ChessBoard.Board, EncodeMove(move));
                 UpdateBoardAndMoves(_lastResult);
                 StateHasChanged();
+                _moveCount++;
                 await HandleAiPlayer(_lastResult);
-
             }
             catch (Exception e)
             {
-                ChessBoard.Message = $"Error performing move\n{e.Message}"; // TODO: This hides all errors not just invalid moves.
+                ChessBoard.Message = $"Error performing move;\n{e.Message}"; // TODO: This hides all errors not just invalid moves.
+                StateHasChanged();
             }
 
 
