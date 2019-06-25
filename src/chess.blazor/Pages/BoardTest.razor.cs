@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using chess.blazor.Shared.Chess;
 using chess.webapi.client.csharp;
@@ -9,7 +6,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace chess.blazor.Pages
 {
-    public class BoardTestComponent : ComponentBase
+    public class BlazorChessComponent : ComponentBase
     {
         [Parameter] public bool WhiteIsHuman { get; set; } = true;
         [Parameter] public bool BlackIsHuman { get; set; } = false;
@@ -44,17 +41,17 @@ namespace chess.blazor.Pages
 
             UpdateMoveListComponent(result);
 
-            Console.WriteLine("Triggering state change");
+            Status("Triggering state change");
             StateHasChanged();
         }
 
         private void UpdateMoveListComponent(ChessWebApiResult result)
         {
-            Console.WriteLine("Updating movelist...");
+            Status("Updating movelist...");
             MoveList.Moves = result.AvailableMoves;
             MoveList.ShowMoveList = !IsAITurn(result);
 
-            Console.WriteLine("Updating message...");
+            Status("Updating message...");
             if (string.IsNullOrEmpty(result.Message))
             {
                 MoveList.Title = $"{result.WhoseTurn} to play";
@@ -67,7 +64,7 @@ namespace chess.blazor.Pages
 
         private void UpdateChessBoardComponent(ChessWebApiResult result)
         {
-            Console.WriteLine("Updating board...");
+            Status("Updating board...");
             ChessBoard.WhiteToPlay = result.WhoseTurn.ToLower().Contains("white");
             ChessBoard.Refresh(result.Board, result.AvailableMoves);
         }
@@ -75,7 +72,7 @@ namespace chess.blazor.Pages
         public async Task OnMoveSelectedAsync(string move)
         {
             ChessBoard.Message = "";
-            Console.WriteLine($"OnMoveSelectedAsync({move})");
+            Status($"OnMoveSelectedAsync({move})");
             try
             {
                 _lastResult = await ApiClient.PlayMoveAsync(ChessBoard.Board, EncodeMove(move));
@@ -94,8 +91,8 @@ namespace chess.blazor.Pages
 
         private async Task HandleAIPlayer(ChessWebApiResult lastResult)
         {
-            Console.WriteLine($"White is human: {WhiteIsHuman}");
-            Console.WriteLine($"Black is human: {BlackIsHuman}");
+            Status($"White is human: {WhiteIsHuman}");
+            Status($"Black is human: {BlackIsHuman}");
             if (IsAITurn(lastResult))
             {
                 await PlayRandomMove(lastResult);
@@ -112,10 +109,8 @@ namespace chess.blazor.Pages
         {
             MoveList.Title = $"{lastResult.WhoseTurn} is thinking...";
             MoveList.ShowMoveList = false;
-//            StateHasChanged();
-//            Thread.Sleep(1000);
-            var rnd = new Random().Next(1, lastResult.AvailableMoves.Length + 1);
-            await OnMoveSelectedAsync(lastResult.AvailableMoves[rnd].Coord);
+            var rnd = new Random().Next(lastResult.AvailableMoves.Length);
+            await OnMoveSelectedAsync(lastResult.AvailableMoves[rnd].SAN);
         }
 
         public async Task ResetBoardAsync()
@@ -124,5 +119,11 @@ namespace chess.blazor.Pages
         }
 
         public string EncodeMove(string move) => move.Replace("+", "");
+
+        private void Status(string text)
+        {
+            // TODO: Move this to something on the page
+            Console.WriteLine(text);
+        }
     }
 }
