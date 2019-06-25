@@ -38,14 +38,14 @@ namespace chess.blazor.Shared.Chess
             }
         }
 
-        public void Updated(Move[] availlableMoves)
+        public void Updated(Move[] availableMoves)
         {
 
             if (HaveFrom)
             {
                 HighlightFromCell(_cells, From);
 
-                HighlightDestinationCells(_cells, availlableMoves
+                HighlightDestinationCells(_cells, availableMoves
                     .Where(m => m.Coord.StartsWith(From))
                     .Select(m => m.Coord.Substring(2)));
             }

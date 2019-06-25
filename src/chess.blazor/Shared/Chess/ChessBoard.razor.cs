@@ -63,6 +63,9 @@ namespace chess.blazor.Shared.Chess
         // ReSharper disable once UnusedMember.Global - referenced in the razor component
         public async Task PieceSelectedAsync(PieceSelectedEventArgs args)
         {
+            // TODO: Enhance this so that the moveSelection knows about available moves for nicer UX
+            // TODO: clicks on non-valid squares are ignored
+            // TODO: clicks on empty squares are ignored
             _moveSelection.Selected((args.X, args.Y). ToChessLocation());
             _moveSelection.Updated(AvailableMoves);
             if (_moveSelection.HaveMove)

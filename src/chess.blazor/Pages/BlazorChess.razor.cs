@@ -47,19 +47,12 @@ namespace chess.blazor.Pages
 
         private void UpdateMoveListComponent(ChessWebApiResult result)
         {
-            Status("Updating movelist...");
-            MoveList.Moves = result.AvailableMoves;
-            MoveList.ShowMoveList = !IsAITurn(result);
+            var title = string.IsNullOrEmpty(result.Message)
+                ? $"{result.WhoseTurn} to play"
+                : result.Message;
 
-            Status("Updating message...");
-            if (string.IsNullOrEmpty(result.Message))
-            {
-                MoveList.Title = $"{result.WhoseTurn} to play";
-            }
-            else
-            {
-                MoveList.Title = result.Message;
-            }
+            MoveList.Update(title, result.AvailableMoves, !IsAITurn(result));
+
         }
 
         private void UpdateChessBoardComponent(ChessWebApiResult result)
@@ -72,13 +65,12 @@ namespace chess.blazor.Pages
         public async Task OnMoveSelectedAsync(string move)
         {
             ChessBoard.Message = "";
-            Status($"OnMoveSelectedAsync({move})");
             try
             {
                 _lastResult = await ApiClient.PlayMoveAsync(ChessBoard.Board, EncodeMove(move));
                 UpdateBoardAndMoves(_lastResult);
 
-                await HandleAIPlayer(_lastResult);
+                await HandleAiPlayer(_lastResult);
 
             }
             catch (Exception e)
@@ -89,10 +81,8 @@ namespace chess.blazor.Pages
 
         }
 
-        private async Task HandleAIPlayer(ChessWebApiResult lastResult)
+        private async Task HandleAiPlayer(ChessWebApiResult lastResult)
         {
-            Status($"White is human: {WhiteIsHuman}");
-            Status($"Black is human: {BlackIsHuman}");
             if (IsAITurn(lastResult))
             {
                 await PlayRandomMove(lastResult);

@@ -39,5 +39,12 @@ namespace chess.blazor.Shared.Chess
 
             return true;
         }
+
+        public void Update(string title, Move[] moves, bool showMoveList)
+        {
+            Title = title;
+            Moves = moves;
+            ShowMoveList = showMoveList;
+        }
     }
 }
