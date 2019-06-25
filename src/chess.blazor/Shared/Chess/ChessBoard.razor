@@ -15,7 +15,8 @@
                     <td class="board-border">@y</td>
                     @for (int x = 1; x <= 8; x++)
                     {
-                        <BoardCell X="@x" Y="@y"
+                        <BoardCell @ref="BoardCell"
+                                   X="@x" Y="@y"
                                    piece="@Piece(x,y)" 
                                    IsBlackSquare="@black" 
                                    OnPieceSelected="PieceSelectedAsync"

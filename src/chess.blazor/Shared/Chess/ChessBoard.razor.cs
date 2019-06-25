@@ -1,12 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using chess.webapi.client.csharp;
 using Microsoft.AspNetCore.Components;
 
 namespace chess.blazor.Shared.Chess
 {
     public class ChessBoardComponent : ComponentBase
     {
-        private MoveSelection _moveSelection = new MoveSelection();
+        private readonly IDictionary<string, BoardCellComponent> _cells = new Dictionary<string, BoardCellComponent>();
+        private readonly MoveSelection _moveSelection;
+
+        public ChessBoardComponent()
+        {
+            _moveSelection = new MoveSelection(_cells);
+        }
+
+        public BoardCell BoardCell
+        {
+            set
+            {
+                var key = $"{(char) (value.X + _asciiLowerCaseA - 1)}{value.Y}";
+                _cells[key] = value;
+            }
+        }
+
         [Parameter]
         public string Board
         {
@@ -17,75 +36,77 @@ namespace chess.blazor.Shared.Chess
                 StateHasChanged();
             }
         }
+        public Move[] AvailableMoves { get; set; }
 
         [Parameter]
         private EventCallback<string> OnMoveSelectedAsync { get; set; }
 
         public async Task<bool> MoveSelected(string move)
         {
-            Console.WriteLine($"Making move: {moveFrom}{moveTo}");
+            Console.WriteLine($"Making move: {move}");
             if (OnMoveSelectedAsync.HasDelegate) await OnMoveSelectedAsync.InvokeAsync(move);
-            ClearSelectedMove();
+            _moveSelection.Clear();
             return true;
         }
+
         public char Piece(int x, int y) => Board[ToBoardStringIdx(x,y)];
         public string Message { get; set; }
 
         [Parameter]
         public bool WhiteToPlay { get; set; }
 
+
         private string _emptyBoard = new string('.', 64);
 
         private int ToBoardStringIdx(int x, int y) => ((8 - y) * 8) + x - 1;
 
-        private string moveFrom = "";
-        private string moveTo = "";
-        private int asciiLowerCaseA = 'a';
+        private int _asciiLowerCaseA = 'a';
         public async Task PieceSelectedAsync(PieceSelectedEventArgs args)
         {
-            _moveSelection.Selected($"{(char)(args.X + asciiLowerCaseA - 1)}{args.Y}");
-
+            _moveSelection.Selected($"{(char)(args.X + _asciiLowerCaseA - 1)}{args.Y}");
+            _moveSelection.Updated(AvailableMoves);
             if (_moveSelection.HaveMove)
             {
                 await MoveSelected($"{_moveSelection.Move}");
-                _moveSelection.Clear();
+                ClearSourceLocationSelection();
             }
 
-            
         }
 
-        public void ClearSelectedMove()
+        private void HighlightFromCell(IDictionary<string, BoardCellComponent> boardCellComponents,
+            string moveSelectionFrom)
         {
-            moveFrom = string.Empty;
-            moveTo = string.Empty;
+            ClearSourceLocationSelection();
+            var fromCell = boardCellComponents[moveSelectionFrom];
+            fromCell.SetAsSourceLocation();
+
         }
-    }
 
-    public class MoveSelection
-    {
-        public string From { get; set; }
-        public string To { get; set; }
-
-        public string Move => $"{From}{To}";
-
-        public void Selected(string location)
+        private void HighlightDestinationCells(IDictionary<string, BoardCellComponent> boardCellComponents,
+            IEnumerable<string> destinations)
         {
-            if (string.IsNullOrWhiteSpace(From))
+            destinations.ToList()
+                .ForEach(dest => boardCellComponents[dest].SetAsDestinationLocation()
+                );
+        }
+
+        private void ClearSourceLocationSelection()
+        {
+            _cells.Values.Where(v => v.IsSourceLocation).ToList().ForEach(v =>
             {
-                From = location;
-            }
-            else
+                v.IsSourceLocation = false;
+            });
+            _cells.Values.Where(v => v.IsDestinationLocation).ToList().ForEach(v =>
             {
-                To = location;
-            }
+                v.IsDestinationLocation = false;
+            });
         }
 
-        public bool HaveMove => !string.IsNullOrWhiteSpace(From) && !string.IsNullOrWhiteSpace(To);
-
-        public void Clear()
+        public void Refresh(string resultBoard, Move[] resultAvailableMoves)
         {
-            From = string.Empty;
-            To = string.Empty;
+            Board = resultBoard;
+            AvailableMoves = resultAvailableMoves;
+
         }
     }
 }

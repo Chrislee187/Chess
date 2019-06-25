@@ -1,8 +1,10 @@
 ﻿@inherits BoardTestComponent
 @page "/boardtest"
     <div class="debug-settings">
-        White is human<input type="checkbox" id="WhiteIsHuman" checked="@WhiteIsHuman" /> | 
-        Black is human<input type="checkbox" id="BlackIsHuman" checked="@BlackIsHuman"/>
+        White is human<input type="checkbox" id="WhiteIsHuman" checked="@WhiteIsHuman"
+                             onchange=@(eventArgs => { WhiteIsHuman = !WhiteIsHuman; })/> | 
+        Black is human<input type="checkbox" id="BlackIsHuman" checked="@BlackIsHuman"
+                             onchange=@(eventArgs => { BlackIsHuman = !BlackIsHuman; })/>
     </div>
     <div class="row">
         <ChessBoard @ref="ChessBoard" 

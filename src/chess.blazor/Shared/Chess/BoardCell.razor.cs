@@ -10,8 +10,9 @@ namespace chess.blazor.Shared.Chess
         [Parameter]
         public char Piece { get; set; }
 
-        [Parameter]
-        public bool IsBlackSquare { get; set; }
+        [Parameter] public bool IsBlackSquare { get; set; }
+        [Parameter] public bool IsSourceLocation { get; set; }
+        [Parameter] public bool IsDestinationLocation { get; set; }
 
         [Parameter]
         public EventCallback<PieceSelectedEventArgs> OnPieceSelected { get; set; }
@@ -32,6 +33,21 @@ namespace chess.blazor.Shared.Chess
         public bool IsEmptySquare => Piece == ' ' || Piece == '.';
 
         public bool PieceIsWhite => char.IsUpper(Piece);
+
+        public void SetAsSourceLocation()
+        {
+            IsSourceLocation = true;
+        }
+        public void ClearLocationStyle()
+        {
+            IsSourceLocation = false;
+            IsDestinationLocation = false;
+        }
+
+        public void SetAsDestinationLocation()
+        {
+            IsDestinationLocation = true;
+        }
     }
 
     public class PieceSelectedEventArgs

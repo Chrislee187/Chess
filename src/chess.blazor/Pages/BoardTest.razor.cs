@@ -69,7 +69,7 @@ namespace chess.blazor.Pages
         {
             Console.WriteLine("Updating board...");
             ChessBoard.WhiteToPlay = result.WhoseTurn.ToLower().Contains("white");
-            ChessBoard.Board = result.Board;
+            ChessBoard.Refresh(result.Board, result.AvailableMoves);
         }
 
         public async Task OnMoveSelectedAsync(string move)
@@ -86,7 +86,7 @@ namespace chess.blazor.Pages
             }
             catch (Exception e)
             {
-                ChessBoard.Message = $"Error performing move"; // TODO: This hides all errors not just invalid moves.
+                ChessBoard.Message = $"Error performing move\n{e.Message}"; // TODO: This hides all errors not just invalid moves.
             }
 
 
@@ -94,6 +94,8 @@ namespace chess.blazor.Pages
 
         private async Task HandleAIPlayer(ChessWebApiResult lastResult)
         {
+            Console.WriteLine($"White is human: {WhiteIsHuman}");
+            Console.WriteLine($"Black is human: {BlackIsHuman}");
             if (IsAITurn(lastResult))
             {
                 await PlayRandomMove(lastResult);
@@ -110,8 +112,8 @@ namespace chess.blazor.Pages
         {
             MoveList.Title = $"{lastResult.WhoseTurn} is thinking...";
             MoveList.ShowMoveList = false;
-            StateHasChanged();
-            Thread.Sleep(1000);
+//            StateHasChanged();
+//            Thread.Sleep(1000);
             var rnd = new Random().Next(1, lastResult.AvailableMoves.Length + 1);
             await OnMoveSelectedAsync(lastResult.AvailableMoves[rnd].Coord);
         }
