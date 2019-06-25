@@ -12,18 +12,9 @@ namespace chess.blazor.Shared.Chess
     /// </summary>
     public class AvailableMoveListComponent : ComponentBase
     {
-        private IEnumerable<Move> _moves;
-
         [Parameter]
-        public IEnumerable<Move> Moves // TODO: This should not be the APIClient Move but a specific model for use by the blazor component
-        {
-            get => _moves;
-            set
-            {
-                _moves = value;
-                StateHasChanged();
-            }
-        }
+        // TODO: This should not be the APIClient Move but a specific model for use by the blazor component
+        public IEnumerable<Move> Moves { get; set; } 
 
         [Parameter] public bool ShowMoveList { get; set; } = true;
 

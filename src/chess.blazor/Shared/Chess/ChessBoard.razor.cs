@@ -10,21 +10,12 @@ namespace chess.blazor.Shared.Chess
 {
     public class ChessBoardComponent : ComponentBase
     {
-        private string _currentBoard = new string('.', 64);
         private readonly MoveSelection _moveSelection;
 
         protected readonly IDictionary<string, BoardCellComponent> BoardCells = new Dictionary<string, BoardCellComponent>();
 
         [Parameter]
-        public string Board
-        {
-            get => _currentBoard;
-            set
-            {
-                _currentBoard = value;
-                StateHasChanged();
-            }
-        }
+        public string Board { get; set; } = new string('.', 64);
 
         [Parameter] public bool WhiteToPlay { get; set; }
 

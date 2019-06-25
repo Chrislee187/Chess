@@ -42,7 +42,6 @@ namespace chess.blazor.Pages
             UpdateMoveListComponent(result);
 
             Status("Triggering state change");
-            StateHasChanged();
         }
 
         private void UpdateMoveListComponent(ChessWebApiResult result)
