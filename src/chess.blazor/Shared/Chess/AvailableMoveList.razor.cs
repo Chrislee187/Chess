@@ -25,6 +25,8 @@ namespace chess.blazor.Shared.Chess
             }
         }
 
+        [Parameter] public bool ShowMoveList { get; set; } = true;
+
         [Parameter]
         private EventCallback<string> OnMoveSelectedAsync { get; set; }
 

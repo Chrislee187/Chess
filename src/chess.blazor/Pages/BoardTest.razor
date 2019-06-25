@@ -1,7 +1,15 @@
 ﻿@inherits BoardTestComponent
 @page "/boardtest"
+    <div class="debug-settings">
+        White is human<input type="checkbox" id="WhiteIsHuman" checked="@WhiteIsHuman" /> | 
+        Black is human<input type="checkbox" id="BlackIsHuman" checked="@BlackIsHuman"/>
+    </div>
     <div class="row">
-        <ChessBoard @ref="ChessBoard"></ChessBoard>
-        <AvailableMoveList @ref="MoveList" OnMoveSelectedAsync="@OnMoveSelectedAsync"></AvailableMoveList>
+        <ChessBoard @ref="ChessBoard" 
+                    OnMoveSelectedAsync="@OnMoveSelectedAsync"
+                    ></ChessBoard>
+        <AvailableMoveList @ref="MoveList" 
+                    OnMoveSelectedAsync="@OnMoveSelectedAsync"
+                    ></AvailableMoveList>
     </div>
 <button onclick="@ResetBoardAsync">Reset Board</button>

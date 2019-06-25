@@ -1,4 +1,5 @@
 ﻿@inherits ChessBoardComponent
+
 <link href="css/chessboard.css" rel="stylesheet" />
 
 <div class="chessboard">
@@ -14,9 +15,10 @@
                     <td class="board-border">@y</td>
                     @for (int x = 1; x <= 8; x++)
                     {
-                        <BoardCell 
+                        <BoardCell X="@x" Y="@y"
                                    piece="@Piece(x,y)" 
                                    IsBlackSquare="@black" 
+                                   OnPieceSelected="PieceSelectedAsync"
                                    />
                         black = !black;
                     }
@@ -31,5 +33,7 @@
     </table>
 
     <div>@Message</div>
+    <div id ="debug">
 
+    </div>
 </div>
