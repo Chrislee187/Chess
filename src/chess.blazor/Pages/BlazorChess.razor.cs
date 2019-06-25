@@ -68,7 +68,7 @@ namespace chess.blazor.Pages
             {
                 _lastResult = await ApiClient.PlayMoveAsync(ChessBoard.Board, EncodeMove(move));
                 UpdateBoardAndMoves(_lastResult);
-
+                StateHasChanged();
                 await HandleAiPlayer(_lastResult);
 
             }

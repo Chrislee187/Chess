@@ -14,8 +14,4 @@
     <PackageReference Include="pgn-reader" Version="1.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\chess.webapi.client.csharp\chess.webapi.client.csharp.csproj" />
-  </ItemGroup>
-
 </Project>

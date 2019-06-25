@@ -51,16 +51,18 @@
     -webkit-box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.66) inset;
     -moz-box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.66) inset;
     box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.66) inset;
+    cursor: pointer;
 }
 
- .white-to-play .white-piece-highlight:hover { 
-     -webkit-border-radius: 10px; 
-     -moz-border-radius: 10px; 
-     border-radius: 10px; 
-     -webkit-box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.33) inset; 
-     -moz-box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.33) inset; 
-     box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.33) inset; 
- } 
+.white-to-play .white-piece-highlight:hover {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.33) inset;
+    -moz-box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.33) inset;
+    box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.33) inset;
+    cursor: pointer;
+} 
  
  .black-to-play .black-piece-highlight:hover { 
      -webkit-border-radius: 10px; 

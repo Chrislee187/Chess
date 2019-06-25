@@ -29,12 +29,19 @@ namespace chess.blazor.Shared.Chess
                 if (location == From)
                 {
                     Clear();
+                    return;
                 }
-                else
+
+                var destLocation = _cells[location];
+                if (!destLocation.IsEmptySquare && destLocation.PieceIsWhite == _cells[From].PieceIsWhite)
                 {
-                    // TODO: If location contains a piece of the same colour as the players turns reset the "from" location
-                    To = location;
+                    From = location;
+                    return;
                 }
+
+                if (!destLocation.IsDestinationLocation) return;
+
+                To = location;
             }
         }
 

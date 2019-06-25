@@ -18,7 +18,7 @@ namespace chess.blazor.Shared.Chess
         public string Board { get; set; } = new string('.', 64);
 
         [Parameter] public bool WhiteToPlay { get; set; }
-
+        
         [Parameter] private EventCallback<string> OnMoveSelectedAsync { get; set; }
 
         public Move[] AvailableMoves { get; set; }
@@ -57,7 +57,8 @@ namespace chess.blazor.Shared.Chess
             // TODO: Enhance this so that the moveSelection knows about available moves for nicer UX
             // TODO: clicks on non-valid squares are ignored
             // TODO: clicks on empty squares are ignored
-            _moveSelection.Selected((args.X, args.Y). ToChessLocation());
+            var location = (args.X, args.Y).ToChessLocation();
+            _moveSelection.Selected(location);
             _moveSelection.Updated(AvailableMoves);
             if (_moveSelection.HaveMove)
             {

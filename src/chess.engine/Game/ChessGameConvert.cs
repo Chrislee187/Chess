@@ -86,7 +86,7 @@ namespace chess.engine.Game
             {
                 var pawn = (PawnEntity) item.Item;
 
-                if (pawn.LocationHistory.Count() == 2 && pawn.LocationHistory.Last().Y == Pawn.EnPassantRankFor(item.Item.Player.Enemy()))// TODO: Check it was the last game move
+                if (pawn.LocationHistory.Count() == 2 && item.Location.Y == Pawn.EnPassantRankFor(item.Item.Player.Enemy()))// TODO: Check it was the last game move
                 {
                     displayChar = pawn.Player == Colours.White ? 'E' : 'e';
                 }
