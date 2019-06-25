@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using chess.blazor.Extensions;
 using chess.webapi.client.csharp;
@@ -19,85 +20,100 @@ namespace chess.blazor.Shared.Chess
             _cells = cells;
         }
 
-        public void Selected(string location)
+        public void Selected(string location, Move[] availableMoves, bool whiteToPlay)
         {
+            var selectedCell = _cells[location];
             if (string.IsNullOrWhiteSpace(From))
             {
-                From = location;
+                if (ContainsCurrentPlayersPiece(whiteToPlay, selectedCell))
+                {
+                    From = location;
+                }
+                else
+                {
+                    return;
+                }
+
             }
             else
             {
                 if (location == From)
                 {
-                    Clear();
+                    Deselect();
                     return;
                 }
 
-                var destLocation = _cells[location];
-                if (!destLocation.IsEmptySquare && destLocation.PieceIsWhite == _cells[From].PieceIsWhite)
+                var destCell = selectedCell;
+
+                if (!destCell.IsEmptySquare && destCell.PieceIsWhite == _cells[From].PieceIsWhite)
                 {
                     From = location;
+                }
+                else if (!destCell.IsDestinationLocation)
+                {
                     return;
                 }
-
-                if (!destLocation.IsDestinationLocation) return;
-
-                To = location;
+                else
+                {
+                    To = location;
+                }
             }
+            var destinations = availableMoves
+                .Where(mv => mv.Coord.StartsWith(From))
+                .Select(m => m.Coord.Substring(2)).ToList();
+
+            HighlightFromCell();
+            HighlightToCells(_cells, destinations);
         }
 
-        public void Updated(Move[] availableMoves)
+        public void Deselect()
         {
-
-            if (HaveFrom)
-            {
-                HighlightFromCell(_cells, From);
-
-                HighlightDestinationCells(_cells, availableMoves
-                    .Where(m => m.Coord.StartsWith(From))
-                    .Select(m => m.Coord.Substring(2)));
-            }
-            else
-            {
-                ClearSourceLocationSelection();
-
-            }
-        }
-
-        public bool HaveMove => !string.IsNullOrWhiteSpace(From) && !string.IsNullOrWhiteSpace(To);
-
-        public void Clear()
-        {
+            _cells[From].IsSourceLocation = false;
+            ClearAllHighlights();
             From = string.Empty;
             To = string.Empty;
         }
 
-
-        public void ClearSourceLocationSelection()
+        private static bool ContainsCurrentPlayersPiece(bool whiteToPlay, BoardCellComponent selectedCell)
         {
-            _cells.Values.Where(v => v.IsSourceLocation).ForEach(v =>
-            {
-                v.IsSourceLocation = false;
-            });
-            _cells.Values.Where(v => v.IsDestinationLocation).ForEach(v =>
-            {
-                v.IsDestinationLocation = false;
-            });
+            if (selectedCell.IsEmptySquare) return false;
+
+            return whiteToPlay && selectedCell.PieceIsWhite
+                   || !whiteToPlay && !selectedCell.PieceIsWhite;
         }
 
-        private void HighlightFromCell(IDictionary<string, BoardCellComponent> boardCellComponents,
-            string moveSelectionFrom)
+        public bool HaveMove => !string.IsNullOrWhiteSpace(From) && !string.IsNullOrWhiteSpace(To);
+
+        private void HighlightFromCell()
         {
-            ClearSourceLocationSelection();
-            var fromCell = boardCellComponents[moveSelectionFrom];
-            fromCell.SetAsSourceLocation();
+            ClearSourceHighlights();
+            _cells[From].IsSourceLocation = true;
 
         }
 
-        private void HighlightDestinationCells(IDictionary<string, BoardCellComponent> boardCellComponents,
+        public void ClearAllHighlights()
+        {
+            ClearSourceHighlights();
+            ClearDestinationHighlights();
+        }
+        private void ClearSourceHighlights()
+        {
+            _cells.Values.Where(v => v.IsSourceLocation).ForEach(v => { v.IsSourceLocation = false; });
+        }
+
+        private void HighlightToCells(IDictionary<string, BoardCellComponent> boardCellComponents,
             IEnumerable<string> destinations)
         {
-            destinations.ForEach(dest => boardCellComponents[dest].SetAsDestinationLocation());
+            ClearDestinationHighlights();
+            destinations.ForEach(dest =>
+            {
+                boardCellComponents[dest].IsDestinationLocation = true;
+            });
+        }
+
+        private void ClearDestinationHighlights()
+        {
+            _cells.Values.Where(v => v.IsDestinationLocation).ForEach(v => { v.IsDestinationLocation = false; });
         }
     }
 }

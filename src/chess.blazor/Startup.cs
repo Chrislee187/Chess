@@ -17,7 +17,7 @@ namespace chess.blazor
             // "https://chess-web-api.azurewebsites.net"
             //"https://localhost:5001"
             services.AddTransient<IChessGameApiClient>(provider 
-                => new ChessGameApiClient(provider.GetService<HttpClient>(), "https://localhost:5001"));
+                => new ChessGameApiClient(provider.GetService<HttpClient>(), "https://chess-web-api.azurewebsites.net"));
         }
 
         public void Configure(IComponentsApplicationBuilder app)

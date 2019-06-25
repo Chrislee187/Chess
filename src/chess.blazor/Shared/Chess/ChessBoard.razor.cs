@@ -40,8 +40,8 @@ namespace chess.blazor.Shared.Chess
         public async Task<bool> MoveSelected(string move)
         {
             Console.WriteLine($"Making move: {move}");
+            _moveSelection.Deselect();
             if (OnMoveSelectedAsync.HasDelegate) await OnMoveSelectedAsync.InvokeAsync(move);
-            _moveSelection.Clear();
             return true;
         }
         
@@ -54,16 +54,12 @@ namespace chess.blazor.Shared.Chess
         // ReSharper disable once UnusedMember.Global - referenced in the razor component
         public async Task PieceSelectedAsync(PieceSelectedEventArgs args)
         {
-            // TODO: Enhance this so that the moveSelection knows about available moves for nicer UX
-            // TODO: clicks on non-valid squares are ignored
-            // TODO: clicks on empty squares are ignored
             var location = (args.X, args.Y).ToChessLocation();
-            _moveSelection.Selected(location);
-            _moveSelection.Updated(AvailableMoves);
+            _moveSelection.Selected(location, AvailableMoves, WhiteToPlay);
+
             if (_moveSelection.HaveMove)
             {
                 await MoveSelected($"{_moveSelection.Move}");
-                _moveSelection.ClearSourceLocationSelection();
             }
 
         }
