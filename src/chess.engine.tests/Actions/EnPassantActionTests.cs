@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace chess.engine.tests.Actions
 {
     [TestFixture]
-    public class EnPassantActionTests : ActionTestsBase<EnPassantAction<ChessPieceEntity>, ChessPieceEntity>
+    public class EnPassantActionTests : ActionTestsBase<EnPassantAction, ChessPieceEntity>
     {
         private static readonly BoardMove EnPassantMove 
             = new BoardMove("B5".ToBoardLocation(), "C6".ToBoardLocation(), (int) ChessMoveTypes.TakeEnPassant);
@@ -20,7 +20,7 @@ namespace chess.engine.tests.Actions
         public void Setup()
         {
             base.SetUp();
-            Action = new EnPassantAction<ChessPieceEntity>(ActionFactoryMock.Object, StateMock.Object);
+            Action = new EnPassantAction(ActionFactoryMock.Object, StateMock.Object);
         }
 
         [Test]

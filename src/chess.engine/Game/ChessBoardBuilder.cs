@@ -156,17 +156,16 @@ namespace chess.engine.Game
                         if (_chessPieceEntityFactory.ValidPieces.Contains(chr.ToString().ToUpper()))
                         {
                             var entity = _chessPieceEntityFactory.Create(
-                                ChessPieceNameMapper.FromChar(chr),
-                                char.IsUpper(chr) ? Colours.White : Colours.Black
-                            );
+                                    ChessPieceNameMapper.FromChar(chr),
+                                    char.IsUpper(chr) ? Colours.White : Colours.Black
+                                );
 
                             var location = BoardLocation.At(file + 1, rank + 1);
 
                             engine.AddPiece(entity, location);
                             if (chr.ToString().ToUpper() == "E")
                             {
-                                // Special pawn char for custom board setups, sets the move history so enpassant validation works
-                                entity.AddMoveTo(location);
+                                ((PawnEntity) entity).TwoStep = true;
                             }
                         }
                         else if (chr != ' ' && chr != '.' && chr != '\0')

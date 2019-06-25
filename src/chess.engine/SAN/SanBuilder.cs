@@ -60,11 +60,14 @@ namespace chess.engine.SAN
                 .Where(i => i.Item.Is(fromItem.Item.Player, fromItem.Item.Piece))
                 .ThatCanMoveTo(move.To);
 
+            // TODO: That I need this resharper disable is probably a smell
+            // ReSharper disable PossibleMultipleEnumeration
             if (otherPieces.Any())
             {
                 fromFile = move.From.X;
+                var file = fromFile;
                 otherPieces = otherPieces
-                    .Where(i => i.Location.X == fromFile);
+                    .Where(i => i.Location.X == file);
             }
             if (otherPieces.Any())
             {
@@ -76,6 +79,7 @@ namespace chess.engine.SAN
             {
                 throw new NotImplementedException($"Unable to disambiguate {move}");
             }
+            // ReSharper restore PossibleMultipleEnumeration
 
             if (piece == ChessPieceName.Pawn && moveType == SanMoveTypes.Take)
             {

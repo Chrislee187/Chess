@@ -13,7 +13,8 @@ namespace chess.engine.Actions
             Actions.Add((int)ChessMoveTypes.KingMove, (s) => new MoveOrTakeAction<ChessPieceEntity>(this, s));
             Actions.Add((int)ChessMoveTypes.CastleQueenSide, (s) => new CastleAction<ChessPieceEntity>(this, s));
             Actions.Add((int) ChessMoveTypes.CastleKingSide, (s) => new CastleAction<ChessPieceEntity>(this, s));
-            Actions.Add((int) ChessMoveTypes.TakeEnPassant, (s) => new EnPassantAction<ChessPieceEntity>(this, s));
+            Actions.Add((int) ChessMoveTypes.TakeEnPassant, (s) => new EnPassantAction(this, s));
+            Actions.Add((int) ChessMoveTypes.PawnTwoStep, (s) => new PawnTwoStepAction(this, s));
         }
 
     }

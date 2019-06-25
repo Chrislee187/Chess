@@ -87,12 +87,14 @@ namespace chess.engine.Movement.King
             IReadOnlyBoardState<ChessPieceEntity> roBoardState, Colours attackingPlayer)
         {
             var passingPieceLocation = move.To.MoveBack(attackingPlayer);
-            var enemyPawn = roBoardState.GetItem(passingPieceLocation);
+            var enemyPawn = roBoardState.GetItem(passingPieceLocation)?.Item as PawnEntity;
 
             if (enemyPawn == null) return false;
-            if (!enemyPawn.Item.Is(attackingPlayer.Enemy(), ChessPieceName.Pawn)) return false;
+            return enemyPawn.TwoStep;
 
-            return enemyPawn.Item.LocationHistory.Count() == 2;
+//            if (!enemyPawn.Item.Is(attackingPlayer.Enemy(), ChessPieceName.Pawn)) return false;
+//
+//            return enemyPawn.Item.LocationHistory.Count() == 2;
         }
         
         private static IEnumerable<BoardLocation> CalcPathBetweenKingAndCastle(BoardMove move, Colours kingColour)

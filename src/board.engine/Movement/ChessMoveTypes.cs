@@ -7,5 +7,6 @@
         KingMove,
         CastleKingSide,
         CastleQueenSide,
+        PawnTwoStep
     }
 }

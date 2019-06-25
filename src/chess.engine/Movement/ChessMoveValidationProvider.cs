@@ -31,6 +31,15 @@ namespace chess.engine.Movement
                         return new EnPassantTakeValidator(chessValidationSteps).ValidateMove(move, boardState);
                     }
                 });
+
+            Validators.Add((int)ChessMoveTypes.PawnTwoStep,
+                new BoardMovePredicate<ChessPieceEntity>[]
+                {(move, boardState) =>
+                    {
+
+                        return new DestinationIsEmptyValidator<ChessPieceEntity>().ValidateMove(move, boardState);
+                    }
+                });
             Validators.Add((int)ChessMoveTypes.CastleKingSide,
                 new BoardMovePredicate<ChessPieceEntity>[]
                 { (move, boardState) =>

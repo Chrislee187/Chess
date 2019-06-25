@@ -15,4 +15,4 @@
                     OnMoveSelectedAsync="@OnMoveSelectedAsync"
                     ></AvailableMoveList>
     </div>
-<button onclick="@ResetBoardAsync">Reset Board</button>
+<button onclick="@(async () => await ResetBoardAsync())">Reset Board</button>

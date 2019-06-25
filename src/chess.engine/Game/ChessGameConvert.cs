@@ -86,7 +86,7 @@ namespace chess.engine.Game
             {
                 var pawn = (PawnEntity) item.Item;
 
-                if (pawn.LocationHistory.Count() == 2 && item.Location.Y == Pawn.EnPassantRankFor(item.Item.Player.Enemy()))// TODO: Check it was the last game move
+                if (pawn.TwoStep)
                 {
                     displayChar = pawn.Player == Colours.White ? 'E' : 'e';
                 }
@@ -133,7 +133,11 @@ namespace chess.engine.Game
                 {
                     var newPiece = BuildEntity(piece);
 
-                    toBePlaced.Add((engine) => engine.AddPiece(newPiece, BoardLocation.At(locX, locY)));
+                    toBePlaced.Add((engine) =>
+                    {
+                        engine.AddPiece(newPiece, BoardLocation.At(locX, locY));
+
+                    });
                 }
 
                 idx++;
@@ -144,13 +148,20 @@ namespace chess.engine.Game
 
         private static ChessPieceEntity BuildEntity(char piece)
         {
-            // TODO: Enpassant pawn check
+            // TODO: TwoStep pawn check
             var chessPieceName = ChessPieceNameMapper.FromChar(piece);
             var colour = char.IsUpper(piece) ? Colours.White : Colours.Black;
             var newPiece = ChessFactory.ChessPieceEntityFactory().Create(new ChessPieceEntityFactory.ChessPieceEntityFactoryTypeExtraData
             {
                 PieceName = chessPieceName, Owner = colour
             });
+
+
+            if (piece.ToString().ToLower() == "e")
+            {
+                var pawn = newPiece as PawnEntity;
+                pawn.TwoStep = true;
+            }
             return newPiece;
         }
 

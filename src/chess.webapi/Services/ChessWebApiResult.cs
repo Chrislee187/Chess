@@ -21,24 +21,16 @@ namespace chess.webapi.Services
         [JsonIgnore]
         public IEnumerable<BoardMove> Moves { get; }
 
-        public ChessWebApiResult(ChessGame game, string msg = "")
-        {
-            Game = game;
-            Board = ChessGameConvert.Serialise(game);
-            BoardText = new ChessBoardBuilder().FromChessGame(game).ToTextBoard();
-            var items = game.BoardState.GetItems().ToList();
-            Moves = items.SelectMany(i => i.Paths.FlattenMoves());
-            AvailableMoves = ToMoveList(items.ToArray());
-            Message = msg;
-        }
-
         public ChessWebApiResult(
             ChessGame game, 
             Colours toMove, 
             string message, 
             params LocatedItem<ChessPieceEntity>[] items
-            ) :this(game)
+            ) 
         {
+            Game = game;
+            Board = ChessGameConvert.Serialise(game);
+            BoardText = new ChessBoardBuilder().FromChessGame(game).ToTextBoard();
             Moves = items.SelectMany(i => i.Paths.FlattenMoves());
             AvailableMoves = ToMoveList(items);
             WhoseTurn = toMove.ToString();

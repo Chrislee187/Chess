@@ -22,7 +22,7 @@ namespace chess.engine.Movement.Pawn
                 if (location.Y == Pieces.Pawn.StartRankFor(playerIdx))
                 {
                     BoardLocation to = location.MoveForward(playerIdx, 2);
-                    path.Add(new BoardMove(location, to, (int)DefaultActions.MoveOnly));
+                    path.Add(new BoardMove(location, to, (int)ChessMoveTypes.PawnTwoStep));
                 }
                 paths.Add(path);
             }

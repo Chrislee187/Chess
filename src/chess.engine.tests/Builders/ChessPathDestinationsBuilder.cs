@@ -24,12 +24,12 @@ namespace chess.engine.tests.Builders
         }
         public ChessPathDestinationsBuilder To(string at, int chessMoveTypes = (int) DefaultActions.MoveOnly)
         {
-            return To((BoardLocation) at.ToBoardLocation(), chessMoveTypes);
+            return To(at.ToBoardLocation(), chessMoveTypes);
         }
 
         public ChessPathDestinationsBuilder ToUpdatePiece(string at, ChessPieceName promotionPiece, DefaultActions defaultActions = DefaultActions.UpdatePiece)
         {
-            return To((BoardLocation) at.ToBoardLocation(), (int) defaultActions);
+            return To(at.ToBoardLocation(), (int) defaultActions);
         }
 
         public Path Build()

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using chess.blazor.Extensions;
 using chess.webapi.client.csharp;
 
 namespace chess.blazor.Shared.Chess
@@ -74,11 +75,11 @@ namespace chess.blazor.Shared.Chess
 
         public void ClearSourceLocationSelection()
         {
-            _cells.Values.Where(v => v.IsSourceLocation).ToList().ForEach(v =>
+            _cells.Values.Where(v => v.IsSourceLocation).ForEach(v =>
             {
                 v.IsSourceLocation = false;
             });
-            _cells.Values.Where(v => v.IsDestinationLocation).ToList().ForEach(v =>
+            _cells.Values.Where(v => v.IsDestinationLocation).ForEach(v =>
             {
                 v.IsDestinationLocation = false;
             });
@@ -96,9 +97,7 @@ namespace chess.blazor.Shared.Chess
         private void HighlightDestinationCells(IDictionary<string, BoardCellComponent> boardCellComponents,
             IEnumerable<string> destinations)
         {
-            destinations.ToList()
-                .ForEach(dest => boardCellComponents[dest].SetAsDestinationLocation()
-                );
+            destinations.ForEach(dest => boardCellComponents[dest].SetAsDestinationLocation());
         }
     }
 }

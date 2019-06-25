@@ -19,12 +19,14 @@ namespace chess.blazor.Pages
         private ChessWebApiResult _lastResult;
 
         private int _moveCount = 0;
+        private static readonly Random Random = new Random();
+
         protected override async Task OnInitAsync()
         {
-            await InitialiseBoardAsync();
+            await ResetBoardAsync();
         }
 
-        private async Task InitialiseBoardAsync()
+        public async Task ResetBoardAsync()
         {
             if (_firstResult == null)
             {
@@ -69,16 +71,17 @@ namespace chess.blazor.Pages
 
             try
             {
-                if (_moveCount > 150) throw new Exception("Move count exceeded");
+                // TODO: Temp hack to stop endless auto-games, need proper stalement & not-enough-material-left checks
+                if (_moveCount > 150) throw new Exception("Move limit exceeded");
                 _lastResult = await ApiClient.PlayMoveAsync(ChessBoard.Board, EncodeMove(move));
                 UpdateBoardAndMoves(_lastResult);
-                StateHasChanged();
+                StateHasChanged();  // NOTE: We call StateHasChanged() because we are in a recursive method when handling AI players and therefore the state doesn't automatically get updated until the stack unwinds
                 _moveCount++;
                 await HandleAiPlayer(_lastResult);
             }
             catch (Exception e)
             {
-                ChessBoard.Message = $"Error performing move;\n{e.Message}"; // TODO: This hides all errors not just invalid moves.
+                ChessBoard.Message = $"Error performing move;\n{e.Message}"; // TODO: Better exception handling and logging
                 StateHasChanged();
             }
 
@@ -103,13 +106,8 @@ namespace chess.blazor.Pages
         {
             MoveList.Title = $"{lastResult.WhoseTurn} is thinking...";
             MoveList.ShowMoveList = false;
-            var rnd = new Random().Next(lastResult.AvailableMoves.Length);
+            var rnd = Random.Next(lastResult.AvailableMoves.Length); // TODO: Ok so it's not really an AI ;)
             await OnMoveSelectedAsync(lastResult.AvailableMoves[rnd].SAN);
-        }
-
-        public async Task ResetBoardAsync()
-        {
-            await InitialiseBoardAsync();
         }
 
         public string EncodeMove(string move) => move.Replace("+", "");

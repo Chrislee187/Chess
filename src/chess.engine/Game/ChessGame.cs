@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using board.engine;
 using board.engine.Board;
 using board.engine.Movement;
 using chess.engine.Entities;
+using chess.engine.Extensions;
 using chess.engine.SAN;
 using Microsoft.Extensions.Logging;
 
@@ -72,12 +74,15 @@ namespace chess.engine.Game
                 return $"Error: No matching move found: {input}";
             }
 
-            return PlayValidMove(move);
+            var validMove = PlayValidMove(move);
+            return validMove;
 
         }
 
         private string PlayValidMove(BoardMove move)
         {
+            ClearPawnTwoStepState();
+
             var preMove = _engine.BoardState.ToTextBoard();
             _engine.Move(move);
 
@@ -93,6 +98,14 @@ namespace chess.engine.Game
                 ? CheckState.ToString()
                 : "";
 
+        }
+
+        private void ClearPawnTwoStepState()
+        {
+            _engine.BoardState.GetItems()
+                .Where(i => i.Item is PawnEntity)
+                .Select(i => i.Item as PawnEntity)
+                .ForEach(p => p.TwoStep = false);
         }
 
         private Colours NextPlayer() => CurrentPlayer == Colours.White ? Colours.Black : Colours.White;

@@ -17,6 +17,9 @@ namespace chess.engine.Entities
                 new PawnNormalAndStartingPathGenerator(),
                 new PawnTakePathGenerator()
             };
+
+        public bool TwoStep { get; set; }
+
         public override object Clone()
         {
             return new PawnEntity(Player);

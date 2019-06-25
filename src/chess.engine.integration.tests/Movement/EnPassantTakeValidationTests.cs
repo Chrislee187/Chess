@@ -32,7 +32,7 @@ namespace chess.engine.integration.tests.Movement
                        "    K  R"
                 );
 
-            _boardState = ChessFactory.CustomChessGame(board.ToGameSetup(), Colours.White).BoardState;
+            _boardState = ChessFactory.CustomChessGame(board.ToGameSetup()).BoardState;
             _validator = new EnPassantTakeValidator(new ChessValidationSteps());
         }
 
@@ -40,7 +40,7 @@ namespace chess.engine.integration.tests.Movement
         public void Should_return_true_for_valid_take()
         {
             BoardLocation to = "B7".ToBoardLocation();
-            var move = new BoardMove("A6".ToBoardLocation(), to, (int)DefaultActions.TakeOnly);
+            var move = new BoardMove("A6".ToBoardLocation(), to, (int)ChessMoveTypes.TakeEnPassant);
             Assert.True(_validator.ValidateMove(move, _boardState));
         }
 
