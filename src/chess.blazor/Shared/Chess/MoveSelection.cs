@@ -32,6 +32,7 @@ namespace chess.blazor.Shared.Chess
                 }
                 else
                 {
+                    // TODO: If location contains a piece of the same colour as the players turns reset the "from" location
                     To = location;
                 }
             }
@@ -64,7 +65,7 @@ namespace chess.blazor.Shared.Chess
         }
 
 
-        private void ClearSourceLocationSelection()
+        public void ClearSourceLocationSelection()
         {
             _cells.Values.Where(v => v.IsSourceLocation).ToList().ForEach(v =>
             {
