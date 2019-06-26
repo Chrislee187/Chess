@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using chess.blazor.Shared.Chess;
 using chess.webapi.client.csharp;
@@ -18,13 +19,10 @@ namespace chess.blazor.Pages
         private ChessWebApiResult _firstResult;
         private ChessWebApiResult _lastResult;
 
-        private int _moveCount = 0;
+        private int _moveCount;
         private static readonly Random Random = new Random();
 
-        protected override async Task OnInitAsync()
-        {
-            await ResetBoardAsync();
-        }
+        protected override async Task OnInitAsync() => await ResetBoardAsync();
 
         public async Task ResetBoardAsync()
         {
@@ -54,7 +52,7 @@ namespace chess.blazor.Pages
                 ? $"{result.WhoseTurn} to play"
                 : result.Message;
 
-            MoveList.Update(title, result.AvailableMoves, !IsAITurn(result));
+            MoveList.Update(title, result.AvailableMoves, !IsAiTurn(result));
 
         }
 
@@ -77,40 +75,41 @@ namespace chess.blazor.Pages
                 UpdateBoardAndMoves(_lastResult);
                 StateHasChanged();  // NOTE: We call StateHasChanged() because we are in a recursive method when handling AI players and therefore the state doesn't automatically get updated until the stack unwinds
                 _moveCount++;
-                await HandleAiPlayer(_lastResult);
+                if(!_lastResult.Message.ToLower().Contains("checkmate"))
+                {
+                    await HandleAiPlayer(_lastResult);
+                }
             }
             catch (Exception e)
             {
                 ChessBoard.Message = $"Error performing move;\n{e.Message}"; // TODO: Better exception handling and logging
                 StateHasChanged();
             }
-
-
         }
 
         private async Task HandleAiPlayer(ChessWebApiResult lastResult)
         {
-            if (IsAITurn(lastResult))
+            if (IsAiTurn(lastResult))
             {
                 await PlayRandomMove(lastResult);
             }
         }
 
-        private bool IsAITurn(ChessWebApiResult lastResult)
-        {
-            return lastResult.WhoseTurn.ToLower() == "black" && !BlackIsHuman
-                   || lastResult.WhoseTurn.ToLower() == "white" && !WhiteIsHuman;
-        }
+        private bool IsAiTurn(ChessWebApiResult lastResult) 
+            => lastResult.WhoseTurn.ToLower() == "black" && !BlackIsHuman
+            || lastResult.WhoseTurn.ToLower() == "white" && !WhiteIsHuman;
 
         private async Task PlayRandomMove(ChessWebApiResult lastResult)
         {
+            if(!lastResult.AvailableMoves.Any()) return;
+
             MoveList.Title = $"{lastResult.WhoseTurn} is thinking...";
             MoveList.ShowMoveList = false;
             var rnd = Random.Next(lastResult.AvailableMoves.Length); // TODO: Ok so it's not really an AI ;)
             await OnMoveSelectedAsync(lastResult.AvailableMoves[rnd].SAN);
         }
 
-        public string EncodeMove(string move) => move.Replace("+", "");
+        public string EncodeMove(string move) => move.Replace("+", ""); // NOTE: '+' breaks the urls!, it's only cosmetic so just remove it
 
         private void Status(string text)
         {

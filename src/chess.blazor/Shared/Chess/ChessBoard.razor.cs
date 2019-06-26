@@ -41,7 +41,7 @@ namespace chess.blazor.Shared.Chess
 
         public ChessBoardComponent()
         {
-            _moveSelection = new MoveSelection(BoardCells);
+            _moveSelection = new MoveSelection(new MoveSelectionCellsManager(BoardCells));
         }
 
         public async Task<bool> MoveSelected(string move)

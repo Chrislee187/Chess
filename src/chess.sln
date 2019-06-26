@@ -59,6 +59,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "chess.webapi.client.csharp"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chess WebAPI", "Chess WebAPI", "{845E7DED-2602-4DA1-99A6-CAB6E8BAA0DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chess.blazor.tests", "chess.blazor.tests\chess.blazor.tests.csproj", "{DFD72D19-B5DD-4DBD-BE70-5024FC374C5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,10 @@ Global
 		{6F1FC4CE-BA9B-44B4-BD0C-24FBC7C6FBEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F1FC4CE-BA9B-44B4-BD0C-24FBC7C6FBEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F1FC4CE-BA9B-44B4-BD0C-24FBC7C6FBEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFD72D19-B5DD-4DBD-BE70-5024FC374C5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFD72D19-B5DD-4DBD-BE70-5024FC374C5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFD72D19-B5DD-4DBD-BE70-5024FC374C5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFD72D19-B5DD-4DBD-BE70-5024FC374C5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
