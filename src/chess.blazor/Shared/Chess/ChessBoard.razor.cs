@@ -44,24 +44,20 @@ namespace chess.blazor.Shared.Chess
             _moveSelection = new MoveSelection(new MoveSelectionCellsManager(BoardCells));
         }
 
-        public async Task MoveSelected(string move)
+        public async Task MoveSelectedAsync(string move)
         {
+            _moveSelection.Deselect();
             if (OnMoveSelectedAsync.HasDelegate)
             {
-                _moveSelection.Deselect();
                 await OnMoveSelectedAsync.InvokeAsync(move);
             }
-            else
-            {
-                throw new Exception("TODO: Log Warning no MoveSelected delegate has been wired up");
-            }
-
         }
 
-        public void Refresh(string resultBoard, Move[] resultAvailableMoves)
+        public void Update(string resultBoard, Move[] resultAvailableMoves, bool whiteToPlay)
         {
             Board = resultBoard;
             AvailableMoves = resultAvailableMoves;
+            WhiteToPlay = whiteToPlay;
         }
 
         // ReSharper disable once UnusedMember.Global - referenced in the razor component
@@ -72,7 +68,7 @@ namespace chess.blazor.Shared.Chess
 
             if (_moveSelection.HaveMove)
             {
-                await MoveSelected($"{_moveSelection.Move}");
+                await MoveSelectedAsync($"{_moveSelection.Move}");
             }
         }
     }

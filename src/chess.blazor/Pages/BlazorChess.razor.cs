@@ -59,11 +59,10 @@ namespace chess.blazor.Pages
         private void UpdateChessBoardComponent(ChessWebApiResult result)
         {
             Status("Updating board...");
-            ChessBoard.WhiteToPlay = result.WhoseTurn.ToLower().Contains("white");
-            ChessBoard.Refresh(result.Board, result.AvailableMoves);
+            ChessBoard.Update(result.Board, result.AvailableMoves, result.WhoseTurn.ToLower().Contains("white"));
         }
 
-        public async Task OnMoveSelectedAsync(string move)
+        public async Task<bool> OnMoveSelectedAsync(string move)
         {
             ChessBoard.Message = "";
 
@@ -85,6 +84,7 @@ namespace chess.blazor.Pages
                 ChessBoard.Message = $"Error performing move;\n{e.Message}"; // TODO: Better exception handling and logging
                 StateHasChanged();
             }
+            return true;
         }
 
         private async Task HandleAiPlayer(ChessWebApiResult lastResult)

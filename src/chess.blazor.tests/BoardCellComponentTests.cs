@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using chess.blazor.Shared.Chess;
-using chess.webapi.client.csharp;
+﻿using chess.blazor.Shared.Chess;
 using Microsoft.AspNetCore.Components;
 using Moq;
 using NUnit.Framework;
