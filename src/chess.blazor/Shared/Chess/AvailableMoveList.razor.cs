@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using chess.webapi.client.csharp;
 using Microsoft.AspNetCore.Components;
@@ -22,11 +23,16 @@ namespace chess.blazor.Shared.Chess
         [Parameter]
         public string Title { get; set; }
 
-        public async Task<bool> MoveSelected(string move)
+        public async Task MoveSelected(string move)
         {
-            if(OnMoveSelectedAsync.HasDelegate) await OnMoveSelectedAsync.InvokeAsync(move);
-
-            return true;
+            if (OnMoveSelectedAsync.HasDelegate)
+            {
+                await OnMoveSelectedAsync.InvokeAsync(move);
+            }
+            else
+            {
+                throw new Exception("OnMoveSelectedAsync callback not wired up");
+            }
         }
 
         public void Update(string title, Move[] moves, bool showMoveList)

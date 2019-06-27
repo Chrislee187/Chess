@@ -44,12 +44,18 @@ namespace chess.blazor.Shared.Chess
             _moveSelection = new MoveSelection(new MoveSelectionCellsManager(BoardCells));
         }
 
-        public async Task<bool> MoveSelected(string move)
+        public async Task MoveSelected(string move)
         {
-            Console.WriteLine($"Making move: {move}");
-            _moveSelection.Deselect();
-            if (OnMoveSelectedAsync.HasDelegate) await OnMoveSelectedAsync.InvokeAsync(move);
-            return true;
+            if (OnMoveSelectedAsync.HasDelegate)
+            {
+                _moveSelection.Deselect();
+                await OnMoveSelectedAsync.InvokeAsync(move);
+            }
+            else
+            {
+                throw new Exception("TODO: Log Warning no MoveSelected delegate has been wired up");
+            }
+
         }
 
         public void Refresh(string resultBoard, Move[] resultAvailableMoves)
