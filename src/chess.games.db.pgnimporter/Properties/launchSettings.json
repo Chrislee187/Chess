@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "chess.games.db.pgnimporter": {
-      "commandName": "Project",
-      "commandLineArgs": "\"D:\\src\\PGNArchive\\_SmokeTestFiles\\Modern100 - Copy (2).pgn\""
-    }
-  }
-}

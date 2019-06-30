@@ -1,2 +1,0 @@
-# LOADING THE PROJECT IN VS2017
-NOTE that this solution was moved to VS2019 to utilise Blazor in .NET Core 3 Preview6, as a preview the installation a usage is not as cut and dried as more mature libraries, currently the wenapwebapi and the blazor site only load correctly in visual studio if you load it from the src folder.

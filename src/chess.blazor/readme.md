@@ -1,6 +1,0 @@
-﻿# DEPLOYMENT
-Deployment to Azure Static Storage currently accomplished via the Azure Storage extension in VS Code.
-* Right click on chess.blazor project and select publish...
-* Create a profile to publish to a Folder somewhere and publish to it
-* Open the publish folder publish location in VS Code and having installed Azure Storage extension, right click on the `dist` folder found under `...\publish\chess.blazor` and select Deploy to Static Website...
-* A dropdown appears at the top of VS code to select which subscription, select the correct subscription and storage account. *NOTE* Transfer will start immediately so make sure you click the right things!

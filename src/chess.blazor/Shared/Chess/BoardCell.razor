@@ -1,8 +1,0 @@
-﻿@inherits BoardCellComponent
-<td class="board-cell 
-    @(IsBlackSquare ? "black-cell": "white-cell") 
-    @(IsEmptySquare ? "" : PieceIsWhite ? "white-piece-highlight": "black-piece-highlight") 
-    @(IsDestinationLocation ? "destination-location": "")  
-    @(IsSourceLocation ? "source-location": "") " 
-    onclick="@OnClick" 
-    >@Piece</td>
