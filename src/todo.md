@@ -115,6 +115,14 @@ son
   * Electron
   * Console
 
+ # Restructure solution, split out projects
+
+ Seperate Chess.Engine/Board.Engine to new solution, repo && nuget: Chess.Engine
+ Seperate Chess.WebApi/Client to new solution, repo & nuget for the client
+ Seperate Chess.Web/Tests to new solution/repo, deprecated.
+ Seperate Chess.Blazor/Tests to new solution/repo
+
+ pgn-reader is already a seperate package link it via the parent project in Github
 
 # CONSOLE STUFF SUPPORT
 

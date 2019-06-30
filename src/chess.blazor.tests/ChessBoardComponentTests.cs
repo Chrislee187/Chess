@@ -37,7 +37,7 @@ namespace chess.blazor.tests
 //        }
 //
 //        [Test]
-//        public void PieceSelectedAsync_raises_move_event_went_complete_move_captured()
+//        public void PieceSelectedAsync_raises_move_event_when_complete_move_captured()
 //        {
 //            // TODO: Hook up CI to the components
 //            throw new NotImplementedException();
