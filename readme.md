@@ -5,6 +5,8 @@ Core C# chess engine.
 Exposes the chess engine through a simple REST-like JSON WebAPI using Core MVC WebAPI
 ## [chess.blazor](https://github.com/Chrislee187/chess.blazor)
 A client-side blazor (in preview at time of writing) SPA that displays a simple chess-board that a game can be played on.
+## [chess.reactredux](https://github.com/Chrislee187/chess.reactredux)
+_NOTE: STILL A WIP AND INCOMPLETE_ A React SPA that displays a simple chess-board that a game can be played on.
 ## [pgn-tools](https://github.com/Chrislee187/pgn-tools)
 Tools to manipulate PGN [Portable Game Notation](https://en.wikipedia.org/wiki/Portable_Game_Notation)
 ## [chess.spikes](https://github.com/Chrislee187/chess.spikes)
