@@ -25,6 +25,9 @@ The Swagger UI for it can be seen at [https://chess-web-api.azurewebsites.net/sw
 
 A client-side blazor (in preview at time of writing) SPA that displays a simple chess-board that a game can be played on.
 
+A version of this can be found at [https://chessstaticstorage.z33.web.core.windows.net](https://chessstaticstorage.z33.web.core.windows.net/)
+
+
 ### [chess.react](https://github.com/Chrislee187/chess.reactredux)
 
 A simple react client (typescript) created for comparison of "SPA" approaches with the `chess.blazor` site.
