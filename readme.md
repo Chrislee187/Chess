@@ -16,7 +16,10 @@ Core chess engine.
 
 ### [chess.webapi](https://github.com/Chrislee187/chess.webapi)
 
-Exposes the chess engine through a simple REST-like JSON WebAPI using Core MVC WebAPI
+Exposes the chess engine through a simple REST-like JSON WebAPI using Core MVC WebAPI.
+
+The Swagger UI for it can be seen at [https://chess-web-api.azurewebsites.net/swagger/index.html](https://chess-web-api.azurewebsites.net/swagger/index.html) (may take to a few moments to fire up, it's not exactly a popular site!).
+
 
 ### [chess.blazor](https://github.com/Chrislee187/chess.blazor)
 
