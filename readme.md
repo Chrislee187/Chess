@@ -20,7 +20,6 @@ Exposes the chess engine through a simple REST-like JSON WebAPI using Core MVC W
 
 The Swagger UI for it can be seen at [https://chess-web-api.azurewebsites.net/swagger/index.html](https://chess-web-api.azurewebsites.net/swagger/index.html) (may take to a few moments to fire up, it's not exactly a popular site!).
 
-
 ### [chess.blazor](https://github.com/Chrislee187/chess.blazor)
 
 A client-side blazor (in preview at time of writing) SPA that displays a simple chess-board that a game can be played on.
@@ -30,7 +29,11 @@ A version of this can be found at [https://chessstaticstorage.z33.web.core.windo
 
 ### [chess.react](https://github.com/Chrislee187/chess.reactredux)
 
-A simple react client (typescript) created for comparison of "SPA" approaches with the `chess.blazor` site.
+A simple react client (typescript) created for comparison of "SPA" approaches.
+
+### [chess.spa.feature.tests](https://github.com/Chrislee187/chess.spa.feature.tests)
+
+A suite of [Specflow](https://specflow.org/)/[Selenium WebDriver](https://www.seleniumhq.org/)/[Shouldly](http://docs.shouldly-lib.net/v2.4.0/docs) BDD style tests that ensure the UX behaves as expected and then using these expected behaviors and customboard setups determines that the rules of chess are correctly implemented.
 
 ### [pgn-tools](https://github.com/Chrislee187/pgn-tools)
 
