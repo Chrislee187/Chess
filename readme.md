@@ -12,7 +12,7 @@ The project is designed for the engine itself to be easily reusable by multiple 
 
 ### [chess.engine](https://github.com/Chrislee187/chess.engine)
 
-Core chess engine.
+Core chess engine in C#.
 
 ### [chess.webapi](https://github.com/Chrislee187/chess.webapi)
 
@@ -22,18 +22,18 @@ The Swagger UI for it can be seen at [https://chess-web-api.azurewebsites.net/sw
 
 ### [chess.blazor](https://github.com/Chrislee187/chess.blazor)
 
-A client-side blazor (in preview at time of writing) SPA that displays a simple chess-board that a game can be played on.
+A client-side blazor SPA that runs the native C# chess engine in the browser using Mono and WebAssembly.
 
 A version of this can be found at [https://chessstaticstorage.z33.web.core.windows.net](https://chessstaticstorage.z33.web.core.windows.net/)
 
 
 ### [chess.react](https://github.com/Chrislee187/chess.reactredux)
 
-A simple react client (typescript) created for comparison of "SPA" approaches.
+A simple react client (typescript) created for comparison of "SPA" approaches. Uses the chess engine via the WebAPI.
 
 ### [chess.spa.feature.tests](https://github.com/Chrislee187/chess.spa.feature.tests)
 
-A suite of [Specflow](https://specflow.org/)/[Selenium WebDriver](https://www.seleniumhq.org/)/[Shouldly](http://docs.shouldly-lib.net/v2.4.0/docs) BDD style tests that ensure the UX behaves as expected and then using these expected behaviors and customboard setups determines that the rules of chess are correctly implemented.
+A suite of [Specflow](https://specflow.org/)/[Selenium WebDriver](https://www.seleniumhq.org/)/[Shouldly](http://docs.shouldly-lib.net/v2.4.0/docs) BDD style tests that ensure the UX behaves as expected and then using these expected behaviors and custom board setups determines that the rules of chess are correctly implemented.
 
 ### [pgn-tools](https://github.com/Chrislee187/pgn-tools)
 
