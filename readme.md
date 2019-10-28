@@ -14,6 +14,10 @@ The project is designed for the engine itself to be easily reusable by multiple 
 
 Core chess engine in C#.
 
+### [chessdb](https://github.com/Chrislee187/chess.db)
+
+A database to manage chess games, using NET Core 3.0 and EF Core to create a mature RESTful API for managing the chess game database.
+
 ### [chess.webapi](https://github.com/Chrislee187/chess.webapi)
 
 Exposes the chess engine through a simple REST-like JSON WebAPI using Core MVC WebAPI.
@@ -25,7 +29,6 @@ The Swagger UI for it can be seen at [https://chess-web-api.azurewebsites.net/sw
 A client-side blazor SPA that runs the native C# chess engine in the browser using Mono and WebAssembly.
 
 A version of this can be found at [https://chessstaticstorage.z33.web.core.windows.net](https://chessstaticstorage.z33.web.core.windows.net/)
-
 
 ### [chess.react](https://github.com/Chrislee187/chess.reactredux)
 
